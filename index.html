@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang = "en">
+<head>
+    <meta charset="utf-8">
+    <title>AudiCom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ui/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ui/css/bootstrap_ms.css">
+    <link rel="stylesheet" href="ui/css/bootstrap-ie7.css">
+    <link rel="stylesheet" href="ui/css/jquery-ui.css">
+    <link rel="stylesheet" href="ui/css/style.css?v=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="ui/js/jquery.js"></script>
+
+
+
+    <script src="ui/js/jquery_ui_touch.js"></script>
+    <script src="ui/js/jquery-ui.js"></script>
+    <script src="ui/js/fabric.min.js"></script>
+    <!--audio-stuff-->
+    <script src="lib/js/resonance/resonance-audio.js"></script>
+</head>
+
+<body>
+<div id = "wrapper">
+
+    <div id = "mouse_coords">
+        Mouse:<br>
+        <div id = "mouse_coords_x">X: <span></span></div>
+        <div id = "mouse_coords_y">Y: <span></span></div>
+    </div><!--mouse_coords-->
+    <div id = "hlp_box">
+        <button id = "btn_help" class = "misc_ctrls"><i class="fas fa-question"></i></button>
+    </div>
+    <div id = "misc_ctrls_box" class = "misc_ctrls">
+        <select id = "level_dropdown">
+            <option level="-">Level Select</option>
+            <option level="1">Railed Shooter</option>
+            <option level="2">Frogger</option>
+            <option level="3">Labyrinth</option>
+            <option level="4">Pointer</option>
+        </select>
+
+        <div id = "fabric_objects_container" class = "displace"></div><!--fabric_objects_container-->
+    </div><!--misc_box-->
+
+    <div id = "win_screen">
+        <p><i class="fas fa-trophy"></i>&nbsp;You win the game!&nbsp;<i class="fas fa-trophy"></i></p>
+        <p style = "text-align:center;font-size:25px;">Click or press 'Esc' to close this screen</p>
+    </div><!--win_screen-->
+
+    <div id = "r_cont">
+
+        <div id = "ui_part_left" class = "ui_part">
+            <div id = "color_controls_box" class = "control_box">
+                <button id = "btn_change_vision_mode" class = "btn"><i class="fas fa-brush"></i></button>
+            </div><!--scene_controls_box-->
+            <div id = "scene_controls_box" class = "control_box">
+                <button id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></button>
+                <button id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></button>
+            </div><!--scene_controls_box-->
+            <div class = "control_box">
+                <button id = "btn_new_scene" class = "btn"><i class="fas fa-star-of-life"></i></button>
+            </div><!--scene_controls_box-->
+
+            <div id = "canvas_controls_box" class = "control_box">
+                <button id = "btn_save" class = "btn"><i class="fas fa-copy"></i></button>
+                <button id = "btn_load" class = "btn"><i class="fas fa-paste"></i></button>
+
+                <!-- <button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>
+                <button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		 -->
+            </div><!--scene_controls_box-->
+        </div><!--ui_left-->
+
+        <div id = "ui_part_middle" class = "ui_part">
+            <div id = "ui_controls">
+                <div tabindex="0" id = "sb_object_enemy" type = "enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
+                    <i class="fas fa-skull"></i>
+                </div><!--sb_object-->
+
+                <div tabindex="0" id = "sb_object_wall" type = "wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
+                    <i class="fas fa-map"></i>
+                </div><!--sb_object-->
+                <div tabindex="0" id = "sb_object_portal" type = "portal" class = "sb_object bg_portal sb_object_structure" obj_type = "portal">
+                    <i class="fas fa-dungeon"></i>
+                </div><!--sb_object-->
+                <div tabindex="0" id = "sb_object_exit" type = "exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div><!--sb_object-->
+                <div tabindex="0" id = "sb_object_generic" type = "generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
+                    <i class="fas fa-circle"></i>
+                </div><!--sb_object-->
+            </div><!--ui_controls-->
+
+            <div id = "canvas_container">
+                <canvas id = "c" class = "canvas_room" width="1800" height = "1600"></canvas>
+            </div><!--canvasContainer-->
+
+            <div id = "item_event_tab_container">
+                <div id = "tab_items" class = "item_event_tab item_event_tab_active" table_='item'>
+                    Items
+                </div><div id = "tab_events" class = "item_event_tab" table_='event'>
+                Events
+            </div><div id = "tab_glevents" class = "item_event_tab" table_='glevent'>
+                Global Events
+            </div><div id = "tab_condition" class = "item_event_tab" table_='condition'>
+                Conditions
+            </div>
+            </div>
+            <div id = "item_event_container">
+                <div id = "condition_container" class = "event_item_table">
+                    <table id = "condition_table">
+                        <thead>
+                        <tr id = "condition_head">
+                            <th>Portal</th>
+                            <th>Primary Object</th>
+                            <th>Trigger</th>
+                            <th class = "condition_cnt">Item Type</th>
+                            <th class = "condition_cnt">Count</th>
+                            <th class = "condition_has">Item</th>
+                            <th class = "condition_has">True/False</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id = "condition_input_row">
+                            <td>
+                                <select id = "condition_portal"  class = "input_row">
+
+                                </select>
+                            </td><td>
+                            <select id = "condition_primary"  class = "input_row">
+                            </select>
+                        </td>
+                            <td>
+                                <select id = "condition_trigger"  class = "input_row select_condition_trigger">
+                                    <option value="countByType">Count by Type</option>
+                                    <option value="hasItemById">Has Item</option>
+                                </select>
+                            </td>
+
+                            <td class = "condition_cnt">
+                                <select id = "condition_type"  class = "input_row"></select>
+                            </td>
+                            <td class = "condition_cnt">
+                                <input id = "condition_count" class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="condition_count">
+                            </td>
+
+
+                            <td class = "condition_has">
+                                <select id = "condition_item"  class = "input_row"></select>
+                            </td>
+                            <td class = "condition_has">
+                                <select id = "condition_tf"  class = "input_row"><option value = "true">True</option><option value ="false">False</option></select>
+                            </td>
+
+
+                            <td>
+                                <button class="table-add_condition btn table_add">
+                                    <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!--item_container-->
+
+
+                <div id = "item_container" class = "event_item_table">
+                    <table id = "item_table">
+                        <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Item Description</th>
+                            <th>Item Type</th>
+                            <th>Charges</th>
+                            <th>Carried by</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id = "item_input_row">
+                            <td>
+                                <input id = "item_name" class = "input_row" placeholder="New item" maxlength="100" type="text" name="item_name">
+                            </td><td>
+                            <input id = "item_desc" class = "input_row" placeholder="This item..." maxlength="100" type="text" name="item_description">
+                        </td><td>
+                            <input id = "item_type" class = "input_row" placeholder="Generic" maxlength="100" type="text" name="item_type">
+                        </td><td>
+                            <input id = "item_charges" class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges">
+                        </td>
+                            <td>
+                                <select id = "item_carrier"  class = "input_row">
+
+                                </select>
+                            </td>
+                            <td>
+                                <button class="table-add_item btn table_add">
+                                    <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!--item_container-->
+
+                <div id = "event_container" class = "event_item_table">
+                    <table id = "event_table">
+                        <thead>
+                        <tr>
+                            <th>Primary Object</th>
+                            <th>Trigger</th>
+                            <th>Action</th>
+                            <th>Item</th>
+                            <th>Secondary Object</th>
+                            <th>Repeats</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="event_input_row">
+                            <td>
+                                <select id = "event_primary"  class = "input_row">
+
+                                </select>
+                            </td><td>
+                            <select id = "event_trigger"  class = "input_row">
+                                <option value="ONDEATH">ONDEATH</option>
+                                <option value="ONCONTACT">ONCONTACT</option>
+                                <option value="ONSIGHT">ONSIGHT</option>
+                            </select>
+                        </td><td>
+                            <select id = "event_action"  class = "input_row">
+                                <option value="ADD">ADD</option>
+                                <option value="REMOVE">REMOVE</option>
+                                <option value="MOVE">MOVE</option>
+                                <option value="ACTIVATE">ACTIVATE</option>
+                                <option value="DEACTIVATE">DEACTIVATE</option>
+                                <option value="WINGAME">WINGAME</option>
+                            </select>
+                        </td><td>
+                            <select id = "event_item"  class = "input_row">
+
+                            </select>
+                        </td><td>
+                            <select id = "event_secondary"  class = "input_row">
+
+                            </select>
+                        </td><td>
+                            <input id = "events_repeat"  class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" style = "width:auto;">
+                        </td><td>
+                            <button class="table-add_event btn table_add">
+                                <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!--event_container-->
+
+                <div id = "glevent_container" class = "event_item_table">
+                    <table id = "glevent_table">
+                        <thead>
+                        <tr>
+                            <th>Primary Object</th>
+                            <th>Condition Object</th>
+                            <th>Function</th>
+                            <th>Item Type</th>
+                            <th>Item Count</th>
+                            <th>Action</th>
+                            <th>Repeats</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="glevent_input_row">
+                            <td>
+                                <select id = "glevent_primary"  class = "input_row">
+
+                                </select>
+                            </td><td>
+                            <select id = "glevent_conobject"  class = "input_row">
+                                <option value="INVENTORY">Inventory</option>
+                            </select>
+                        </td><td>
+                            <select id = "glevent_func"  class = "input_row">
+                                <option value="countByType">Count by Type</option>
+                            </select>
+                        </td><td>
+                            <select id = "glevent_type"  class = "input_row">
+
+                            </select>
+                        </td><td>
+                            <input id = "glevent_count"  class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_count" style = "width:auto;">
+                        </td><td>
+                            <select id = "glevent_action"  class = "input_row">
+                                <option value="WINGAME">Win Game</option>
+                            </select>
+                        </td><td>
+                            <input id = "glevent_repeat"  class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_repeat" style = "width:auto;">
+                        </td><td>
+                            <button class="table-add_glevent btn table_add">
+                                <i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!--glevent_container-->
+            </div><!--item_event_cotnainer-->
+
+
+
+            <div id = "ui_part_right" class = "ui_part ui_part_right_expanded">
+                <!--<div id = "btn_collapse"><i class="fas fa-arrows-alt-h"></i></div>-->
+                <div id = "ui_part_right_inner">
+                    <div class = "ui_box ui_box_room ui_box_special">
+                        <input id = "input_room_name" placeholder="Room name" maxlength="100" type="text" name="input_room_name" value="">
+                    </div><!--ui_box-->
+                    <div id = "canvas_dim_box" class = "ui_box ui_box_room ui_box_special">
+                        <span class = "ui_header">Room-Size (Work in Progress):</span><br>
+                        <input id = "tb_canvas_dim_width" class = "tb_canvas_dim" placeholder="w (m)" maxlength="100" type="text" name="tb_canvas_dim_width" value="">
+                        <span>X</span>
+                        <input id = "tb_canvas_dim_height" class = "tb_canvas_dim" placeholder="h (m)" maxlength="100" type="text" name="tb_canvas_dim_height" value="">
+                        <button id = "btn_set_dim" class = "btn"><i class="fas fa-check"></i></button>
+                    </div><!--ui_box-->
+
+                    <div class = "ui_box ui_box_special ui_box_general" style = "margin-top:0">
+                        <input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
+                        <br>
+                        <span class = "label_span ui_header">X:</span> <input id = "input_obj_x" class = "input_position" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:5px">
+                        <span class = "label_span ui_header">Y:</span> <input id = "input_obj_y" class = "input_position" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
+                    </div><!--ui_box-->
+
+
+                    <div id = "ui_box_player_railed" class = "ui_box ui_box_special ui_box_player">
+
+                        <div style = "margin-bottom:10px">
+                            <span class = "ui_header">Controls:</span><br>
+                            <span class = "rb_ctrls"><input id = "rb_ctrl_classic" type="radio" name="controls" value="classic" checked> Classic &nbsp;&nbsp;</span>
+                            <span class = "rb_ctrls"><input id = "rb_ctrl_railed" class = "rb_ctrls" type="radio" name="controls" value="railed"> Railed<br></span>
+                        </div>
+
+                        <span class = "show_on_railed">
+								<span class = "ui_header">Path:</span>
+								<button class = "btn btn_add_to_path"><i class="fas fa-thumbtack"></i></button>
+								<button class = "btn btn_path_rec"><i class="fas fa-circle"></i></button>
+								<button class = "btn btn_path_delete"><i class="fas fa-times"></i></button>
+							<br></span>
+                    </div><!--ui_box-->
+
+                    <div class = "ui_box ui_box_special ui_box_player">
+							<span class = "hide_on_railed">
+								<span class = "key_label hide_on_railed">Up:</span><button id = "btn_key_up" class = "btn btn_key_assign" keycode = "38">&uarr;</button><br>
+								<span class = "key_label">Down:</span><button id = "btn_key_down" class = "btn btn_key_assign" keycode = "40">&darr;</button><br>
+							</span><!--hide_on_railed-->
+                        <span class = "key_label">Left:</span><button id = "btn_key_left" class = "btn btn_key_assign" keycode = "37">&larr;</button><br>
+                        <span class = "key_label">Right:</span><button id = "btn_key_right" class = "btn btn_key_assign" keycode = "39">&rarr;</button><br>
+                        <span class = "key_label">Action:</span><button id = "btn_key_interact" class = "btn btn_key_assign">C</button>
+
+
+                        <div style = "margin-top:10px"><span class = "ui_header">Attack Range:</span><br>
+                            <select id = "atk_range_dropdown">
+                                <option value = '0'>None</option>
+                                <option value = '1'>Melee</option>
+                                <option value = '7'>Bow</option>
+                                <option value = '999'>Laser</option>
+                            </select>
+                        </div>
+
+
+
+
+                    </div><!--ui_box-->
+
+                    <!-- <div class = "ui_box">
+                        Größe:<br>
+                        <input id = "input_obj_width" class = "" placeholder="Width" maxlength="100" type="text" name="" value="1">
+                        <span>X</span>
+                        <input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
+                    </div> -->
+
+                    <div class = "ui_box">
+                        <!--Position:<br>
+                        <input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
+                        <span>X</span>
+                        <input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">-->
+                    </div><!--ui-box-->
+
+                    <!-- <div class = "ui_box">
+                        Obj-Rotation:<br>
+                        <input id = "input_obj_rot" placeholder="0" maxlength="100" type="text" name="input_obj_name" value=""> &deg;
+                    </div>-->
+
+                    <div id = "ui_box_wall_size" class = "ui_box_special ui_box ui_box_wall" style="margin-top:-5px">
+                        <span class = "label_span"><span class = "ui_header">W:</span></span> <input id = "input_obj_w" placeholder="Width" maxlength="10" type="number" step = "0.1" min = "0.1" name="input_obj_w" value="" style ="margin-right:10px"><br>
+                        <span class = "label_span"><span class = "ui_header">H:</span></span> <input id = "input_obj_h" placeholder="Height" maxlength="10" type="number" step = "0.1" min = "0.1" name="input_obj_h" value="">
+                    </div><!--ui_box_wall-->
+
+                    <div id = "ui_box_enemy_path" class = "ui_box_special ui_box ui_box_enemy" style = "margin-top:-10px">
+                        <span class = "label_span"><span class = "ui_header">HP:</span></span>
+                        <input id = "input_enemy_health" placeholder="Health" maxlength="10" type="number" step = "1" min = "1" name="input_enemy_health" value="">
+                        <br>
+
+                        <div class = "ui_inner_box" style = "margin-top:10px">
+                            <span class = "ui_header">Path:</span>
+                            <button class = "btn btn_add_to_path"><i class="fas fa-thumbtack"></i></button>
+                            <button class = "btn btn_path_rec"><i class="fas fa-circle"></i></button>
+                            <button class = "btn btn_path_delete"><i class="fas fa-times"></i></button>
+                        </div><!--ui_inner_box-->
+                        <div class = "ui_inner_box" style = "margin-top:5px">
+                            <input id = "cb_circle" type="checkbox" name="cb_circle" value="circle" checked> Run in circles<br>
+                            <input id = "cb_runaway" type="checkbox" name="cb_runaway" value="runaway"> Run away from player<br>
+                        </div><!--ui_inner_box-->
+
+                    </div><!--ui_box-->
+
+
+
+                    <div id = "ui_box_gegner_speed" class = "ui_box_special ui_box ui_box_enemy" style = "margin-top:-5px">
+                        <span class = "ui_header">Speed:</span><br>
+                        <!-- <button id = "btn_speed_0" class = "btn bnt_speed" speed = '0'>0</button>
+                        <button id = "btn_speed_1" class = "btn bnt_speed" speed = '1'>1</button>
+                        <button id = "btn_speed_2" class = "btn bnt_speed" speed = '2'>2</button>
+                        <button id = "btn_speed_3" class = "btn bnt_speed" speed = '3'>3</button>
+                        <button id = "btn_speed_4" class = "btn bnt_speed" speed = '4'>4</button> -->
+                        <select id = "object_speed_dropdown">
+                            <option id = "select_0" value = '0'>Stone</option>
+                            <option id = "select_1" value = '1'>Turtle</option>
+                            <option id = "select_2" value = '2'>Human</option>
+                            <option id = "select_3" value = '3'>Wolf</option>
+                            <option id = "select_4" value = '4'>Cheetah</option>
+                        </select>
+
+
+                    </div><!--ui_box-->
+
+                    <div id = "ui_box_link_portals" class = "ui_box_special ui_box ui_box_portal">
+                        <span class = "ui_header">Link Portals:</span><br>
+                        <select id = "portal_dropdown">
+                            <option value="">None</option>
+                        </select>
+                        <br>
+                        <button id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></button>
+                        <button id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></button>
+                    </div><!--ui_box-->
+
+                    <div id = "ui_sound_box" class = "ui_box_special ui_box ui_box_general">
+
+                        <div class = "ui_mini_box">
+                            <span class = "ui_header">General Sound:</span>
+                            <br>
+
+                            <select id = "sound_dropdown" class = "sound_dropdown">
+                                <option value = 'none'>None</option>
+                                <option value = 'steps'>Footsteps</option>
+                                <option value = 'magic'>Magic Aura</option>
+                                <option value = 'waterfall'>Waterfall</option>
+                                <option value = 'ouch'>Ouch</option>
+                                <option value = 'fainting'>Fainting</option>
+                                <option value = 'arrow'>Arrow</option>
+                                <option value = 'car'>Car</option>
+                                <option value = 'truck'>Truck</option>
+                                <option value = 'motorcycle'>Motorcycle</option>
+                                <option value = 'monster' >Monster Snore</option>
+                                <option value = 'bats' >Bat Swarm</option>
+                            </select>	<br>
+                            <div id = "slider_box_general" class = "slider_box">
+                                <input class = "slider_" id="slider_general_volume" type="range" min="0" max="2" value="1" step="0.01"><div class = "slider_box_label"><span id = "slider_value_general" class = "slider_value">100</span>%</div>
+                            </div><!--slider_box-->
+
+
+                        </div>
+                        <div class = "ui_mini_box ui_box_enemy ui_box_player ui_box_special" style = "margin-top:10px">
+                            <span class = "ui_header">Death sound:</span>
+                            <br>
+                            <select id = "sound_destruction_dropdown" class = "sound_dropdown">
+                                <option value = 'none'>None</option>
+                                <option value = 'steps'>Footsteps</option>
+                                <option value = 'magic'>Magic Aura</option>
+                                <option value = 'waterfall'>Waterfall</option>
+                                <option value = 'ouch'>Ouch</option>
+                                <option value = 'fainting'>Fainting</option>
+                                <option value = 'arrow'>Arrow</option>
+                                <option value = 'car'>Car</option>
+                                <option value = 'truck'>Truck</option>
+                                <option value = 'motorcycle'>Motorcycle</option>
+                                <option value = 'monster' >Monster Snore</option>
+                                <option value = 'bats' >Bat Swarm</option>
+                            </select>
+                            <div id = "slider_box_death" class = "slider_box">
+                                <input class = "slider_" id="slider_death_volume" type="range" min="0" max="2" value="1" step="0.01"><div class = "slider_box_label"><span id = "slider_value_death" class = "slider_value">100</span>%</div>
+                            </div><!--slider_box-->
+                        </div><!--ui_mini_box-->
+                    </div><!--ui_box-->
+
+                    <div class = "ui_box ui_box_special ui_box_player">
+
+                        <span class = "ui_header">Action sound</span>
+                        <br>
+                        <select id = "sound_action_dropdown" class = "sound_dropdown">
+                            <option value = 'none'>None</option>
+                            <option value = 'steps'>Footsteps</option>
+                            <option value = 'magic'>Magic Aura</option>
+                            <option value = 'waterfall'>Waterfall</option>
+                            <option value = 'ouch'>Ouch</option>
+                            <option value = 'fainting'>Fainting</option>
+                            <option value = 'arrow'>Arrow</option>
+                            <option value = 'car'>Car</option>
+                            <option value = 'truck'>Truck</option>
+                            <option value = 'motorcycle'>Motorcycle</option>
+                            <option value = 'monster' >Monster Snore</option>
+                            <option value = 'bats' >Bat Swarm</option>
+                        </select>
+                        <div id = "slider_box_action" class = "slider_box">
+                            <input class = "slider_" id="slider_action_volume" type="range" min="0" max="2" value="1" step="0.01"><div class = "slider_box_label"><span id = "slider_value_action" class = "slider_value">100</span>%</div>
+                        </div><!--slider_box-->
+
+                    </div><!--ui_box-->
+
+
+                    <div id = "ui_colli_box" class = "ui_box_special ui_box ui_box_general">
+                        <input id = "cb_colli" type="checkbox" name="collidable" value="collidable" checked> Collidable<br>
+                    </div><!--ui_box-->
+
+                    <div id = "ui_delete_box" class = "ui_box_special ui_box">
+                        <button id = "btn_delete_object" class = "btn">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                    <div id = "path_coords">
+
+                    </div><!--path_coords-->
+
+                    <div id = "audio_src_box" class = "ui_box">
+
+                    </div><!--audio_src_box-->
+
+                </div><!--ui_part_right_inner-->
+
+            </div><!--col-->
+        </div><!--col-->
+    </div><!--r_cont-->
+
+    <div id = "ff_popup">
+        <div id = "ff_inputbox">
+            <div id = "ff_close_btn"><i class="fas fa-times"></i></div>
+            <p>Firefox doesn't allow direct pasting (which is a good thing, don't worry:)).</p><p>To solve this problem just manually paste your Level Code into the textarea below and hit Load. Otherwise just click outside this text box to close it.</p>
+            <textarea id = "ff_ta" placeholder = "Paste your Level Code here :)"></textarea>
+
+            <div id = "ff_load" class = "btn">Load</div>
+
+        </div>
+
+    </div>
+
+    <div id = "overlay">
+        <div id = "overlay_text_box">
+            <div id = "overlay_close_btn"><i class="fas fa-times"></i></div>
+            <p class = "centered bigger">Hallo und willkommen zu unserem Audio Game Editor.</p>
+            <p>Wir haben hier f&uuml;r Dich schon mal ein erstes Testszenario als Demo vorbereitet. Folgende Dinge m&ouml;chten wir Dir auf deinem Abenteuer mitgeben:</p>
+            <ol>
+                <li>Es handelt sich um eine sehr fr&uuml;he Version des Editors, der voll mit kleinen K&auml;fern (Bugs) ist. Diese Sch&auml;dlinge k&ouml;nnen daf&uuml;r sorgen, dass ab und an etwas nicht so glatt l&auml;uft, wie es vielleicht sollte. Es wird sich im Laufe der Entwicklung noch deutlich verbessern. &#9786;</li>
+                <li>Bitte benutze den Editor auf einem ausreichend großen Bildschirm und mit Tastatur (Du benötigst die Pfeiltasten). &#9786;</li>
+                <li>Mit einem Klick auf den Playbutton (unter Scene-Controls) startest Du das Demolevel.</li>
+                <li>Du steuerst den Charakter (Avatar) mit den Pfeiltasten. Am besten schrittweise, Du kannst also dazwischen auch mal die Pfeiltasten loslassen. &#9786;</li>
+                <li>Du kannst auch zus&auml;tzliche Objekte (links) auf die Spielfl&auml;che (in der Mitte) ziehen;<br>bedenke aber bitte Punkt 1.</li>
+                <li>Du kannst (fast) alle Elemente mit der Tab-Taste fokussieren und mit der Enter-Taste auswählen.</li>
+                <li>Eine ausführlichere Beschreibung (in Englisch – "documentation_UI.pdf") zum Herunterladen findest du <a target = "_blank" href = "https://www.audicom.at/public/">hier</a>.</li>
+                <li>Falls Dir etwas auff&auml;llt oder du Ideen hast, die Du uns gerne mitteilen m&ouml;chtest; oder auch einfach nur so &uuml;ber Audio Games quatschen magst, kannst Du uns unter <a href = "mailto:hallo@audicom.at">hallo@audicom.at</a> erreichen!</li>
+                <li>Um diese Anleitung zu schließen, drücke die ESC-Taste.</li>
+            </ol>
+            <p class = "centered bigger">Viel Spaß!</p>
+        </div><!--overlay_text_box-->
+    </div><!--overlay-->
+    <div style = "clear:both"></div>
+</div><!--wrapper-->
+
+<div id = "debug_stuff">
+    <span id = "id_" style = "margin-top:-5px">ID: <span></span> /</span>
+    <span id = "coord_x">X: <span></span> /</span>
+    <span id = "coord_y">Y: <span></span></span>
+</div><!--debug_stuff-->
+
+<!--<script type = "module" src="lib/audicom.js"></script>-->
+<script type = "module" src="ui/js/interaction.js"></script>
+
+<script type = "module">
+
+    console.log("importing everything we need.. from one file yey...");
+
+    import {
+        Vector3
+    } from '/lib/js/three/Vector3.js'
+
+    import {
+        AGNavigation, AGRoom, AGPlayer, AGSoundSource, AGObject, AGItem, GlobalEvent, Event, AGRoomExit,
+        setControl, getReferenceById, getIdByReference,
+        g_gamearea, g_eventHandler, g_IAudiCom
+    } from "/lib/audicom.js";
+
+    jQuery(document.body).ready(function ($) {
+
+        // create controls
+        let controls = new AGNavigation(38, 40, 37, 39, 67);
+        let controlsID = getIdByReference(controls);
+        g_IAudiCom._controlsID = controlsID;
+        setControl(getReferenceById(controlsID));
+
+        // create room
+        var room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
+        var room_1ID = getIdByReference(room_1);
+        g_gamearea.addRoom(room_1ID);
+
+        // create player and add it to the room
+        var player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+        var playerID = getIdByReference(player);
+        g_gamearea.listener = playerID;
+        getReferenceById(room_1ID).listener = playerID;
+        getReferenceById(room_1ID).add(playerID);
+
+
+        // create exit object
+        var exit = new AGRoomExit("Exit", new Vector3(10.5, 1.0, 5.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+        var exitID = getIdByReference(exit);
+
+        // create wall object
+        var wall1 = new AGObject("Wand unten", new Vector3(14, 1.0, 6.7), new Vector3(1, 0, 0), new Vector3(12, 1, 0.5));
+        var wall1_ID = wall1.ID;
+        getReferenceById(wall1_ID).tag = "WALL";
+
+        // create enemy object
+        var enemy1 = new AGObject("Gegner 1", new Vector3(6.3, 1.0, 2.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+        var enemy1_ID = enemy1.ID;
+        getReferenceById(enemy1_ID).tag = "ENEMY";
+
+        // create environmental object
+        var environmental1 = new AGObject("Wasserfall", new Vector3(19.3, 1.0, 2.1), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+        var environmental1_ID = environmental1.ID;
+        getReferenceById(environmental1_ID).tag = "WATERFALL";
+
+        // add the objects to the room
+        getReferenceById(room_1ID).add(exitID);
+        getReferenceById(room_1ID).add(wall1_ID);
+        getReferenceById(room_1ID).add(enemy1_ID);
+        getReferenceById(room_1ID).add(environmental1_ID);
+
+        // add soundsources
+        var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
+        var ouchID = getIdByReference(ouch);
+        getReferenceById(ouchID).tag = "OUCH";
+
+        var enemy1_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+        var enemy1_ss_ID = enemy1_ss.ID;
+
+        var environmental1SS = new AGSoundSource("Wasserfall Sound", "sounds/waterfall.wav", true, 1, room_1ID);
+        var environmental1SS_ID = environmental1SS.ID;
+
+        var magic_exit = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
+        var magic_exit_ID = getIdByReference(magic_exit);
+        getReferenceById(magic_exit_ID).tag = "MAGIC";
+        getReferenceById(exitID).addSoundSource(magic_exit_ID);
+
+        // player settings
+        getReferenceById(playerID).setSpeedSkalar(0.1);
+        getReferenceById(playerID).hitSound = ouchID;
+        getReferenceById(playerID).movable = false;
+        getReferenceById(playerID).dangerous = true;
+        getReferenceById(playerID).damage = 1;
+        getReferenceById(playerID).range = 7;
+
+        // enemy settings
+        getReferenceById(enemy1_ID).destructible = true;
+        getReferenceById(enemy1_ID).health = 1;
+        getReferenceById(enemy1_ID).movable = false;
+        getReferenceById(enemy1_ID).collidable = true;
+        getReferenceById(enemy1_ID).setAliveSound = enemy1_ss_ID;
+
+        // environmental settings
+        getReferenceById(environmental1_ID).addSoundSource(environmental1SS_ID);
+        getReferenceById(environmental1_ID).collidable = false;
+
+        // room
+        getReferenceById(room_1ID).live = true;
+
+        g_IAudiCom.renderScene();
+    });
+
+</script>
+
+</body>
+</html>
