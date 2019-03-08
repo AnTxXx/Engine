@@ -1,7 +1,11 @@
 {
   "name": "Engine",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "flow-typed": "^2.5.1",
+    "resonance-audio": "^1.0.0",
+    "webpack": "^4.29.6"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-flow": "^6.23.0",

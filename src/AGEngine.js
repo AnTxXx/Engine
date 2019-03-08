@@ -1,7 +1,9 @@
 // @flow
 import { Vector3 } from './js/three/Vector3.js';
-//import { ResonanceAudio } from './js/resonance/resonance-audio.min.js';
-//import * as resonance from './js/resonance/resonance-audio.js';
+//import * as ResonanceAudio from './js/resonance/resonance-audio.min.js';
+//import * as bla from './js/resonance/resonance-audio.js';
+
+let debug = 0;
 
 let audioContext;
 let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
@@ -23,11 +25,11 @@ export class AGGameArea {
     }
     name:string;
     size:Vector3;
-    roomDimensions;
-    roomMaterials;
+    roomDimensions:Object;
+    roomMaterials:Object;
 
 
-    constructor(name, size:Vector3){
+    constructor(name:string, size:Vector3){
         this.name = name;
         this.size = size;
 
@@ -35,6 +37,7 @@ export class AGGameArea {
         audioContext = new AudioContext();
         // Create a (first-order Ambisonic) Resonance Audio scene and pass it
         // the AudioContext.
+        // $FlowFixMe
         resonanceAudioScene = new ResonanceAudio(audioContext);
         // Connect the scene’s binaural output to stereo out.
         resonanceAudioScene.output.connect(audioContext.destination);
@@ -72,7 +75,7 @@ export class AGGameArea {
     draw(){
         this._AGobjects.forEach(function(element) {
             element.draw();
-            console.log('draw on element: ' + element);
+            if(debug) console.log("draw on element: " + element.name);
         });
     }
 }
@@ -93,7 +96,7 @@ export class AGObject {
     _position:Vector3;
     direction:Vector3;
 
-    constructor(name, position:Vector3, direction:Vector3) {
+    constructor(name:string, position:Vector3, direction:Vector3) {
         this.name = name;
         this.direction = direction;
         this._position = position;
@@ -112,38 +115,87 @@ export class AGObject {
     draw(){
         this._AGSoundSources.forEach(function(element) {
             element.play();
-            console.log('draw on element: ' + element);
+            if(debug) console.log("draw on element: " + element.name);
         });
     }
 }
 
-export class AGPlayer /*extends AGObject*/ {
-    /*constructor(name, pos:Vector3, dir:Vector3){
-    //    super(name, pos, dir);
-    }*/
+export class AGNavigation {
+    forward:number;
+    backward:number;
+    left:number;
+    right:number;
+
+    constructor(forward:number, backward:number, left:number, right:number){
+        this.forward = forward;
+        this.backward = backward;
+        this.left = left;
+        this.right = right;
+    }
+
+
+    draw(player:AGPlayer){
+        window.onkeydown = function(e) {
+            switch(e.keyCode){
+                case 38:
+                    player._position += player.direction * 0.3;
+                    break;
+                case 40:
+                    player._position -= player.direction * 0.3;
+                    break;
+                case 37:
+                    player.direction.applyEuler(1);
+                    break;
+                case 39:
+                    player.direction.applyEuler(-1);
+                    break;
+            }
+            console.log("Position: " + player._position.x + " " + player._position.y + " " + player._position.z);
+        }
+
+    }
+}
+
+export class AGPlayer extends AGObject {
+
+    navigation:AGNavigation;
+    constructor(name:string, position:Vector3, direction:Vector3, navigation:AGNavigation){
+        super(name, position, direction);
+        this.navigation = navigation;
+    }
 
     moveSound:AGSoundSource;
     health:number;
+
+    draw(){
+        this.navigation.draw(this);
+    }
 }
 
 export class AGSoundSource /*extends AGObject*/ {
+
     get audioElement() {
         return this._audioElement;
     }
+
+    set audioElement(value:Object) {
+        this._audioElement = value;
+    }
+
     /*constructor(name, pos:Vector3, dir:Vector3) {
         super(name, pos, dir);
     }*/
 
     name:string;
-    file;
+    file:Object;
     looping:boolean;
     interval:number;
     playing:boolean;
-    audioElement;
-    audioElementSource;
-    source;
+    _audioElement:Object;
+    audioElementSource:Object;
+    source:Object;
 
-    constructor(name:string, file, looping:boolean, interval:number){
+    constructor(name:string, file:Object, looping:boolean, interval:number){
         this.name = name;
         this.file = file;
         this.looping = looping;
@@ -180,8 +232,10 @@ export class AGSoundSource /*extends AGObject*/ {
 let request;
 
 function animate(gameArea:AGGameArea) {
-    request = requestAnimationFrame(animate);
     draw(gameArea);
+    request = window.requestAnimationFrame(function () {
+        animate(gameArea);
+    })
 }
 
 function draw(gameArea:AGGameArea) {
