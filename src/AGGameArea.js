@@ -5,6 +5,13 @@ import {AGObject} from "./AGObject.js";
 let debug = 0;
 
 export class AGGameArea {
+    get listener(): AGObject {
+        return this._listener;
+    }
+
+    set listener(value: AGObject) {
+        this._listener = value;
+    }
     get audioContext() {
         return this._audioContext;
     }
@@ -29,6 +36,7 @@ export class AGGameArea {
     roomDimensions:Object;
     roomMaterials:Object;
 
+    _listener:AGObject;
 
     constructor(name:string, size:Vector3){
         console.log("Creating AGGameArea object: " + name + ".");
@@ -79,5 +87,9 @@ export class AGGameArea {
             element.draw();
             if(debug) console.log("draw on element: " + element.name);
         });
+        this._resonanceAudioScene.setListenerPosition(this._listener.position.x, this._listener.position.y, this._listener.position.z);
+        this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
     }
+
+
 }
