@@ -46,6 +46,14 @@ export class AGObject {
         this._speed = value;
     }
 
+    setSpeedSkalar(value:number){
+        this.speed = new Vector3(value, value, value);
+    }
+
+    getSpeedSkalar(){
+        return this.speed.x;
+    }
+
     name:string;
     _position:Vector3;
     _direction:Vector3;
@@ -67,7 +75,7 @@ export class AGObject {
     }
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
-        console.log("Creating AGObject object: " + name + ".");
+        console.log("Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z + ".");
         this.name = name;
         this._position = position;
         this._direction = direction;
@@ -88,17 +96,21 @@ export class AGObject {
     }
 
     draw(){
-        this._AGSoundSources.forEach(function(element) {
+        /*this._AGSoundSources.forEach(function(element) {
             element.play();
             if(debug) console.log("draw on element: " + element.name);
-        });
+        })*/
+
+        for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
+            this._AGSoundSources[i].setPosition(this.position);
+            this._AGSoundSources[i].play();
+        }
 
         if(this._movable){
-
-            if(this._position.distanceTo(this._route[this._currentRoute]) < this._speed.clone().multiply(1.5)){
-                console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
+            if(this.position.distanceTo(this._route[this._currentRoute]) < this.getSpeedSkalar()*1){
+                //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
                 this._currentRoute = ++this._currentRoute % this._route.length;
-                console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
+                //console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
             } else {
                 moveTo(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize());
             }

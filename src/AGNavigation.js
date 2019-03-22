@@ -12,9 +12,10 @@ export function move(object:AGObject, add:boolean){
 //TODO: debug warum das object bei moveTo sich nicht bewegt, bekommt aus AGObject alle wichtigen Daten
 
 export function moveTo(object:AGObject, direction:Vector3){
-    object.position.sub(object.speed.clone().multiply(direction));
-    console.log(object.position.x + " " + object.position.y + " " + object.position.z +
-        " " + direction.x + " " + direction.y + " " + direction.z);
+    object.position.add(object.speed.clone().multiply(direction));
+    //console.log(object.position.x + " " + object.position.y + " " + object.position.z +
+    //    " " + direction.x + " " + direction.y + " " + direction.z);
+
 }
 
 export class AGNavigation {
