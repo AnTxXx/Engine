@@ -1,7 +1,16 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
+import {type} from "./AGType.js";
 
-export class AGSoundSource /*extends AGObject*/ {
+export class AGSoundSource
+  /*extends AGObject*/ {
+    get type() {
+        return this._type;
+    }
+
+    set type(value:Object) {
+        this._type = value;
+    }
 
     get audioElement() {
         return this._audioElement;
@@ -32,6 +41,7 @@ export class AGSoundSource /*extends AGObject*/ {
     _audioElement:Object;
     audioElementSource:Object;
     source:Object;
+    _type:Object;
 
     // $FlowFixMe
     audioContext;
@@ -59,6 +69,7 @@ export class AGSoundSource /*extends AGObject*/ {
         this.source = resonanceAudioScene.createSource();
         this.audioElementSource.connect(this.source.input);
         this._name = name;
+        this._type = type.SOUNDSOURCE;
 
     }
 

@@ -2,10 +2,32 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {moveTo} from "./AGNavigation.js";
+import {type} from "./AGType.js";
 
 let debug = 0;
 
 export class AGObject {
+    get collidable() {
+        return this._collidable;
+    }
+
+    set collidable(value) {
+        this._collidable = value;
+    }
+    get blockedObjects(): Array<AGObject> {
+        return this._blockedObjects;
+    }
+
+    set blockedObjects(value: Array<AGObject>) {
+        this._blockedObjects = value;
+    }
+    get type() {
+        return this._type;
+    }
+
+    set type(value:Object) {
+        this._type = value;
+    }
     get name(): string {
         return this._name;
     }
@@ -60,6 +82,7 @@ export class AGObject {
     getSpeedSkalar(){
         return this.speed.x;
     }
+    _type:Object;
 
     _name:string;
     _position:Vector3;
@@ -70,6 +93,8 @@ export class AGObject {
     _movable:boolean;
     _route:Array<Vector3>;
     _currentRoute:number;
+
+    _collidable:boolean;
 
     addRoute(...routes:Vector3){
         if(!this._route){
@@ -82,7 +107,7 @@ export class AGObject {
     }
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
-        console.log("Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z + ".");
+        console.log("Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
         this._direction = direction;
         this._size = size;
@@ -90,6 +115,8 @@ export class AGObject {
         this._movable = false;
         this._speed = new Vector3(0,0,0);
         this._name = name;
+        this._collidable = false; //for testing, should be true for release
+        this._type = type.OBJECT;
     }
 
     _AGSoundSources:Array<AGSoundSource>;
@@ -121,6 +148,23 @@ export class AGObject {
             } else {
                 moveTo(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize());
             }
+        }
+    }
+
+    _blockedObjects:Array<AGObject>;
+
+    onCollisionEnter(obj: AGObject) {
+        console.log("Collision happened between: " + this.name + " and " + obj.name);
+        if(!this._blockedObjects.includes(obj)){
+            this._blockedObjects.push(obj);
+        }
+    }
+
+    onCollisionExit(obj: AGObject) {
+        console.log("Collision exit between: " + this.name + " and " + obj.name);
+        let index = this._blockedObjects.lastIndexOf(obj);
+        if(index > -1){
+            this._blockedObjects.splice(index, 1);
         }
     }
 }

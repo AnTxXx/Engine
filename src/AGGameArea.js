@@ -1,10 +1,20 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
+import {colliding} from "./AGPhysics.js";
+import {type} from "./AGType.js";
+import {Collision, collisionIsInArray} from "./Collision.js";
 
 let debug = 0;
 
 export class AGGameArea {
+    get type() {
+        return this._type;
+    }
+
+    set type(value:Object) {
+        this._type = value;
+    }
     get listener(): AGObject {
         return this._listener;
     }
@@ -46,6 +56,7 @@ export class AGGameArea {
     roomMaterials:Object;
 
     _listener:AGObject;
+    _type:Object;
 
     constructor(name:string, size:Vector3){
         console.log("Creating AGGameArea object: " + name + ".");
@@ -80,9 +91,15 @@ export class AGGameArea {
 
         this._resonanceAudioScene.setRoomProperties(this.roomDimensions, this.roomMaterials);
         this._name = name;
+        this._type = type.GAMEAREA;
+
+        if(!this._collisions){
+            this._collisions = [];
+        }
     }
 
     _AGobjects:Array<AGObject>;
+    _collisions:Array<Collision>;
 
     add(gameObject :AGObject){
         if(!this._AGobjects){
@@ -91,14 +108,38 @@ export class AGGameArea {
         this._AGobjects.push(gameObject);
     }
 
+    addCollision(obj1:AGObject, obj2:AGObject){
+        this._collisions.push(new Collision(obj1, obj2));
+    }
+
     draw(){
+        //All objects draw
         this._AGobjects.forEach(function(element) {
             element.draw();
             if(debug) console.log("draw on element: " + element.name);
         });
+
+        //Collision?
+        for(let i = 0, len = this._AGobjects.length; i < len; i++){
+            for(let j = 0; j < len; j++){
+                if(i == j) continue;
+                else {
+                    if(colliding(this._AGobjects[i], this._AGobjects[j])){
+                        this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
+                        this.addCollision(this._AGobjects[i], this._AGobjects[j]);
+                    } else {
+                        let index:number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
+                        if(index > -1){
+                            this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
+                            this._collisions.splice(index,1);
+                        }
+                    }
+                }
+            }
+        }
+
         this._resonanceAudioScene.setListenerPosition(this._listener.position.x, this._listener.position.y, this._listener.position.z);
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
     }
-
 
 }
