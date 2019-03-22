@@ -15,8 +15,17 @@ export class AGSoundSource /*extends AGObject*/ {
         super(name, pos, dir);
     }*/
 
-    name:string;
+    _name:string;
     file:Object;
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+    }
+
     looping:boolean;
     interval:number;
     playing:boolean;
@@ -32,7 +41,6 @@ export class AGSoundSource /*extends AGObject*/ {
     // $FlowFixMe
     constructor(name:string, file:Object, looping:boolean, interval:number, audioContext, resonanceAudioScene){
         console.log("Creating AGSoundSource object: " + name + ".");
-        this.name = name;
         this.file = file;
         this.looping = looping;
         this.interval = interval;
@@ -50,6 +58,7 @@ export class AGSoundSource /*extends AGObject*/ {
 
         this.source = resonanceAudioScene.createSource();
         this.audioElementSource.connect(this.source.input);
+        this._name = name;
 
     }
 

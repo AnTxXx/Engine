@@ -6,6 +6,13 @@ import {moveTo} from "./AGNavigation.js";
 let debug = 0;
 
 export class AGObject {
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+    }
     get movable() {
         return this._movable;
     }
@@ -54,7 +61,7 @@ export class AGObject {
         return this.speed.x;
     }
 
-    name:string;
+    _name:string;
     _position:Vector3;
     _direction:Vector3;
     _size:Vector3;
@@ -76,13 +83,13 @@ export class AGObject {
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
         console.log("Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z + ".");
-        this.name = name;
         this._position = position;
         this._direction = direction;
         this._size = size;
         this._currentRoute = 0;
         this._movable = false;
         this._speed = new Vector3(0,0,0);
+        this._name = name;
     }
 
     _AGSoundSources:Array<AGSoundSource>;

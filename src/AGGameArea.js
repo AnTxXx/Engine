@@ -31,8 +31,17 @@ export class AGGameArea {
     get AGobjects(): AGObject[] {
         return this._AGobjects;
     }
-    name:string;
+    _name:string;
     size:Vector3;
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+    }
+
     roomDimensions:Object;
     roomMaterials:Object;
 
@@ -40,7 +49,6 @@ export class AGGameArea {
 
     constructor(name:string, size:Vector3){
         console.log("Creating AGGameArea object: " + name + ".");
-        this.name = name;
         this.size = size;
 
         // Create an AudioContext
@@ -71,6 +79,7 @@ export class AGGameArea {
         };
 
         this._resonanceAudioScene.setRoomProperties(this.roomDimensions, this.roomMaterials);
+        this._name = name;
     }
 
     _AGobjects:Array<AGObject>;
