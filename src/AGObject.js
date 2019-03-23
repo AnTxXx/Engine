@@ -159,6 +159,12 @@ export class AGObject {
         }
     }
 
+    stop(){
+        for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
+            this._AGSoundSources[i].stop();
+        }
+    }
+
     onCollisionEnter(obj: AGObject) {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
         if(!this._blockedObjects.includes(obj)){

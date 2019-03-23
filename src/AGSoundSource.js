@@ -4,6 +4,21 @@ import {type} from "./AGType.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
+    get looping(): boolean {
+        return this._looping;
+    }
+
+    set looping(value: boolean) {
+        this._looping = value;
+    }
+
+    get playing() {
+        return this._playing;
+    }
+
+    set playing(value:boolean) {
+        this._playing = value;
+    }
     get type() {
         return this._type;
     }
@@ -35,9 +50,9 @@ export class AGSoundSource
         this._name = value;
     }
 
-    looping:boolean;
+    _looping:boolean;
     interval:number;
-    playing:boolean;
+    _playing:boolean;
     _audioElement:Object;
     audioElementSource:Object;
     source:Object;
@@ -52,9 +67,8 @@ export class AGSoundSource
     constructor(name:string, file:Object, looping:boolean, interval:number, audioContext, resonanceAudioScene){
         console.log("Creating AGSoundSource object: " + name + ".");
         this.file = file;
-        this.looping = looping;
         this.interval = interval;
-        this.playing = false;
+        this._playing = false;
         this.audioContext = audioContext;
         this.resonanceAudioScene = resonanceAudioScene;
 
@@ -70,6 +84,7 @@ export class AGSoundSource
         this.audioElementSource.connect(this.source.input);
         this._name = name;
         this._type = type.SOUNDSOURCE;
+        this._looping = looping;
 
     }
 
@@ -80,8 +95,15 @@ export class AGSoundSource
     play(){
         if(!this.playing){
             this.playing = true;
-            this.audioElement.loop = true;
+            this.audioElement.loop = this.looping;
             this.audioElement.play();
+        }
+    }
+
+    stop(){
+        if(this.playing){
+            this.playing = false;
+            this.audioElement.stop();
         }
     }
 

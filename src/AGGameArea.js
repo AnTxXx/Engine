@@ -124,14 +124,17 @@ export class AGGameArea {
             for(let j = 0; j < len; j++){
                 if(i == j) continue;
                 else {
-                    if(colliding(this._AGobjects[i], this._AGobjects[j])){
-                        this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
-                        this.addCollision(this._AGobjects[i], this._AGobjects[j]);
-                    } else {
-                        let index:number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
-                        if(index > -1){
-                            this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
-                            this._collisions.splice(index,1);
+                    if(this._AGobjects[i].collidable && this._AGobjects[j].collidable) {
+                        if (colliding(this._AGobjects[i], this._AGobjects[j])) {
+                            this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
+                            this.addCollision(this._AGobjects[i], this._AGobjects[j]);
+                            console.log("Collision between " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
+                        } else {
+                            let index: number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
+                            if (index > -1) {
+                                this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
+                                this._collisions.splice(index, 1);
+                            }
                         }
                     }
                 }
@@ -140,6 +143,14 @@ export class AGGameArea {
 
         this._resonanceAudioScene.setListenerPosition(this._listener.position.x, this._listener.position.y, this._listener.position.z);
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
+    }
+
+    stop(){
+        this._collisions = [];
+        this._AGobjects.forEach(function(element) {
+            element.stop();
+            if(debug) console.log("stop on element: " + element.name);
+        });
     }
 
 }

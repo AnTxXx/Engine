@@ -36,5 +36,10 @@ export function play(gameArea:AGGameArea, state:boolean){
         console.debug("Playing...");
     } else {
         cancelAnimationFrame(request)
+        stop(gameArea);
     }
+}
+
+function stop(gameArea:AGGameArea){
+    gameArea.stop();
 }
