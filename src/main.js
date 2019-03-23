@@ -19,6 +19,8 @@ let door2:AGPortal = new AGPortal("Tuere 2", new Vector3(8.0, 1.0, 8.0), new Vec
 
 gegner.addSoundSource(gegner_ss);
 area.add(gegner);
+area.add(door1);
+area.add(door2);
 
 //player.setSpeedSkalar(1);
 player.speed = new Vector3(0.1, 0.0, 0.1);
@@ -31,9 +33,7 @@ gegner.addRoute(new Vector3(1,1,10), new Vector3(10,1,10), new Vector3(10, 1, 10
 gegner.setSpeedSkalar(1);
 gegner.movable = true;
 
-//Player spawns at door, should be instantly teleported
-door1.exit = door2;
-door2.exit = door1;
+door1.linkPortals(door2);
 
 //Physics debug:
 player.collidable = true;

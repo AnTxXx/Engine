@@ -19,7 +19,7 @@ export function moveTo(object:AGObject, direction:Vector3){
 export class AGNavigation {
 
     constructor(forward:number, backward:number, left:number, right:number){
-        console.log("Creating AGNavigation object.");
+        console.log("[AGNavigation] Creating AGNavigation object.");
         gForward = forward;
         gBackward = backward;
         gLeft = left;

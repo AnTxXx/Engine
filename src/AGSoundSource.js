@@ -65,7 +65,7 @@ export class AGSoundSource
 
     // $FlowFixMe
     constructor(name:string, file:Object, looping:boolean, interval:number, audioContext, resonanceAudioScene){
-        console.log("Creating AGSoundSource object: " + name + ".");
+        console.log("[AGSoundSource] Creating AGSoundSource object: " + name + ".");
         this.file = file;
         this.interval = interval;
         this._playing = false;

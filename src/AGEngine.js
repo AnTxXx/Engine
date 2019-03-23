@@ -33,7 +33,7 @@ function draw(gameArea:AGGameArea) {
 export function play(gameArea:AGGameArea, state:boolean){
     if(state){
         animate(gameArea);
-        console.debug("Playing...");
+        console.debug("[AGEngine] Playing...");
     } else {
         cancelAnimationFrame(request)
         stop(gameArea);

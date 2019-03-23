@@ -16,21 +16,32 @@ export class AGPortal extends AGObject{
     _exit:AGPortal;
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3){
-        console.log("Creating AGPortal object: " + name + ".");
+        console.log("[AGPortal] Creating AGPortal object: " + name + ".");
         super(name, position, direction, size);
         this._type = type.PORTAL;
     }
 
     onCollisionEnter(obj: AGObject) {
-        console.log("Portal Coll");
         if(obj.type === type.PLAYER && !this._blockedObjects.includes(obj)){
-            obj.position = this.exit.position;
-            this._blockedObjects.push(obj);
             //Blocks object that has just been teleported in other Portal to not get teleported again (until leave)
-            obj.blockedObjects.push(obj);
-            console.log("Teleporting Object: " + obj.name + " to exit: " + this.exit.name);
-        }
+            this.exit.blockedObjects.push(obj);
+            obj.position = this.exit.position.clone();
+            //this._blockedObjects.push(obj);
 
+            console.log("[AGPortal] Teleporting Object: " + obj.name + " to exit: " + this.exit.name);
+        } else {
+            console.log("[AGPortal] Registering already blocked object: " + obj.name);
+        }
+    }
+
+    linkPortals(portal:AGPortal){
+        portal.exit = (this);
+        this.exit = portal;
+    }
+
+    draw(){
+        super.draw();
+        //console.log(this.position.x + " " + this.position.y + " " + this.position.z);
     }
 
     /*onCollisionExit(obj: AGObject) {

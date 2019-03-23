@@ -113,7 +113,7 @@ export class AGObject {
     }
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
-        console.log("Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
+        console.log("[AGObject] Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
         this._direction = direction;
         this._size = size;
@@ -174,6 +174,7 @@ export class AGObject {
         //console.log("Collision exit between: " + this.name + " and " + obj.name);
         let index = this._blockedObjects.lastIndexOf(obj);
         if(index > -1){
+            console.log("[AGObject] Collision Exit: removing object " + obj.name);
             this._blockedObjects.splice(index, 1);
         }
     }

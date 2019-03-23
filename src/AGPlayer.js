@@ -18,7 +18,7 @@ export class AGPlayer extends AGObject {
     navigation:AGNavigation;
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, navigation:AGNavigation){
-        console.log("Creating AGPlayer object: " + name + ".");
+        console.log("[AGPlayer] Creating AGPlayer object: " + name + ".");
 
         super(name, position, size, direction);
         this.navigation = navigation;

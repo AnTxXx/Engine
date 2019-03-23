@@ -59,7 +59,7 @@ export class AGGameArea {
     _type:Object;
 
     constructor(name:string, size:Vector3){
-        console.log("Creating AGGameArea object: " + name + ".");
+        console.log("[AGGameArea] Creating AGGameArea object: " + name + ".");
         this.size = size;
 
         // Create an AudioContext
@@ -126,12 +126,15 @@ export class AGGameArea {
                 else {
                     if(this._AGobjects[i].collidable && this._AGobjects[j].collidable) {
                         if (colliding(this._AGobjects[i], this._AGobjects[j])) {
-                            this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
-                            this.addCollision(this._AGobjects[i], this._AGobjects[j]);
-                            console.log("Collision between " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
+                            if((collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]))) == -1){
+                                console.log("[AGGameArea] Collision between " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
+                                this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
+                                this.addCollision(this._AGobjects[i], this._AGobjects[j]);
+                            }
                         } else {
-                            let index: number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
+                            let index:number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
                             if (index > -1) {
+                                console.log("[AGGameArea] Collision exit on " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
                                 this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
                                 this._collisions.splice(index, 1);
                             }
