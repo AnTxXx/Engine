@@ -95,6 +95,7 @@ export class AGObject {
     _currentRoute:number;
 
     _collidable:boolean;
+    _blockedObjects:Array<AGObject>;
 
     addRoute(...routes:Vector3){
         let i;
@@ -123,6 +124,7 @@ export class AGObject {
         this._collidable = false; //for testing, should be true for release
         this._type = type.OBJECT;
         this._route = [];
+        this._blockedObjects = [];
     }
 
     _AGSoundSources:Array<AGSoundSource>;
@@ -157,17 +159,15 @@ export class AGObject {
         }
     }
 
-    _blockedObjects:Array<AGObject>;
-
     onCollisionEnter(obj: AGObject) {
-        console.log("Collision happened between: " + this.name + " and " + obj.name);
+        //console.log("Collision happened between: " + this.name + " and " + obj.name);
         if(!this._blockedObjects.includes(obj)){
             this._blockedObjects.push(obj);
         }
     }
 
     onCollisionExit(obj: AGObject) {
-        console.log("Collision exit between: " + this.name + " and " + obj.name);
+        //console.log("Collision exit between: " + this.name + " and " + obj.name);
         let index = this._blockedObjects.lastIndexOf(obj);
         if(index > -1){
             this._blockedObjects.splice(index, 1);

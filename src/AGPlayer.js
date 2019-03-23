@@ -6,6 +6,13 @@ import {AGNavigation} from "./AGNavigation.js";
 import {type} from "./AGType.js";
 
 export class AGPlayer extends AGObject {
+    get hitSound(): AGSoundSource {
+        return this._hitSound;
+    }
+
+    set hitSound(value: AGSoundSource) {
+        this._hitSound = value;
+    }
 
 
     navigation:AGNavigation;
@@ -20,9 +27,15 @@ export class AGPlayer extends AGObject {
     }
 
     moveSound:AGSoundSource;
+    _hitSound:AGSoundSource;
     health:number;
 
     draw(){
         this.navigation.draw(this);
+    }
+
+    onCollisionEnter(obj: AGObject) {
+        super.onCollisionEnter(obj);
+        this._hitSound.play();
     }
 }
