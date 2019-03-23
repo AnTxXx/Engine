@@ -107,6 +107,10 @@ export class AGObject {
         this._route.push(node);
     }
 
+    clearRoute(){
+        this._route = [];
+    }
+
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
         console.log("Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
