@@ -35,6 +35,7 @@ export class AGPortal extends AGObject{
     }
 
     linkPortals(portal:AGPortal){
+        console.log("[AGPortal] Linking Portal: " + this.name + " to " + portal.name);
         portal.exit = (this);
         this.exit = portal;
     }
