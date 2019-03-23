@@ -11,7 +11,7 @@ export class AGObject {
         return this._collidable;
     }
 
-    set collidable(value) {
+    set collidable(value:boolean) {
         this._collidable = value;
     }
     get blockedObjects(): Array<AGObject> {
@@ -97,13 +97,14 @@ export class AGObject {
     _collidable:boolean;
 
     addRoute(...routes:Vector3){
-        if(!this._route){
-            this._route = [];
-        }
         let i;
         for(i = 0; i < routes.length; i++) {
             this._route.push(routes[i]);
         }
+    }
+
+    addRouteNode(node:Vector3){
+        this._route.push(node);
     }
 
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
@@ -117,6 +118,7 @@ export class AGObject {
         this._name = name;
         this._collidable = false; //for testing, should be true for release
         this._type = type.OBJECT;
+        this._route = [];
     }
 
     _AGSoundSources:Array<AGSoundSource>;
