@@ -36,10 +36,10 @@ gegner.movable = true;
 door1.linkPortals(door2);
 
 //Physics debug:
-player.collidable = true;
-gegner.collidable = false;
-door1.collidable = true;
-door2.collidable = true;
+//player.collidable = true;
+//gegner.collidable = false;
+//door1.collidable = true;
+//door2.collidable = true;
 
 play(area, true);
 

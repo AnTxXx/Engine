@@ -4,7 +4,7 @@ import {AGObject} from "./AGObject.js";
 
 export function collisionIsInArray(arr:Array<Collision>, col:Collision):number {
     for(let i = 0, len = arr.length; i < len; i++){
-        if(arr[i].obj1 === col.obj1 && arr[i].obj2 === col.obj2){
+        if((arr[i].obj1 === col.obj1 && arr[i].obj2 === col.obj2) || (arr[i].obj2 === col.obj1 && arr[i].obj1 === col.obj2)){
             return i;
         }
     }

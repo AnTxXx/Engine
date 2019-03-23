@@ -30,7 +30,7 @@ export class AGPortal extends AGObject{
 
             console.log("[AGPortal] Teleporting Object: " + obj.name + " to exit: " + this.exit.name);
         } else {
-            console.log("[AGPortal] Registering already blocked object: " + obj.name);
+            //console.log("[AGPortal] Registering already blocked object: " + obj.name);
         }
     }
 
