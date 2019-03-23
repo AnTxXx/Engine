@@ -14,7 +14,7 @@ let gegner_ss:AGSoundSource = new AGSoundSource("schritte", "sounds/steps.wav", 
 let controls:AGNavigation = new AGNavigation(38, 40, 37, 39);
 let player:AGPlayer = new AGPlayer("spieler", new Vector3(4.0, 1.0, 4.0), new Vector3(1,0,0), new Vector3(1,1,1), controls);
 let player_hit:AGSoundSource = new AGSoundSource("hit", "sounds/ouch.mp3", false, 1, area.audioContext, area.resonanceAudioScene);
-let door1:AGPortal = new AGPortal("Tuere 1", new Vector3(5.0, 1.0, 4.0), new Vector3(1,0,0), new Vector3(1,1,1));
+let door1:AGPortal = new AGPortal("Tuere 1", new Vector3(5.0, 1.0, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
 let door2:AGPortal = new AGPortal("Tuere 2", new Vector3(8.0, 1.0, 8.0), new Vector3(1,0,0), new Vector3(1,1,1));
 
 gegner.addSoundSource(gegner_ss);

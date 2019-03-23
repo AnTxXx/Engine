@@ -123,6 +123,7 @@ export class AGObject {
         this._name = name;
         this._collidable = false; //for testing, should be true for release
         this._type = type.OBJECT;
+        this._AGSoundSources = [];
         this._route = [];
         this._blockedObjects = [];
     }
@@ -130,9 +131,6 @@ export class AGObject {
     _AGSoundSources:Array<AGSoundSource>;
 
     addSoundSource(source: AGSoundSource){
-        if(!this._AGSoundSources){
-            this._AGSoundSources = [];
-        }
         source.setPosition(this._position);
         this._AGSoundSources.push(source);
     }

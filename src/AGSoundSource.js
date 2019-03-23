@@ -103,7 +103,8 @@ export class AGSoundSource
     stop(){
         if(this.playing){
             this.playing = false;
-            this.audioElement.stop();
+            this.audioElement.pause();
+            this.audioElement.currentTime = 0;
         }
     }
 

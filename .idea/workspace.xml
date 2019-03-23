@@ -41,7 +41,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AGPortal.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
@@ -59,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="17" column="42" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
+            <state relative-caret-position="501">
+              <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
               <folding>
                 <element signature="e#9#46#0" expanded="true" />
               </folding>
@@ -83,20 +83,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AGObject.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="158" column="9" selection-start-line="158" selection-start-column="9" selection-end-line="158" selection-end-column="9" />
-              <folding>
-                <element signature="e#9#55#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AGSoundSource.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="93" selection-start-line="93" selection-end-line="93" />
+            <state relative-caret-position="198">
+              <caret line="127" column="34" lean-forward="true" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
               <folding>
                 <element signature="e#9#55#0" expanded="true" />
               </folding>
@@ -130,6 +118,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="484">
               <caret line="138" column="21" selection-start-line="138" selection-start-column="21" selection-end-line="138" selection-end-column="21" />
+              <folding>
+                <element signature="e#9#55#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AGSoundSource.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="388">
+              <caret line="99" column="9" lean-forward="true" selection-start-line="99" selection-start-column="9" selection-end-line="99" selection-end-column="9" />
               <folding>
                 <element signature="e#9#55#0" expanded="true" />
               </folding>
@@ -214,12 +214,12 @@
         <option value="$PROJECT_DIR$/src/AGNavigation.js" />
         <option value="$PROJECT_DIR$/src/AGPhysics.js" />
         <option value="$PROJECT_DIR$/src/AGPlayer.js" />
-        <option value="$PROJECT_DIR$/src/AGSoundSource.js" />
-        <option value="$PROJECT_DIR$/src/AGObject.js" />
         <option value="$PROJECT_DIR$/src/AGEngine.js" />
         <option value="$PROJECT_DIR$/src/AGGameArea.js" />
-        <option value="$PROJECT_DIR$/src/main.js" />
         <option value="$PROJECT_DIR$/src/AGPortal.js" />
+        <option value="$PROJECT_DIR$/src/AGSoundSource.js" />
+        <option value="$PROJECT_DIR$/src/AGObject.js" />
+        <option value="$PROJECT_DIR$/src/main.js" />
       </list>
     </option>
   </component>
@@ -305,6 +305,21 @@
               <item name="Engine" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="resonance" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Engine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Engine" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="resonance" type="462c0819:PsiDirectoryNode" />
+              <item name="resonance-audio.js" type="620a8d5e:NestingTreeNode" />
+            </path>
+            <path>
+              <item name="Engine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Engine" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
               <item name="three" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -377,7 +392,7 @@
       <workItem from="1553343659787" duration="1086000" />
       <workItem from="1553344955522" duration="241000" />
       <workItem from="1553345220219" duration="261000" />
-      <workItem from="1553345598454" duration="4460000" />
+      <workItem from="1553345598454" duration="5451000" />
     </task>
     <task id="LOCAL-00001" summary="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <created>1552061084633</created>
@@ -390,7 +405,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="101172000" />
+    <option name="totallyTimeSpent" value="102163000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -476,13 +491,6 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/resonance-audio/package.json" />
-    <entry file="file://$PROJECT_DIR$/src/js/resonance/resonance-audio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="3974" column="35" lean-forward="true" selection-start-line="3974" selection-start-column="35" selection-end-line="3974" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/flow-typed/resonance-audio.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -608,36 +616,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AGSoundSource.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="93" selection-start-line="93" selection-end-line="93" />
-          <folding>
-            <element signature="e#9#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AGPlayer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="e#9#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AGObject.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="158" column="9" selection-start-line="158" selection-start-column="9" selection-end-line="158" selection-end-column="9" />
-          <folding>
-            <element signature="e#9#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AGNavigation.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -662,13 +640,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AGPhysics.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -676,12 +647,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.js">
+    <entry file="file://$PROJECT_DIR$/src/AGPlayer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="17" column="42" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
+        <state relative-caret-position="289">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
           <folding>
-            <element signature="e#9#46#0" expanded="true" />
+            <element signature="e#9#55#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -690,6 +661,50 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/resonance/resonance-audio.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="3967" selection-start-line="3967" selection-end-line="3967" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AGSoundSource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="99" column="9" lean-forward="true" selection-start-line="99" selection-start-column="9" selection-end-line="99" selection-end-column="9" />
+          <folding>
+            <element signature="e#9#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AGObject.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="127" column="34" lean-forward="true" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
+          <folding>
+            <element signature="e#9#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
+          <folding>
+            <element signature="e#9#46#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
