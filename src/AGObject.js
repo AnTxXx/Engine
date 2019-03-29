@@ -3,10 +3,18 @@ import {Vector3} from "./js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {moveTo} from "./AGNavigation.js";
 import {type} from "./AGType.js";
+import {AGGameArea} from "./AGGameArea.js";
 
 let debug = 0;
 
 export class AGObject {
+    get gameArea(): AGGameArea {
+        return this._gameArea;
+    }
+
+    set gameArea(value: AGGameArea) {
+        this._gameArea = value;
+    }
     get collidable() {
         return this._collidable;
     }
@@ -83,6 +91,7 @@ export class AGObject {
         return this.speed.x;
     }
     _type:Object;
+    _gameArea:AGGameArea;
 
     _name:string;
     _position:Vector3;

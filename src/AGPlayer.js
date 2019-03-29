@@ -36,6 +36,7 @@ export class AGPlayer extends AGObject {
 
     onCollisionEnter(obj: AGObject) {
         super.onCollisionEnter(obj);
+        this._hitSound.audioElement.currentTime = 0;
         this._hitSound.play();
     }
 }

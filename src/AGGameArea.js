@@ -1,9 +1,9 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import {colliding} from "./AGPhysics.js";
+import {isAABBInsideAABB, isPointInsideAABB, colliding} from "./AGPhysics.js";
 import {type} from "./AGType.js";
-import {Collision, collisionIsInArray} from "./Collision.js";
+import {Collision, objectPartOfCollision, collisionIsInArray} from "./Collision.js";
 
 let debug = 0;
 
@@ -106,10 +106,58 @@ export class AGGameArea {
             this._AGobjects = [];
         }
         this._AGobjects.push(gameObject);
+        gameObject.gameArea = this;
     }
 
     addCollision(obj1:AGObject, obj2:AGObject){
         this._collisions.push(new Collision(obj1, obj2));
+    }
+
+    objectPartOfCollision(obj:AGObject):?AGObject{
+        return objectPartOfCollision(this._collisions, obj);
+    }
+
+    checkForCollision(){
+        //Collision?
+        for(let i = 0, len = this._AGobjects.length; i < len; i++){
+            for(let j = 0; j < len; j++){
+                if(i === j) continue;
+                else {
+                    if(this._AGobjects[i].collidable && this._AGobjects[j].collidable) {
+                        if (colliding(this._AGobjects[i], this._AGobjects[j])) {
+                            if((collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]))) === -1){
+                                console.log("[AGGameArea] Collision between " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
+                                this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
+                                this.addCollision(this._AGobjects[i], this._AGobjects[j]);
+                            }
+                        } else {
+                            let index:number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
+                            if (index > -1) {
+                                console.log("[AGGameArea] Collision exit on " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
+                                this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
+                                this._collisions.splice(index, 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    predictCollisionByPoint(position:Vector3):Array<AGObject>{
+        let collisionArray:Array<AGObject> = [];
+        for(let i = 0, len = this._AGobjects.length; i < len; i++){
+            if(isPointInsideAABB(position, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
+        }
+        return collisionArray;
+    }
+
+    predictCollisionByPointAndSize(position:Vector3, size:Vector3):Array<AGObject>{
+        let collisionArray:Array<AGObject> = [];
+        for(let i = 0, len = this._AGobjects.length; i < len; i++){
+            if(isAABBInsideAABB(position, size, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
+        }
+        return collisionArray;
     }
 
     draw(){
@@ -119,30 +167,7 @@ export class AGGameArea {
             if(debug) console.log("draw on element: " + element.name);
         });
 
-        //Collision?
-        for(let i = 0, len = this._AGobjects.length; i < len; i++){
-            for(let j = 0; j < len; j++){
-                if(i == j) continue;
-                else {
-                    if(this._AGobjects[i].collidable && this._AGobjects[j].collidable) {
-                        if (colliding(this._AGobjects[i], this._AGobjects[j])) {
-                            if((collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]))) == -1){
-                                //console.log("[AGGameArea] Collision between " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
-                                this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
-                                this.addCollision(this._AGobjects[i], this._AGobjects[j]);
-                            }
-                        } else {
-                            let index:number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
-                            if (index > -1) {
-                                //console.log("[AGGameArea] Collision exit on " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
-                                this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
-                                this._collisions.splice(index, 1);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        this.checkForCollision();
 
         this._resonanceAudioScene.setListenerPosition(this._listener.position.x, this._listener.position.y, this._listener.position.z);
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
