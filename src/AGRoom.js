@@ -1,7 +1,7 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import {isAABBInsideAABB, isPointInsideAABB, colliding} from "./AGPhysics.js";
+import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom} from "./AGPhysics.js";
 import {type} from "./AGType.js";
 import {Collision, objectPartOfCollision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
@@ -150,7 +150,7 @@ export class AGRoom {
         this._collisions.push(new Collision(obj1, obj2));
     }
 
-    objectPartOfCollision(obj:AGObject):?AGObject{
+    objectPartOfCollision(obj:AGObject):?AGObject {
         return objectPartOfCollision(this._collisions, obj);
     }
 
@@ -195,6 +195,10 @@ export class AGRoom {
             if(isAABBInsideAABB(position, size, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
         }
         return collisionArray;
+    }
+
+    pointInsideRoom(position:Vector3, size:Vector3):boolean{
+        return isAABBInsideRoom(position, size, this);
     }
 
     draw(){

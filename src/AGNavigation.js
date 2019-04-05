@@ -11,8 +11,9 @@ export function move(object:AGObject, add:boolean){
     if(add){
         //console.log("Prediction:");
         //console.log(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())));
-        collisionArray = object.room.predictCollisionByPointAndSize(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())), object.size);
-        if(collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL){
+        let testPoint:Vector3 = object.position.clone().add(object.speed.clone().multiply(object.direction.clone()));
+        collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
+        if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL) || !object.room.pointInsideRoom(testPoint, object.size)){
             console.log("Can't move forward. Blocked.");
         }
         else {
@@ -21,8 +22,9 @@ export function move(object:AGObject, add:boolean){
     } else {
         //console.log("Prediction:");
         //console.log(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
-        collisionArray = object.room.predictCollisionByPointAndSize(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())), object.size);
-        if(collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL){
+        let testPoint:Vector3 = object.position.clone().add(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
+        collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
+        if(collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL || !object.room.pointInsideRoom(testPoint, object.size)){
             console.log("Can't move backward. Blocked.");
         }
         else {

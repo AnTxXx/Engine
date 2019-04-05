@@ -19,7 +19,7 @@ let player_hit:AGSoundSource = new AGSoundSource("hit", "sounds/ouch.mp3", false
 let door1:AGPortal = new AGPortal("Tuere 1", new Vector3(5.0, 1.0, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
 let door2:AGPortal = new AGPortal("Tuere 2", new Vector3(8.0, 1.0, 8.0), new Vector3(1,0,0), new Vector3(1,1,1));
 
-let wallSOUTH:AGObject = new AGObject("wall_south", new Vector3(5,1,10), new Vector3(1,0,0), new Vector3(5,1,1));
+//let wallSOUTH:AGObject = new AGObject("wall_south", new Vector3(5,1,10), new Vector3(1,0,0), new Vector3(5,1,1));
 
 area.listener = player;
 
@@ -27,7 +27,7 @@ gegner.addSoundSource(gegner_ss);
 room_1.add(gegner);
 room_1.add(door1);
 room_1.add(door2);
-room_1.add(wallSOUTH);
+//room_1.add(wallSOUTH);
 
 //player.setSpeedSkalar(1);
 player.speed = new Vector3(0.1, 0.0, 0.1);

@@ -1,6 +1,7 @@
 // @flow
 import {AGObject} from "./AGObject.js";
 import {Vector3} from "./js/three/Vector3.js";
+import {AGRoom} from "./AGRoom.js";
 
 export function colliding(obj1:AGObject, obj2:AGObject):boolean{
     /*console.log((obj1.position.x-obj1.size.x/2 <= obj2.position.x+obj2.size.x/2 &&
@@ -28,4 +29,13 @@ export function isAABBInsideAABB(point:Vector3, size:Vector3, obj:AGObject):bool
             point.y+size.y/2 >= obj.position.y-obj.size.y/2) &&
         (point.z-size.z/2 <= obj.position.z+obj.size.z/2 &&
             point.z+size.z/2 >= obj.position.z-obj.size.z/2);
+}
+
+export function isAABBInsideRoom(point:Vector3, size:Vector3, room:AGRoom):boolean{
+    return (point.x - size.x/2 >= 0.0 &&
+    point.x + size.x/2 <= room.size.x) &&
+        (point.y - size.y/2 >= 0.0 &&
+    point.y + size.y/2 <= room.size.y) &&
+        (point.z - size.z/2 >= 0.0 &&
+    point.z + size.z/2 <= room.size.z);
 }
