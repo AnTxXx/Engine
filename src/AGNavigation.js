@@ -11,7 +11,7 @@ export function move(object:AGObject, add:boolean){
     if(add){
         //console.log("Prediction:");
         //console.log(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())));
-        collisionArray = object.gameArea.predictCollisionByPointAndSize(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())), object.size);
+        collisionArray = object.room.predictCollisionByPointAndSize(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())), object.size);
         if(collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL){
             console.log("Can't move forward. Blocked.");
         }
@@ -21,7 +21,7 @@ export function move(object:AGObject, add:boolean){
     } else {
         //console.log("Prediction:");
         //console.log(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
-        collisionArray = object.gameArea.predictCollisionByPointAndSize(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())), object.size);
+        collisionArray = object.room.predictCollisionByPointAndSize(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())), object.size);
         if(collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL){
             console.log("Can't move backward. Blocked.");
         }

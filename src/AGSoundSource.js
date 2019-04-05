@@ -1,16 +1,16 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {type} from "./AGType.js";
-import {AGGameArea} from "./AGGameArea.js";
+import {AGRoom} from "./AGRoom.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
-    get area(): AGGameArea {
-        return this._area;
+    get room(): AGRoom {
+        return this._room;
     }
 
-    set area(value: AGGameArea) {
-        this._area = value;
+    set room(value: AGRoom) {
+        this._room = value;
     }
     get looping(): boolean {
         return this._looping;
@@ -66,7 +66,7 @@ export class AGSoundSource
     source:Object;
     _type:Object;
 
-    _area:AGGameArea;
+    _room:AGRoom;
 
     // $FlowFixMe
     audioContext;
@@ -74,13 +74,13 @@ export class AGSoundSource
     resonanceAudioScene;
 
     // $FlowFixMe
-    constructor(name:string, file:Object, looping:boolean, interval:number, area:AGGameArea){
+    constructor(name:string, file:Object, looping:boolean, interval:number, room:AGRoom){
         console.log("[AGSoundSource] Creating AGSoundSource object: " + name + ".");
         this.file = file;
         this.interval = interval;
         this._playing = false;
-        this.audioContext = area.audioContext;
-        this.resonanceAudioScene = area.resonanceAudioScene;
+        this.audioContext = room.audioContext;
+        this.resonanceAudioScene = room.resonanceAudioScene;
 
         // Create an AudioElement.
         this._audioElement = document.createElement('audio');
@@ -96,14 +96,14 @@ export class AGSoundSource
         this._type = type.SOUNDSOURCE;
         this._looping = looping;
 
-        this._area = area;
+        this._room = room;
 
     }
 
     setPosition(position: Vector3){
-        this.source.setPosition(position.x - this.area.size.x/2,
-            position.y - this.area.size.y/2,
-            position.z - this.area.size.z/2);
+        this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
+            position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
+            position.z - this.room.positionOnGameArea.z + this.room.size.z/2);
     }
 
     play(){
