@@ -8,6 +8,13 @@ import {Collision, objectPartOfCollision, collisionIsInArray} from "./Collision.
 let debug = 0;
 
 export class AGGameArea {
+    get size(): Vector3 {
+        return this._size;
+    }
+
+    set size(value: Vector3) {
+        this._size = value;
+    }
     get type() {
         return this._type;
     }
@@ -42,7 +49,7 @@ export class AGGameArea {
         return this._AGobjects;
     }
     _name:string;
-    size:Vector3;
+    _size:Vector3;
 
     get name(): string {
         return this._name;
@@ -60,7 +67,6 @@ export class AGGameArea {
 
     constructor(name:string, size:Vector3){
         console.log("[AGGameArea] Creating AGGameArea object: " + name + ".");
-        this.size = size;
 
         // Create an AudioContext
         this._audioContext = new AudioContext();
@@ -70,6 +76,8 @@ export class AGGameArea {
         this._resonanceAudioScene = new ResonanceAudio(this._audioContext);
         // Connect the scene’s binaural output to stereo out.
         this._resonanceAudioScene.output.connect(this._audioContext.destination);
+
+        this.size = size;
 
         this.roomDimensions = {
             width: this.size.x,
@@ -90,12 +98,14 @@ export class AGGameArea {
         };
 
         this._resonanceAudioScene.setRoomProperties(this.roomDimensions, this.roomMaterials);
+
         this._name = name;
         this._type = type.GAMEAREA;
 
         if(!this._collisions){
             this._collisions = [];
         }
+        this._size = size;
     }
 
     _AGobjects:Array<AGObject>;
@@ -169,7 +179,10 @@ export class AGGameArea {
 
         this.checkForCollision();
 
-        this._resonanceAudioScene.setListenerPosition(this._listener.position.x, this._listener.position.y, this._listener.position.z);
+        this._resonanceAudioScene.setListenerPosition(this._listener.position.x -  this.size.x/2,
+            this._listener.position.y - this.size.y/2,
+            this._listener.position.z - this.size.z/2);
+
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
     }
 

@@ -1,9 +1,17 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {type} from "./AGType.js";
+import {AGGameArea} from "./AGGameArea.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
+    get area(): AGGameArea {
+        return this._area;
+    }
+
+    set area(value: AGGameArea) {
+        this._area = value;
+    }
     get looping(): boolean {
         return this._looping;
     }
@@ -58,19 +66,21 @@ export class AGSoundSource
     source:Object;
     _type:Object;
 
+    _area:AGGameArea;
+
     // $FlowFixMe
     audioContext;
     // $FlowFixMe
     resonanceAudioScene;
 
     // $FlowFixMe
-    constructor(name:string, file:Object, looping:boolean, interval:number, audioContext, resonanceAudioScene){
+    constructor(name:string, file:Object, looping:boolean, interval:number, area:AGGameArea){
         console.log("[AGSoundSource] Creating AGSoundSource object: " + name + ".");
         this.file = file;
         this.interval = interval;
         this._playing = false;
-        this.audioContext = audioContext;
-        this.resonanceAudioScene = resonanceAudioScene;
+        this.audioContext = area.audioContext;
+        this.resonanceAudioScene = area.resonanceAudioScene;
 
         // Create an AudioElement.
         this._audioElement = document.createElement('audio');
@@ -78,18 +88,22 @@ export class AGSoundSource
         // Load an audio file into the AudioElement.
         this.audioElement.src = this.file;
 
-        this.audioElementSource = audioContext.createMediaElementSource(this.audioElement);
+        this.audioElementSource = this.audioContext.createMediaElementSource(this.audioElement);
 
-        this.source = resonanceAudioScene.createSource();
+        this.source = this.resonanceAudioScene.createSource();
         this.audioElementSource.connect(this.source.input);
         this._name = name;
         this._type = type.SOUNDSOURCE;
         this._looping = looping;
 
+        this._area = area;
+
     }
 
     setPosition(position: Vector3){
-        this.source.setPosition(position.x, position.y, position.z);
+        this.source.setPosition(position.x - this.area.size.x/2,
+            position.y - this.area.size.y/2,
+            position.z - this.area.size.z/2);
     }
 
     play(){
