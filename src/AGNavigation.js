@@ -13,8 +13,10 @@ export function move(object:AGObject, add:boolean){
         //console.log(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())));
         let testPoint:Vector3 = object.position.clone().add(object.speed.clone().multiply(object.direction.clone()));
         collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
-        if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL) || !object.room.pointInsideRoom(testPoint, object.size)){
-            console.log("Can't move forward. Blocked.");
+        if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL && object !== collisionArray[0])){
+            console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by other object: " + collisionArray[0].name + ".");
+        } else if(!object.room.pointInsideRoom(testPoint, object.size)){
+            console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by room boundaries.");
         }
         else {
             object.position.add(object.speed.clone().multiply(object.direction.clone()));
@@ -22,10 +24,12 @@ export function move(object:AGObject, add:boolean){
     } else {
         //console.log("Prediction:");
         //console.log(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
-        let testPoint:Vector3 = object.position.clone().add(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
+        let testPoint:Vector3 = object.position.clone().sub(object.speed.clone().multiply(object.direction.clone()));
         collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
-        if(collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL || !object.room.pointInsideRoom(testPoint, object.size)){
-            console.log("Can't move backward. Blocked.");
+        if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL && object !== collisionArray[0])){
+            console.log("[AGNavigation] " + object.name + ": Can't move Backward. Blocked by other object: " + collisionArray[0].name + ".");
+        } else if(!object.room.pointInsideRoom(testPoint, object.size)){
+            console.log("[AGNavigation] " + object.name + ": Can't move Backward. Blocked by room boundaries.");
         }
         else {
             object.position.sub(object.speed.clone().multiply(object.direction.clone()));
@@ -42,9 +46,35 @@ export function move(object:AGObject, add:boolean){
     }*/
 }
 
+function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
+    for(let i = 0; i < collArray.length; i++){
+        if(obj !== collArray[i] && collArray[i].type !== type.PORTAL) {
+            //console.log("[AGNavigation] " + obj.name + ": Condition failed at object " + collArray[i].name + ".");
+            return false;
+        }
+    }
+    return true;
+}
+
 export function moveTo(object:AGObject, direction:Vector3){
-    object.position.add(object.speed.clone().multiply(direction));
-    //TODO: Collision detection from above adapt for moveTo
+    //should be optimized in a way, that we only need one function for moving :-) copy&pasta-ing is bad
+    let collisionArray:Array<AGObject>;
+    //console.log("Prediction:");
+    //console.log(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())));
+    let testPoint:Vector3 = object.position.clone().add(object.speed.clone().multiply(direction.clone()));
+    collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
+    /*if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL && object !== collisionArray[0])){
+        console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by other object: " + collisionArray[0].name + ".");
+    } else if(!object.room.pointInsideRoom(testPoint, object.size)){
+        console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by room boundaries.");
+    }*/
+    if(allowedCollision(object, collisionArray)){
+        //console.log("moving");
+        object.position.add(object.speed.clone().multiply(direction));
+    } else {
+        console.log("[AGNavigation] " + object.name + ": Can't move forward.");
+    }
+
     /*if(object.gameArea.objectPartOfCollision(object)!=null){
         object.position.add(object.speed.clone().multiply(-direction));
         console.log("Can't move forward. Blocked. " + object.position.x + " " + object.position.y + " " + object.position.z);
