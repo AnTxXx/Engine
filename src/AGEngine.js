@@ -19,6 +19,7 @@ const ConditionEnum = {
 
 let request;
 
+//Update Loop
 function animate(gameArea:AGGameArea) {
     draw(gameArea);
     request = window.requestAnimationFrame(function () {
@@ -26,10 +27,12 @@ function animate(gameArea:AGGameArea) {
     })
 }
 
+//Calling the gameArea for draw (update loop tick)
 function draw(gameArea:AGGameArea) {
     gameArea.draw();
 }
 
+//Start or Stop the game
 export function play(gameArea:AGGameArea, state:boolean){
     if(state){
         animate(gameArea);
@@ -40,6 +43,7 @@ export function play(gameArea:AGGameArea, state:boolean){
     }
 }
 
+//Stop game
 function stop(gameArea:AGGameArea){
     gameArea.stop();
 }

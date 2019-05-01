@@ -8,6 +8,9 @@ import {AGGameArea} from "./AGGameArea.js";
 
 let debug = 0;
 
+/**
+ * AGRoom is a physically separated room of a game scene (e.g., level or floor). It follows resonance audio's room idea.
+ */
 export class AGRoom {
     get live() {
         return this._live;
@@ -92,6 +95,13 @@ export class AGRoom {
     _gameArea:AGGameArea;
     _live:boolean;
 
+    /**
+     *
+     * @param name The name of the room.
+     * @param size The size of the room as Vector3.
+     * @param positionOnGrid The position of the room in the overall grid (the game 'map').
+     * @param gameArea The AGGameArea this room is part of.
+     */
     constructor(name:string, size:Vector3, positionOnGrid:Vector3, gameArea:AGGameArea){
         console.log("[AGRoom] Creating AGRoom object: " + name + ".");
         this._positionOnGameArea = positionOnGrid;
@@ -138,6 +148,10 @@ export class AGRoom {
     _AGobjects:Array<AGObject>;
     _collisions:Array<Collision>;
 
+    /**
+     * Adds a AGObject to the room (and will therefore be considered with every draw loop)
+     * @param gameObject The AGObject to add.
+     */
     add(gameObject :AGObject){
         if(!this._AGobjects){
             this._AGobjects = [];
@@ -146,14 +160,22 @@ export class AGRoom {
         gameObject.room = this;
     }
 
+    /**
+     * Add a collision to the room Collision array.
+     * @param obj1 The first object that is involved in a collision.
+     * @param obj2 The second object that is involved in a collision.
+     */
     addCollision(obj1:AGObject, obj2:AGObject){
         this._collisions.push(new Collision(obj1, obj2));
     }
 
-    objectPartOfCollision(obj:AGObject):?AGObject {
+    /*objectPartOfCollision(obj:AGObject):?AGObject {
         return objectPartOfCollision(this._collisions, obj);
-    }
+    }*/
 
+    /**
+     * Checks if a collision is happening in the respective room. If yes, it will be added to the local room collision array.
+     */
     checkForCollision(){
         //Collision?
         for(let i = 0, len = this._AGobjects.length; i < len; i++){
