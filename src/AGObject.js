@@ -106,6 +106,10 @@ export class AGObject {
     _collidable:boolean;
     _blockedObjects:Array<AGObject>;
 
+    /**
+     * Sets the waypoints of the respective object to which the object moves (if moveable == true).
+     * @param routes The routes as rest parameter.
+     */
     addRoute(...routes:Vector3){
         let i;
         for(i = 0; i < routes.length; i++) {
@@ -113,14 +117,28 @@ export class AGObject {
         }
     }
 
+    /**
+     * Adds a waypoint to the route.
+     * @param node The waypoint to be added.
+     */
     addRouteNode(node:Vector3){
         this._route.push(node);
     }
 
+    /**
+     * Clears the route.
+     */
     clearRoute(){
         this._route = [];
     }
 
+    /**
+     * Creates a new AGObject which is the basis of all objects the current scene has.
+     * @param name Name of the object.
+     * @param position Position (Vector3) of the object.
+     * @param direction Direction (Vector3) of the object.
+     * @param size Size (Vector3) of the object.
+     */
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
         console.log("[AGObject] Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
@@ -139,22 +157,26 @@ export class AGObject {
 
     _AGSoundSources:Array<AGSoundSource>;
 
+    /**
+     * Adds a soundsource to the object.
+     * @param source Soundsource (AGSoundSource) to be added.
+     */
     addSoundSource(source: AGSoundSource){
         source.setPosition(this._position);
         this._AGSoundSources.push(source);
     }
 
+    /**
+     * the draw-loop
+     */
     draw(){
-        /*this._AGSoundSources.forEach(function(element) {
-            element.play();
-            if(debug) console.log("draw on element: " + element.name);
-        })*/
-
+        //as long as the draw loop is called, the sound should be played.
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
             this._AGSoundSources[i].setPosition(this.position);
             this._AGSoundSources[i].play();
         }
 
+        //moves the object depending on speed and direction if the object is movable and a route is given.
         if(this._movable){
             if(this.position.distanceTo(this._route[this._currentRoute]) < this.getSpeedSkalar()*1){
                 //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
@@ -166,21 +188,36 @@ export class AGObject {
         }
     }
 
+    /**
+     * Stops all running sounds at the object.
+     */
     stop(){
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
             this._AGSoundSources[i].stop();
         }
     }
 
+    /**
+     * OnCollisionEnter is called as soon as a Collision happens with the respective object involved.
+     * @param obj The object (AGObject) this object collided with.
+     */
     onCollisionEnter(obj: AGObject) {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
+
+        //adds this object to the other object on its blocked list, so the onCollisionEnter isn't called again.
         if(!this._blockedObjects.includes(obj)){
             this._blockedObjects.push(obj);
         }
     }
 
+    /**
+     * OnCollisionExit is called as soon as a Collision ends.
+     * @param obj The object (AGobject) this object collided with before it left the Collision.
+     */
     onCollisionExit(obj: AGObject) {
         //console.log("Collision exit between: " + this.name + " and " + obj.name);
+
+        //deletes the object from the blockedObjects list.
         let index = this._blockedObjects.lastIndexOf(obj);
         if(index > -1){
             //console.log("[AGObject] Collision Exit: removing object " + obj.name);

@@ -74,6 +74,14 @@ export class AGSoundSource
     resonanceAudioScene;
 
     // $FlowFixMe
+    /**
+     * Creates a new sound source for the room.
+     * @param name Name of the sound source.
+     * @param file Filepath to the sound source. Uses HTML5 audio.
+     * @param looping If the sound source should be looped.
+     * @param interval ?
+     * @param room The room this sound source is going to be played.
+     */
     constructor(name:string, file:Object, looping:boolean, interval:number, room:AGRoom){
         console.log("[AGSoundSource] Creating AGSoundSource object: " + name + ".");
         this.file = file;
@@ -100,12 +108,19 @@ export class AGSoundSource
 
     }
 
+    /**
+     * Sets the position of the sound source.
+     * @param position New position (Vector3) of the sound source.
+     */
     setPosition(position: Vector3){
         this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
             position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
             position.z - this.room.positionOnGameArea.z + this.room.size.z/2);
     }
 
+    /**
+     * Starts the sound source. Doesn't care if it's already playing.
+     */
     play(){
         if(!this.playing){
             this.playing = true;
@@ -114,6 +129,9 @@ export class AGSoundSource
         }
     }
 
+    /**
+     * Stops the sound source.
+     */
     stop(){
         if(this.playing){
             this.playing = false;

@@ -17,6 +17,14 @@ export class AGPlayer extends AGObject {
 
     navigation:AGNavigation;
 
+    /**
+     * Creates a player of the game.
+     * @param name Name of the player.
+     * @param position Position (Vector3) of the player.
+     * @param direction Direction (Vector3) the player is facing.
+     * @param size Size (Vector3) of the player.
+     * @param navigation Navigation (AGNavigation) that has the controls for the player.
+     */
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, navigation:AGNavigation){
         console.log("[AGPlayer] Creating AGPlayer object: " + name + ".");
 
@@ -30,10 +38,17 @@ export class AGPlayer extends AGObject {
     _hitSound:AGSoundSource;
     health:number;
 
+    /**
+     * draw-loop
+     */
     draw(){
         this.navigation.draw(this);
     }
 
+    /**
+     * Extends onCollisionEnter of AGObject and plays the hit sound.
+     * @param obj The object (AGObject) the player collides with.
+     */
     onCollisionEnter(obj: AGObject) {
         super.onCollisionEnter(obj);
         this._hitSound.audioElement.currentTime = 0;

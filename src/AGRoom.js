@@ -211,6 +211,12 @@ export class AGRoom {
         return collisionArray;
     }
 
+    /**
+     * Cross AABB check if two objects intersect. Returns an array of collisions.
+     * @param position Position (Vector3) of the object.
+     * @param size Size (Vector3) of the object.
+     * @returns {Array<AGObject>} An Array of AGObjects that intersect with the position and size of the object given.
+     */
     predictCollisionByPointAndSize(position:Vector3, size:Vector3):Array<AGObject>{
         let collisionArray:Array<AGObject> = [];
         for(let i = 0, len = this._AGobjects.length; i < len; i++){
@@ -219,10 +225,19 @@ export class AGRoom {
         return collisionArray;
     }
 
+    /**
+     * Checks if a position is inside a room (true) or not (false)
+     * @param position The position (Vector3) to be checked.
+     * @param size The size (Vector3) of the surrounding boundary the point.
+     * @returns {boolean} True, if point is inside room, otherwise false.
+     */
     pointInsideRoom(position:Vector3, size:Vector3):boolean{
         return isAABBInsideRoom(position, size, this);
     }
 
+    /**
+     * draw-loop
+     */
     draw(){
         //All objects draw
         this._AGobjects.forEach(function(element) {
@@ -239,6 +254,9 @@ export class AGRoom {
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
     }
 
+    /**
+     * Iteratively goes through all objects stored in AGobjects and calls their respective stop. Clears collision array too.
+     */
     stop(){
         this._collisions = [];
         this._AGobjects.forEach(function(element) {
