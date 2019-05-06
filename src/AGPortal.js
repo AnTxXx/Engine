@@ -23,8 +23,8 @@ export class AGPortal extends AGObject{
      * @param size Size (Vector3) of the portal.
      */
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3){
-        console.log("[AGPortal] Creating AGPortal object: " + name + ".");
         super(name, position, direction, size);
+        console.log("[AGPortal] Creating AGPortal object [ID: " + this._ID + "]: " + name + ".");
         this._type = type.PORTAL;
     }
 

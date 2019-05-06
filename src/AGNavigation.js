@@ -2,6 +2,7 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {type} from "./AGType.js";
+import {Counter} from "./IDGenerator.js";
 
 let gForward, gBackward, gLeft, gRight;
 
@@ -104,6 +105,12 @@ export function moveTo(object:AGObject, direction:Vector3){
  */
 export class AGNavigation {
 
+    _ID:number;
+
+    get ID() {
+        return this._ID;
+    }
+
     /**
      *
      * @param forward Keycode for forward-movement.
@@ -112,7 +119,8 @@ export class AGNavigation {
      * @param right Keycode for right-turn.
      */
     constructor(forward:number, backward:number, left:number, right:number){
-        console.log("[AGNavigation] Creating AGNavigation object.");
+        this._ID = Counter.next();
+        console.log("[AGNavigation] Creating AGNavigation object [ID: " + this._ID + "].");
         gForward = forward;
         gBackward = backward;
         gLeft = left;

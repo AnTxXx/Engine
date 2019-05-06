@@ -4,10 +4,20 @@ import {AGSoundSource} from "./AGSoundSource.js";
 import {moveTo} from "./AGNavigation.js";
 import {type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
+import {Counter} from "./IDGenerator.js";
+import {AGInventory} from "./AGInventory.js";
 
 let debug = 0;
 
 export class AGObject {
+    get ID() {
+        return this._ID;
+    }
+
+    get inventory() {
+        return this._inventory;
+    }
+
     get room(): AGRoom {
         return this._room;
     }
@@ -90,8 +100,21 @@ export class AGObject {
     getSpeedSkalar(){
         return this.speed.x;
     }
+
+
+    get tag(): string {
+        return this._tag;
+    }
+
+    set tag(value: string) {
+        this._tag = value;
+    }
+
     _type:Object;
+
     _room:AGRoom;
+
+    _ID:number;
 
     _name:string;
     _position:Vector3;
@@ -105,6 +128,9 @@ export class AGObject {
 
     _collidable:boolean;
     _blockedObjects:Array<AGObject>;
+    _tag:string;
+
+    _inventory:AGInventory;
 
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
@@ -125,6 +151,7 @@ export class AGObject {
         this._route.push(node);
     }
 
+
     /**
      * Clears the route.
      */
@@ -140,7 +167,8 @@ export class AGObject {
      * @param size Size (Vector3) of the object.
      */
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
-        console.log("[AGObject] Creating AGObject object: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
+        this._ID = Counter.next();
+        console.log("[AGObject] Creating AGObject object [ID: " + this._ID + "]: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
         this._direction = direction;
         this._size = size;
@@ -153,7 +181,10 @@ export class AGObject {
         this._AGSoundSources = [];
         this._route = [];
         this._blockedObjects = [];
+        this._tag = "";
+        this._inventory = new AGInventory();
     }
+
 
     _AGSoundSources:Array<AGSoundSource>;
 
@@ -203,6 +234,7 @@ export class AGObject {
      */
     onCollisionEnter(obj: AGObject) {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
+        //TODO: call EventHandler with onContact() Trigger
 
         //adds this object to the other object on its blocked list, so the onCollisionEnter isn't called again.
         if(!this._blockedObjects.includes(obj)){

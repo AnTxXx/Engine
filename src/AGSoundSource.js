@@ -2,9 +2,15 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
+import {Counter} from "./IDGenerator.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
+
+    get ID() {
+        return this._ID;
+    }
+
     get room(): AGRoom {
         return this._room;
     }
@@ -65,6 +71,7 @@ export class AGSoundSource
     audioElementSource:Object;
     source:Object;
     _type:Object;
+    _ID:number;
 
     _room:AGRoom;
 
@@ -83,7 +90,8 @@ export class AGSoundSource
      * @param room The room this sound source is going to be played.
      */
     constructor(name:string, file:Object, looping:boolean, interval:number, room:AGRoom){
-        console.log("[AGSoundSource] Creating AGSoundSource object: " + name + ".");
+        this._ID = Counter.next();
+        console.log("[AGSoundSource] Creating AGSoundSource object [ID: " + this._ID + "]: " + name + ".");
         this.file = file;
         this.interval = interval;
         this._playing = false;

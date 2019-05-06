@@ -5,6 +5,7 @@ import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom} from "
 import {type} from "./AGType.js";
 import {Collision, objectPartOfCollision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
+import {Counter} from "./IDGenerator.js";
 
 let debug = 0;
 
@@ -12,6 +13,11 @@ let debug = 0;
  * AGRoom is a physically separated room of a game scene (e.g., level or floor). It follows resonance audio's room idea.
  */
 export class AGRoom {
+
+    get ID() {
+        return this._ID;
+    }
+
     get live() {
         return this._live;
     }
@@ -76,6 +82,7 @@ export class AGRoom {
     }
     _name:string;
     _size:Vector3;
+    _ID:number;
 
     get name(): string {
         return this._name;
@@ -103,7 +110,8 @@ export class AGRoom {
      * @param gameArea The AGGameArea this room is part of.
      */
     constructor(name:string, size:Vector3, positionOnGrid:Vector3, gameArea:AGGameArea){
-        console.log("[AGRoom] Creating AGRoom object: " + name + ".");
+        this._ID = Counter.next();
+        console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
         this._positionOnGameArea = positionOnGrid;
         this._gameArea = gameArea;
         this._live = false;
