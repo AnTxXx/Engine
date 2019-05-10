@@ -21,6 +21,14 @@ export class AGItem {
         this._charges = value;
     }
 
+    addCharge(){
+        this._charges++;
+    }
+
+    removeCharge():number{
+        return --this._charges;
+    }
+
     get name(): string {
         return this._name;
     }

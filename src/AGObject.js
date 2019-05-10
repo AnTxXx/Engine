@@ -11,6 +11,21 @@ import type {Trigger} from "./EventType.js";
 let debug = 0;
 
 export class AGObject {
+    get destructible() {
+        return this._destructible;
+    }
+
+    set destructible(value) {
+        this._destructible = value;
+    }
+
+    get health() {
+        return this._health;
+    }
+
+    set health(value) {
+        this._health = value;
+    }
     get ID() {
         return this._ID;
     }
@@ -133,6 +148,9 @@ export class AGObject {
 
     _inventory:AGInventory;
 
+    _destructible:boolean;
+    _health:number;
+
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
      * @param routes The routes as rest parameter.
@@ -184,6 +202,8 @@ export class AGObject {
         this._blockedObjects = [];
         this._tag = "";
         this._inventory = new AGInventory(this);
+        this._destructible = false;
+        this._health = 1;
     }
 
 
