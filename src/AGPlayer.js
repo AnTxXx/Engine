@@ -3,7 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {AGObject} from "./AGObject.js";
 import {AGNavigation} from "./AGNavigation.js";
-import {type} from "./AGType.js";
+import type {Type} from "./AGType.js";
 
 export class AGPlayer extends AGObject {
     get hitSound(): AGSoundSource {
@@ -28,9 +28,9 @@ export class AGPlayer extends AGObject {
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, navigation:AGNavigation){
         console.log("[AGPlayer] Creating AGPlayer object: " + name + ".");
 
-        super(name, position, size, direction);
+        super(name, position, direction, size);
         this.navigation = navigation;
-        this._type = type.PLAYER;
+        this._type = "PLAYER";
 
     }
 

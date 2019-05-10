@@ -1,15 +1,17 @@
 // @flow
-export const trigger = {
-    ONDEATH: 'on_death',
-    ONCONTACT: 'on_contact',
-    ONSIGHT: 'on_sight',
-}
+const triggerVals = Object.freeze({
+    ONDEATH: 'ONDEATH',
+    ONCONTACT: 'ONCONTACT',
+    ONSIGHT: 'ONSIGHT',
+})
 
-export const action = {
-    ADD: 'add',
-    REMOVE: 'remove',
-    MOVE: 'move',
-    ACTIVATE: 'activate',
-    DEACTIVATE: 'deactivate',
-}
+const actionVals = Object.freeze({
+    ADD: 'ADD',
+    REMOVE: 'REMOVE',
+    MOVE: 'MOVE',
+    ACTIVATE: 'ACTIVATE',
+    DEACTIVATE: 'DEACTIVATE',
+})
 
+export type Trigger = $Values<typeof triggerVals>;
+export type Action = $Values<typeof actionVals>;

@@ -2,10 +2,11 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {moveTo} from "./AGNavigation.js";
-import {type} from "./AGType.js";
+import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
+import type {Trigger} from "./EventType.js";
 
 let debug = 0;
 
@@ -39,11 +40,11 @@ export class AGObject {
     set blockedObjects(value: Array<AGObject>) {
         this._blockedObjects = value;
     }
-    get type() {
+    get type():Type {
         return this._type;
     }
 
-    set type(value:Object) {
+    set type(value:Type) {
         this._type = value;
     }
     get name(): string {
@@ -110,7 +111,7 @@ export class AGObject {
         this._tag = value;
     }
 
-    _type:Object;
+    _type:Type;
 
     _room:AGRoom;
 
@@ -177,12 +178,12 @@ export class AGObject {
         this._speed = new Vector3(0,0,0);
         this._name = name;
         this._collidable = true;
-        this._type = type.OBJECT;
+        this._type = "OBJECT";
         this._AGSoundSources = [];
         this._route = [];
         this._blockedObjects = [];
         this._tag = "";
-        this._inventory = new AGInventory();
+        this._inventory = new AGInventory(this);
     }
 
 
@@ -235,7 +236,7 @@ export class AGObject {
     onCollisionEnter(obj: AGObject) {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
         //TODO: call EventHandler with onContact() Trigger
-
+        this.room.gameArea.eventHandler.call(this, "ONCONTACT");
         //adds this object to the other object on its blocked list, so the onCollisionEnter isn't called again.
         if(!this._blockedObjects.includes(obj)){
             this._blockedObjects.push(obj);

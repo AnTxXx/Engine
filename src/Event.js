@@ -1,6 +1,6 @@
 // @flow
 
-import {trigger, action} from "./EventType.js";
+import type {Trigger, Action} from "./EventType.js";
 import {AGObject} from "./AGObject.js";
 
 export class Event {
@@ -19,19 +19,19 @@ export class Event {
     set repeat(value: number) {
         this._repeat = value;
     }
-    get trigger(): Object {
+    get trigger(): Trigger {
         return this._trigger;
     }
 
-    set trigger(value: Object) {
+    set trigger(value: Trigger) {
         this._trigger = value;
     }
 
-    get action(): Object {
+    get action(): Action {
         return this._action;
     }
 
-    set action(value:Object) {
+    set action(value:Action) {
         this._action = value;
     }
 
@@ -52,13 +52,13 @@ export class Event {
     }
 
     _origin:AGObject;
-    _trigger:typeof(trigger);
-    _action:typeof(action);
+    _trigger:Trigger;
+    _action:Action;
     _object:AGObject;
     _addObject:?Object;
     _repeat:number;
 
-    constructor(origin: AGObject, trigger:Object, action:Object, object: AGObject, addObject: Object, repeat: number) {
+    constructor(origin: AGObject, trigger:Trigger, action:Action, object: AGObject, addObject: Object, repeat: number) {
         this._origin = origin;
         this._trigger = trigger;
         this._action = action;

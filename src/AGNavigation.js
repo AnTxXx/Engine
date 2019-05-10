@@ -1,7 +1,7 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import {type} from "./AGType.js";
+import type {Type} from "./AGType.js";
 import {Counter} from "./IDGenerator.js";
 
 let gForward, gBackward, gLeft, gRight;
@@ -26,7 +26,7 @@ export function move(object:AGObject, add:boolean){
         collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
 
         //checks if there is no collision happening and the object doesn't collide with itself
-        if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL && object !== collisionArray[0])){
+        if((collisionArray.length !== 0 && collisionArray[0].type === "PORTAL" && object !== collisionArray[0])){
             console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by other object: " + collisionArray[0].name + ".");
         } else
             //checks if the new point is still inside the room
@@ -43,7 +43,7 @@ export function move(object:AGObject, add:boolean){
         //console.log(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
         let testPoint:Vector3 = object.position.clone().sub(object.speed.clone().multiply(object.direction.clone()));
         collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
-        if((collisionArray.length !== 0 && collisionArray[0].type !== type.PORTAL && object !== collisionArray[0])){
+        if((collisionArray.length !== 0 && collisionArray[0].type === "PORTAL" && object !== collisionArray[0])){
             console.log("[AGNavigation] " + object.name + ": Can't move Backward. Blocked by other object: " + collisionArray[0].name + ".");
         } else if(!object.room.pointInsideRoom(testPoint, object.size)){
             console.log("[AGNavigation] " + object.name + ": Can't move Backward. Blocked by room boundaries.");
@@ -62,7 +62,7 @@ export function move(object:AGObject, add:boolean){
  */
 function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
     for(let i = 0; i < collArray.length; i++){
-        if(obj !== collArray[i] && collArray[i].type !== type.PORTAL) {
+        if(obj !== collArray[i] && collArray[i].type === "PORTAL") {
             //console.log("[AGNavigation] " + obj.name + ": Condition failed at object " + collArray[i].name + ".");
             return false;
         }

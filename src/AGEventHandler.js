@@ -3,7 +3,7 @@
 import {AGRoom} from "./AGRoom.js";
 import {Event} from "./Event.js";
 import {AGObject} from "./AGObject.js";
-import {action, trigger} from "./EventType.js";
+import type {Action, Trigger} from "./EventType.js";
 import {Counter} from "./IDGenerator.js";
 
 export class AGEventHandler{
@@ -27,14 +27,12 @@ export class AGEventHandler{
         this._events.splice(this.findEventIndex(event), 1);
     }
 
-    _room:AGRoom;
     _ID:number;
     _events:Array<Event>;
 
-    constructor(room:AGRoom){
+    constructor(){
         this._ID = Counter.next();
         console.log("[AGEventHandler] Creating AGEventHandler object [ID: " + this._ID + "].");
-        this._room = room;
         this._events = [];
     }
 
@@ -64,53 +62,53 @@ export class AGEventHandler{
     }
     */
 
-    findEventsAfterCall(object:AGObject, action:typeof(action)):Array<Event>{
+    findEventsAfterCall(object:AGObject, trigger:Trigger):Array<Event>{
         let events:Array<Event> = [];
         for(let i = 0; i < this._events.length; i++){
             if(this._events[i].object === object &&
-                this._events[i].action === action
+                this._events[i].trigger === trigger
             ) events.push(this._events[i]);
         }
         return events;
     }
 
-    call(object:AGObject, action:typeof(action)){
-        let events:Array<Event> = this.findEventsAfterCall(object, action);
-
+    call(object:AGObject, trigger:Trigger){
+        let events:Array<Event> = this.findEventsAfterCall(object, trigger);
         for(let i = 0; i < events.length; i++){
-            if(events[i].repeat > 1 || events[i].repeat === -1){
+            if(events[i].repeat >= 1 || events[i].repeat === -1){
                 //TODO: implement remaining action
-                switch(events[i].action){
+                console.log(events[i]);
+                switch(events[i].trigger){
                     //TRIGGER: ON CONTACT WITH OTHER OBJECT
-                    case trigger.ONCONTACT:
+                    case "ONCONTACT":
                         switch(events[i].action){
                             // TRIGGER: ONCONTACT, ACTION: ADD TO INVENTORY
-                            case action.ADD:
+                            case "ADD":
                                 events[i].object.inventory.addItem(events[i].addObject);
                                 break;
                             // TRIGGER: ONCONTACT, ACTION: REMOVE FROM INVENTORY
-                            case action.REMOVE:
+                            case "REMOVE":
                                 events[i].origin.inventory.removeItem(events[i].addObject);
                                 break;
                             // TRIGGER: ONCONTACT, ACTION: MOVE FROM INVENTORY TO OTHER
-                            case action.MOVE:
+                            case "MOVE":
                                 events[i].origin.inventory.removeItem(events[i].addObject);
                                 events[i].object.inventory.addItem(events[i].addObject);
                                 break;
                         }
                         break;
-                    case trigger.ONDEATH:
-                        switch(events[i].action){
+                    case "ONDEATH":
+                        switch(events[i].trigger){
                             // TRIGGER: ONDEATH, ACTION: ADD TO INVENTORY
-                            case action.ADD:
+                            case "ADD":
                                 events[i].object.inventory.addItem(events[i].addObject);
                                 break;
                             // TRIGGER: ONDEATH, ACTION: REMOVE FROM INVENTORY
-                            case action.REMOVE:
+                            case "REMOVE":
                                 events[i].origin.inventory.removeItem(events[i].addObject);
                                 break;
                             // TRIGGER: ONDEATH, ACTION: MOVE FROM INVENTORY TO OTHER
-                            case action.MOVE:
+                            case "MOVE":
                                 events[i].origin.inventory.removeItem(events[i].addObject);
                                 events[i].object.inventory.addItem(events[i].addObject);
                                 break;

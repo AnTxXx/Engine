@@ -2,7 +2,7 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom} from "./AGPhysics.js";
-import {type} from "./AGType.js";
+import type {Type} from "./AGType.js";
 import {Collision, objectPartOfCollision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {Counter} from "./IDGenerator.js";
@@ -47,11 +47,11 @@ export class AGRoom {
     set size(value: Vector3) {
         this._size = value;
     }
-    get type() {
+    get type():Type {
         return this._type;
     }
 
-    set type(value:Object) {
+    set type(value:Type) {
         this._type = value;
     }
     get listener(): AGObject {
@@ -96,7 +96,7 @@ export class AGRoom {
     roomMaterials:Object;
 
     _listener:AGObject;
-    _type:Object;
+    _type:Type;
 
     _positionOnGameArea:Vector3;
     _gameArea:AGGameArea;
@@ -145,7 +145,7 @@ export class AGRoom {
         this._resonanceAudioScene.setRoomProperties(this.roomDimensions, this.roomMaterials);
 
         this._name = name;
-        this._type = type.GAMEAREA;
+        this._type = "GAMEAREA";
 
         if(!this._collisions){
             this._collisions = [];

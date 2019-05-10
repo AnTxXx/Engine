@@ -1,8 +1,11 @@
 // @flow
-export const type = {
-    PLAYER: 'player',
-    SOUNDSOURCE: 'soundsource',
-    GAMEAREA: 'gamearea',
-    OBJECT: 'object',
-    PORTAL: 'portal'
-}
+
+const values = Object.freeze({
+    PLAYER: "PLAYER",
+    SOUNDSOURCE: 'SOUNDSOURCE',
+    GAMEAREA: "GAMEAREA",
+    OBJECT: "OBJECT",
+    PORTAL: "PORTAL"
+});
+
+export type Type = $Values<typeof values>;

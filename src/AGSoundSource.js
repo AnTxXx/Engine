@@ -1,6 +1,6 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
-import {type} from "./AGType.js";
+import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 
@@ -33,11 +33,11 @@ export class AGSoundSource
     set playing(value:boolean) {
         this._playing = value;
     }
-    get type() {
+    get type():Type {
         return this._type;
     }
 
-    set type(value:Object) {
+    set type(value:Type) {
         this._type = value;
     }
 
@@ -70,7 +70,7 @@ export class AGSoundSource
     _audioElement:Object;
     audioElementSource:Object;
     source:Object;
-    _type:Object;
+    _type:Type;
     _ID:number;
 
     _room:AGRoom;
@@ -109,7 +109,7 @@ export class AGSoundSource
         this.source = this.resonanceAudioScene.createSource();
         this.audioElementSource.connect(this.source.input);
         this._name = name;
-        this._type = type.SOUNDSOURCE;
+        this._type = "SOUNDSOURCE";
         this._looping = looping;
 
         this._room = room;

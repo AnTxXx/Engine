@@ -1,7 +1,7 @@
 // @flow
 import {AGObject} from "./AGObject.js";
 import {Vector3} from "./js/three/Vector3.js";
-import {type} from "./AGType.js";
+import type {Type} from "./AGType.js";
 
 export class AGPortal extends AGObject{
 
@@ -25,7 +25,7 @@ export class AGPortal extends AGObject{
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3){
         super(name, position, direction, size);
         console.log("[AGPortal] Creating AGPortal object [ID: " + this._ID + "]: " + name + ".");
-        this._type = type.PORTAL;
+        this._type = "PORTAL";
     }
 
     /**
@@ -33,7 +33,7 @@ export class AGPortal extends AGObject{
      * @param obj The object (AGObject) the portal collides with.
      */
     onCollisionEnter(obj: AGObject) {
-        if(obj.type === type.PLAYER && !this._blockedObjects.includes(obj)){
+        if(obj.type === "PLAYER" && !this._blockedObjects.includes(obj)){
             //Blocks object that has just been teleported in other Portal to not get teleported again (until leave)
             this.exit.blockedObjects.push(obj);
             obj.position = this.exit.position.clone();

@@ -3,10 +3,18 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {AGRoom} from "./AGRoom.js";
+import {AGEventHandler} from "./AGEventHandler.js";
 
 let debug:number = 0;
 
 export class AGGameArea {
+    get eventHandler(): AGEventHandler {
+        return this._eventHandler;
+    }
+
+    set eventHandler(value: AGEventHandler) {
+        this._eventHandler = value;
+    }
     get audioContext() {
         return this._audioContext;
     }
@@ -63,10 +71,13 @@ export class AGGameArea {
     // $FlowFixMe
     _audioContext;
 
-    constructor(name:string, size:Vector3){
+    _eventHandler:AGEventHandler;
+
+    constructor(name:string, size:Vector3, eventHandler:AGEventHandler){
         this.AGRooms = [];
         this.name = name;
         this.size = size;
+        this._eventHandler = eventHandler;
 
         // Create an AudioContext
         this._audioContext = new AudioContext();

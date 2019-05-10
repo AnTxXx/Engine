@@ -10,12 +10,14 @@ import { AGPortal } from "./AGPortal.js";
 import {AGRoom} from "./AGRoom.js";
 import {AGItem} from "./AGItem.js";
 import {AGEventHandler} from "./AGEventHandler.js";
-import {trigger, action} from "./EventType.js";
+import type {Trigger, Action} from "./EventType.js";
 import {Event} from "./Event.js";
 
-let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
+
+let eventHandler:AGEventHandler = new AGEventHandler();
+let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10), eventHandler);
 let room_1:AGRoom = area.newRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(0.0, 0.0, 0.0));
-let eventHandler:AGEventHandler = new AGEventHandler(room_1);
+
 
 let gegner:AGObject = new AGObject("gegner", new Vector3(2,1,8), new Vector3(1,0,0), new Vector3(1,1,1));
 let gegner_ss:AGSoundSource = new AGSoundSource("schritte", "sounds/steps.wav", true, 1, room_1);
@@ -56,7 +58,7 @@ door1.linkPortals(door2);
 
 let key:AGItem = new AGItem("Schluessel", "Ein Schluessel zum Oeffnen von Tueren.", 1);
 gegner.inventory.addItem(key);
-eventHandler.addEvent(new Event(gegner, trigger.ONCONTACT, action.MOVE, player, key, 1));
+eventHandler.addEvent(new Event(gegner, "ONCONTACT", "MOVE", player, key, 1));
 
 //EVENT ITEM TEST
 

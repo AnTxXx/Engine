@@ -1,13 +1,16 @@
 // @flow
 
 import {AGItem} from "./AGItem.js";
+import {AGObject} from "./AGObject.js";
 
 export class AGInventory{
 
     _inventory:Array<AGItem>;
+    _attachedTo:AGObject;
 
-    constructor() {
+    constructor(object:AGObject) {
         this._inventory = [];
+        this._attachedTo = object;
     }
 
 
@@ -21,6 +24,8 @@ export class AGInventory{
 
     addItem(item:AGItem){
         this._inventory.push(item);
+        console.log("[AGInventory] Adding Item " + item.name + " to Object's " + this._attachedTo.name + " inventory.");
+
     }
 
     removeItem(item:AGItem){
@@ -32,6 +37,7 @@ export class AGInventory{
             }
         }
         if(indexToDelete > -1) this._inventory.splice(indexToDelete, 1);
+        console.log("[AGInventory] Removing Item " + item.name + " from Object's " + this._attachedTo.name + " inventory.");
     }
 
     searchItemByName(name:string):?AGItem{
