@@ -221,7 +221,7 @@ export class AGObject {
     /**
      * the draw-loop
      */
-    draw(){
+    draw(timeStamp:Date){
         //as long as the draw loop is called, the sound should be played.
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
             this._AGSoundSources[i].setPosition(this.position);
@@ -235,7 +235,7 @@ export class AGObject {
                 this._currentRoute = ++this._currentRoute % this._route.length;
                 //console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
             } else {
-                moveTo(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize());
+                moveTo(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
             }
         }
 

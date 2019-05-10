@@ -9,7 +9,7 @@ import { AGPortal } from "../../lib/AGPortal.js";
 import { AGRoom } from "../../lib/AGRoom.js";
 import { AGItem } from "../../lib/AGItem.js";
 import { AGEventHandler } from "../../lib/AGEventHandler.js";
-
+import {AGCondition} from "../../lib/AGCondition.js";
 import { Event } from "../../lib/Event.js";
 
 
@@ -32,6 +32,7 @@ jQuery(function($){
 	area.listener = player;
 
 	gegner.addSoundSource(gegner_ss);
+	gegner.setSpeedSkalar(0.1);
 	gegner.tag = "ENEMY";
 
 	room_1.add(gegner);
@@ -60,7 +61,8 @@ jQuery(function($){
 	gegner.inventory.addItem(key);
 	eventHandler.addEvent(new Event(gegner, "ONCONTACT", "MOVE", player, key, 1));
 
-	//
+    door1.addCondition(new AGCondition(player, "INVENTORY", key));
+    //
 
 
 	//render the objects

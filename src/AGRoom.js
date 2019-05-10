@@ -102,6 +102,8 @@ export class AGRoom {
     _gameArea:AGGameArea;
     _live:boolean;
 
+    _lastTime:Date;
+
     /**
      *
      * @param name The name of the room.
@@ -151,6 +153,8 @@ export class AGRoom {
             this._collisions = [];
         }
         this._size = size;
+
+        this._lastTime = new Date(0);
     }
 
     _AGobjects:Array<AGObject>;
@@ -247,11 +251,13 @@ export class AGRoom {
      * draw-loop
      */
     draw(){
+        if(this._lastTime.getTime() === new Date(0).getTime()) this._lastTime = new Date();
+        console.log(this._lastTime);
         //All objects draw
-        this._AGobjects.forEach(function(element) {
-            element.draw();
-            if(debug) console.log("draw on element: " + element.name);
-        });
+        for(let i = 0; i < this._AGobjects.length; i++){
+            this._AGobjects[i].draw(this._lastTime);
+            if(debug) console.log("draw on element: " + this._AGobjects[i].name);
+        }
 
         this.checkForCollision();
 
@@ -260,6 +266,8 @@ export class AGRoom {
             this._listener.position.z - this.size.z/2);
 
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
+
+        this._lastTime = new Date();
     }
 
     /**

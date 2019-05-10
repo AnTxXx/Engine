@@ -180,6 +180,8 @@ function renderAGObject(ag_object){
 					obj.isRecording = false;
 					obj.name = 'Gegner';
 					obj.type = 'enemy';
+					obj.originX = 'center';
+					obj.originY = 'center';
 				  	room_canvas.add(obj).renderAll();
 				});
 				
@@ -220,6 +222,8 @@ function renderAGObject(ag_object){
 					obj.name = 'Portal';
 					obj.type = 'portal';
 					obj.secDoor = false;
+					obj.originX = 'center';
+					obj.originY = 'center';
 				  	room_canvas.add(obj).renderAll();
 				});
 				break;
@@ -239,6 +243,8 @@ function renderAGObject(ag_object){
 					obj.isObject = true;
 					obj.name = 'Spieler';
 					obj.type = 'player';
+					obj.originX = 'center';
+					obj.originY = 'center';
 				  	room_canvas.add(obj).renderAll();
 				});
 				break;
