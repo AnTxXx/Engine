@@ -553,6 +553,7 @@ jQuery(function($){
 		   	   left: target.left
 		   	};
 		
+<<<<<<< HEAD
 			switch (target.__corner) {
 			   case 'tl':
 			      if (dist.left < dist.top && dist.left < threshold) {
@@ -657,6 +658,28 @@ jQuery(function($){
 					});
 					
 					break;
+=======
+		switch(ag_object.tag){
+			case 'ENEMY':
+				fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
+				  	var obj = fabric.util.groupSVGElements(objects);
+				 	obj.scaleToWidth(ag_object.size.x*scale_,);
+				  	obj.scaleToHeight(ag_object.size.z*scale_,);
+				  	obj.left = ag_object.position.x*scale_;
+				    obj.top = ag_object.position.z*scale_;
+					obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+					obj.fill = colors[3][vision_mode];
+					obj.AGObject = ag_object;
+				 	obj.PathArray = [];
+					obj.isObject = true;
+					obj.isRecording = false;
+					obj.name = 'Gegner';
+					obj.type = 'enemy';
+					obj.originX = 'center';
+					obj.originY = 'center';
+				  	room_canvas.add(obj).renderAll();
+				});
+>>>>>>> a659ddc86f5d498bec6b8ca0b8542f24eba9e327
 				
 				case 'WALL':
 					var obj = new fabric.Rect({
@@ -739,6 +762,7 @@ jQuery(function($){
 	
 	function changeVisionMode(){
 		
+<<<<<<< HEAD
 		// 0...default
 		// 1...high contrast
 		room_canvas.backgroundColor = colors[0][vision_mode];
@@ -774,3 +798,52 @@ jQuery(function($){
 
 
 
+=======
+	}else if(ag_object.type){
+		switch(ag_object.type){
+			case 'PORTAL':	
+				fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
+				  	var obj = fabric.util.groupSVGElements(objects);
+				 	obj.scaleToWidth(ag_object.size.x*scale_,);
+				  	obj.scaleToHeight(ag_object.size.z*scale_,);
+				  	obj.left = ag_object.position.x*scale_;
+				    obj.top = ag_object.position.z*scale_;
+					obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+					obj.fill = colors[4][vision_mode];
+					obj.AGObject = ag_object;
+				 	obj.PathArray = [];
+					obj.isObject = true;
+					obj.isRecording = false;
+					obj.name = 'Portal';
+					obj.type = 'portal';
+					obj.secDoor = false;
+					obj.originX = 'center';
+					obj.originY = 'center';
+				  	room_canvas.add(obj).renderAll();
+				});
+				break;
+				
+			case 'PLAYER':
+				//TODO change size of player
+				fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
+				  	var obj = fabric.util.groupSVGElements(objects);
+				 	obj.scaleToWidth(1*scale_);
+				  	obj.scaleToHeight(1*scale_);
+				  	obj.left = ag_object.position.x*scale_;
+				    obj.top = ag_object.position.z*scale_;
+					obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+					obj.fill = colors[2][vision_mode];
+					obj.AGObject = ag_object;
+				 	obj.PathArray = [];
+					obj.isObject = true;
+					obj.name = 'Spieler';
+					obj.type = 'player';
+					obj.originX = 'center';
+					obj.originY = 'center';
+				  	room_canvas.add(obj).renderAll();
+				});
+				break;
+		}	
+	}
+}
+>>>>>>> a659ddc86f5d498bec6b8ca0b8542f24eba9e327
