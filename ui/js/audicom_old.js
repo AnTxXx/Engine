@@ -321,8 +321,6 @@ jQuery(function($){
 		}
 	});
 	
-	
-	
 	$('#btn_path_linkdoors').click(function(){
 		if(actObj.isRecording){
 			actObj.isRecording = false;
