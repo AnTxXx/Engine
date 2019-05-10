@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Audicom</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="ui/css/bootstrap.min.css">
+	<link rel="stylesheet" href="ui/css/bootstrap_ms.css">
+	<link rel="stylesheet" href="ui/css/bootstrap-ie7.css">
+	<link rel="stylesheet" href="ui/css/jquery-ui.css">
+	<link rel="stylesheet" href="ui/css/style.css?v=1.0">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+		
+	
+	<script src="ui/js/jquery.js"></script>
+	<script src="ui/js/jquery_ui_touch.js"></script>
+	<script src="ui/js/jquery-ui.js"></script>
+	<script src="ui/js/fabric.min.js"></script>	
+	
+
+	
+	<!--audio-stuff-->
+    <script src="lib/js/resonance/resonance-audio.js"></script>
+	
+	<script src="ui/js/audicom.js"></script>
+	<script type = "module" src="ui/js/main.js"></script>
+</head>
+
+<body>
+	<div id = "wrapper">
+		<div class = "row">
+			
+			<div id = "ui_part_left" class = "ui_part">
+				
+				<h2>Objects</h2>
+				<div id = "sb_object_enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
+					<i class="fas fa-skull"></i>
+				</div><!--sb_object-->
+				
+				
+				<h2>Structures</h2>
+				
+				
+				
+				<div id = "sb_object_wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
+					<i class="fas fa-map"></i>
+				</div><!--sb_object-->
+				
+				<div id = "sb_object_portal" class = "sb_object bg_portal sb_object_structure" obj_type = "portal">
+					<i class="fas fa-dungeon"></i>
+				</div><!--sb_object-->
+				
+				
+				
+				
+				
+				<!-- <div id = "sb_agplayer" class = "sb_object bg_green" obj_type = "player">
+					AGPlayer
+				</div> -->
+				
+				<!-- <p>Toppings</p>
+				<div id = "sb_agsoundsource" class = "sb_object bg_blue" obj_type = "soundsource">
+					AGSoundSource
+				</div> -->
+				
+				<div id = "color_controls_box">
+					<h2>Vision-Controls</h2>
+					<div id = "btn_change_vision_mode" class = "btn"><i class="fas fa-brush"></i></div>
+					
+					
+					
+					
+				</div><!--scene_controls_box-->
+				
+				
+				
+				
+				
+				
+				<div id = "scene_controls_box">
+					<h2>Scene-Controls</h2>
+					<div id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></div>
+					<div id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></div>
+				</div><!--scene_controls_box-->
+				
+				<!--<div id = "canvas_dim_box">
+					<h2>Canvas (WIP)</h2>
+					<input id = "tb_canvas_dim_width" class = "tb_canvas_dim" placeholder="Width" maxlength="100" type="text" name="tb_canvas_dim_width" value="">
+					<span>X</span>
+					<input id = "tb_canvas_dim_height" class = "tb_canvas_dim" placeholder="Height" maxlength="100" type="text" name="tb_canvas_dim_height" value="">
+					<br>
+					<div id = "btn_set_dim" class = "btn">Set Dimensions</div>
+				</div>canvas_dim_box-->
+				
+			</div><!--col-->
+			
+			<div id = "ui_part_middle" class = "ui_part ui_part_middle_expanded">
+				<div id = "canvas_container">
+					<canvas id = "c" class = "canvas_room" width="1800" height = "1600"></canvas>
+				</div><!--canvasContainer-->
+			</div><!--col-->
+		
+		
+			<div id = "ui_part_right" class = "ui_part ui_part_right_expanded">
+				
+				<div id = "btn_collapse"><i class="fas fa-arrows-alt-h"></i></div>
+				
+				<div id = "ui_part_right_inner">
+					
+					
+					<div class = "ui_box">
+						<h2 id = "h_object_name"></h2>
+						Obj-Name:<br>
+						<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
+					</div><!--ui_box-->
+					
+					<div class = "ui_box">
+						Obj-Dimensions:<br>
+						<input id = "input_obj_width" class = "" placeholder="Width" maxlength="100" type="text" name="" value="1">
+						<span>X</span>
+						<input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
+					</div><!--ui_box-->
+					
+					
+					
+					<div class = "ui_box">
+						Obj-Position:<br>
+						<input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
+						<span>X</span>
+						<input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">
+					</div><!--ui_box-->
+					
+					
+					
+					<div class = "ui_box">
+						Obj-Rotation:<br>
+						<input id = "input_obj_rot" placeholder="0" maxlength="100" type="text" name="input_obj_name" value=""> &deg;
+					</div><!--ui_box-->
+					
+					<div class = "ui_box">
+						Path-Controls:
+						<br>
+						<div id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></div>
+						<div id = "btn_path_delete" class = "btn"><i class="fas fa-trash-alt"></i></div>
+					</div><!--ui_box-->
+					
+					<div class = "ui_box">
+						Door-Controls:
+						<br>
+						<div id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></div>
+						<div id = "btn_path_deletedoors" class = "btn"><i class="fas fa-trash-alt"></i></div>
+					</div><!--ui_box-->
+					
+					<div id = "path_coords">
+					
+					</div><!--path_coords-->
+					
+					<div id = "audio_src_box" class = "ui_box">
+						Audio-Source:<br>
+						<input id = "input_audio_src" placeholder="Dateipfad" maxlength="100" type="text" name="input_audio_src" value="">
+						<div id = "btn_set_file" class = "btn"><i class="fas fa-upload"></i></div>
+						<br>
+						for testing:<br> 
+						/Users/michaelh/Desktop/audios/urbi.mp3 <br>
+						/Users/michaelh/Desktop/audios/steps.wav<br>
+						/Users/michaelh/Desktop/audios/ouch.mp3
+						
+						<br>
+						<input type="file" name="audio_src_input" id="file" accept="audio/*">				
+						<label for="file"><i class="fas fa-volume-up"></i></label> :
+					</div><!--audio_src_box-->
+					
+				</div><!--ui_part_right_inner-->
+				
+			</div><!--col-->
+			
+		</div><!--row-->
+	</div><!--wrapper-->
+	
+	
+	
+	
+	
+	
+	
+</body>
+</html>

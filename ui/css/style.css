@@ -1,0 +1,362 @@
+html{
+	font-family: 'Open Sans', sans-serif;	
+	color:#333333;
+}
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Dosis', sans-serif;
+}
+
+#wrapper{
+	height:100vh;
+	padding:25px;
+	-webkit-box-sizing: border-box;
+	  -moz-box-sizing: border-box;
+	  box-sizing: border-box;
+}
+
+
+/* UI */
+.ui_part{
+	
+	padding:15px;
+	float:left;
+  	-moz-transition: width 0.2s ease-out;
+  	-webkit-transition: width 0.2s ease-out;
+  	-moz-transition: width 0.2s ease-out;
+  	-o-transition: width 0.2s ease-out;
+  	transition: width 0.2s ease-out; 
+	-webkit-box-sizing: border-box;
+	  -moz-box-sizing: border-box;
+	  box-sizing: border-box;
+}
+#ui_part_left{
+	width:15%;
+}
+#ui_part_middle{
+	width:50%;
+}
+.ui_part_middle_expanded{
+	width:80% !important;
+}
+#ui_part_right{
+	width:5%;
+}
+
+.ui_part_right_expanded{
+	width:25% !important;
+}
+
+.ui_box{
+	margin:10px 0;
+}
+
+#ui_part_right_inner{
+	
+}
+
+
+/*canvas*/
+#canvas_container{
+	margin-top:15px;
+	overflow: scroll;
+	height:600px;
+	border:1px solid #a1a1a1;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+canvas{
+
+	
+}
+
+/*text-inputs*/
+#canvas_dim_box span{
+	color:#BFBFBF;
+}
+
+#canvas_dim_box input[type=text]{
+	margin-top:0;
+	width:90px;
+}
+
+#input_obj_width, #input_obj_height, #input_obj_pos_x, #input_obj_pos_y{
+	width:80px;
+}
+
+#input_obj_rot{
+	width:80px;
+}
+
+
+/*sb*/
+.sb_object{	
+	display:inline-block;
+	width:60px;
+	height:60px;
+	font-size:25px;
+	text-align:center;
+	line-height:60px;
+	
+}
+
+.bg_enemy{
+	background-color:#d47070;
+}
+
+.bg_portal, .bg_wall{
+	background-color:#FDA038;
+}
+
+
+
+
+/*dnd*/
+.sb_object_dragging{
+	
+}
+.over{
+	background-color:#DDD;
+}
+
+.object_dragged{
+	
+}
+
+
+.red_{
+	background-color:red !important;
+}
+
+/*audio*/
+
+#btn_area{
+	padding:15px;
+}
+
+button{
+	background-color:transparent;
+	border:1px solid #DE83CF;
+	padding:10px 25px;	
+	margin:0 0 15px 0;
+	width:auto;
+	-moz-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+	font-size:15px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+button:hover{
+	background-color:#DE83CF;
+}
+button:focus{
+
+  	outline: none;
+}
+
+
+.bg_red{
+	background-color:#d47070;
+}
+.bg_blue{
+	background-color:#7093d4;
+}
+.bg_green{
+	background-color:#70d47e;
+}
+
+/*path controls*/
+
+#btn_path_rec{
+	
+}
+
+.btn_path_play_blink{
+	color:#98eea4;
+  	animation: rec_blink 1s linear infinite;
+}
+.btn_path_rec_blink{
+	color:#FB3039;
+  	animation: rec_blink 1s linear infinite;
+}
+@keyframes rec_blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+#btn_path_play{
+	
+}
+
+
+/*inputs & custom btns*/
+
+
+.btn{
+	cursor:pointer;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	display:inline-block;
+	padding:10px 15px;
+	background-color:#BFBFBF;
+
+}
+.btn:hover{
+	background-color:#98eea4;
+	
+	-moz-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+}
+
+.btn:active{
+	
+	transform: translate(0px, 2px);
+	  -webkit-transform: translate(0px, 2px);
+}
+
+input[type=text], textarea{
+	border:1px solid #7F7F7F;
+	padding:10px 15px;
+	margin:5px 0;
+	background-color:white;
+	-moz-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+	color:black;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+
+input[type=text]:focus, textarea:focus, select:focus{
+  	-webkit-box-shadow:0 0 0 #017f54;
+  	-moz-box-shadow:0 0 0 #017f54;
+  	box-shadow:0 0 0 #017f54;
+  	outline: none;
+	background-color:#98eea4;	
+}
+
+input[type=text]:focus, textarea:focus, select:focus, input[type=number]:focus{
+  	-webkit-box-shadow:0 0 0 #017f54;
+  	-moz-box-shadow:0 0 0 #017f54;
+  	box-shadow:0 0 0 #017f54;
+  	outline: none;
+	background-color:#98eea4;	
+}
+
+
+
+input[type=submit]{
+	background-color:white;
+	border:1px solid white;
+	padding:10px 25px;	
+	color:white;
+	margin:0 0 15px 0;
+	width:auto;
+	-moz-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+	font-size:15px;
+}
+input[type=submit]:hover{
+
+  	background-color:#202a28;
+}
+input[type=submit]:focus{
+
+  	-webkit-box-shadow:0 0 0 #017f54;
+  	-moz-box-shadow:0 0 0 #017f54;
+  	box-shadow:0 0 0 #017f54;
+  	outline: none;
+}
+
+/*https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/*/
+input[type=file]{
+		width: 0.1px;
+		height: 0.1px;
+		opacity: 0;
+		overflow: hidden;
+		position: absolute;
+		z-index: -1;
+}
+
+input[type=file] + label {
+	cursor: pointer;
+}
+input[type=file] + label {
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	display:inline-block;
+	padding:10px 15px;
+	background-color:#BFBFBF;
+}
+input[type=file]:focus + label{
+	transform: translate(0px, 2px);
+	  -webkit-transform: translate(0px, 2px);
+}
+
+input[type=file] + label:hover{
+	background-color:#98eea4;
+	
+	-moz-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+}
+
+/*ui-stuff*/
+.ui-draggable-dragging.drag_obj{
+	
+}
+.ui-state-highlight{
+	border:0;
+	background-color: #999999 !important;
+	
+}
+
+
+.ui-draggable-dragging.sb_object{
+	z-index:999;
+	opacity:0;
+}
+
+/*contrast*/
+h1.contrast, h2.contrast, h3.contrast, h4.contrast, h5.contrast, h6.contrast{
+	color:white;
+}
+.sb_object_structure.contrast{
+	background-color:#DDA0DD;
+	color:#05182A;
+}
+.sb_object_creature.contrast{
+	background-color:#F7CA18;
+	color:#05182A;
+}
+body.contrast{
+	background-color:#0F4880;
+	color:white;
+}
+.btn.contrast, label.contrast{
+	background-color:#7FFFD4;
+	color:#05182A;
+}
+#canvas_container.contrast{
+	border:3px solid white;
+}
+
