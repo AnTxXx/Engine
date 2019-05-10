@@ -24,7 +24,7 @@ export class AGInventory{
 
     addItem(item:AGItem){
         this._inventory.push(item);
-        console.log("[AGInventory] Adding Item " + item.name + " to Object's " + this._attachedTo.name + " inventory.");
+        console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
 
     }
 
@@ -37,7 +37,7 @@ export class AGInventory{
             }
         }
         if(indexToDelete > -1) this._inventory.splice(indexToDelete, 1);
-        console.log("[AGInventory] Removing Item " + item.name + " from Object's " + this._attachedTo.name + " inventory.");
+        console.log("[AGInventory] Removing Item " + item.name + " from Object " + this._attachedTo.name + "'s inventory.");
     }
 
     searchItemByName(name:string):?AGItem{
