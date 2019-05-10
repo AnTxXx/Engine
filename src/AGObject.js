@@ -11,19 +11,19 @@ import type {Trigger} from "./EventType.js";
 let debug = 0;
 
 export class AGObject {
-    get destructible() {
+    get destructible():boolean {
         return this._destructible;
     }
 
-    set destructible(value) {
+    set destructible(value:boolean) {
         this._destructible = value;
     }
 
-    get health() {
+    get health():number {
         return this._health;
     }
 
-    set health(value) {
+    set health(value:number) {
         this._health = value;
     }
     get ID() {
@@ -238,6 +238,9 @@ export class AGObject {
                 moveTo(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize());
             }
         }
+
+        //What happens if the object dies
+        if(this._destructible && this._health <= 0) this.onDeath();
     }
 
     /**
@@ -276,5 +279,9 @@ export class AGObject {
             //console.log("[AGObject] Collision Exit: removing object " + obj.name);
             this._blockedObjects.splice(index, 1);
         }
+    }
+
+    onDeath(){
+        this._room.gameArea.eventHandler.call(this, "ONDEATH");
     }
 }

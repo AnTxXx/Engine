@@ -12,6 +12,7 @@ import {AGItem} from "./AGItem.js";
 import {AGEventHandler} from "./AGEventHandler.js";
 import type {Trigger, Action} from "./EventType.js";
 import {Event} from "./Event.js";
+import {AGCondition} from "./AGCondition.js";
 
 
 let eventHandler:AGEventHandler = new AGEventHandler();
@@ -47,18 +48,21 @@ room_1.add(player);
 room_1.listener = area.listener;
 
 //gegner.addRoute(new Vector3(1,1,10), new Vector3(10,1,10), new Vector3(10, 1, 10), new Vector3(1,1,1));
-gegner.addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
+//gegner.addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
 
 gegner.setSpeedSkalar(1);
-gegner.movable = true;
+//gegner.movable = true;
 
 door1.linkPortals(door2);
+
 
 //EVENT ITEM TEST
 
 let key:AGItem = new AGItem("Schluessel", "Ein Schluessel zum Oeffnen von Tueren.", 1);
 gegner.inventory.addItem(key);
 eventHandler.addEvent(new Event(gegner, "ONCONTACT", "MOVE", player, key, 1));
+
+door1.addCondition(new AGCondition(player, "INVENTORY",key ));
 
 //EVENT ITEM TEST
 
