@@ -13,6 +13,7 @@ import {AGEventHandler} from "./AGEventHandler.js";
 import type {Trigger, Action} from "./EventType.js";
 import {Event} from "./Event.js";
 import {AGCondition} from "./AGCondition.js";
+import { IAudiCom } from "../ui/js/IAudiCom.js";
 
 
 let eventHandler:AGEventHandler = new AGEventHandler();
@@ -69,7 +70,16 @@ door1.addCondition(new AGCondition(player, "INVENTORY",key ));
 
 
 room_1.live = true;
-play(area, true);
+//play(area, true);
+
+export let i_audicom = new IAudiCom(area, room_1);
+
+//render the objects
+i_audicom.renderAGRoom(room_1);
+i_audicom.renderAGObject(player);
+i_audicom.renderAGObject(gegner);
+i_audicom.renderAGObject(door1);
+i_audicom.renderAGObject(door2);
 
 
 // TODO: https://github.com/schteppe/cannon.js inkludieren?

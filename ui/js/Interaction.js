@@ -1,4 +1,6 @@
-import { i_audicom } from "./main.js";
+
+import { i_audicom } from "../../lib/main.js";
+
 
 jQuery(function($){
 	

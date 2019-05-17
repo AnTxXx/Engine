@@ -13,45 +13,49 @@ import { AGEventHandler } from "../../lib/AGEventHandler.js";
 jQuery(function($){
 	//0...default, 1...contrast
 	var vision_mode = 0;
-	
+
+
 	var colors = [
-	  ['#e2e2e2', '#000060'], 	//canvas
-	  ['#ebebeb', '#cccccc'],	//grid
-	  ['#A06FEB', '#FFFACD'],	//player
-	  ['#d47070', '#F7CA18'],	//enemy
-	  ['#FDA038', '#DDA0DD'],	//wall
+		['#e2e2e2', '#000060'], 	//canvas
+		['#ebebeb', '#cccccc'],	//grid
+		['#A06FEB', '#FFFACD'],	//player
+		['#d47070', '#F7CA18'],	//enemy
+		['#FDA038', '#DDA0DD'],	//wall
 	];
-	
+
+
 	//the active Object on the canvas
 	let actObj;
 	let scale_ = 55;
 	let grid = scale_;
 	let room_width = 20;
 	let room_depth = 20;
-	
+
+
 	//audio//	
-	
+
 	//**************//
 	//**ROOM START**//
 	//**************//
-	
-	
+
+
 	//let room = area.newRoom("Erster Raum", new Vector3(room_width, 2.5, room_depth), new Vector3(0.0, 0.0, 0.0));
 
-	
+
 	let room_canvas;
-	
-	
-	
-	
+
+
+
+
 	//**************//
 	//***ROOM END***//
 	//**************//
-	
+
 	//snapping-stuff end
-	
-	
-	
+
+
+
+
 	//jq dnd-stuff
 	$('.sb_object').draggable({
 		appendTo: 'body',
@@ -60,41 +64,42 @@ jQuery(function($){
 		helper: 'clone',
 		drag: function(e, ui){
 			ui.helper.animate({
- 				width: scale_,
- 				height: scale_,
+
+				width: scale_,
+				height: scale_,
 				opacity: 1,
- 			}, 200, function() {
- 			 	
- 			});
+			}, 200, function() {
+
+			});
 			ui.helper.empty();
 		}
 	});
 	$('#c').droppable({
 		tolerance: "touch",
 		classes: {
-		  "ui-droppable-active": "ui-state-highlight"
+			"ui-droppable-active": "ui-state-highlight"
 		},
-		drop: function( event, ui ) {  
+		drop: function( event, ui ) {
 			let obj_type = $(ui.draggable).attr('obj_type');
 			let obj;
 			let left_buff = (ui.position.left)-$(this).offset().left;
-			let top_buff = (ui.position.top)-$(this).offset().top;	
+			let top_buff = (ui.position.top)-$(this).offset().top;
 			let agobject_buffer;
-			
-  	    	var snap_buffer = { // Closest snapping points
-  	        	top: Math.round((top_buff) / grid) * grid,
-  	        	left: Math.round((left_buff) / grid) * grid,
-  	        	bottom: Math.round((top_buff + scale_) / grid) * grid,
-  	        	right: Math.round((left_buff+ scale_) / grid) * grid
-  	     	};
-			
+
+			var snap_buffer = { // Closest snapping points
+				top: Math.round((top_buff) / grid) * grid,
+				left: Math.round((left_buff) / grid) * grid,
+				bottom: Math.round((top_buff + scale_) / grid) * grid,
+				right: Math.round((left_buff+ scale_) / grid) * grid
+			};
+
 			let snap_top_buffer = snap_buffer.top < snap_buffer.bottom ? snap_buffer.top : snap_buffer.bottom;
 			let snap_left_buffer = snap_buffer.left < snap_buffer.right ? snap_buffer.left : snap_buffer.right;
-			
+
 			//move to a function
 			switch(obj_type){
 				case 'soundsource':
-					
+
 					//the fabric.js object
 					obj = new fabric.Rect({
 						width: $(ui.draggable).outerWidth(),
@@ -105,63 +110,63 @@ jQuery(function($){
 						name: 'soundsource'
 					});
 					break;
-		    		room_canvas.add(obj);	
+					room_canvas.add(obj);
 				case 'enemy':
-					
+
 					//the AGObject	
 					agobject_buffer = new AGObject("AGgegner", new Vector3((snap_left_buffer/scale_), 1, (snap_top_buffer/scale_)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 					let agobject_buffer_ss = new AGSoundSource("schritte", "sounds/urbi.mp3", true, 1, room);
 					agobject_buffer.addSoundSource(agobject_buffer_ss);
 					agobject_buffer.setSpeedSkalar(0.1);
 					room.add(agobject_buffer);
-					
+
 					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
-					  	obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(scale_);
-					  	obj.scaleToHeight(scale_);
-					  	obj.left = snap_left_buffer;
-					    obj.top = snap_top_buffer;
+						obj = fabric.util.groupSVGElements(objects);
+						obj.scaleToWidth(scale_);
+						obj.scaleToHeight(scale_);
+						obj.left = snap_left_buffer;
+						obj.top = snap_top_buffer;
 						obj.fill = colors[3][vision_mode];
 						obj.AGObject = agobject_buffer;
-					 	obj.PathArray = [];
+						obj.PathArray = [];
 						obj.isObject = true;
 						obj.isRecording = false;
 						obj.name = 'Gegner';
 						obj.type = 'enemy';
-					  	room_canvas.add(obj).renderAll();
+						room_canvas.add(obj).renderAll();
 					});
-	
+
 					break;
 				case 'portal':
-					
+
 					//the AGObject	
 					agobject_buffer = new AGPortal("Portal_" + Math.floor(Math.random() * Math.floor(9999)), new Vector3((snap_left_buffer/scale_), 1.0, (snap_top_buffer/scale_)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 					room.add(agobject_buffer);
-					
+
 					fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
-					  	obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(scale_);
-					  	obj.scaleToHeight(scale_);
-					  	obj.left = snap_left_buffer;
-					    obj.top = snap_top_buffer;
+						obj = fabric.util.groupSVGElements(objects);
+						obj.scaleToWidth(scale_);
+						obj.scaleToHeight(scale_);
+						obj.left = snap_left_buffer;
+						obj.top = snap_top_buffer;
 						obj.fill = colors[4][vision_mode];
 						obj.AGObject = agobject_buffer;
-					 	obj.PathArray = [];
+						obj.PathArray = [];
 						obj.isObject = true;
 						obj.isRecording = false;
 						obj.name = 'Portal';
 						obj.type = 'portal';
 						obj.secDoor = false;
-					  	room_canvas.add(obj).renderAll();
+						room_canvas.add(obj).renderAll();
 					});
-					
+
 					break;
 				case 'wall':
-						
+
 					//the AGObject	
 					agobject_buffer = new AGPortal("Wall_" + Math.floor(Math.random() * Math.floor(9999)), new Vector3((snap_left_buffer/scale_), 1.0, (snap_top_buffer/scale_)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 					room.add(agobject_buffer);
-					
+
 					//the fabric.js object
 					obj = new fabric.Rect({
 						width: scale_,
@@ -175,42 +180,42 @@ jQuery(function($){
 						type: 'wall',
 						strokeWidth: 1,
 					});
-					room_canvas.add(obj);	
+					room_canvas.add(obj);
 					break;
 			}
-			
+
 		}
 	});
-	
-	
 
-	
+
+
+
 	//*******************//
 	//*******TEST********//
 	//*******************//
 
-	
+
 	function loadObject(){
-			$('#ui_part_right_inner').fadeOut(100, function(){
-				$('#input_obj_name').val(actObj.name);
-				$('#input_obj_width').val(Math.round(actObj.width/scale_));
-				$('#input_obj_height').val(Math.round(actObj.height/scale_));
-				
-				
-				$('#input_obj_pos_x').val(actObj.left/scale_);
-				$('#input_obj_pos_y').val(actObj.top/scale_);
-				
-				
-				setTimeout(function(){
-						$('#ui_part_right_inner').fadeIn(100);
-	  			}, 100);	
-			});
+		$('#ui_part_right_inner').fadeOut(100, function(){
+			$('#input_obj_name').val(actObj.name);
+			$('#input_obj_width').val(Math.round(actObj.width/scale_));
+			$('#input_obj_height').val(Math.round(actObj.height/scale_));
+
+
+			$('#input_obj_pos_x').val(actObj.left/scale_);
+			$('#input_obj_pos_y').val(actObj.top/scale_);
+
+
+			setTimeout(function(){
+				$('#ui_part_right_inner').fadeIn(100);
+			}, 100);
+		});
 	}
-	
-	
-	
+
+
+
 	//*FABRIC Listeners*//
-	
+
 	//keep object active for path recording
 	// room_canvas.on('selection:cleared', function(e){
 // 		//if path is recording keep the object active
@@ -299,11 +304,11 @@ jQuery(function($){
 		if(actObj.isRecording){
 			//Hier wird noch ein Fehler produziert
 			let first_dot = new fabric.Circle({
-			    left:   actObj.left,
-			    top:    actObj.top,
-			    radius: 4,
-			    fill:   'black',
-			    objectCaching: false,
+				left:   actObj.left,
+				top:    actObj.top,
+				radius: 4,
+				fill:   'black',
+				objectCaching: false,
 				selectable: false,
 			});
 			room_canvas.add(first_dot);
@@ -311,18 +316,18 @@ jQuery(function($){
 			//save path to AGObject and set movable true
 			actObj.PathArray.forEach(function(ele) {
 				actObj.AGObject.movable = true;
-				actObj.AGObject.addRouteNode(new Vector3(ele.left/scale_, 1, ele.top/scale_));	
+				actObj.AGObject.addRouteNode(new Vector3(ele.left/scale_, 1, ele.top/scale_));
 			});
 			actObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
-		}else{	
+		}else{
 			actObj.isRecording = true;
 			$(this).find('i').addClass('btn_path_rec_blink');
 		}
 	});
-	
-	
-	
+
+
+
 	$('#btn_path_linkdoors').click(function(){
 		if(actObj.isRecording){
 			actObj.isRecording = false;
@@ -332,31 +337,35 @@ jQuery(function($){
 			$(this).find('i').addClass('btn_path_rec_blink');
 		}
 	});
-	
+
+
 	$('#btn_path_delete').click(function(){
 		actObj.PathArray.forEach(function(ele) {
 			room_canvas.remove(ele);
 		});
-		actObj.PathArray = [];	
+
+		actObj.PathArray = [];
 		actObj.AGObject.clearRoute();
 		actObj.AGObject.movable = false;
 	});
-	
+
 	//***********************//
 	//*******TEST-END********//
 	//***********************//
-	
-	
+
+
 	//***********************//
 	//*******jq-clickers and others********//
 	//***********************//
-	
+
 	$('#btn_change_vision_mode').click(function(){
-		
+
+
 		if(vision_mode==0){
 			vision_mode = 1;
 		}else{
 			vision_mode = 0;
+
 		}
 		
 		changeVisionMode();
@@ -553,112 +562,7 @@ jQuery(function($){
 		   	   left: target.left
 		   	};
 		
-<<<<<<< HEAD
-			switch (target.__corner) {
-			   case 'tl':
-			      if (dist.left < dist.top && dist.left < threshold) {
-			         attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-			         attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-			         attrs.top = target.top + (h - target.height * attrs.scaleY);
-			         attrs.left = snap.left;
-			      } else if (dist.top < threshold) {
-			         attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-			         attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-			         attrs.left = attrs.left + (w - target.width * attrs.scaleX);
-			         attrs.top = snap.top;
-			      }
-			      break;
-			   case 'mt':
-			      if (dist.top < threshold) {
-			         attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-			         attrs.top = snap.top;
-			      }
-			      break;
-			   case 'tr':
-			      if (dist.right < dist.top && dist.right < threshold) {
-			         attrs.scaleX = (snap.right - target.left) / target.width;
-			         attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-			         attrs.top = target.top + (h - target.height * attrs.scaleY);
-			      } else if (dist.top < threshold) {
-			         attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-			         attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-			         attrs.top = snap.top;
-			      }
-			      break;
-			   case 'ml':
-			      if (dist.left < threshold) {
-			         attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-			         attrs.left = snap.left;
-			      }
-			      break;
-			   case 'mr':
-			      if (dist.right < threshold) attrs.scaleX = (snap.right - target.left) / target.width;
-			      break;
-			   case 'bl':
-			      if (dist.left < dist.bottom && dist.left < threshold) {
-			         attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-			         attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-			         attrs.left = snap.left;
-			      } else if (dist.bottom < threshold) {
-			         attrs.scaleY = (snap.bottom - target.top) / target.height;
-			         attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-			         attrs.left = attrs.left + (w - target.width * attrs.scaleX);
-			      }
-			      break;
-			   case 'mb':
-			      if (dist.bottom < threshold) attrs.scaleY = (snap.bottom - target.top) / target.height;
-			      break;
-			   case 'br':
-			      if (dist.right < dist.bottom && dist.right < threshold) {
-			         attrs.scaleX = (snap.right - target.left) / target.width;
-			         attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-			      } else if (dist.bottom < threshold) {
-			         attrs.scaleY = (snap.bottom - target.top) / target.height;
-			         attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-			      }
-			      break;
-			}
-	   
-			if(!target.strokeWidthUnscaled && target.strokeWidth){
-				target.strokeWidthUnscaled = target.strokeWidth;
-			}
-			if(target.strokeWidthUnscaled){
-				var scale_buffer = target.scaleX > target.scaleY ? target.scaleX : target.scaleY;
-				target.strokeWidth = target.strokeWidthUnscaled / scale_buffer;
-			} 
-		
-		  	target.set(attrs);
-		});
-		
-	}
-	
-	
-	//AGObjects
-	function renderAGObject(ag_object){
-		
-		if(ag_object.tag){
-			
-			switch(ag_object.tag){
-				case 'ENEMY':
-					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(ag_object.size.x*scale_,);
-					  	obj.scaleToHeight(ag_object.size.z*scale_,);
-					  	obj.left = ag_object.position.x*scale_;
-					    obj.top = ag_object.position.z*scale_;
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
-						obj.fill = colors[3][vision_mode];
-						obj.AGObject = ag_object;
-					 	obj.PathArray = [];
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = 'Gegner';
-						obj.type = 'enemy';
-					  	room_canvas.add(obj).renderAll();
-					});
-					
-					break;
-=======
+
 		switch(ag_object.tag){
 			case 'ENEMY':
 				fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
@@ -716,10 +620,12 @@ jQuery(function($){
 						obj.name = 'Portal';
 						obj.type = 'portal';
 						obj.secDoor = false;
+						obj.originX = 'center';
+						obj.originY = 'center';
 					  	room_canvas.add(obj).renderAll();
 					});
 					break;
-					
+				
 				case 'PLAYER':
 					//TODO change size of player
 					fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
@@ -735,6 +641,8 @@ jQuery(function($){
 						obj.isObject = true;
 						obj.name = 'Spieler';
 						obj.type = 'player';
+						obj.originX = 'center';
+						obj.originY = 'center';
 					  	room_canvas.add(obj).renderAll();
 					});
 					break;
@@ -744,6 +652,7 @@ jQuery(function($){
 	
 	
 	
+
 	function getMouseCoords(event){
 		var pointer = room_canvas.getPointer(event.e);
 		var posX = pointer.x;
@@ -758,11 +667,12 @@ jQuery(function($){
 	}
 
 	function drawObjects(obj_type, obj_left, obj_top){
+
 	}
 	
 	function changeVisionMode(){
 		
-<<<<<<< HEAD
+
 		// 0...default
 		// 1...high contrast
 		room_canvas.backgroundColor = colors[0][vision_mode];
@@ -794,56 +704,3 @@ jQuery(function($){
 		
 	}	
 });
-
-
-
-
-=======
-	}else if(ag_object.type){
-		switch(ag_object.type){
-			case 'PORTAL':	
-				fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
-				  	var obj = fabric.util.groupSVGElements(objects);
-				 	obj.scaleToWidth(ag_object.size.x*scale_,);
-				  	obj.scaleToHeight(ag_object.size.z*scale_,);
-				  	obj.left = ag_object.position.x*scale_;
-				    obj.top = ag_object.position.z*scale_;
-					obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
-					obj.fill = colors[4][vision_mode];
-					obj.AGObject = ag_object;
-				 	obj.PathArray = [];
-					obj.isObject = true;
-					obj.isRecording = false;
-					obj.name = 'Portal';
-					obj.type = 'portal';
-					obj.secDoor = false;
-					obj.originX = 'center';
-					obj.originY = 'center';
-				  	room_canvas.add(obj).renderAll();
-				});
-				break;
-				
-			case 'PLAYER':
-				//TODO change size of player
-				fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
-				  	var obj = fabric.util.groupSVGElements(objects);
-				 	obj.scaleToWidth(1*scale_);
-				  	obj.scaleToHeight(1*scale_);
-				  	obj.left = ag_object.position.x*scale_;
-				    obj.top = ag_object.position.z*scale_;
-					obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
-					obj.fill = colors[2][vision_mode];
-					obj.AGObject = ag_object;
-				 	obj.PathArray = [];
-					obj.isObject = true;
-					obj.name = 'Spieler';
-					obj.type = 'player';
-					obj.originX = 'center';
-					obj.originY = 'center';
-				  	room_canvas.add(obj).renderAll();
-				});
-				break;
-		}	
-	}
-}
->>>>>>> a659ddc86f5d498bec6b8ca0b8542f24eba9e327
