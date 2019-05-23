@@ -1,8 +1,8 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import type {Type} from "./AGType.js";
 import {Counter} from "./IDGenerator.js";
+import {objectPartOfCollisions} from "./Collision.js";
 
 let gForward, gBackward, gLeft, gRight;
 
@@ -75,7 +75,7 @@ function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
  * @param object The object (AGObject) that is going to be moved.
  * @param direction The direction (Vector3) the object is moved towards.
  */
-export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
+/*export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
     //TODO: should be optimized in a way, that we only need one function for moving :-) copy&pasta-ing is bad
     let timeDiff = new Date() - timeStamp;
     timeDiff /= 1000;
@@ -91,6 +91,25 @@ export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
         //console.log("moving");
         object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     } else {
+        console.log("[AGNavigation] " + object.name + ": Can't move forward.");
+    }
+
+    //console.log(object.position.x + " " + object.position.y + " " + object.position.z +
+    //    " " + direction.x + " " + direction.y + " " + direction.z);
+}*/
+
+//new moveTo function that forces collision and does not stop before it without triggering collision
+export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
+    //TODO: should be optimized in a way, that we only need one function for moving :-) copy&pasta-ing is bad
+    let timeDiff = new Date() - timeStamp;
+    timeDiff /= 1000;
+    //Math.abs(timeDiff);
+
+    object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
+    object.room.checkForCollision();
+
+    if(!allowedCollision(object, objectPartOfCollisions(object.room.collisions, object))){
+        object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
         console.log("[AGNavigation] " + object.name + ": Can't move forward.");
     }
 

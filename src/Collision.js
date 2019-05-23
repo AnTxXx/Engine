@@ -23,12 +23,13 @@ export function collisionIsInArray(arr:Array<Collision>, col:Collision):number {
  * @param obj A specific AGObject that is going to be looked up.
  * @returns {AGObject|null} Returns the AGObject, that obj is colliding with.
  */
-export function objectPartOfCollision(arr:Array<Collision>, obj:AGObject):?AGObject{
+export function objectPartOfCollisions(arr:Array<Collision>, obj:AGObject):Array<AGObject>{
+    let returnarr:Array<AGObject> = [];
     for(let i = 0, len = arr.length; i < len; i++){
-        if(arr[i].obj1 === obj) return arr[i].obj2;
-        else if(arr[i].obj2 === obj) return arr[i].obj1;
+        if(arr[i].obj1 === obj) returnarr.push(arr[i].obj2);
+        else if(arr[i].obj2 === obj) returnarr.push(arr[i].obj1);
     }
-    return null;
+    return returnarr;
 }
 
 /**

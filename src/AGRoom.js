@@ -3,7 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom} from "./AGPhysics.js";
 import type {Type} from "./AGType.js";
-import {Collision, objectPartOfCollision, collisionIsInArray} from "./Collision.js";
+import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {Counter} from "./IDGenerator.js";
 
@@ -13,6 +13,13 @@ let debug = 0;
  * AGRoom is a physically separated room of a game scene (e.g., level or floor). It follows resonance audio's room idea.
  */
 export class AGRoom {
+    get collisions() {
+        return this._collisions;
+    }
+
+    set collisions(value:Array<Collision>) {
+        this._collisions = value;
+    }
 
     get ID() {
         return this._ID;
@@ -252,7 +259,7 @@ export class AGRoom {
      */
     draw(){
         if(this._lastTime.getTime() === new Date(0).getTime()) this._lastTime = new Date();
-        console.log(this._lastTime);
+        //console.log(this._lastTime);
         //All objects draw
         for(let i = 0; i < this._AGobjects.length; i++){
             this._AGobjects[i].draw(this._lastTime);
