@@ -1,7 +1,7 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
-import {moveTo} from "./AGNavigation.js";
+import {move} from "./AGNavigation.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
@@ -235,7 +235,7 @@ export class AGObject {
                 this._currentRoute = ++this._currentRoute % this._route.length;
                 //console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
             } else {
-                moveTo(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
+                move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
             }
         }
 

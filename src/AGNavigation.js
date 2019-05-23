@@ -6,13 +6,16 @@ import {objectPartOfCollisions} from "./Collision.js";
 
 let gForward, gBackward, gLeft, gRight;
 
+let moveTimestamp;
+
 /**
  * Function to move object (AGObject) based on its direction and speed. If the movement is not possible
  * (e.g., collision), the object does not move.
  * @param object Object (AGObject) to be moved.
  * @param add If the object should move forward (true) or backward (false).
  */
-export function move(object:AGObject, add:boolean){
+//OLD
+/*export function move(object:AGObject, add:boolean){
 
     let collisionArray:Array<AGObject>;
     if(add){
@@ -52,7 +55,7 @@ export function move(object:AGObject, add:boolean){
             object.position.sub(object.speed.clone().multiply(object.direction.clone()));
         }
     }
-}
+}*/
 
 /**
  * Private function: if a collision is allowed (e.g., collision with portal) or not.
@@ -98,16 +101,22 @@ function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
 }*/
 
 //new moveTo function that forces collision and does not stop before it without triggering collision
-export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
-    //TODO: should be optimized in a way, that we only need one function for moving :-) copy&pasta-ing is bad
-    let timeDiff = new Date() - timeStamp;
-    timeDiff /= 1000;
+export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
+    let timeDiff;
+    if(timeStamp!==undefined){
+        timeDiff = new Date() - timeStamp;
+        timeDiff /= 1000;
+    } else {
+        timeDiff = 1;
+    }
+
     //Math.abs(timeDiff);
 
     object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     object.room.checkForCollision();
 
-    if(!allowedCollision(object, objectPartOfCollisions(object.room.collisions, object))){
+    if(!allowedCollision(object, objectPartOfCollisions(object.room.collisions, object)) ||
+        !object.room.pointInsideRoom(object.position, object.size)){
         object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
         console.log("[AGNavigation] " + object.name + ": Can't move forward.");
     }
@@ -145,6 +154,7 @@ export class AGNavigation {
         gBackward = backward;
         gLeft = left;
         gRight = right;
+        moveTimestamp = new Date(0);
     }
 
     /**
@@ -152,13 +162,16 @@ export class AGNavigation {
      * @param player Object (AGObject) which can be moved by the player.
      */
     draw(player:AGObject){
+        if(moveTimestamp.getTime() === new Date(0).getTime()) moveTimestamp = new Date();
         window.onkeydown = function(e) {
             switch(e.keyCode){
                 case gForward:
-                    move(player, true);
+                    //move(player, true);
+                    move(player, player.direction);
                     break;
                 case gBackward:
-                    move(player, false);
+                    //move(player, false);
+                    move(player, player.direction.clone().multiplyScalar(-1));
                     break;
                 case gLeft:
                     player.direction.applyAxisAngle(new Vector3(0,1,0), 8 * (Math.PI / 180));
@@ -167,8 +180,9 @@ export class AGNavigation {
                     player.direction.applyAxisAngle(new Vector3(0,1,0), -8 * (Math.PI / 180));
                     break;
             }
-            console.log("Position: " + player.position.x + " " + player.position.y + " " + player.position.z);
-            console.log("Direction: " + player.direction.x + " " + player.direction.y + " " + player.direction.z);
+            moveTimestamp = new Date();
+            //console.log("Position: " + player.position.x + " " + player.position.y + " " + player.position.z);
+            //console.log("Direction: " + player.direction.x + " " + player.direction.y + " " + player.direction.z);
         }
 
     }

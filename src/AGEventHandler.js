@@ -80,6 +80,7 @@ export class AGEventHandler{
         for(let i = 0; i < events.length; i++){
             if(events[i].repeat >= 1 || events[i].repeat === -1){
                 //TODO: implement remaining action
+                console.log("[AGEventHandler] Event triggered:");
                 console.log(events[i]);
                 switch(events[i].trigger){
                     //TRIGGER: ON CONTACT WITH OTHER OBJECT
