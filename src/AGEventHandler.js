@@ -65,14 +65,17 @@ export class AGEventHandler{
     findEventsAfterCall(object:AGObject, trigger:Trigger):Array<Event>{
         let events:Array<Event> = [];
         for(let i = 0; i < this._events.length; i++){
-            if(this._events[i].object === object &&
+            if(this._events[i].origin === object &&
                 this._events[i].trigger === trigger
-            ) events.push(this._events[i]);
+            ) {
+                events.push(this._events[i]);
+            }
         }
         return events;
     }
 
     call(object:AGObject, trigger:Trigger){
+        //console.log("[AGEventHandler] Received Event-Call from " + object.name);
         let events:Array<Event> = this.findEventsAfterCall(object, trigger);
         for(let i = 0; i < events.length; i++){
             if(events[i].repeat >= 1 || events[i].repeat === -1){

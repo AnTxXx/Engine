@@ -62,7 +62,6 @@ door1.linkPortals(door2);
 let key:AGItem = new AGItem("Schluessel", "Ein Schluessel zum Oeffnen von Tueren.", 1);
 gegner.inventory.addItem(key);
 eventHandler.addEvent(new Event(gegner, "ONCONTACT", "MOVE", player, key, 1));
-//TODO: Collision doesnt happen since player movement blocks advancing into enemy
 door1.addCondition(new AGCondition(player, "INVENTORY",key ));
 
 //EVENT ITEM TEST

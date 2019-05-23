@@ -76,7 +76,6 @@ function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
  * @param direction The direction (Vector3) the object is moved towards.
  */
 /*export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
-    //TODO: should be optimized in a way, that we only need one function for moving :-) copy&pasta-ing is bad
     let timeDiff = new Date() - timeStamp;
     timeDiff /= 1000;
     //Math.abs(timeDiff);
