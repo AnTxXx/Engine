@@ -15,7 +15,6 @@ import { Event } from "../../lib/Event.js";
 
 export class IAudiCom {
 	
-	
     set position(value) {
         this._scale = value;
     }
@@ -34,12 +33,14 @@ export class IAudiCom {
     /**
      * Bla
      */
-    constructor(area, room_canvas) {
-		this._room_canvas = room_canvas;
+    constructor(AGarea, AGroom) {
+		this._AGroom = AGroom;
+		this._AGarea = AGarea;
 		this._scale = 55;
 		this._vision_mode = 0;
-		this._area = area;
+		
 		this._interval = '';
+		this._room_canvas;
 		
 		this._colors = [
 		  ['#e2e2e2', '#000060'], 	//canvas
@@ -91,7 +92,7 @@ export class IAudiCom {
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
 		
-		play(this._area, true);
+		play(this._AGarea, true);
 		this._interval = setInterval(function(){			
 			let canvas_objects = room_buffer.getObjects();
 			canvas_objects.forEach(function(item, i) {
@@ -105,10 +106,33 @@ export class IAudiCom {
 		}, 30);	
 	}
 	stopArea(){
-		play(this._area, false);
+		play(this._AGarea, false);
 		this._interval = 0;
 	}
-  
+  	
+	
+	zoomCanvas(zoom_factor){
+		
+		//min : 0.5
+		//max : 1.5
+		
+		
+		let room_buffer = this._room_canvas;
+		room_buffer.setZoom(room_buffer.getZoom()*zoom_factor);
+		
+		//set stroke-width to 1 again
+		let canvas_objects = room_buffer.getObjects();
+		canvas_objects.forEach(function(item, i) {
+			if(item.type == 'grid_line'){
+				item.strokeWidth = (1/room_buffer.getZoom())*1;
+			}
+		});	
+		console.log(room_buffer.getZoom());
+		room_buffer.renderAll();
+	}
+	
+	
+	
 	renderAGRoom(ag_room){
 		this._room_canvas = new fabric.Canvas('c',{
 		    selection: false, 
@@ -143,120 +167,175 @@ export class IAudiCom {
 
 		//snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
 		this._room_canvas.on('object:moving', options => {
-		   options.target.set({
-		      left: Math.round((options.target.left) / this._scale) * this._scale,
-		      top: Math.round((options.target.top) / this._scale) * this._scale 
-		   });
+			if(options.target.type == 'wall'){
+	 			options.target.set({
+	 			   left: Math.round((options.target.left) / this._scale) * this._scale,
+	 			   top: Math.round((options.target.top) / this._scale) * this._scale 
+	 			});
+			}
+			options.target.AGObject.position = new Vector3((options.target.left - options.target.AGObject.size.x*this._scale/2)/this._scale, 1, (options.target.top - options.target.AGObject.size.z*this._scale/2)/this._scale);
 		});
 		
-		var w = 0;
-		this._room_canvas.on('object:scaling', options => {
+		let w = 0;
+		this._room_canvas.on('object:scaling', options => {	
+			if(options.target.type == 'wall'){
+				var target = options.target,
+					w = target.width * target.scaleX,
+					offset = w/2,
+					h = target.height * target.scaleY,
+					snap = { // Closest snapping points
+						top: Math.round(target.top  / this._scale) * this._scale,
+						left: Math.round(target.left / this._scale) * this._scale,
+						bottom: Math.round((target.top + h) / this._scale) * this._scale,
+						right: Math.round((target.left + w) / this._scale) * this._scale
+					},
+					threshold = this._scale,
+					dist = { // Distance from snapping points
+						top: Math.abs(snap.top - target.top),
+						left: Math.abs(snap.left - target.left),
+						bottom: Math.abs(snap.bottom - target.top - h),
+						right: Math.abs(snap.right - target.left - w)
+					},
+					attrs = {
+						scaleX: target.scaleX,
+						scaleY: target.scaleY,
+						top: target.top,
+						left: target.left
+					};
+            	
+				switch (target.__corner) {
+					case 'tl':
+						if (dist.left < dist.top && dist.left < threshold) {
+							attrs.scaleX = (w - (snap.left - target.left)) / target.width;
+							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
+							attrs.top = target.top + (h - target.height * attrs.scaleY);
+							attrs.left = snap.left;
+						} else if (dist.top < threshold) {
+							attrs.scaleY = (h - (snap.top - target.top)) / target.height;
+							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
+							attrs.left = attrs.left + (w - target.width * attrs.scaleX);
+							attrs.top = snap.top;
+						}
+						break;
+					case 'mt':
+						if (dist.top < threshold) {
+							attrs.scaleY = (h - (snap.top - target.top)) / target.height;
+							attrs.top = snap.top;
+						}
+						break;
+					case 'tr':
+						if (dist.right < dist.top && dist.right < threshold) {
+							attrs.scaleX = (snap.right - target.left) / target.width;
+							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
+							attrs.top = target.top + (h - target.height * attrs.scaleY);
+						} else if (dist.top < threshold) {
+							attrs.scaleY = (h - (snap.top - target.top)) / target.height;
+							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
+							attrs.top = snap.top;
+						}
+						break;
+					case 'ml':
+						if (dist.left < threshold) {
+							attrs.scaleX = (w - (snap.left - target.left)) / target.width;
+							attrs.left = snap.left;
+						}
+						break;
+					case 'mr':
+						if (dist.right < threshold) attrs.scaleX = (snap.right - target.left) / target.width;
+						break;
+					case 'bl':
+						if (dist.left < dist.bottom && dist.left < threshold) {
+							attrs.scaleX = (w - (snap.left - target.left)) / target.width;
+							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
+							attrs.left = snap.left;
+						} else if (dist.bottom < threshold) {
+							attrs.scaleY = (snap.bottom - target.top) / target.height;
+							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
+							attrs.left = attrs.left + (w - target.width * attrs.scaleX);
+						}
+						break;
+					case 'mb':
+						if (dist.bottom < threshold) attrs.scaleY = (snap.bottom - target.top) / target.height;
+						break;
+					case 'br':
+						if (dist.right < dist.bottom && dist.right < threshold) {
+							attrs.scaleX = (snap.right - target.left) / target.width;
+							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
+						} else if (dist.bottom < threshold) {
+							attrs.scaleY = (snap.bottom - target.top) / target.height;
+							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
+						}
+						break;
+				}
+            	
+				if(!target.strokeWidthUnscaled && target.strokeWidth){
+					target.strokeWidthUnscaled = target.strokeWidth;
+				}
+				if(target.strokeWidthUnscaled){
+					var scale_buffer = target.scaleX > target.scaleY ? target.scaleX : target.scaleY;
+					target.strokeWidth = target.strokeWidthUnscaled / scale_buffer;
+				}
+				target.set(attrs);
+			}
+			
+			//update Size of objects
 			
 			
-			var target = options.target,
-				w = target.width * target.scaleX,
-				offset = w/2,
-				h = target.height * target.scaleY,
-				snap = { // Closest snapping points
-					top: Math.round(target.top  / this._scale) * this._scale,
-					left: Math.round(target.left / this._scale) * this._scale,
-					bottom: Math.round((target.top + h) / this._scale) * this._scale,
-					right: Math.round((target.left + w) / this._scale) * this._scale
-				},
-				threshold = this._scale,
-				dist = { // Distance from snapping points
-					top: Math.abs(snap.top - target.top),
-					left: Math.abs(snap.left - target.left),
-					bottom: Math.abs(snap.bottom - target.top - h),
-					right: Math.abs(snap.right - target.left - w)
-				},
-				attrs = {
-					scaleX: target.scaleX,
-					scaleY: target.scaleY,
-					top: target.top,
-					left: target.left
-				};
-
-			switch (target.__corner) {
-				case 'tl':
-					if (dist.left < dist.top && dist.left < threshold) {
-						attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-						attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-						attrs.top = target.top + (h - target.height * attrs.scaleY);
-						attrs.left = snap.left;
-					} else if (dist.top < threshold) {
-						attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-						attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-						attrs.left = attrs.left + (w - target.width * attrs.scaleX);
-						attrs.top = snap.top;
-					}
-					break;
-				case 'mt':
-					if (dist.top < threshold) {
-						attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-						attrs.top = snap.top;
-					}
-					break;
-				case 'tr':
-					if (dist.right < dist.top && dist.right < threshold) {
-						attrs.scaleX = (snap.right - target.left) / target.width;
-						attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-						attrs.top = target.top + (h - target.height * attrs.scaleY);
-					} else if (dist.top < threshold) {
-						attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-						attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-						attrs.top = snap.top;
-					}
-					break;
-				case 'ml':
-					if (dist.left < threshold) {
-						attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-						attrs.left = snap.left;
-					}
-					break;
-				case 'mr':
-					if (dist.right < threshold) attrs.scaleX = (snap.right - target.left) / target.width;
-					break;
-				case 'bl':
-					if (dist.left < dist.bottom && dist.left < threshold) {
-						attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-						attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-						attrs.left = snap.left;
-					} else if (dist.bottom < threshold) {
-						attrs.scaleY = (snap.bottom - target.top) / target.height;
-						attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-						attrs.left = attrs.left + (w - target.width * attrs.scaleX);
-					}
-					break;
-				case 'mb':
-					if (dist.bottom < threshold) attrs.scaleY = (snap.bottom - target.top) / target.height;
-					break;
-				case 'br':
-					if (dist.right < dist.bottom && dist.right < threshold) {
-						attrs.scaleX = (snap.right - target.left) / target.width;
-						attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-					} else if (dist.bottom < threshold) {
-						attrs.scaleY = (snap.bottom - target.top) / target.height;
-						attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-					}
-					break;
-			}
-
-			if(!target.strokeWidthUnscaled && target.strokeWidth){
-				target.strokeWidthUnscaled = target.strokeWidth;
-			}
-			if(target.strokeWidthUnscaled){
-				var scale_buffer = target.scaleX > target.scaleY ? target.scaleX : target.scaleY;
-				target.strokeWidth = target.strokeWidthUnscaled / scale_buffer;
-			}
-
-			target.set(attrs);
 		});
 	}
 
+	//
+	makeThenRenderAGObject(obj_type, obj_left, obj_top){
+
+	
+		let obj_buffer;
+		switch(obj_type){
+			
+			case 'enemy':
+				
+				obj_buffer = new AGObject("AGgegner", new Vector3((obj_left/this._scale), 1, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer.tag = "ENEMY";
+				let gegner_ss = new AGSoundSource("urbiurbiurbi", "sounds/urbi.mp3", true, 1, this._AGroom);
+				obj_buffer.addSoundSource(gegner_ss);
+				
+				break;
+
+			case 'wall':
+				
+				//calculate snapping points for wall
+	  	    	let snap_buffer = { // Closest snapping points
+	  	        	top: Math.round((obj_top) / this._scale) * this._scale,
+	  	        	left: Math.round((obj_left) / this._scale) * this._scale,
+	  	        	bottom: Math.round((obj_top + this._scale) / this._scale) * this._scale,
+	  	        	right: Math.round((obj_left+ this._scale) / this._scale) * this._scale
+	  	     	};
+
+				let snap_top_buffer = snap_buffer.top < snap_buffer.bottom ? snap_buffer.top : snap_buffer.bottom;
+				let snap_left_buffer = snap_buffer.left < snap_buffer.right ? snap_buffer.left : snap_buffer.right;
+				
+				obj_buffer = new AGObject("Wall", new Vector3((snap_left_buffer/this._scale), 1.0, (snap_top_buffer/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer.tag = "WALL";
+				
+				break;
+			case 'portal':
+
+				obj_buffer = new AGPortal("Portal", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				
+				break;
+			case 'exit':
+
+				//obj_buffer = new AGPortal("Portal", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				
+				break;
+			
+		}
+		this._AGroom.add(obj_buffer);
+		this.renderAGObject(obj_buffer);
+	}
 
 	//AGObjects
 	renderAGObject(ag_object){
+		
 		
 		let _scalebuffer = this._scale
 		let colors_buffer = this._colors;
@@ -264,7 +343,7 @@ export class IAudiCom {
 		let room_canvas_buffer = this._room_canvas;
 		
 		if(ag_object.tag){
-		
+			
 			switch(ag_object.tag){
 				case 'ENEMY':
 					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
@@ -297,12 +376,13 @@ export class IAudiCom {
 						top: ag_object.position.z*_scalebuffer,
 						AGObject: ag_object,
 						isObject: true,	
-						name:'Mauer',
+						name:'Wall',
 						type: 'wall',
 						strokeWidth: 1,
 					});
 					room_canvas_buffer.add(obj).renderAll();
 					break;
+					
 			}
 		
 		}else if(ag_object.type){

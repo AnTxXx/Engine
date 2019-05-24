@@ -14,10 +14,8 @@ h1, h2, h3, h4, h5, h6{
 	  box-sizing: border-box;
 }
 
-
 /* UI */
 .ui_part{
-	
 	padding:15px;
 	float:left;
   	-moz-transition: width 0.2s ease-out;
@@ -33,7 +31,7 @@ h1, h2, h3, h4, h5, h6{
 	width:15%;
 }
 #ui_part_middle{
-	width:50%;
+	width:60%;
 }
 .ui_part_middle_expanded{
 	width:80% !important;
@@ -41,19 +39,15 @@ h1, h2, h3, h4, h5, h6{
 #ui_part_right{
 	width:5%;
 }
-
 .ui_part_right_expanded{
 	width:25% !important;
 }
-
 .ui_box{
 	margin:10px 0;
 }
-
 #ui_part_right_inner{
 	
 }
-
 
 /*canvas*/
 #canvas_container{
@@ -98,14 +92,15 @@ canvas{
 	font-size:25px;
 	text-align:center;
 	line-height:60px;
-	
+
+	margin:5px;
 }
 
 .bg_enemy{
 	background-color:#d47070;
 }
 
-.bg_portal, .bg_wall{
+.bg_portal, .bg_wall, .bg_exit{
 	background-color:#FDA038;
 }
 

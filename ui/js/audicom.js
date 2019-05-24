@@ -23,6 +23,7 @@ jQuery(function($){
 	//Interaction -> jQuery-Stuff?
 	//center problem beim scaling
 	//warum überhaupt snapping???
+	//WALLS
 
 	//the active Object on the canvas
 	let actObj;
@@ -40,20 +41,7 @@ jQuery(function($){
 	//*******************//
 
 
-	function loadObject(){
-		$('#ui_part_right_inner').fadeOut(100, function(){
-			$('#input_obj_name').val(actObj.name);
-			$('#input_obj_width').val(Math.round(actObj.width/scale_));
-			$('#input_obj_height').val(Math.round(actObj.height/scale_));
 
-			$('#input_obj_pos_x').val(actObj.left/scale_);
-			$('#input_obj_pos_y').val(actObj.top/scale_);
-
-			setTimeout(function(){
-				$('#ui_part_right_inner').fadeIn(100);
-			}, 100);
-		});
-	}
 
 
 
@@ -273,213 +261,16 @@ jQuery(function($){
 		}
 	});
 
-	//the ui main loop
-	let interval;
-	$('#btn_start_scene').click(function(){
-		play(area, true);
-		interval = setInterval(function(){			
-			let canvas_objects = room_canvas.getObjects();
-			canvas_objects.forEach(function(item, i) {
-				if(item.isObject){
-	 			   item.left = item.AGObject.position.x*scale_;
-	  			   item.top = item.AGObject.position.z*scale_;
-	  			   item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
-				   room_canvas.renderAll();
-				}
-			});	
-		}, 30);	
-	});
-
-	$('#btn_stop_scene').click(function(){
-		play(room, false);
-		interval = 0;
-	});
 	
 	
 	//***********************//
 	//*******functions********//
 	//***********************//
-	
-	
-	// let gegner_test = new AGObject("gegner", new Vector3(2,1,8), new Vector3(1,0,0), new Vector3(1,1,1));
-	// gegner_test.tag = 'enemy';
-	// renderAGObject(gegner_test);
-	//
-	//
-	// let wall_test = new AGObject("Wall_", new Vector3(5, 1, 4), new Vector3(1, 0, 0), new Vector3(3, 1, 1));
-	// wall_test.tag = "wall";
-	//
-	// renderAGObject(wall_test);
-	//
-	//
-	// //the AGObject
-	// let portal_test = new AGPortal("Portal_", new Vector3(1, 1, 3), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-	// renderAGObject(portal_test);
-	//
-	//
-	// //let player_test = new AGPlayer("spieler", new Vector3(5, 1, 5), new Vector3(1, 0, 0), new Vector3(0, 1, -1), controls);
-	// renderAGObject(player);
-	//
-	//
-
-	
-	
-	function renderAGRoom(ag_room){
-		
-		room_canvas = new fabric.Canvas('c',{
-		    selection: false, 
-		    height: room_depth * scale_, 
-		    width: room_width * scale_,
-		});
-	
-		let options = {
-		   distance: scale_,
-		   width: room_canvas.width,
-		   height: room_canvas.height,
-		   param: {
-		   		stroke: colors[1][vision_mode],
-		   		strokeWidth: 1,
-		   		selectable: false,
-			  	type:'grid_line'
-		   }
-		};
-
-		//grid for the canvas
-		let gridLen = options.width / options.distance;
-		
-		for (var i = 0; i < gridLen; i++) {
-		  var distance   = i * options.distance,
-		      horizontal = new fabric.Line([ distance, 0, distance, options.width], options.param),
-		      vertical   = new fabric.Line([ 0, distance, options.width, distance], options.param);
-		  room_canvas.add(horizontal);
-		  room_canvas.add(vertical);
-		};
-		room_canvas.backgroundColor = colors[0][vision_mode];
-		room_canvas.renderAll();
-
 
 
 	
-		//snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
-		room_canvas.on('object:moving', options => {
-		   options.target.set({
-		      left: Math.round(options.target.left / scale_) * scale_,
-		      top: Math.round(options.target.top / scale_) * scale_ 
-		   });
-		});
 	
-		var w = 0;
-		room_canvas.on('object:scaling', options => {
-			var target = options.target,
-		   	w = target.width * target.scaleX,
-		   	h = target.height * target.scaleY,
-		   	snap = { // Closest snapping points
-		   	   top: Math.round(target.top / grid) * grid,
-		   	   left: Math.round(target.left / grid) * grid,
-		   	   bottom: Math.round((target.top + h) / grid) * grid,
-		   	   right: Math.round((target.left + w) / grid) * grid
-		   	},
-		   	threshold = grid,
-		   	dist = { // Distance from snapping points
-		   	   top: Math.abs(snap.top - target.top),
-		   	   left: Math.abs(snap.left - target.left),
-		   	   bottom: Math.abs(snap.bottom - target.top - h),
-		   	   right: Math.abs(snap.right - target.left - w)
-		   	},
-		   	attrs = {
-		   	   scaleX: target.scaleX,
-		   	   scaleY: target.scaleY,
-		   	   top: target.top,
-		   	   left: target.left
-		   	};
-		
-
-		switch(ag_object.tag){
-			case 'ENEMY':
-				fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
-				  	var obj = fabric.util.groupSVGElements(objects);
-				 	obj.scaleToWidth(ag_object.size.x*scale_,);
-				  	obj.scaleToHeight(ag_object.size.z*scale_,);
-				  	obj.left = ag_object.position.x*scale_;
-				    obj.top = ag_object.position.z*scale_;
-					obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
-					obj.fill = colors[3][vision_mode];
-					obj.AGObject = ag_object;
-				 	obj.PathArray = [];
-					obj.isObject = true;
-					obj.isRecording = false;
-					obj.name = 'Gegner';
-					obj.type = 'enemy';
-					obj.originX = 'center';
-					obj.originY = 'center';
-				  	room_canvas.add(obj).renderAll();
-				});
->>>>>>> a659ddc86f5d498bec6b8ca0b8542f24eba9e327
-				
-				case 'WALL':
-					var obj = new fabric.Rect({
-						width: ag_object.size.x*scale_,
-						height: ag_object.size.z*scale_,
-						fill: colors[4][vision_mode],
-						left: ag_object.position.x*scale_,
-						top: ag_object.position.z*scale_,
-						AGObject: ag_object,
-						isObject: true,	
-						name:'Mauer',
-						type: 'wall',
-						strokeWidth: 1,
-					});
-					room_canvas.add(obj).renderAll();
-					break;
-			}
-			
-		}else if(ag_object.type){
-			switch(ag_object.type){
-				case 'PORTAL':	
-					fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(ag_object.size.x*scale_,);
-					  	obj.scaleToHeight(ag_object.size.z*scale_,);
-					  	obj.left = ag_object.position.x*scale_;
-					    obj.top = ag_object.position.z*scale_;
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
-						obj.fill = colors[4][vision_mode];
-						obj.AGObject = ag_object;
-					 	obj.PathArray = [];
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = 'Portal';
-						obj.type = 'portal';
-						obj.secDoor = false;
-						obj.originX = 'center';
-						obj.originY = 'center';
-					  	room_canvas.add(obj).renderAll();
-					});
-					break;
-				
-				case 'PLAYER':
-					//TODO change size of player
-					fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(1*scale_);
-					  	obj.scaleToHeight(1*scale_);
-					  	obj.left = ag_object.position.x*scale_;
-					    obj.top = ag_object.position.z*scale_;
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
-						obj.fill = colors[2][vision_mode];
-						obj.AGObject = ag_object;
-					 	obj.PathArray = [];
-						obj.isObject = true;
-						obj.name = 'Spieler';
-						obj.type = 'player';
-						obj.originX = 'center';
-						obj.originY = 'center';
-					  	room_canvas.add(obj).renderAll();
-					});
-					break;
-			}	
-		}
-	}
+	
 	
 	
 	
@@ -501,37 +292,5 @@ jQuery(function($){
 
 	}
 	
-	function changeVisionMode(){
 		
-
-		// 0...default
-		// 1...high contrast
-		room_canvas.backgroundColor = colors[0][vision_mode];
-		room_canvas.getObjects().forEach(object=>{
-			switch(object.type){
-				case 'grid_line':
-					object.set("stroke", colors[1][vision_mode]);
-					break;
-			
-				case 'player':
-					object.set("fill", colors[2][vision_mode]);		
-					object.set("fill", colors[2][vision_mode]);
-					break;
-				
-				case 'enemy':
-					object.set("fill", colors[3][vision_mode]);
-					
-					break;
-				case 'portal':
-				case 'wall':	
-					object.set("fill", colors[4][vision_mode]);
-					break;
-			}
-		});
-		room_canvas.renderAll();
-		
-		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,.btn,#canvas_container,label" ).toggleClass("contrast");
-		
-	}	
 });

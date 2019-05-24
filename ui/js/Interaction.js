@@ -1,9 +1,14 @@
 import { i_audicom } from "../../lib/main.js";
+import { Vector3 } from "../../lib/js/three/Vector3.js";
 
 jQuery(function($){
 	
 	//Play-Button
 	let interval;
+	
+	//the active Fabric-Object
+	let actFabObj;
+	
 	$('#btn_start_scene').click(function(){
 		i_audicom.startArea();
 	});
@@ -14,6 +19,39 @@ jQuery(function($){
 	$('#btn_change_vision_mode').click(function(){
 		i_audicom.toggleVisionMode();
 	});
+	
+	$('#btn_zoom_out').click(function(){
+		i_audicom.zoomCanvas(0.9);
+	});
+	$('#btn_zoom_in').click(function(){
+		i_audicom.zoomCanvas(1.1);
+	});
+	
+	
+	$('#input_obj_name').on('input', function() {
+	    let buffer = $(this).val();
+		i_audicom._room_canvas.getActiveObject().name = buffer;
+		_room_canvas.getActiveObject().AGObject.name = buffer;
+	});
+	
+	
+	$('#input_obj_pos_x').on('input', function() {	
+		i_audicom._room_canvas.getActiveObject().AGObject.position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
+		i_audicom._room_canvas.getActiveObject().set({
+			left: $('#input_obj_pos_x').val()*i_audicom._scale,
+			top: $('#input_obj_pos_y').val()*i_audicom._scale,
+		});
+		i_audicom._room_canvas.renderAll();
+	});
+	$('#input_obj_pos_y').on('input', function() {
+		i_audicom._room_canvas.getActiveObject().AGObject.position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
+		i_audicom._room_canvas.getActiveObject().set({
+			left: $('#input_obj_pos_x').val()*i_audicom._scale,
+			top: $('#input_obj_pos_y').val()*i_audicom._scale,
+		});
+		i_audicom._room_canvas.renderAll();
+	});
+
 	
 	//jq dnd-stuff
 	$('.sb_object').draggable({
@@ -44,15 +82,8 @@ jQuery(function($){
 			let top_buff = (ui.position.top)-$(this).offset().top;	
 			let agobject_buffer;
 			
-  	    	var snap_buffer = { // Closest snapping points
-  	        	top: Math.round((top_buff) / i_audicom._scale) * i_audicom._scale,
-  	        	left: Math.round((left_buff) / i_audicom._scale) * i_audicom._scale,
-  	        	bottom: Math.round((top_buff + i_audicom._scale) / i_audicom._scale) * i_audicom._scale,
-  	        	right: Math.round((left_buff+ i_audicom._scale) / i_audicom._scale) * i_audicom._scale
-  	     	};
-			
-			let snap_top_buffer = snap_buffer.top < snap_buffer.bottom ? snap_buffer.top : snap_buffer.bottom;
-			let snap_left_buffer = snap_buffer.left < snap_buffer.right ? snap_buffer.left : snap_buffer.right;
+			i_audicom.makeThenRenderAGObject(obj_type, left_buff, top_buff);
+			//render the thing
 			
 			//move to a function
 			switch(obj_type){
@@ -68,84 +99,74 @@ jQuery(function($){
 					});
 					break;
 		    		room_canvas.add(obj);	
-				case 'enemy':
-					
-					
-					//TODO the AGObject	
-					// agobject_buffer = new AGObject("AGgegner", new Vector3((snap_left_buffer/i_audicom._scale), 1, (snap_top_buffer/i_audicom._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-// 					let agobject_buffer_ss = new AGSoundSource("schritte", "sounds/urbi.mp3", true, 1, room);
-// 					agobject_buffer.addSoundSource(agobject_buffer_ss);
-// 					agobject_buffer.setSpeedSkalar(0.1);
-// 					room.add(agobject_buffer);
-					
-					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
-					  	obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(i_audicom._scale);
-					  	obj.scaleToHeight(i_audicom._scale);
-					  	obj.left = snap_left_buffer + i_audicom._scale/2;
-					    obj.top = snap_top_buffer + i_audicom._scale/2;
-						obj.fill = i_audicom._colors[3][i_audicom._vision_mode];
-						obj.AGObject = agobject_buffer;
-					 	obj.PathArray = [];
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = 'Gegner';
-						obj.type = 'enemy';
-						obj.originX = 'center';
-						obj.originY = 'center';
-					  	i_audicom._room_canvas.add(obj).renderAll();
-					});
-	
-					break;
-				case 'portal':
-					//the AGObject	
-					// agobject_buffer = new AGPortal("Portal_" + Math.floor(Math.random() * Math.floor(9999)), new Vector3((snap_left_buffer/i_audicom._scale), 1.0, (snap_top_buffer/i_audicom._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-// 					room.add(agobject_buffer);
-					
-					fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
-					  	obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(i_audicom._scale);
-					  	obj.scaleToHeight(i_audicom._scale);
-					  	obj.left = snap_left_buffer + i_audicom._scale/2;
-					    obj.top = snap_top_buffer + i_audicom._scale/2;
-						obj.fill = i_audicom._colors[4][i_audicom._vision_mode];
-						obj.AGObject = agobject_buffer;
-					 	obj.PathArray = [];
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = 'Portal';
-						obj.type = 'portal';
-						obj.secDoor = false;
-						obj.originX = 'center';
-						obj.originY = 'center';
-					  	i_audicom._room_canvas.add(obj).renderAll();
-					});
-					
-					break;
-				case 'wall':	
-					//the AGObject	
-					// agobject_buffer = new AGPortal("Wall_" + Math.floor(Math.random() * Math.floor(9999)), new Vector3((snap_left_buffer/i_audicom._scale), 1.0, (snap_top_buffer/i_audicom._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-// 					room.add(agobject_buffer);
-					
-					//the fabric.js object
-					obj = new fabric.Rect({
-						width: i_audicom._scale,
-						height: i_audicom._scale,
-						fill: i_audicom._colors[4][i_audicom._vision_mode],
-						left: snap_left_buffer + i_audicom._scale/2,
-						top: snap_top_buffer + i_audicom._scale/2,
-						AGObject: agobject_buffer,
-						isObject: true,
-						name:'Mauer',
-						type: 'wall',
-						originX:'center',
-						originY:'center',
-						strokeWidth: 1,
-					});
-					i_audicom._room_canvas.add(obj);	
-					break;
 			}
 		}
 	});
+	
+	
+	function loadObject(){
+		
+		//all: position, SoSo, Namen, Löschenbutton
+		//gegner: Pfad, HP
+		//Mauer: Gräße, Form
+		//Portale: Verlinkung
+		//Spieler: HP, Reichweite, Schaden
+		//Raumziel
+		
+		$('#ui_part_right_inner').fadeOut(100, function(){
+			$('#input_obj_name').val(actFabObj.name);
+			$('#input_obj_width').val(Math.round(actFabObj.width/i_audicom._scale));
+			$('#input_obj_height').val(Math.round(actFabObj.height/i_audicom._scale));
+
+			$('#input_obj_pos_x').val(actFabObj.left/i_audicom._scale);
+			$('#input_obj_pos_y').val(actFabObj.top/i_audicom._scale);
+
+			setTimeout(function(){
+				$('#ui_part_right_inner').fadeIn(100);
+			}, 100);
+		});
+	}
+	
+	
+	//fabric listeners
+	i_audicom._room_canvas.on('selection:created', function(e){
+		if(actFabObj != i_audicom._room_canvas.getActiveObject()){
+			actFabObj = i_audicom._room_canvas.getActiveObject();
+			loadObject();
+		}
+	});
+	i_audicom._room_canvas.on('selection:updated', function(e){
+		//if another object is selected hide path of current object
+	
+		if(actFabObj.isRecording && actFabObj.type=='portal'){
+	
+			// let actObj_buffer = room_canvas.getActiveObject();
+//
+// 			if(actObj_buffer.type=='portal'){
+// 				actFabObj.secDoor = room_canvas.getActiveObject();
+// 				actObj_buffer.secDoor = actObj;
+// 				actFabObj.AGObject.linkPortals(actObj_buffer.AGObject);
+//
+// 			}
+			//canvas.setActiveObject(actObj);
+	
+		}else{
+			if(actFabObj != i_audicom._room_canvas.getActiveObject() && actFabObj.PathArray){
+				actFabObj.PathArray.forEach(function(ele) {
+					ele.opacity = 0;
+				});
+				actFabObj = i_audicom._room_canvas.getActiveObject();
+			}else if(actFabObj.PathArray){
+				actFabObj = i_audicom._room_canvas.getActiveObject();
+				actFabObj.PathArray.forEach(function(ele) {
+					ele.opacity = 1;
+				});
+			}else{
+				actObj = i_audicom._room_canvas.getActiveObject();
+			}
+		}
+		loadObject();
+	});
+	
 
 });

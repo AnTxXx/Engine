@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Audicom</title>
+	<title>AudiCom</title>
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="ui/css/bootstrap.min.css">
@@ -55,6 +55,11 @@
 				
 				
 				
+				<div id = "sb_object_exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
+					<i class="fas fa-sign-out-alt"></i>
+				</div><!--sb_object-->
+				
+				
 				
 				
 				<!-- <div id = "sb_agplayer" class = "sb_object bg_green" obj_type = "player">
@@ -77,6 +82,11 @@
 				
 				
 				
+				<div id = "canvas_controls_box">
+					<h2>Canvas Zoom</h2>
+					<div id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></div>
+					<div id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></div>				
+				</div><!--scene_controls_box-->
 				
 				
 				
@@ -97,7 +107,7 @@
 				
 			</div><!--col-->
 			
-			<div id = "ui_part_middle" class = "ui_part ui_part_middle_expanded">
+			<div id = "ui_part_middle" class = "ui_part">
 				<div id = "canvas_container">
 					<canvas id = "c" class = "canvas_room" width="1800" height = "1600"></canvas>
 				</div><!--canvasContainer-->
@@ -106,49 +116,44 @@
 		
 			<div id = "ui_part_right" class = "ui_part ui_part_right_expanded">
 				
-				<div id = "btn_collapse"><i class="fas fa-arrows-alt-h"></i></div>
+				<!--<div id = "btn_collapse"><i class="fas fa-arrows-alt-h"></i></div>-->
 				
 				<div id = "ui_part_right_inner">
 					
-					
 					<div class = "ui_box">
 						<h2 id = "h_object_name"></h2>
-						Obj-Name:<br>
+						Name:<br>
 						<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
 					</div><!--ui_box-->
 					
-					<div class = "ui_box">
-						Obj-Dimensions:<br>
+					<!-- <div class = "ui_box">
+						Größe:<br>
 						<input id = "input_obj_width" class = "" placeholder="Width" maxlength="100" type="text" name="" value="1">
 						<span>X</span>
 						<input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
-					</div><!--ui_box-->
-					
-					
+					</div> -->
 					
 					<div class = "ui_box">
-						Obj-Position:<br>
+						Position:<br>
 						<input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
 						<span>X</span>
 						<input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">
 					</div><!--ui_box-->
 					
-					
-					
-					<div class = "ui_box">
+					<!-- <div class = "ui_box">
 						Obj-Rotation:<br>
 						<input id = "input_obj_rot" placeholder="0" maxlength="100" type="text" name="input_obj_name" value=""> &deg;
-					</div><!--ui_box-->
+					</div>-->
 					
 					<div class = "ui_box">
-						Path-Controls:
+						Gegnerpfad:
 						<br>
 						<div id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></div>
 						<div id = "btn_path_delete" class = "btn"><i class="fas fa-trash-alt"></i></div>
 					</div><!--ui_box-->
 					
 					<div class = "ui_box">
-						Door-Controls:
+						Portal verlinken:
 						<br>
 						<div id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></div>
 						<div id = "btn_path_deletedoors" class = "btn"><i class="fas fa-trash-alt"></i></div>
@@ -159,18 +164,18 @@
 					</div><!--path_coords-->
 					
 					<div id = "audio_src_box" class = "ui_box">
-						Audio-Source:<br>
+						<!-- Audio-Source:<br>
 						<input id = "input_audio_src" placeholder="Dateipfad" maxlength="100" type="text" name="input_audio_src" value="">
 						<div id = "btn_set_file" class = "btn"><i class="fas fa-upload"></i></div>
 						<br>
-						for testing:<br> 
+						for testing:<br>
 						/Users/michaelh/Desktop/audios/urbi.mp3 <br>
 						/Users/michaelh/Desktop/audios/steps.wav<br>
 						/Users/michaelh/Desktop/audios/ouch.mp3
-						
+
 						<br>
-						<input type="file" name="audio_src_input" id="file" accept="audio/*">				
-						<label for="file"><i class="fas fa-volume-up"></i></label> :
+						<input type="file" name="audio_src_input" id="file" accept="audio/*">
+						<label for="file"><i class="fas fa-volume-up"></i></label> : -->
 					</div><!--audio_src_box-->
 					
 				</div><!--ui_part_right_inner-->
