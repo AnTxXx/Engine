@@ -1,7 +1,7 @@
 // @flow
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom} from "./AGPhysics.js";
+import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom, hitBoundingBox} from "./AGPhysics.js";
 import type {Type} from "./AGType.js";
 import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
@@ -188,6 +188,14 @@ export class AGRoom {
         this._collisions.push(new Collision(obj1, obj2));
     }
 
+    objectsRayIntersect(obj:AGObject):Array<AGObject>{
+        let returnArr:Array<AGObject> = [];
+        for(let i = 0; i < this._AGobjects.length; i++){
+           if(hitBoundingBox(this._AGobjects[i], obj) && this._AGobjects[i] !== obj) returnArr.push((this._AGobjects[i]));
+        }
+        return returnArr;
+    }
+
     /*objectPartOfCollision(obj:AGObject):?AGObject {
         return objectPartOfCollision(this._collisions, obj);
     }*/
@@ -228,6 +236,23 @@ export class AGRoom {
             if(isPointInsideAABB(position, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
         }
         return collisionArray;
+    }
+
+    removeAGObject(obj:AGObject){
+        let index:number = -1;
+        for(let i = 0; i < this._AGobjects.length; i++){
+            if(obj === this._AGobjects[i]) index = i;
+        }
+        if(index === -1) return;
+        this._AGobjects.splice(index, 1);
+        this.removeCollisionWithObject(obj);
+        console.log("[AGRoom] Removed object " + obj.name + " from room " + this.name + ".");
+    }
+
+    removeCollisionWithObject(obj:AGObject){
+        for(let i = this._collisions.length-1; i>=0; i--){
+            if(this._collisions[i].obj1 === obj || this._collisions[i].obj2 === obj) this._collisions.splice(i,1);
+        }
     }
 
     /**

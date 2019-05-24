@@ -11,6 +11,28 @@ import type {Trigger} from "./EventType.js";
 let debug = 0;
 
 export class AGObject {
+    get damage(): number {
+        return this._damage;
+    }
+
+    set damage(value: number) {
+        this._damage = value;
+    }
+
+    get dangerous(): boolean {
+        return this._dangerous;
+    }
+
+    set dangerous(value: boolean) {
+        this._dangerous = value;
+    }
+    get range(): number {
+        return this._range;
+    }
+
+    set range(value: number) {
+        this._range = value;
+    }
     get destructible():boolean {
         return this._destructible;
     }
@@ -137,6 +159,8 @@ export class AGObject {
     _direction:Vector3;
     _size:Vector3;
 
+    //TODO: deep copy for reset on stop Lodash deepclone??
+
     _speed:Vector3;
     _movable:boolean;
     _route:Array<Vector3>;
@@ -150,6 +174,11 @@ export class AGObject {
 
     _destructible:boolean;
     _health:number;
+
+    _range:number;
+
+    _damage:number;
+    _dangerous:boolean;
 
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
@@ -258,7 +287,6 @@ export class AGObject {
      */
     onCollisionEnter(obj: AGObject) {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
-        //TODO: call EventHandler with onContact() Trigger
         this.room.gameArea.eventHandler.call(this, "ONCONTACT");
         //adds this object to the other object on its blocked list, so the onCollisionEnter isn't called again.
         if(!this._blockedObjects.includes(obj)){
@@ -283,5 +311,29 @@ export class AGObject {
 
     onDeath(){
         this._room.gameArea.eventHandler.call(this, "ONDEATH");
+        console.log("[AGObject] " + this.name + " got destroyed. Triggering death routines.");
+        this.kill();
+    }
+
+    kill(){
+        console.log("[AGObject] " + this.name + ": killed.");
+        this.room.removeAGObject(this);
+    }
+
+    interact(){
+
+    }
+
+    doDamage(obj:AGObject){
+        if(this.destructible) {
+            this.health -= obj.damage;
+            console.log("[AGObject] " + this.name + " got " + obj.damage + " damage from object " + obj.name + " leaving me at " + this.health + " health.");
+        } else {
+            console.log("[AGObject] " + this.name + " got " + obj.damage + " damage from object " + obj.name + " but cannot take any damage.");
+        }
+    }
+
+    reset(){
+
     }
 }

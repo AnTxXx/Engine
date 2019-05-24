@@ -54,4 +54,20 @@ export class AGPlayer extends AGObject {
         this._hitSound.audioElement.currentTime = 0;
         this._hitSound.play();
     }
+
+    interact() {
+        super.interact();
+        //damage others
+        if(!this.dangerous) return;
+        let hits:Array<AGObject> = this.room.objectsRayIntersect(this);
+        console.log("[AGPlayer] Interaction Hits:");
+        console.log(hits);
+        for(let i = 0; i < hits.length; i++){
+            //if the object is in hit range
+            if(hits[i].position.distanceTo(this.position)<this.range){
+                hits[i].doDamage(this);
+            }
+        }
+
+    }
 }

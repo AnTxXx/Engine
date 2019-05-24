@@ -5,7 +5,8 @@ const values = Object.freeze({
     SOUNDSOURCE: 'SOUNDSOURCE',
     GAMEAREA: "GAMEAREA",
     OBJECT: "OBJECT",
-    PORTAL: "PORTAL"
+    PORTAL: "PORTAL",
+    EXIT: "EXIT"
 });
 
 export type Type = $Values<typeof values>;
