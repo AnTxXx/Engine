@@ -14,6 +14,7 @@ import type {Trigger, Action} from "./EventType.js";
 import {Event} from "./Event.js";
 import {AGCondition} from "./AGCondition.js";
 import { IAudiCom } from "../ui/js/IAudiCom.js";
+import {AGRoomExit} from "./AGRoomExit.js";
 
 
 let eventHandler:AGEventHandler = new AGEventHandler();
@@ -29,6 +30,8 @@ let player_hit:AGSoundSource = new AGSoundSource("hit", "sounds/ouch.mp3", false
 let door1:AGPortal = new AGPortal("Tuere 1", new Vector3(5.0, 1.0, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
 let door2:AGPortal = new AGPortal("Tuere 2", new Vector3(3.0, 1.0, 3.0), new Vector3(1,0,0), new Vector3(1,1,1));
 
+let exit1:AGRoomExit = new AGRoomExit("Ausgang", new Vector3(5.0, 1.0, 1.0), new Vector3(1,0,0), new Vector3(1,1,1));
+
 //let wallSOUTH:AGObject = new AGObject("wall_south", new Vector3(5,1,10), new Vector3(1,0,0), new Vector3(5,1,1));
 
 area.listener = player;
@@ -39,6 +42,7 @@ gegner.tag = "ENEMY";
 room_1.add(gegner);
 room_1.add(door1);
 room_1.add(door2);
+room_1.add(exit1);
 //room_1.add(wallSOUTH);
 
 //player.setSpeedSkalar(1);
