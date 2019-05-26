@@ -41,10 +41,6 @@ jQuery(function($){
 	//*******************//
 
 
-
-
-
-
 	//*FABRIC Listeners*//
 
 	//keep object active for path recording
@@ -108,55 +104,10 @@ jQuery(function($){
 // 	});
 //
 // 	//coords for path
-// 	room_canvas.on('mouse:down', function(e){
-// 		if(actObj.type=='enemy' && actObj.isRecording){
-// 			let dot = new fabric.Circle({
-// 			    left:   getMouseCoords(e)[0]-4,
-// 			    top:    getMouseCoords(e)[1]-4,
-// 			    radius: 4,
-// 			    fill:   'black',
-// 			    objectCaching: false,
-// 				selectable: false,
-// 			});
-// 			room_canvas.add(dot);
-// 			actObj.PathArray.push(dot);
-// 		}else{
-//
-// 		}
-//
-//
-// 	});
+
 
 
 	//******canvas stuff end*********//
-
-	//button for path recording
-	$('#btn_path_rec').click(function(){
-		if(actObj.isRecording){
-			//Hier wird noch ein Fehler produziert
-			let first_dot = new fabric.Circle({
-				left:   actObj.left,
-				top:    actObj.top,
-				radius: 4,
-				fill:   'black',
-				objectCaching: false,
-				selectable: false,
-			});
-			room_canvas.add(first_dot);
-			actObj.PathArray.unshift(first_dot);
-			//save path to AGObject and set movable true
-			actObj.PathArray.forEach(function(ele) {
-				actObj.AGObject.movable = true;
-				actObj.AGObject.addRouteNode(new Vector3(ele.left/scale_, 1, ele.top/scale_));
-			});
-			actObj.isRecording = false;
-			$(this).find('i').removeClass('btn_path_rec_blink');
-		}else{
-			actObj.isRecording = true;
-			$(this).find('i').addClass('btn_path_rec_blink');
-		}
-	});
-
 
 
 	$('#btn_path_linkdoors').click(function(){
@@ -275,22 +226,7 @@ jQuery(function($){
 	
 	
 
-	function getMouseCoords(event){
-		var pointer = room_canvas.getPointer(event.e);
-		var posX = pointer.x;
-		var posY = pointer.y;
-		return [posX, posY]
-	}
-
-	function setCanvasDimensions(width, height){
-		room_canvas.setHeight(width);
-		room_canvas.setWidth(height);
-		room_canvas.renderAll();
-	}
-
-	function drawObjects(obj_type, obj_left, obj_top){
-
-	}
+	
 	
 		
 });

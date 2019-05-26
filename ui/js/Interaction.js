@@ -51,7 +51,19 @@ jQuery(function($){
 		});
 		i_audicom._room_canvas.renderAll();
 	});
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//jq dnd-stuff
 	$('.sb_object').draggable({
@@ -128,16 +140,93 @@ jQuery(function($){
 	}
 	
 	
+	
+	//button for path recording
+	$('#btn_path_rec').click(function(){
+		if(actFabObj.isRecording){
+			
+			let first_dot = new fabric.Circle({
+				left:   actFabObj.left,
+				top:    actFabObj.top,
+				radius: 4,
+				fill:   'black',
+				objectCaching: false,
+				selectable: false,
+			});
+			
+			i_audicom._room_canvas.add(first_dot);
+			
+			actFabObj.PathArray.unshift(first_dot);
+			
+			//save path to AGObject and set movable true
+			actFabObj.PathArray.forEach(function(ele) {
+				actFabObj.AGObject.addRouteNode(new Vector3(ele.left/i_audicom._scale, 1, ele.top/i_audicom._scale));
+			});
+			actFabObj.AGObject.movable = true;
+			actFabObj.isRecording = false;
+			$(this).find('i').removeClass('btn_path_rec_blink');
+			
+		}else{
+			actFabObj.isRecording = true;
+			$(this).find('i').addClass('btn_path_rec_blink');
+		}
+	});
+	
+	
+	i_audicom._room_canvas.on('mouse:down', function(e){
+		
+		
+		//add path-point if an enemy is selected and it is recording
+		if(actFabObj.type=='enemy' && actFabObj.isRecording){
+			let dot = new fabric.Circle({
+			    left:   getMouseCoords(e)[0]-4,
+			    top:    getMouseCoords(e)[1]-4,
+			    radius: 4,
+			    fill:   'black',
+			    objectCaching: false,
+				selectable: false,
+			});
+			i_audicom._room_canvas.add(dot);
+			actFabObj.PathArray.push(dot);
+			i_audicom._room_canvas.setActiveObject(actFabObj);
+		
+		
+		//deselect Object and hide Path-Points	
+		}else if(!i_audicom._room_canvas.getActiveObject()){
+			if(actFabObj.PathArray){
+				actFabObj.PathArray.forEach(function(ele) {
+					ele.opacity = 0;
+				});
+			}
+			
+			//TODO check if recording; if yes -> stop recording
+			
+		}
+	});
+	
+	
 	//fabric listeners
 	i_audicom._room_canvas.on('selection:created', function(e){
+		
+		//only load properties if another element is selected
 		if(actFabObj != i_audicom._room_canvas.getActiveObject()){
 			actFabObj = i_audicom._room_canvas.getActiveObject();
 			loadObject();
 		}
+		
+		
+		//if element has path array -> show path points
+		if(i_audicom._room_canvas.getActiveObject().PathArray){
+			actFabObj = i_audicom._room_canvas.getActiveObject();
+			actFabObj.PathArray.forEach(function(ele) {
+				ele.opacity = 1;
+			});
+		}
 	});
-	i_audicom._room_canvas.on('selection:updated', function(e){
-		//if another object is selected hide path of current object
 	
+	
+	i_audicom._room_canvas.on('selection:updated', function(e){
+		
 		if(actFabObj.isRecording && actFabObj.type=='portal'){
 	
 			// let actObj_buffer = room_canvas.getActiveObject();
@@ -152,21 +241,47 @@ jQuery(function($){
 	
 		}else{
 			if(actFabObj != i_audicom._room_canvas.getActiveObject() && actFabObj.PathArray){
+				//if another object is selected hide path of current object
 				actFabObj.PathArray.forEach(function(ele) {
 					ele.opacity = 0;
 				});
 				actFabObj = i_audicom._room_canvas.getActiveObject();
-			}else if(actFabObj.PathArray){
+				
+			//show path-points if object has a path array
+			}else if(i_audicom._room_canvas.getActiveObject().PathArray){
+				
+				
+				
 				actFabObj = i_audicom._room_canvas.getActiveObject();
 				actFabObj.PathArray.forEach(function(ele) {
 					ele.opacity = 1;
 				});
 			}else{
-				actObj = i_audicom._room_canvas.getActiveObject();
+				actFabObj = i_audicom._room_canvas.getActiveObject();
 			}
 		}
 		loadObject();
 	});
+	
+	
+	
+	function getMouseCoords(event){
+		var pointer = i_audicom._room_canvas.getPointer(event.e);
+		var posX = pointer.x;
+		var posY = pointer.y;
+		return [posX, posY]
+	}
+
+	function setCanvasDimensions(width, height){
+		i_audicom._room_canvas.setHeight(width);
+		i_audicom._room_canvas.setWidth(height);
+		i_audicom._room_canvas.renderAll();
+	}
+
+	function drawObjects(obj_type, obj_left, obj_top){
+
+	}
+	
 	
 
 });

@@ -92,7 +92,6 @@ canvas{
 	font-size:25px;
 	text-align:center;
 	line-height:60px;
-
 	margin:5px;
 }
 
@@ -103,8 +102,6 @@ canvas{
 .bg_portal, .bg_wall, .bg_exit{
 	background-color:#FDA038;
 }
-
-
 
 
 /*dnd*/

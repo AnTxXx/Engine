@@ -7,6 +7,7 @@ import { AGPlayer } from "../../lib/AGPlayer.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
 import { AGPortal } from "../../lib/AGPortal.js";
 import { AGRoom } from "../../lib/AGRoom.js";
+import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGItem } from "../../lib/AGItem.js";
 import { AGEventHandler } from "../../lib/AGEventHandler.js";
 
@@ -43,11 +44,11 @@ export class IAudiCom {
 		this._room_canvas;
 		
 		this._colors = [
-		  ['#e2e2e2', '#000060'], 	//canvas
-		  ['#ebebeb', '#cccccc'],	//grid
-		  ['#A06FEB', '#FFFACD'],	//player
-		  ['#d47070', '#F7CA18'],	//enemy
-		  ['#FDA038', '#DDA0DD'],	//wall
+		  	['#e2e2e2', '#000060'], //canvas
+		  	['#ebebeb', '#cccccc'],	//grid
+		  	['#A06FEB', '#FFFACD'],	//player
+		  	['#d47070', '#F7CA18'],	//enemy
+		  	['#FDA038', '#DDA0DD'],	//wall, portal, exit
 		];
     }
 	
@@ -91,6 +92,11 @@ export class IAudiCom {
 	startArea(){
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
+		
+		//JUST FOR TESTING
+		// let interval_test = setInterval(function(){
+// 			console.log(room_buffer.getActiveObject().AGObject.route);
+// 		},1000);
 		
 		play(this._AGarea, true);
 		this._interval = setInterval(function(){			
@@ -324,7 +330,7 @@ export class IAudiCom {
 				break;
 			case 'exit':
 
-				//obj_buffer = new AGPortal("Portal", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer = new AGRoomExit("Exit", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				
 				break;
 			
@@ -362,9 +368,24 @@ export class IAudiCom {
 						obj.type = 'enemy';
 						obj.originX = 'center';
 						obj.originY = 'center';
+						
+						if(ag_object.route.length > 0){
+							ag_object.route.forEach(function (item, index) {
+								let dot = new fabric.Circle({
+								    left:   (item.x*_scalebuffer)-4,
+								    top:    (item.z*_scalebuffer)-4,
+								    radius: 4,
+								    fill:   'black',
+								    objectCaching: false,
+									selectable: false,
+									opacity: 0,
+								});
+								obj.PathArray.push(dot);
+								room_canvas_buffer.add(dot);
+							});
+						}
 					  	room_canvas_buffer.add(obj).renderAll();
 					});
-				
 					break;
 			
 				case 'WALL':
@@ -397,7 +418,7 @@ export class IAudiCom {
 						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
 						obj.fill = colors_buffer[4][vision_mode_buffer];
 						obj.AGObject = ag_object;
-					 	obj.PathArray = [];
+					 	
 						obj.isObject = true;
 						obj.isRecording = false;
 						obj.name = 'Portal';
@@ -408,7 +429,28 @@ export class IAudiCom {
 					  	room_canvas_buffer.add(obj).renderAll();
 					});
 					break;
-				
+					
+				case 'EXIT':	
+					fabric.loadSVGFromURL('ui/img/exit.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(ag_object.size.x*_scalebuffer);
+					  	obj.scaleToHeight(ag_object.size.z*_scalebuffer);
+					  	obj.left = ag_object.position.x*_scalebuffer + ag_object.size.x*_scalebuffer/2;
+					    obj.top = ag_object.position.z*_scalebuffer + ag_object.size.z*_scalebuffer/2;
+						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[4][vision_mode_buffer];
+						obj.AGObject = ag_object;
+						obj.isObject = true;
+						obj.isRecording = false;
+						obj.name = 'Exit';
+						obj.type = 'exit';
+						obj.secDoor = false;
+						obj.originX = 'center';
+						obj.originY = 'center';
+					  	room_canvas_buffer.add(obj).renderAll();
+					});
+					break;
+					
 				case 'PLAYER':
 					//TODO change size of player
 					fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
