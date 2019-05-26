@@ -11,6 +11,9 @@ import type {Trigger} from "./EventType.js";
 let debug = 0;
 
 export class AGObject {
+    get route():Array<Vector3> {
+        return this._route;
+    }
     get damage(): number {
         return this._damage;
     }
