@@ -5,6 +5,9 @@ html{
 h1, h2, h3, h4, h5, h6{
 	font-family: 'Dosis', sans-serif;
 }
+h2{
+	margin-bottom:5px;
+}
 
 #wrapper{
 	height:100vh;
@@ -45,6 +48,9 @@ h1, h2, h3, h4, h5, h6{
 .ui_box{
 	margin:10px 0;
 }
+.ui_box_special{
+	display:none;
+}
 #ui_part_right_inner{
 	
 }
@@ -54,7 +60,7 @@ h1, h2, h3, h4, h5, h6{
 	margin-top:15px;
 	overflow: scroll;
 	height:600px;
-	border:1px solid #a1a1a1;
+	/*border:1px solid #a1a1a1;*/
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
@@ -166,6 +172,15 @@ button:focus{
 
 #btn_path_rec{
 	
+}
+#btn_delete_object_box{
+}
+#btn_delete_object{
+	
+	background-color:#ee9898;
+}
+#btn_delete_object:hover{
+	background-color:#BFBFBF;
 }
 
 .btn_path_play_blink{
@@ -349,6 +364,11 @@ body.contrast{
 	color:#05182A;
 }
 #canvas_container.contrast{
-	border:3px solid white;
+	/*border:3px solid white;*/
+}
+
+#btn_delete_object.contrast{
+	background-color:#f02727;
+	color:white;
 }
 
