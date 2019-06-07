@@ -107,6 +107,15 @@ export class AGSoundSource
         this.audioElementSource = this.audioContext.createMediaElementSource(this.audioElement);
 
         this.source = this.resonanceAudioScene.createSource();
+        //TODO: activate filter when obstruction between listener and soundsource
+        /*let biquadFilter = this.audioContext.createBiquadFilter();
+        biquadFilter.type = "lowpass";
+        biquadFilter.frequency.value = 400;
+        biquadFilter.gain.value = -5;
+
+        this.audioElementSource.connect(biquadFilter);
+        biquadFilter.connect(this.source.input);*/
+
         this.audioElementSource.connect(this.source.input);
         this._name = name;
         this._type = "SOUNDSOURCE";
