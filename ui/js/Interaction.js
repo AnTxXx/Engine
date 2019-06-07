@@ -232,8 +232,11 @@ jQuery(function($){
 		if(actFabObj.type == 'portal'){
 			//actFabObj.secDoor
 			let fab_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
-			fab_buffer.secDoor = false;
-			fab_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);	
+			
+			if(fab_buffer){
+				fab_buffer.secDoor = false;
+				fab_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);	
+			}
 		}
 		
 		i_audicom._room_canvas.remove(actFabObj);
