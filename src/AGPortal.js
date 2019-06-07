@@ -37,7 +37,8 @@ export class AGPortal extends AGObject{
      * @param obj The object (AGObject) the portal collides with.
      */
     onCollisionEnter(obj: AGObject) {
-        if(obj.type === "PLAYER" && !this._blockedObjects.includes(obj) && evaluateAll(this._conditions)){
+        //console.log(obj.type);
+        if((obj.type === "PLAYER" || obj.tag === "ENEMY") && !this._blockedObjects.includes(obj) && evaluateAll(this._conditions)){
             //Blocks object that has just been teleported in other Portal to not get teleported again (until leave)
             this.exit.blockedObjects.push(obj);
             obj.position = this.exit.position.clone();
