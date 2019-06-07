@@ -54,17 +54,6 @@ jQuery(function($){
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//jq dnd-stuff
 	$('.sb_object').draggable({
 		appendTo: 'body',
@@ -90,8 +79,8 @@ jQuery(function($){
 		drop: function( event, ui ) {  
 			let obj_type = $(ui.draggable).attr('obj_type');
 			let obj;
-			let left_buff = (ui.position.left)-$(this).offset().left;
-			let top_buff = (ui.position.top)-$(this).offset().top;	
+			let left_buff = (ui.position.left)-$(this).offset().left + i_audicom._scale/2;
+			let top_buff = (ui.position.top)-$(this).offset().top + i_audicom._scale/2;	
 			let agobject_buffer;
 			
 			i_audicom.makeThenRenderAGObject(obj_type, left_buff, top_buff);
@@ -157,13 +146,14 @@ jQuery(function($){
 				left:   actFabObj.left,
 				top:    actFabObj.top,
 				radius: 4,
-				fill:   'black',
-				objectCaching: false,
+			    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+			    objectCaching: false,
 				selectable: false,
+				type: 'path_dot'
 			});
 			
-			i_audicom._room_canvas.add(first_dot);
-			actFabObj.PathArray.unshift(first_dot);
+			//i_audicom._room_canvas.add(first_dot);
+			//actFabObj.PathArray.unshift(first_dot);
 			
 			//clear old route and save path to AGObject and set movable true
 			actFabObj.AGObject.clearRoute();
@@ -227,14 +217,19 @@ jQuery(function($){
 			});
 		}
 		
+		if(actFabObj.type == 'portal'){
+			//actFabObj.secDoor
+			let fab_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
+			fab_buffer.secDoor = false;
+			fab_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);	
+		}
+		
 		i_audicom._room_canvas.remove(actFabObj);
 		i_audicom._room_canvas.renderAll();
 		
-	});
+		$('#ui_part_right_inner').fadeOut(100, function(){});
 		
-
-	
-	
+	});
 	
 	i_audicom._room_canvas.on('mouse:down', function(e){
 		
@@ -245,9 +240,10 @@ jQuery(function($){
 			    left:   getMouseCoords(e)[0]-4,
 			    top:    getMouseCoords(e)[1]-4,
 			    radius: 4,
-			    fill:   'black',
+			    fill:   i_audicom._colors[6][i_audicom._vision_mode],
 			    objectCaching: false,
 				selectable: false,
+				type: 'path_dot'
 			});
 			i_audicom._room_canvas.add(dot);
 			actFabObj.PathArray.push(dot);
@@ -261,8 +257,6 @@ jQuery(function($){
 
 			if(obj_buffer){
 				if(obj_buffer.AGObject.type == 'PORTAL'){
-					
-					
 					//link the portal
 					//mark the portal in canvas
 					actFabObj.AGObject.linkPortals(obj_buffer.AGObject);
@@ -270,19 +264,16 @@ jQuery(function($){
 					$('#btn_path_linkdoors').find('i').removeClass('btn_path_rec_blink');
 					
 					//link fabric objects
-					actFabObj.secDoor = i_audicom.room_canvas.getActiveObject();
-					obj_buffer.secDoor = actFabObj;
+					actFabObj.secDoor = i_audicom.room_canvas.getActiveObject().AGObject;
+					obj_buffer.secDoor = actFabObj.AGObject;
 					
 					//colorize
 					//console.log(i_audicom._colors[5][i_audicom._vision_mode]);
 					obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
 					i_audicom.room_canvas.renderAll();
-					
 				}
 			}
-			
-			
 			i_audicom._room_canvas.setActiveObject(actFabObj);
 			
 			
@@ -296,12 +287,10 @@ jQuery(function($){
 					ele.opacity = 0;
 				});
 			}else if(actFabObj.secDoor){
-				actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+				i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
 			}
 			
-			$('#ui_part_right_inner').fadeOut(100, function(){
-				
-			});
+			$('#ui_part_right_inner').fadeOut(100, function(){});
 			
 			//TODO check if recording; if yes -> stop recording	
 		}
@@ -326,7 +315,7 @@ jQuery(function($){
 				ele.opacity = 1;
 			});
 		}else if(actFabObj.secDoor){
-			actFabObj.secDoor.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+			i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 		}
 		
 	});
@@ -364,14 +353,12 @@ jQuery(function($){
 				});
 			//if another object is selected hide highlight-color of portal
 			}else if(actFabObj != i_audicom._room_canvas.getActiveObject() && actFabObj.secDoor){
-				actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+				i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
 			}else{
 				
 				if(i_audicom._room_canvas.getActiveObject().secDoor){
-					i_audicom._room_canvas.getActiveObject().secDoor.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
-				}
-				
-					
+					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+				}	
 			}
 			actFabObj = i_audicom._room_canvas.getActiveObject();
 		}
