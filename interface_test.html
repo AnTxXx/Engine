@@ -60,8 +60,6 @@
 				</div><!--sb_object-->
 				
 				
-				
-				
 				<!-- <div id = "sb_agplayer" class = "sb_object bg_green" obj_type = "player">
 					AGPlayer
 				</div> -->
@@ -125,7 +123,7 @@
 				
 				<div id = "ui_part_right_inner">
 					
-					<div class = "ui_box">
+					<div class = "ui_box ui_box_special ui_box_general">
 						<h2 id = "h_object_name"></h2>
 						Name:<br>
 						<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
@@ -138,30 +136,39 @@
 						<input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
 					</div> -->
 					
-					<div class = "ui_box">
+					<!--<div class = "ui_box">
 						Position:<br>
 						<input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
 						<span>X</span>
 						<input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">
-					</div><!--ui_box-->
+					</div>ui_box-->
 					
 					<!-- <div class = "ui_box">
 						Obj-Rotation:<br>
 						<input id = "input_obj_rot" placeholder="0" maxlength="100" type="text" name="input_obj_name" value=""> &deg;
 					</div>-->
 					
-					<div class = "ui_box">
+					<div class = "ui_box_special ui_box ui_box_enemy">
 						Gegnerpfad:
 						<br>
 						<div id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></div>
-						<div id = "btn_path_delete" class = "btn"><i class="fas fa-trash-alt"></i></div>
+						<div id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></div>
 					</div><!--ui_box-->
 					
-					<div class = "ui_box">
+					<div class = "ui_box_special ui_box ui_box_portal">
 						Portal verlinken:
 						<br>
 						<div id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></div>
-						<div id = "btn_path_deletedoors" class = "btn"><i class="fas fa-trash-alt"></i></div>
+						<div id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></div>
+					</div><!--ui_box-->
+					
+					
+					
+					<div id = "ui_delete_box" class = "ui_box_special ui_box">
+						
+						<div id = "btn_delete_object" class = "btn">
+							<i class="fas fa-trash-alt"></i>&nbsp;&nbsp;<span>Delete Object</span>
+						</div><!---->
 					</div><!--ui_box-->
 					
 					<div id = "path_coords">

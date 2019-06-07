@@ -44,11 +44,12 @@ export class IAudiCom {
 		this._room_canvas;
 		
 		this._colors = [
-		  	['#e2e2e2', '#000060'], //canvas
-		  	['#ebebeb', '#cccccc'],	//grid
-		  	['#A06FEB', '#FFFACD'],	//player
-		  	['#d47070', '#F7CA18'],	//enemy
-		  	['#FDA038', '#DDA0DD'],	//wall, portal, exit
+		  	['#e2e2e2', '#000060'], //0 canvas
+		  	['#ebebeb', '#cccccc'],	//1 grid
+		  	['#A06FEB', '#FFFACD'],	//2 player
+		  	['#d47070', '#F7CA18'],	//3 enemy
+		  	['#FDA038', '#DDA0DD'],	//4 wall, portal, exit
+			['#60cd4b', '#38fd4f'],	//5 colors for highlighted objects
 		];
     }
 	
@@ -77,11 +78,18 @@ export class IAudiCom {
 
 					break;
 				case 'portal':
+
+					object.set("fill", this._colors[4][this._vision_mode]);
+					
+					break;
 				case 'wall':
 					object.set("fill", this._colors[4][this._vision_mode]);
 					break;
 			}
 		});
+		
+		
+		
 		this._room_canvas.renderAll();
 
 		//toggle contrast class for css
@@ -106,9 +114,10 @@ export class IAudiCom {
 	 			   item.left = item.AGObject.position.x*scale_buffer + item.AGObject.size.x*scale_buffer/2;
 	  			   item.top = item.AGObject.position.z*scale_buffer + item.AGObject.size.z*scale_buffer/2;
 	  			   item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
-				   room_buffer.renderAll();
+				  
 				}
 			});	
+			room_buffer.renderAll();
 		}, 30);	
 	}
 	stopArea(){
@@ -364,10 +373,25 @@ export class IAudiCom {
 					 	obj.PathArray = [];
 						obj.isObject = true;
 						obj.isRecording = false;
-						obj.name = 'Gegner';
+						obj.name = ag_object.name;
 						obj.type = 'enemy';
 						obj.originX = 'center';
 						obj.originY = 'center';
+						
+						
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
 						
 						if(ag_object.route.length > 0){
 							ag_object.route.forEach(function (item, index) {
@@ -397,10 +421,11 @@ export class IAudiCom {
 						top: ag_object.position.z*_scalebuffer,
 						AGObject: ag_object,
 						isObject: true,	
-						name:'Wall',
+						name: ag_object.name,
 						type: 'wall',
 						strokeWidth: 1,
 					});
+					obj.hasRotatingPoint = false; 
 					room_canvas_buffer.add(obj).renderAll();
 					break;
 					
@@ -421,11 +446,26 @@ export class IAudiCom {
 					 	
 						obj.isObject = true;
 						obj.isRecording = false;
-						obj.name = 'Portal';
+						obj.name = ag_object.name;
 						obj.type = 'portal';
 						obj.secDoor = false;
 						obj.originX = 'center';
 						obj.originY = 'center';
+						
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						
 					  	room_canvas_buffer.add(obj).renderAll();
 					});
 					break;
@@ -442,12 +482,29 @@ export class IAudiCom {
 						obj.AGObject = ag_object;
 						obj.isObject = true;
 						obj.isRecording = false;
-						obj.name = 'Exit';
+						obj.name = ag_object.name;
 						obj.type = 'exit';
 						obj.secDoor = false;
 						obj.originX = 'center';
 						obj.originY = 'center';
-					  	room_canvas_buffer.add(obj).renderAll();
+					  	
+						
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						
+						room_canvas_buffer.add(obj).renderAll();
+						
 					});
 					break;
 					
@@ -464,12 +521,25 @@ export class IAudiCom {
 						obj.AGObject = ag_object;
 					 	obj.PathArray = [];
 						obj.isObject = true;
-						obj.name = 'Spieler';
+						obj.name = ag_object.name;
 						obj.type = 'player';
 					  	room_canvas_buffer.add(obj).renderAll();
 						obj.originX = 'center';
 						obj.originY = 'center';
-
+						
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
 					
 					
 					});
