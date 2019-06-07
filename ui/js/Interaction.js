@@ -127,6 +127,12 @@ jQuery(function($){
 			$('.ui_box_' + type).show();
 			$('.ui_box_general').show();
 			
+			
+			if(type=='enemy'){
+				$('.bnt_speed').removeClass('gegner_speed_active');
+				$('#btn_speed_' + actFabObj.AGObject.getSpeedSkalar()).addClass('gegner_speed_active');
+			}
+			
 			if(type!='player'){
 				$('#ui_delete_box').show();
 			}
@@ -136,7 +142,12 @@ jQuery(function($){
 		});
 	}
 	
-	
+	//change speed of enemy
+	$('.bnt_speed').click(function() {
+		$('.bnt_speed').removeClass('gegner_speed_active');
+		$(this).addClass('gegner_speed_active');
+		actFabObj.AGObject.setSpeedSkalar($(this).attr('speed'));
+	});
 	
 	//button for path recording
 	$('#btn_path_rec').click(function(){
@@ -202,6 +213,7 @@ jQuery(function($){
 		// actFabObj.secDoor = false;
 		// actFabObj.AGObject.clearRoute();
 	});
+
 	
 	
 	$('#btn_delete_object').click(function(){
