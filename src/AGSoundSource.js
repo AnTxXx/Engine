@@ -116,6 +116,9 @@ export class AGSoundSource
         this.audioElementSource.connect(biquadFilter);
         biquadFilter.connect(this.source.input);*/
 
+        this.source.setRolloff('logarithmic');
+        this.source.setMaxDistance(20);
+
         this.audioElementSource.connect(this.source.input);
         this._name = name;
         this._type = "SOUNDSOURCE";
