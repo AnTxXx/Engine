@@ -351,7 +351,7 @@ export class IAudiCom {
 				
 				obj_buffer = new AGObject("AGgegner", new Vector3((obj_left/this._scale), 1, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				obj_buffer.tag = "ENEMY";
-				let gegner_ss = new AGSoundSource("urbiurbiurbi", "sounds/urbi.mp3", true, 1, this._AGroom);
+				let gegner_ss = new AGSoundSource("urbiurbiurbi", "sounds/car.mp3", true, 1, this._AGroom);
 				obj_buffer.addSoundSource(gegner_ss);
 				
 				break;
