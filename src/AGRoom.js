@@ -30,6 +30,7 @@ export class AGRoom {
     }
 
     set live(value:boolean) {
+        this._gameArea.history.ike(this, this.live, arguments, this);
         this._live = value;
     }
     get positionOnGameArea(): Vector3 {
@@ -66,6 +67,8 @@ export class AGRoom {
     }
 
     set listener(value: AGObject) {
+        this._gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments, this);
+
         this._listener = value;
     }
     get audioContext() {
@@ -162,6 +165,8 @@ export class AGRoom {
         this._size = size;
 
         this._lastTime = new Date(0);
+
+        this.gameArea.history.ike(this, this.constructor, arguments, this);
     }
 
     _AGobjects:Array<AGObject>;
@@ -176,6 +181,7 @@ export class AGRoom {
             this._AGobjects = [];
         }
         this._AGobjects.push(gameObject);
+        this._gameArea.history.ike(this, this.add, arguments, this);
         gameObject.room = this;
     }
 

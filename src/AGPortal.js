@@ -4,6 +4,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGCondition} from "./AGCondition.js";
 import {evaluateAll} from "./AGCondition.js";
+import {AGRoom} from "./AGRoom.js";
 
 export class AGPortal extends AGObject{
 
@@ -25,8 +26,8 @@ export class AGPortal extends AGObject{
      * @param direction Direction (Vector3) of the portal.
      * @param size Size (Vector3) of the portal.
      */
-    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3){
-        super(name, position, direction, size);
+    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, room:AGRoom){
+        super(name, position, direction, size, room);
         console.log("[AGPortal] Creating AGPortal object [ID: " + this._ID + "]: " + name + ".");
         this._type = "PORTAL";
         this._conditions = [];
@@ -57,6 +58,7 @@ export class AGPortal extends AGObject{
         console.log("[AGPortal] Linking Portal: " + this.name + " to " + portal.name);
         portal.exit = (this);
         this.exit = portal;
+        this._room.gameArea.history.ike(this, this.linkPortals, arguments, this);
     }
 
     addCondition(condition:AGCondition){

@@ -16,6 +16,7 @@ export class AGObject {
     }
 
     set damage(value: number) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set, arguments, this);
         this._damage = value;
     }
 
@@ -24,6 +25,7 @@ export class AGObject {
     }
 
     set dangerous(value: boolean) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set, arguments, this);
         this._dangerous = value;
     }
     get range(): number {
@@ -31,6 +33,7 @@ export class AGObject {
     }
 
     set range(value: number) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set, arguments, this);
         this._range = value;
     }
     get destructible():boolean {
@@ -38,6 +41,7 @@ export class AGObject {
     }
 
     set destructible(value:boolean) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set, arguments, this);
         this._destructible = value;
     }
 
@@ -46,6 +50,7 @@ export class AGObject {
     }
 
     set health(value:number) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set, arguments, this);
         this._health = value;
     }
     get ID() {
@@ -96,6 +101,7 @@ export class AGObject {
     }
 
     set movable(value:boolean) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set, arguments, this);
         this._movable = value;
     }
     get size(): Vector3 {
@@ -128,10 +134,12 @@ export class AGObject {
     }
 
     set speed(value: Vector3) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set, arguments, this);
         this._speed = value;
     }
 
     setSpeedSkalar(value:number){
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'setSpeedSkalar').set, arguments, this);
         this.speed = new Vector3(value, value, value);
     }
 
@@ -145,6 +153,7 @@ export class AGObject {
     }
 
     set tag(value: string) {
+        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set, arguments, this);
         this._tag = value;
     }
 
@@ -189,6 +198,7 @@ export class AGObject {
         for(i = 0; i < routes.length; i++) {
             this._route.push(routes[i]);
         }
+        this._room.gameArea.history.ike(this, this.addRoute, arguments, this);
     }
 
     /**
@@ -213,8 +223,9 @@ export class AGObject {
      * @param position Position (Vector3) of the object.
      * @param direction Direction (Vector3) of the object.
      * @param size Size (Vector3) of the object.
+     * @param room (optional but recommended) THe room the AGObject is in.
      */
-    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
+    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, room?:AGRoom) {
         this._ID = Counter.next();
         console.log("[AGObject] Creating AGObject object [ID: " + this._ID + "]: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
@@ -233,6 +244,13 @@ export class AGObject {
         this._inventory = new AGInventory(this);
         this._destructible = false;
         this._health = 1;
+
+        if(room!==undefined) {
+            this.room = room;
+            this.room.gameArea.history.ike(this, this.constructor, arguments, this);
+            //this.room.add(this);
+        }
+
     }
 
 
@@ -244,6 +262,7 @@ export class AGObject {
      */
     addSoundSource(source: AGSoundSource){
         source.setPosition(this._position);
+        this._room.gameArea.history.ike(this, this.addSoundSource, arguments, this);
         this._AGSoundSources.push(source);
     }
 

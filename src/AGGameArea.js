@@ -5,9 +5,18 @@ import {AGObject} from "./AGObject.js";
 import {AGRoom} from "./AGRoom.js";
 import {AGEventHandler} from "./AGEventHandler.js";
 
+import {AGSaLo} from "./AGSaLo.js";
+
 let debug:number = 0;
 
 export class AGGameArea {
+    get history() {
+        return this._history;
+    }
+
+    set history(value:AGSaLo) {
+        this._history = value;
+    }
     get eventHandler(): AGEventHandler {
         return this._eventHandler;
     }
@@ -35,6 +44,8 @@ export class AGGameArea {
     }
 
     set listener(value: AGObject) {
+        //TODO: listener function
+        this._history.ike(this, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments, this);
         this._listener = value;
     }
     get AGRooms(): Array<AGRoom> {
@@ -73,11 +84,14 @@ export class AGGameArea {
 
     _eventHandler:AGEventHandler;
 
+    _history:AGSaLo;
+
     constructor(name:string, size:Vector3, eventHandler:AGEventHandler){
         this.AGRooms = [];
         this.name = name;
         this.size = size;
         this._eventHandler = eventHandler;
+        this._history = new AGSaLo();
 
         // Create an AudioContext
         this._audioContext = new AudioContext();
