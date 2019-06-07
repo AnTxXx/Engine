@@ -41,7 +41,7 @@ export class AGPlayer extends AGObject {
     /**
      * draw-loop
      */
-    draw(){
+    draw(timeStamp:Date){
         this.navigation.draw(this);
     }
 

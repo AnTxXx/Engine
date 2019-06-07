@@ -262,11 +262,13 @@ export class AGObject {
 
         //moves the object depending on speed and direction if the object is movable and a route is given.
         if(this._movable){
-            if(this.position.distanceTo(this._route[this._currentRoute]) < this.getSpeedSkalar()*1){
+            //TODO: 0.2 suboptimal ... should be speed * deltaTime or something like that
+            if(this.position.distanceTo(this._route[this._currentRoute]) < 0.2){
                 //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
                 this._currentRoute = ++this._currentRoute % this._route.length;
                 //console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
             } else {
+                //console.log(this._route[this._currentRoute].clone().sub(this.position.clone()).normalize());
                 move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
             }
         }

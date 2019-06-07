@@ -113,7 +113,6 @@ export class AGSoundSource
         this._looping = looping;
 
         this._room = room;
-
     }
 
     /**
