@@ -90,5 +90,6 @@ i_audicom.renderAGObject(player);
 i_audicom.renderAGObject(gegner);
 i_audicom.renderAGObject(door1);
 i_audicom.renderAGObject(door2);
+i_audicom.renderAGObject(exit1);
 
 // TODO: eine art pushforce pro objekt, damit das staerkere Objekt das schwaechere zurueckdraengen kann?
