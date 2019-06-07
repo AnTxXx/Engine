@@ -123,6 +123,7 @@ export class AGSoundSource
         this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
             position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
             position.z - this.room.positionOnGameArea.z + this.room.size.z/2);
+
     }
 
     /**
