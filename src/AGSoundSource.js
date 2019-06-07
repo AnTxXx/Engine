@@ -117,7 +117,7 @@ export class AGSoundSource
         biquadFilter.connect(this.source.input);*/
 
         this.source.setRolloff('logarithmic');
-        this.source.setMaxDistance(20);
+        this.source.setMaxDistance(4);
 
         this.audioElementSource.connect(this.source.input);
         this._name = name;
@@ -132,9 +132,16 @@ export class AGSoundSource
      * @param position New position (Vector3) of the sound source.
      */
     setPosition(position: Vector3){
-        this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
+        //TODO maybe buggy, should be tested, workaround for now see uncommented
+        /*this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
             position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
-            position.z - this.room.positionOnGameArea.z + this.room.size.z/2);
+            position.z - this.room.positionOnGameArea.z + this.room.size.z/2);*/
+
+        this.source.setPosition(position.x, position.y, position.z);
+
+        /*console.log(new Vector3(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
+            position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
+            position.z - this.room.positionOnGameArea.z + this.room.size.z/2));*/
 
     }
 

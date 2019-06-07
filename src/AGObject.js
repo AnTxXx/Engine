@@ -256,6 +256,7 @@ export class AGObject {
     draw(timeStamp:Date){
         //as long as the draw loop is called, the sound should be played.
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
+            //console.log(this.position);
             this._AGSoundSources[i].setPosition(this.position);
             this._AGSoundSources[i].play();
         }

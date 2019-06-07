@@ -292,10 +292,14 @@ export class AGRoom {
         }
 
         this.checkForCollision();
-
-        this._resonanceAudioScene.setListenerPosition(this._listener.position.x -  this.size.x/2,
+        //TODO wtf? see uncommented version ...
+        /*this._resonanceAudioScene.setListenerPosition(this._listener.position.x -  this.size.x/2,
             this._listener.position.y - this.size.y/2,
-            this._listener.position.z - this.size.z/2);
+            this._listener.position.z - this.size.z/2);*/
+
+        this._resonanceAudioScene.setListenerPosition(this._listener.position.x,
+            this._listener.position.y,
+            this._listener.position.z);
 
         this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
 
