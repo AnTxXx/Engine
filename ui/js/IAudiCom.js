@@ -105,30 +105,44 @@ export class IAudiCom {
 	startArea(){
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
-		
-		//JUST FOR TESTING
-		// let interval_test = setInterval(function(){
-// 			console.log(room_buffer.getActiveObject().AGObject.route);
-// 		},1000);
+
 		let canvas_objects = room_buffer.getObjects();
 		play(this._AGarea, true);
-		this._interval = setInterval(function(){			
-			
+		this._interval = setInterval(function(){				
 			canvas_objects.forEach(function(item, i) {
 				if(item.isObject){
-	 			   // item.left = item.AGObject.position.x*scale_buffer + item.AGObject.size.x*scale_buffer/2;
-// 	  			   item.top = item.AGObject.position.z*scale_buffer + item.AGObject.size.z*scale_buffer/2;
-// 	  			   item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
-				   
-				   
-	 			   item.left = item.AGObject.position.x*scale_buffer;
-	  			   item.top = item.AGObject.position.z*scale_buffer;
-	  			   item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
-				  
+	 				// item.left = item.AGObject.position.x*scale_buffer + item.AGObject.size.x*scale_buffer/2;
+					// item.top = item.AGObject.position.z*scale_buffer + item.AGObject.size.z*scale_buffer/2;
+					// item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
+					
+					//remove "dead" objects
+					if(item.AGObject.destructible && item.AGObject.health <= 0){
+					//remove path of dead enemies	
+						if(item.type == 'enemy'){
+							item.PathArray.forEach(function(ele) {
+								room_buffer.remove(ele);
+							});
+						}
+						room_buffer.remove(item);
+					}
+					
+					
+					if(item.type == 'exit'){	
+						
+						
+						if(item.AGObject.reached){
+							$('#win_screen').fadeIn(100);
+						}						
+					}
+					
+					
+	 			   	item.left = item.AGObject.position.x*scale_buffer;
+	  			   	item.top = item.AGObject.position.z*scale_buffer;
+	  			   	item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);  
 				}
 			});	
 			room_buffer.renderAll();
-		}, 50);	
+		}, 33);	
 	}
 	stopArea(){
 		play(this._AGarea, false);
