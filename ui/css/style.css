@@ -233,7 +233,7 @@ button:focus{
 
 input[type=text], textarea{
 	border:1px solid #7F7F7F;
-	padding:10px 15px;
+	padding:10px 10px;
 	margin:5px 0;
 	background-color:white;
 	-moz-transition: background-color 0.3s;
