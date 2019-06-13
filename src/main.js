@@ -1,5 +1,4 @@
 // @flow
-import { g_references, g_gamearea } from './AGEngine.js';
 import {g_controls, g_eventHandler, g_history, setControl} from "./AGEngine.js";
 import { AGGameArea} from "./AGGameArea.js";
 import { AGObject} from "./AGObject.js";
@@ -19,9 +18,10 @@ import {AGRoomExit} from "./AGRoomExit.js";
 
 
 let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 32);
+setControl(controls);
+
 let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
 let room_1:AGRoom = area.newRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0));
-setControl(controls);
 
 let gegner:AGObject = new AGObject("gegner", new Vector3(2,1,8), new Vector3(1,0,0), new Vector3(1,1,1));
 let gegner_ss:AGSoundSource = new AGSoundSource("schritte", "sounds/steps.wav", true, 1, room_1);
@@ -92,9 +92,9 @@ export let i_audicom = new IAudiCom(area, room_1);
 //render the objects
 i_audicom.renderAGRoom(room_1);
 i_audicom.renderAGObject(player);
-//i_audicom.renderAGObject(gegner);
-//i_audicom.renderAGObject(door1);
-//i_audicom.renderAGObject(door2);
-//i_audicom.renderAGObject(exit1);
+i_audicom.renderAGObject(gegner);
+i_audicom.renderAGObject(door1);
+i_audicom.renderAGObject(door2);
+i_audicom.renderAGObject(exit1);
 
 // TODO: eine art pushforce pro objekt, damit das staerkere Objekt das schwaechere zurueckdraengen kann?
