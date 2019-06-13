@@ -1,6 +1,8 @@
 // @flow
 
 import {Counter} from "./IDGenerator.js";
+import {g_history} from "./AGEngine.js";
+import {g_references} from "./AGEngine.js";
 
 export class AGItem {
     _name:string;
@@ -47,9 +49,12 @@ export class AGItem {
 
     constructor(name: string, description: string, charges: number) {
         this._ID = Counter.next();
+        g_references.set(this, this._ID);
         console.log("[AGItem] Creating AGItem object [ID: " + this._ID + "]: " + name + ".");
         this._name = name;
         this._description = description;
         this._charges = charges;
+
+        g_history.ike(this, this.constructor, arguments, this);
     }
 }

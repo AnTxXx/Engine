@@ -3,6 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
+import {g_history, g_references} from "./AGEngine.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
@@ -91,6 +92,7 @@ export class AGSoundSource
      */
     constructor(name:string, file:Object, looping:boolean, interval:number, room:AGRoom){
         this._ID = Counter.next();
+        g_references.set(this, this._ID);
         console.log("[AGSoundSource] Creating AGSoundSource object [ID: " + this._ID + "]: " + name + ".");
         this.file = file;
         this.interval = interval;
@@ -125,6 +127,7 @@ export class AGSoundSource
         this._looping = looping;
 
         this._room = room;
+        g_history.ike(this, this.constructor, arguments, this);
     }
 
     /**

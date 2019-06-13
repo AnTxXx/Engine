@@ -4,6 +4,9 @@ import {AGSoundSource} from "./AGSoundSource.js";
 import {AGObject} from "./AGObject.js";
 import {AGNavigation} from "./AGNavigation.js";
 import type {Type} from "./AGType.js";
+import {AGRoom} from "./AGRoom.js";
+import {g_history} from "./AGEngine.js";
+import {g_controls} from "./AGEngine.js";
 
 export class AGPlayer extends AGObject {
     get hitSound(): AGSoundSource {
@@ -11,6 +14,7 @@ export class AGPlayer extends AGObject {
     }
 
     set hitSound(value: AGSoundSource) {
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments, this);
         this._hitSound = value;
     }
 
@@ -24,12 +28,12 @@ export class AGPlayer extends AGObject {
      * @param direction Direction (Vector3) the player is facing.
      * @param size Size (Vector3) of the player.
      * @param navigation Navigation (AGNavigation) that has the controls for the player.
+     * @param room
      */
-    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, navigation:AGNavigation){
+    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3){
         console.log("[AGPlayer] Creating AGPlayer object: " + name + ".");
 
         super(name, position, direction, size);
-        this.navigation = navigation;
         this._type = "PLAYER";
 
     }
@@ -41,8 +45,9 @@ export class AGPlayer extends AGObject {
     /**
      * draw-loop
      */
+
     draw(timeStamp:Date){
-        this.navigation.draw(this);
+        if(g_controls !== undefined) g_controls.draw(this);
     }
 
     /**

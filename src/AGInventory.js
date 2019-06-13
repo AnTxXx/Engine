@@ -2,6 +2,9 @@
 
 import {AGItem} from "./AGItem.js";
 import {AGObject} from "./AGObject.js";
+import {g_history} from "./AGEngine.js";
+import {g_references} from "./AGEngine.js";
+import {Counter} from "./IDGenerator.js";
 
 export class AGInventory{
 
@@ -9,8 +12,12 @@ export class AGInventory{
     _attachedTo:AGObject;
 
     constructor(object:AGObject) {
+        this._ID = Counter.next();
+        g_references.set(this, this._ID);
+        console.log("[AGInventory] Creating AGInventory object [ID: " + this._ID + "]. for Object: " + object.name);
         this._inventory = [];
         this._attachedTo = object;
+        g_history.ike(this, this.constructor, arguments, this);
     }
 
 
@@ -25,7 +32,7 @@ export class AGInventory{
     addItem(item:AGItem){
         this._inventory.push(item);
         console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
-
+        g_history.ike(this, this.addItem, arguments, this);
     }
 
     removeItem(item:AGItem){

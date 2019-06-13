@@ -1,15 +1,28 @@
 // @flow
 import { AGGameArea} from "./AGGameArea.js";
+import {AGSaLo} from "./AGSaLo.js";
+import {AGEventHandler} from "./AGEventHandler.js";
+import {AGNavigation} from "./AGNavigation.js";
 //import * as ResonanceAudio from './js/resonance/resonance-audio.min.js';
 //import * as bla from './js/resonance/resonance-audio.js';
 
 let debug = 0;
+
+export let g_references:Map<number, Object> = new Map();
+export let g_history:AGSaLo = new AGSaLo();
+export let g_eventHandler:AGEventHandler = new AGEventHandler();
+export let g_gamearea:AGGameArea;
+export let g_controls:AGNavigation;
 
 //let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
 //let AGGameArea = new AGGameArea("main", new Vector3(20,20,0)); //simulate something "static", probably (quite sure :p) not state of the art
 /*
 Game Area in which the audio game is played. It holds all audio game objects.
  */
+
+export function setControl(controls:AGNavigation){
+    g_controls = controls;
+}
 
 const ConditionEnum = {
     None: 0,
