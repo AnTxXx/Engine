@@ -3,6 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
+import {g_history, g_references} from "./AGEngine.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
@@ -91,6 +92,7 @@ export class AGSoundSource
      */
     constructor(name:string, file:Object, looping:boolean, interval:number, room:AGRoom){
         this._ID = Counter.next();
+        g_references.set(this, this._ID);
         console.log("[AGSoundSource] Creating AGSoundSource object [ID: " + this._ID + "]: " + name + ".");
         this.file = file;
         this.interval = interval;
@@ -114,6 +116,7 @@ export class AGSoundSource
 
         this._room = room;
 
+        g_history.ike(this, this.constructor, arguments, this);
     }
 
     /**
@@ -121,9 +124,17 @@ export class AGSoundSource
      * @param position New position (Vector3) of the sound source.
      */
     setPosition(position: Vector3){
-        this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
+        //TODO maybe buggy, should be tested, workaround for now see uncommented
+        /*this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
             position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
-            position.z - this.room.positionOnGameArea.z + this.room.size.z/2);
+            position.z - this.room.positionOnGameArea.z + this.room.size.z/2);*/
+
+        this.source.setPosition(position.x, position.y, position.z);
+
+        /*console.log(new Vector3(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
+            position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
+            position.z - this.room.positionOnGameArea.z + this.room.size.z/2));*/
+
     }
 
     /**

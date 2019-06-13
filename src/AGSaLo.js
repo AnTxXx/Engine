@@ -1,4 +1,4 @@
-
+import {g_references} from "./AGEngine.js";
 
 export class AGSaLo {
 
@@ -11,6 +11,7 @@ export class AGSaLo {
     ike(obj:Object, func, args, context){
         let _args = Array.prototype.slice.call(args);
         this._savedObjects.push(new SaLoCommand(obj, func, _args, context));
+        g_references.set(obj, obj.id);
     }
 }
 

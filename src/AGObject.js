@@ -7,6 +7,7 @@ import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
 import type {Trigger} from "./EventType.js";
+import {g_history, g_eventHandler, g_references} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -16,7 +17,7 @@ export class AGObject {
     }
 
     set damage(value: number) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set, arguments, this);
         this._damage = value;
     }
 
@@ -25,7 +26,7 @@ export class AGObject {
     }
 
     set dangerous(value: boolean) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set, arguments, this);
         this._dangerous = value;
     }
     get range(): number {
@@ -33,7 +34,7 @@ export class AGObject {
     }
 
     set range(value: number) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set, arguments, this);
         this._range = value;
     }
     get destructible():boolean {
@@ -41,7 +42,7 @@ export class AGObject {
     }
 
     set destructible(value:boolean) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set, arguments, this);
         this._destructible = value;
     }
 
@@ -50,7 +51,7 @@ export class AGObject {
     }
 
     set health(value:number) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set, arguments, this);
         this._health = value;
     }
     get ID() {
@@ -101,7 +102,7 @@ export class AGObject {
     }
 
     set movable(value:boolean) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set, arguments, this);
         this._movable = value;
     }
     get size(): Vector3 {
@@ -134,12 +135,12 @@ export class AGObject {
     }
 
     set speed(value: Vector3) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set, arguments, this);
         this._speed = value;
     }
 
     setSpeedSkalar(value:number){
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'setSpeedSkalar').set, arguments, this);
+        g_history.ike(this, this.setSpeedSkalar, arguments, this);
         this.speed = new Vector3(value, value, value);
     }
 
@@ -153,7 +154,7 @@ export class AGObject {
     }
 
     set tag(value: string) {
-        this._room.gameArea.history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set, arguments, this);
         this._tag = value;
     }
 
@@ -198,7 +199,7 @@ export class AGObject {
         for(i = 0; i < routes.length; i++) {
             this._route.push(routes[i]);
         }
-        this._room.gameArea.history.ike(this, this.addRoute, arguments, this);
+        g_history.ike(this, this.addRoute, arguments, this);
     }
 
     /**
@@ -225,8 +226,9 @@ export class AGObject {
      * @param size Size (Vector3) of the object.
      * @param room (optional but recommended) THe room the AGObject is in.
      */
-    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3, room?:AGRoom) {
+    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
         this._ID = Counter.next();
+        g_references.set(this, this._ID);
         console.log("[AGObject] Creating AGObject object [ID: " + this._ID + "]: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
         this._direction = direction;
@@ -245,11 +247,7 @@ export class AGObject {
         this._destructible = false;
         this._health = 1;
 
-        if(room!==undefined) {
-            this.room = room;
-            this.room.gameArea.history.ike(this, this.constructor, arguments, this);
-            //this.room.add(this);
-        }
+        g_history.ike(this, this.constructor, arguments, this);
 
     }
 
@@ -262,7 +260,7 @@ export class AGObject {
      */
     addSoundSource(source: AGSoundSource){
         source.setPosition(this._position);
-        this._room.gameArea.history.ike(this, this.addSoundSource, arguments, this);
+        g_history.ike(this, this.addSoundSource, arguments, this);
         this._AGSoundSources.push(source);
     }
 
@@ -306,7 +304,7 @@ export class AGObject {
      */
     onCollisionEnter(obj: AGObject) {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
-        this.room.gameArea.eventHandler.call(this, "ONCONTACT");
+        g_eventHandler.call(this, "ONCONTACT");
         //adds this object to the other object on its blocked list, so the onCollisionEnter isn't called again.
         if(!this._blockedObjects.includes(obj)){
             this._blockedObjects.push(obj);
@@ -329,7 +327,7 @@ export class AGObject {
     }
 
     onDeath(){
-        this._room.gameArea.eventHandler.call(this, "ONDEATH");
+        g_eventHandler.call(this, "ONDEATH");
         console.log("[AGObject] " + this.name + " got destroyed. Triggering death routines.");
         this.kill();
     }

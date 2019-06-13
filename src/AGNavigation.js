@@ -3,6 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {Counter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
+import {g_references} from "./AGEngine.js";
 
 let gForward, gBackward, gLeft, gRight, gInteract;
 
@@ -149,6 +150,7 @@ export class AGNavigation {
      */
     constructor(forward:number, backward:number, left:number, right:number, interact:number){
         this._ID = Counter.next();
+        g_references.set(this, this._ID);
         console.log("[AGNavigation] Creating AGNavigation object [ID: " + this._ID + "].");
         gForward = forward;
         gBackward = backward;

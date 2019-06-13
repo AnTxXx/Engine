@@ -3,27 +3,15 @@
 import {Vector3} from "./js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {AGRoom} from "./AGRoom.js";
-import {AGEventHandler} from "./AGEventHandler.js";
 
 import {AGSaLo} from "./AGSaLo.js";
+import {Counter} from "./IDGenerator.js";
+import {g_history, g_references} from "./AGEngine.js";
 
 let debug:number = 0;
 
 export class AGGameArea {
-    get history() {
-        return this._history;
-    }
 
-    set history(value:AGSaLo) {
-        this._history = value;
-    }
-    get eventHandler(): AGEventHandler {
-        return this._eventHandler;
-    }
-
-    set eventHandler(value: AGEventHandler) {
-        this._eventHandler = value;
-    }
     get audioContext() {
         return this._audioContext;
     }
@@ -45,7 +33,7 @@ export class AGGameArea {
 
     set listener(value: AGObject) {
         //TODO: listener function
-        this._history.ike(this, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments, this);
+        g_history.ike(this, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments, this);
         this._listener = value;
     }
     get AGRooms(): Array<AGRoom> {
@@ -82,16 +70,19 @@ export class AGGameArea {
     // $FlowFixMe
     _audioContext;
 
-    _eventHandler:AGEventHandler;
+    _ID:number;
+
 
     _history:AGSaLo;
 
-    constructor(name:string, size:Vector3, eventHandler:AGEventHandler){
+    constructor(name:string, size:Vector3){
+        this._ID = Counter.next();
+        g_references.set(this, this._ID);
+        console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
+
         this.AGRooms = [];
         this.name = name;
         this.size = size;
-        this._eventHandler = eventHandler;
-        this._history = new AGSaLo();
 
         // Create an AudioContext
         this._audioContext = new AudioContext();
