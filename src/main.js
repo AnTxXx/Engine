@@ -82,10 +82,12 @@ door1.addCondition(new AGCondition(player, "INVENTORY",key ));
 
 //EVENT ITEM TEST
 
-console.log(g_history);
-
 room_1.live = true;
 //play(area, true);
+
+console.log(g_history);
+
+g_history.rebuild();
 
 export let i_audicom = new IAudiCom(area, room_1);
 

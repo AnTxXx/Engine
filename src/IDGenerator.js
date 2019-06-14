@@ -1,10 +1,12 @@
 export interface Counter {
     next(): number;
+    reset(): void;
 }
 
 export function new_counter(init = 0): Counter {
     return {
-        next: () => ++init
+        next: () => ++init,
+        reset: () => init = 0
     };
 }
 

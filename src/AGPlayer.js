@@ -6,7 +6,7 @@ import {AGNavigation} from "./AGNavigation.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {g_history} from "./AGEngine.js";
-import {g_controls} from "./AGEngine.js";
+import {g_controls, g_loading} from "./AGEngine.js";
 
 export class AGPlayer extends AGObject {
     get hitSound(): AGSoundSource {
@@ -14,7 +14,8 @@ export class AGPlayer extends AGObject {
     }
 
     set hitSound(value: AGSoundSource) {
-        g_history.ike(this, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments, this);
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments, this);
         this._hitSound = value;
     }
 

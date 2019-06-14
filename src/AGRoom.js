@@ -6,7 +6,7 @@ import type {Type} from "./AGType.js";
 import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references} from "./AGEngine.js";
+import {g_history, g_references, g_loading} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -31,7 +31,8 @@ export class AGRoom {
     }
 
     set live(value:boolean) {
-        g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments, this);
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments, this);
         this._live = value;
     }
     get positionOnGameArea(): Vector3 {
@@ -68,7 +69,8 @@ export class AGRoom {
     }
 
     set listener(value: AGObject) {
-        g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments, this);
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments, this);
 
         this._listener = value;
     }
@@ -124,7 +126,7 @@ export class AGRoom {
      */
     constructor(name:string, size:Vector3, positionOnGrid:Vector3, gameArea:AGGameArea){
         this._ID = Counter.next();
-        g_references.set(this, this._ID);
+        g_references.set(this._ID, this);
         console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
         this._positionOnGameArea = positionOnGrid;
         this._gameArea = gameArea;
@@ -168,7 +170,7 @@ export class AGRoom {
 
         this._lastTime = new Date(0);
 
-        g_history.ike(this, this.constructor, arguments, this);
+        if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
     }
 
     _AGobjects:Array<AGObject>;
@@ -183,7 +185,7 @@ export class AGRoom {
             this._AGobjects = [];
         }
         this._AGobjects.push(gameObject);
-        g_history.ike(this, this.add, arguments, this);
+        if(!g_loading) g_history.ike(this, this.add, arguments, this);
         gameObject.room = this;
     }
 

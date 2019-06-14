@@ -4,6 +4,7 @@ import {AGObject} from "./AGObject.js";
 import {Counter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
 import {g_references} from "./AGEngine.js";
+import {g_history, g_loading} from "./AGEngine.js";
 
 let gForward, gBackward, gLeft, gRight, gInteract;
 
@@ -150,13 +151,15 @@ export class AGNavigation {
      */
     constructor(forward:number, backward:number, left:number, right:number, interact:number){
         this._ID = Counter.next();
-        g_references.set(this, this._ID);
+        g_references.set(this._ID, this);
         console.log("[AGNavigation] Creating AGNavigation object [ID: " + this._ID + "].");
         gForward = forward;
         gBackward = backward;
         gLeft = left;
         gRight = right;
         gInteract = interact;
+
+        if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
         //moveTimestamp = new Date(0);
     }
 
