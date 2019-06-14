@@ -25,8 +25,16 @@ export function setControl(controls:AGNavigation){
     g_controls = controls;
 }
 
-export function getReferenceById(id:number):?Object{
+export function getReferenceById(id:number):Object{
     return g_references.get(id);
+}
+
+export function getIdByReference(obj:Object):number{
+    return [...g_references.entries()]
+    // $FlowFixMe
+        .filter(({ 1: v }) => v === obj)
+        .map(([k]) => k)[0];
+    //return Object.keys(g_references).find(key => g_references[key] === obj);
 }
 
 export function setLoading(bool:boolean){

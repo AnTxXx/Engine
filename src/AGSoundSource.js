@@ -4,6 +4,7 @@ import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_references, g_loading} from "./AGEngine.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
@@ -90,15 +91,18 @@ export class AGSoundSource
      * @param interval ?
      * @param room The room this sound source is going to be played.
      */
-    constructor(name:string, file:Object, looping:boolean, interval:number, room:AGRoom){
+    constructor(name:string, file:Object, looping:boolean, interval:number, roomID:number){
         this._ID = Counter.next();
         g_references.set(this._ID, this);
         console.log("[AGSoundSource] Creating AGSoundSource object [ID: " + this._ID + "]: " + name + ".");
         this.file = file;
         this.interval = interval;
         this._playing = false;
-        this.audioContext = room.audioContext;
-        this.resonanceAudioScene = room.resonanceAudioScene;
+
+        this._room = getReferenceById(roomID);
+
+        this.audioContext = this._room.audioContext;
+        this.resonanceAudioScene = this._room.resonanceAudioScene;
 
         // Create an AudioElement.
         this._audioElement = document.createElement('audio');
@@ -126,7 +130,6 @@ export class AGSoundSource
         this._type = "SOUNDSOURCE";
         this._looping = looping;
 
-        this._room = room;
         if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
     }
 

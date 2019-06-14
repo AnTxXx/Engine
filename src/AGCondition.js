@@ -2,6 +2,7 @@
 
 import {AGObject} from "./AGObject.js";
 import type {ConditionType} from "./ConditionType.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class AGCondition {
 
@@ -9,10 +10,10 @@ export class AGCondition {
     _conditionType:ConditionType;
     _object2:Object;
 
-    constructor(object: AGObject, conditionType:ConditionType, object2: Object) {
-        this._object = object;
+    constructor(objectID: number, conditionType:ConditionType, object2ID: number) {
+        this._object = getReferenceById(objectID);
         this._conditionType = conditionType;
-        this._object2 = object2;
+        this._object2 = getReferenceById(object2ID);
     }
 
     evaluate():boolean{

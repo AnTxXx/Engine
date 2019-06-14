@@ -3,17 +3,17 @@ import {Vector3} from "./js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {AGObject} from "./AGObject.js";
 import {AGNavigation} from "./AGNavigation.js";
-import type {Type} from "./AGType.js";
-import {AGRoom} from "./AGRoom.js";
 import {g_history} from "./AGEngine.js";
 import {g_controls, g_loading} from "./AGEngine.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class AGPlayer extends AGObject {
     get hitSound(): AGSoundSource {
         return this._hitSound;
     }
 
-    set hitSound(value: AGSoundSource) {
+    set hitSound(valueID: number) {
+        let value = getReferenceById(valueID);
         // $FlowFixMe
         if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments, this);
         this._hitSound = value;

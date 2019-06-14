@@ -2,6 +2,7 @@
 
 import type {Trigger, Action} from "./EventType.js";
 import {AGObject} from "./AGObject.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class Event {
     get origin(): AGObject {
@@ -58,12 +59,12 @@ export class Event {
     _addObject:?Object;
     _repeat:number;
 
-    constructor(origin: AGObject, trigger:Trigger, action:Action, object: AGObject, addObject: Object, repeat: number) {
-        this._origin = origin;
+    constructor(originID: number, trigger:Trigger, action:Action, objectID: number, addObjectID: number, repeat: number) {
+        this._origin = getReferenceById(originID);
         this._trigger = trigger;
         this._action = action;
-        this._object = object;
-        this._addObject = addObject;
+        this._object = getReferenceById(objectID);
+        this._addObject = getReferenceById(addObjectID);
         this._repeat = repeat;
     }
 }

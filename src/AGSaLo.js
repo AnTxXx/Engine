@@ -14,7 +14,7 @@ export class AGSaLo {
     ike(obj:Object, func:Function, args:Array<Object>, context:Object){
         let _args = Array.prototype.slice.call(args);
         this._savedObjects.push(new SaLoCommand(obj, func, _args, context));
-        g_references.set(obj, obj.id);
+        //g_references.set(obj.id, obj);
     }
 
     rebuild(){

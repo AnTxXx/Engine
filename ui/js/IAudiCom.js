@@ -1,4 +1,4 @@
-import { play } from '../../lib/AGEngine.js';
+import { play , getReferenceById} from '../../lib/AGEngine.js';
 import { AGGameArea } from "../../lib/AGGameArea.js";
 import { AGObject } from "../../lib/AGObject.js";
 import { AGSoundSource } from "../../lib/AGSoundSource.js";
@@ -33,9 +33,9 @@ export class IAudiCom {
     /**
      * Bla
      */
-    constructor(AGarea, AGroom) {
-		this._AGroom = AGroom;
-		this._AGarea = AGarea;
+    constructor(AGareaID, AGroomID) {
+		this._AGroom = getReferenceById(AGroomID);
+		this._AGarea = getReferenceById(AGareaID);
 		this._scale = 55;
 		this._vision_mode = 0;
 		

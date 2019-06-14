@@ -8,6 +8,7 @@ import {Counter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
 import type {Trigger} from "./EventType.js";
 import {g_history, g_eventHandler, g_references, g_loading} from "./AGEngine.js";
+import {getReferenceById} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -272,7 +273,8 @@ export class AGObject {
      * Adds a soundsource to the object.
      * @param source Soundsource (AGSoundSource) to be added.
      */
-    addSoundSource(source: AGSoundSource){
+    addSoundSource(sourceID: number){
+        let source = getReferenceById(sourceID);
         source.setPosition(this._position);
         if(!g_loading) g_history.ike(this, this.addSoundSource, arguments, this);
         this._AGSoundSources.push(source);
