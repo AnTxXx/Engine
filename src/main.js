@@ -27,7 +27,7 @@ setControl(getReferenceById(controlsID));
 
 let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0), g_gamearea);
 let room_1ID:number = getIdByReference(room_1);
-getReferenceById(areaID).addRoom(room_1ID);
+g_gamearea.addRoom(room_1ID);
 
 let gegner:AGObject = new AGObject("gegner", new Vector3(2,1,8), new Vector3(1,0,0), new Vector3(1,1,1));
 let gegner_ss:AGSoundSource = new AGSoundSource("schritte", "sounds/steps.wav", true, 1, room_1ID);
@@ -48,7 +48,7 @@ let exit1ID:number = getIdByReference(exit1);
 
 //let wallSOUTH:AGObject = new AGObject("wall_south", new Vector3(5,1,10), new Vector3(1,0,0), new Vector3(5,1,1));
 
-getReferenceById(areaID).listener = getIdByReference(player);
+g_gamearea.listener = getIdByReference(player);
 
 getReferenceById(gegnerID).addSoundSource(gegner_ssID);
 getReferenceById(gegnerID).tag = "ENEMY";
@@ -68,7 +68,7 @@ getReferenceById(playerID).damage = 1;
 getReferenceById(playerID).range = 2;
 
 getReferenceById(room_1ID).add(playerID);
-getReferenceById(room_1ID).listener = getReferenceById(areaID).listener;
+getReferenceById(room_1ID).listener = g_gamearea.listener;
 
 //gegner.addRoute(new Vector3(1,1,10), new Vector3(10,1,10), new Vector3(10, 1, 10), new Vector3(1,1,1));
 getReferenceById(gegnerID).addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
