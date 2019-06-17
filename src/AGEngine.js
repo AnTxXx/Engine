@@ -3,6 +3,7 @@ import { AGGameArea} from "./AGGameArea.js";
 import {AGSaLo} from "./AGSaLo.js";
 import {AGEventHandler} from "./AGEventHandler.js";
 import {AGNavigation} from "./AGNavigation.js";
+import {Vector3} from "./js/three/Vector3";
 //import * as ResonanceAudio from './js/resonance/resonance-audio.min.js';
 //import * as bla from './js/resonance/resonance-audio.js';
 
@@ -11,7 +12,7 @@ let debug = 0;
 export let g_references:Map<number, Object> = new Map();
 export let g_history:AGSaLo = new AGSaLo();
 export let g_eventHandler:AGEventHandler = new AGEventHandler();
-export let g_gamearea:AGGameArea;
+export let g_gamearea:AGGameArea = new AGGameArea("Area", new Vector3(30,2.5,10));
 export let g_controls:AGNavigation;
 export let g_loading:boolean = false;
 

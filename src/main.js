@@ -1,5 +1,5 @@
 // @flow
-import {g_controls, g_eventHandler, g_history, g_references, setControl} from "./AGEngine.js";
+import {g_controls, g_eventHandler, g_history, g_gamearea, setControl} from "./AGEngine.js";
 import { AGGameArea} from "./AGGameArea.js";
 import { AGObject} from "./AGObject.js";
 import { AGSoundSource} from "./AGSoundSource.js";
@@ -22,8 +22,8 @@ let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 32);
 let controlsID:number = getIdByReference(controls);
 setControl(getReferenceById(controlsID));
 
-let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
-let areaID:number = getIdByReference(area);
+//let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
+let areaID:number = getIdByReference(g_gamearea);
 
 let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0), areaID);
 let room_1ID:number = getIdByReference(room_1);
