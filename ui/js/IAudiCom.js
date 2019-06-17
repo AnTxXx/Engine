@@ -10,7 +10,7 @@ import { AGRoom } from "../../lib/AGRoom.js";
 import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGItem } from "../../lib/AGItem.js";
 import { AGEventHandler } from "../../lib/AGEventHandler.js";
-import { getIdByReference, getReferenceById } from "../../lib/AGEngine.js";
+import { getIdByReference, getReferenceById, g_history, g_gamearea } from "../../lib/AGEngine.js";
 
 
 import { Event } from "../../lib/Event.js";
@@ -36,9 +36,8 @@ export class IAudiCom {
     /**
      * Bla
      */
-    constructor(AGareaID, AGroomID) {
+    constructor(AGroomID) {
 		this._AGroomID = AGroomID;
-		this._AGareaID = AGareaID;
 		this._scale = 55;
 		this._vision_mode = 0;
 		
@@ -99,7 +98,6 @@ export class IAudiCom {
 					object.set("fill", this._colors[6][this._vision_mode]);
 					break;
 				case 'path_line':
-					console.log("huhu");
 					object.set("fill", this._colors[7][this._vision_mode]);
 					object.set("stroke", this._colors[7][this._vision_mode]);
 					break;
@@ -121,7 +119,7 @@ export class IAudiCom {
 
 		let canvas_objects = room_buffer.getObjects();
 		
-		play(getReferenceById(this._AGareaID), true);
+		play(g_gamearea, true);
 		
 		
 		this._interval = setInterval(function(){				
@@ -161,8 +159,33 @@ export class IAudiCom {
 		}, 33);	
 	}
 	stopArea(){
-		play(getReferenceById(this._AGareaID), false);
-		this._interval = 0;
+		play(g_gamearea, false);	
+		this._interval = 0;	
+		
+		
+		let canvas_buffer = this._room_canvas;
+		//let canvas_objects = canvas_buffer.getObjects();
+		canvas_buffer.clear()
+		//canvas_buffer.dispose();
+		//$('#c').empty();
+		
+		g_history.rebuild();
+		
+		
+		//console.log(g_gamearea.AGRooms);
+		
+		//let rooms_buffer = g_gamearea.AGRooms;
+		
+		//TODO HIER GEHTS WEITER :)
+		console.log(rooms_buffer[0].AGobjects);
+		
+		
+		//rooms_buffer.each
+		
+		
+		
+		
+		
 	}
   	
 	

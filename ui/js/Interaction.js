@@ -129,6 +129,8 @@ jQuery(function($){
 			$('.ui_box_general').show();
 			
 			
+			$('#id_ span').text(actFabObj.AGObjectID);
+			
 			if(type=='enemy'){
 				$('.bnt_speed').removeClass('gegner_speed_active');
 				$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
@@ -137,9 +139,14 @@ jQuery(function($){
 			if(type!='player'){
 				$('#ui_delete_box').show();
 			}
+			
+			
+			
 			setTimeout(function(){
 				$('#ui_part_right_inner').fadeIn(100);
 			}, 100);
+			
+			
 		});
 	}
 	
@@ -230,6 +237,9 @@ jQuery(function($){
 		
 		if(actFabObj.type == 'enemy'){
 			actFabObj.PathArray.forEach(function(ele) {
+				i_audicom._room_canvas.remove(ele);
+			});
+			actFabObj.LineArray.forEach(function(ele) {
 				i_audicom._room_canvas.remove(ele);
 			});
 		}
