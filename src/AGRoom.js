@@ -8,6 +8,7 @@ import {AGGameArea} from "./AGGameArea.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_references, g_loading} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
+import {g_gamearea} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -125,12 +126,12 @@ export class AGRoom {
      * @param positionOnGrid The position of the room in the overall grid (the game 'map').
      * @param gameArea The AGGameArea this room is part of.
      */
-    constructor(name:string, size:Vector3, positionOnGrid:Vector3, gameAreaID:number){
+    constructor(name:string, size:Vector3, positionOnGrid:Vector3){
         this._ID = Counter.next();
         g_references.set(this._ID, this);
         console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
         this._positionOnGameArea = positionOnGrid;
-        this._gameArea = getReferenceById(gameAreaID);
+        this._gameArea = g_gamearea;
         this._live = false;
         // Create an AudioContext
         this._audioContext = this._gameArea.audioContext;

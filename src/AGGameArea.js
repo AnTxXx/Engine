@@ -77,9 +77,9 @@ export class AGGameArea {
     _history:AGSaLo;
 
     constructor(name:string, size:Vector3){
-        this._ID = Counter.next();
-        g_references.set(this._ID, this);
-        console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
+        //this._ID = Counter.next();
+        //g_references.set(this._ID, this);
+        //console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
 
         this.AGRooms = [];
         this.name = name;

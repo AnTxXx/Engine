@@ -23,9 +23,9 @@ let controlsID:number = getIdByReference(controls);
 setControl(getReferenceById(controlsID));
 
 //let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
-let areaID:number = getIdByReference(g_gamearea);
+//let areaID:number = getIdByReference(g_gamearea);
 
-let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0), areaID);
+let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0), g_gamearea);
 let room_1ID:number = getIdByReference(room_1);
 getReferenceById(areaID).addRoom(room_1ID);
 
