@@ -102,7 +102,9 @@ export class AGGameArea {
         if(!g_loading) g_history.ike(this, this.addRoom, arguments, this);
     }
 
-
+    clearRooms(){
+        this._AGRooms = [];
+    }
 
     /*newRoom(name:string, size:Vector3, position:Vector3):AGRoom{
         let agRoom:AGRoom = new AGRoom(name, size, position, this);

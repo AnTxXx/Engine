@@ -1,6 +1,6 @@
 // @flow
 
-import {g_references, g_loading, setLoading} from "./AGEngine.js";
+import {g_references, g_loading, setLoadin, g_gamearea} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 
 export class AGSaLo {
@@ -20,6 +20,7 @@ export class AGSaLo {
     rebuild(){
         g_references.clear();
         Counter.reset();
+        g_gamearea.clearRooms();
         setLoading(true);
         for(let i = 0; i < this._savedObjects.length; i++){
             let obj = this._savedObjects[i];
