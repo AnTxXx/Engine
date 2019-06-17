@@ -1,6 +1,6 @@
 // @flow
 
-import {g_references, g_loading, setLoadin, g_gamearea} from "./AGEngine.js";
+import {g_references, g_loading, setLoading, g_gamearea} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 
 export class AGSaLo {
