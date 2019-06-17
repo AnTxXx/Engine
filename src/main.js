@@ -25,7 +25,7 @@ setControl(getReferenceById(controlsID));
 //let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
 //let areaID:number = getIdByReference(g_gamearea);
 
-let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0), g_gamearea);
+let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0));
 let room_1ID:number = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 
@@ -106,7 +106,7 @@ console.log(g_history);
 
 //console.log(g_references);
 
-export let i_audicom = new IAudiCom(areaID, room_1ID);
+export let i_audicom = new IAudiCom(g_gamearea, room_1ID);
 
 //render the objects
 i_audicom.renderAGRoom(room_1ID);
