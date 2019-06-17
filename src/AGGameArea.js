@@ -94,7 +94,7 @@ export class AGGameArea {
         // Connect the scene’s binaural output to stereo out.
         this._resonanceAudioScene.output.connect(this._audioContext.destination);
 
-        if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
+        //if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
     }
 
     addRoom(room:number){
