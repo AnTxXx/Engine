@@ -3,10 +3,11 @@
 import {g_references, g_loading, setLoading, g_gamearea} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 import {getReferenceById} from "./AGEngine.js";
+import {Vector3} from "./js/three/Vector3.js";
 
-//import {cloneDeep} from "./js/Lodash/core.js"
+//import {clone} from "./js/Lodash/core.js"
 
-let _ = require('lodash/core');
+//let _ = require('lodash/core');
 
 export class AGSaLo {
 
@@ -18,7 +19,12 @@ export class AGSaLo {
 
     ike(objID:number, func:Function, args:Array<Object>){
         let _args = Array.prototype.slice.call(args);
-        this._savedObjects.push(new SaLoCommand(objID, func, _.cloneDeep(_args)));
+        for(let i = 0; i < _args.length; i++){
+            if((_args[i] instanceof Vector3)) {
+                _args[i] = _args[i].clone();
+            }
+        }
+        this._savedObjects.push(new SaLoCommand(objID, func, _args));
         //g_references.set(obj.id, obj);
     }
 
