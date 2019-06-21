@@ -160,7 +160,6 @@ jQuery(function($){
 	//button for path recording
 	$('#btn_path_rec').click(function(){
 		if(actFabObj.isRecording){
-			
 			let first_dot = new fabric.Circle({
 				left:   actFabObj.left,
 				top:    actFabObj.top,
@@ -180,11 +179,7 @@ jQuery(function($){
 				getReferenceById(actFabObj.AGObjectID).addRouteNode(new Vector3(ele.left/i_audicom._scale, 1, ele.top/i_audicom._scale));
 			});
 			getReferenceById(actFabObj.AGObjectID).movable = true;
-			
-			
-			
 
-			
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
@@ -226,8 +221,6 @@ jQuery(function($){
 		// getReferenceById(actFabObj.AGObjectID).clearRoute();
 	});
 
-	
-	
 	$('#btn_delete_object').click(function(){
 
 		getReferenceById(actFabObj.AGObjectID).kill();
@@ -265,7 +258,7 @@ jQuery(function($){
 		
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording){
-			
+
 			let dot = new fabric.Circle({
 			    left:   getMouseCoords(e)[0]-4,
 			    top:    getMouseCoords(e)[1]-4,
@@ -276,10 +269,8 @@ jQuery(function($){
 				type: 'path_dot'
 			});
 			
-			
 			if(actFabObj.PathArray.length >= 1){
 				let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
-				
 				let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
 					fill: i_audicom._colors[7][i_audicom._vision_mode],
 					stroke: i_audicom._colors[7][i_audicom._vision_mode],
@@ -293,15 +284,11 @@ jQuery(function($){
 				i_audicom._room_canvas.add(line);
 			}
 			
-			
 			actFabObj.PathArray.push(dot);
-			
-			
 			i_audicom._room_canvas.setActiveObject(actFabObj);
 			i_audicom._room_canvas.add(dot);
 			
 		}else if(actFabObj.type=='portal' && actFabObj.isRecording){
-			
 			
 			let obj_buffer = i_audicom._room_canvas.getActiveObject();
 
@@ -310,22 +297,67 @@ jQuery(function($){
 					//link the portal
 					//mark the portal in canvas
 					
+					i_audicom._room_canvas.setActiveObject(actFabObj);
+					
 					getReferenceById(actFabObj.AGObjectID).linkPortals(obj_buffer.AGObjectID);
 					actFabObj.isRecording = false;
 					$('#btn_path_linkdoors').find('i').removeClass('btn_path_rec_blink');
 					
+					//if there is a door, reset color and remove portal from second door
+					if(actFabObj.secDoor){
+						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+						i_audicom.getFabricObject(actFabObj.secDoor).secDoor = false;
+					}
+					
+					//obj_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+					
 					//link fabric objects
-					actFabObj.secDoor = i_audicom.room_canvas.getActiveObject().AGObjectID;
+					actFabObj.secDoor = obj_buffer.AGObjectID;
 					obj_buffer.secDoor = actFabObj.AGObjectID;
 					
+										//
+					// let dot_1 = new fabric.Circle({
+					//     left:   obj_buffer.left-4,
+					//     top:    obj_buffer.top-4,
+					//     radius: 4,
+					//     fill:   i_audicom._colors[6][i_audicom._vision_mode],
+					//     objectCaching: false,
+					// 	selectable: false,
+					// 	type: 'path_dot'
+					// });
+					// let dot_2 = new fabric.Circle({
+					//     left:   actFabObj.left-4,
+					//     top:    actFabObj.top-4,
+					//     radius: 4,
+					//     fill:   i_audicom._colors[6][i_audicom._vision_mode],
+					//     objectCaching: false,
+					// 	selectable: false,
+					// 	type: 'path_dot'
+					// });
+					// //draw line between portals
+					// let line = new fabric.Line([actFabObj.left, actFabObj.top,obj_buffer.left, obj_buffer.top],{
+					// 	fill: i_audicom._colors[7][i_audicom._vision_mode],
+					// 	stroke: i_audicom._colors[7][i_audicom._vision_mode],
+					// 	strokeWidth: 2,
+					// 	selectable: false,
+					// 	evented: false,
+					// 	type: 'path_line',
+					// 	dots: [dot_1, dot_2],
+					// });
+					// i_audicom._room_canvas.add(dot_1);
+					// i_audicom._room_canvas.add(dot_2);
+					// i_audicom._room_canvas.add(line);
+	
 					//colorize
 					//console.log(i_audicom._colors[5][i_audicom._vision_mode]);
 					obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
 					i_audicom.room_canvas.renderAll();
 				}
+			}else{
+				i_audicom._room_canvas.setActiveObject(actFabObj);
 			}
-			i_audicom._room_canvas.setActiveObject(actFabObj);
+			
 			
 			
 		//deselect Object and hide Path-Points	
@@ -357,30 +389,40 @@ jQuery(function($){
 	
 	//fabric listeners
 	i_audicom._room_canvas.on('selection:created', function(e){
-		actFabObj = i_audicom._room_canvas.getActiveObject();
-		loadObject(actFabObj.type);
 		
-		//if element has path array -> show path points
-		if(i_audicom._room_canvas.getActiveObject().PathArray){
-			actFabObj = i_audicom._room_canvas.getActiveObject();
-			actFabObj.PathArray.forEach(function(ele) {
-				ele.opacity = 1;
-			});
-			actFabObj.LineArray.forEach(function(ele) {
-				ele.opacity = 1;
-			});
-		}else if(actFabObj.secDoor){
-			i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+		
+		
+		actFabObj = i_audicom._room_canvas.getActiveObject();
+		if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
+			if(!actFabObj.isRecording){
+				loadObject(actFabObj.type);
+				if(i_audicom._room_canvas.getActiveObject().PathArray){
+					actFabObj = i_audicom._room_canvas.getActiveObject();
+					actFabObj.PathArray.forEach(function(ele) {
+						ele.opacity = 1;
+					});
+					actFabObj.LineArray.forEach(function(ele) {
+						ele.opacity = 1;
+					});
+				}else if(actFabObj.secDoor){
+					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+				}	
+			}
 		}
 	});
 	
 	
 	i_audicom._room_canvas.on('selection:updated', function(e){
-		
 		//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
 		
+		
+		
 		if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
-	
+			
+			
+			
+			
+			
 			// let actObj_buffer = room_canvas.getActiveObject();
 //
 // 			if(actObj_buffer.type=='portal'){
@@ -392,7 +434,6 @@ jQuery(function($){
 			//canvas.setActiveObject(actObj);
 	
 		}else{
-			
 			
 			//if another element is selected reset highlights and hide paths
 			if(actFabObj != i_audicom._room_canvas.getActiveObject()){	
@@ -422,8 +463,9 @@ jQuery(function($){
 				i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 			}
 			actFabObj = i_audicom._room_canvas.getActiveObject();
+			loadObject(actFabObj.type);
 		}
-		loadObject(actFabObj.type);
+		
 	});
 	
 	

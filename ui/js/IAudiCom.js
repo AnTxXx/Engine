@@ -36,13 +36,17 @@ export class IAudiCom {
     /**
      * Bla
      */
-    constructor(AGroomID) {
-		this._AGroomID = AGroomID;
+    constructor() {
+		
+		
 		this._scale = 55;
 		this._vision_mode = 0;
 		
 		this._interval = '';
-		this._room_canvas;
+		
+		this._room_canvas = new fabric.Canvas('c',{
+		    selection: false, 
+		});
 		
 		this._colors = [
 		  	['#e2e2e2', '#000060'], //0 canvas
@@ -55,9 +59,8 @@ export class IAudiCom {
 			['#000000', '#f02727'],	//7 colors for path-lines
 		];
 		
-		
-		
-		//getReferenceByID
+		this.renderScene();
+
     }
 	
     /**
@@ -116,11 +119,9 @@ export class IAudiCom {
 	startArea(){
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
-
 		let canvas_objects = room_buffer.getObjects();
 		
-		play(g_gamearea, true);
-		
+		play(getReferenceById(g_gamearea.ID), true);
 		
 		this._interval = setInterval(function(){				
 			canvas_objects.forEach(function(item, i) {
@@ -139,17 +140,11 @@ export class IAudiCom {
 						}
 						room_buffer.remove(item);
 					}
-					
-					
 					if(item.type == 'exit'){	
-						
-						
 						if(getReferenceById(item.AGObjectID).reached){
 							$('#win_screen').fadeIn(100);
 						}						
 					}
-					
-					
 	 			   	item.left = getReferenceById(item.AGObjectID).position.x*scale_buffer;
 	  			   	item.top = getReferenceById(item.AGObjectID).position.z*scale_buffer;
 	  			   	item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);  
@@ -159,17 +154,21 @@ export class IAudiCom {
 		}, 33);	
 	}
 	stopArea(){
-		play(g_gamearea, false);	
-		this._interval = 0;	
+		play(getReferenceById(g_gamearea.ID), false);
+		this._interval = false;	
 		
+		this._room_canvas.clear();
+		console.log("VORHER");
+		console.log(g_history);
+		g_history.rebuild();
+		console.log("NACHHER");
+		console.log(g_history);
+ 		this.renderScene();
 		
-		let canvas_buffer = this._room_canvas;
 		//let canvas_objects = canvas_buffer.getObjects();
-		canvas_buffer.clear()
 		//canvas_buffer.dispose();
 		//$('#c').empty();
 		
-		g_history.rebuild();
 		
 		
 		//console.log(g_gamearea.AGRooms);
@@ -177,17 +176,35 @@ export class IAudiCom {
 		//let rooms_buffer = g_gamearea.AGRooms;
 		
 		//TODO HIER GEHTS WEITER :)
-		console.log(rooms_buffer[0].AGobjects);
-		
-		
-		//rooms_buffer.each
-		
-		
-		
-		
+		// console.log(rooms_buffer[0].AGobjects);
+// 		this.renderAGRoom(rooms_buffer[0]);
+// 		if(rooms_buffer[0].AGobjects.length > 0){
+// 			rooms_buffer[0].AGobjects.forEach(function(element) {
+//  				this.renderAGObject(element);
+// 			});
+// 		}
+
 		
 	}
   	
+	
+	renderScene(){
+		console.log(getReferenceById(g_gamearea.ID));
+		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
+		
+		this._AGroomID = rooms_buffer[0].ID;
+		this.renderAGRoom(this._AGroomID);
+		
+		let this_buffer = this;
+		if(rooms_buffer[0].AGobjects.length > 0){
+			rooms_buffer[0].AGobjects.forEach(function(element) {
+ 				this_buffer.renderAGObject(element.ID);
+				console.log(element.tag + ": " + element.position.x)
+				//console.log(element.position.x);
+			});
+		}
+	}
+	
 	
 	zoomCanvas(zoom_factor){
 		//min : 0.5
@@ -207,11 +224,14 @@ export class IAudiCom {
 	}
 	
 	renderAGRoom(ag_roomID){
-		this._room_canvas = new fabric.Canvas('c',{
-		    selection: false, 
-		    height: getReferenceById(ag_roomID).size.x * this._scale, 
-		    width: getReferenceById(ag_roomID).size.z * this._scale,
-		});
+		
+	
+		
+		
+		this._room_canvas.setHeight(getReferenceById(ag_roomID).size.x * this._scale);
+		this._room_canvas.setWidth(getReferenceById(ag_roomID).size.z * this._scale);
+		
+		
 
 		let options = {
 		   distance: this._scale,
@@ -332,6 +352,11 @@ export class IAudiCom {
 				break;
 			
 		}
+		
+		console.log(getReferenceById(this._AGroomID));
+		console.log(this._AGroomID);
+		
+		
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
 		this.renderAGObject(obj_buffer_ID);
 	}
@@ -347,6 +372,8 @@ export class IAudiCom {
 		});	
 		return fab_buffer;
 	}
+	
+	
 	
 
 	//AGObjects
