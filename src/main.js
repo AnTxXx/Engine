@@ -102,7 +102,7 @@ getReferenceById(room_1ID).live = true;
 
 console.log(g_history);
 
-g_history.rebuild();
+//g_history.rebuild();
 
 //console.log(g_gamearea.AGRooms[0].AGobjects);
 //console.log(g_references);
