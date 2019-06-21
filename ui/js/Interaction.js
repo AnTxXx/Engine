@@ -197,6 +197,9 @@ jQuery(function($){
 		actFabObj.PathArray = [];	
 		getReferenceById(actFabObj.AGObjectID).clearRoute();
 		getReferenceById(actFabObj.AGObjectID).movable = false;
+		
+		
+		
 	});
 	
 	
@@ -245,6 +248,17 @@ jQuery(function($){
 				fab_buffer.secDoor = false;
 				fab_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);	
 			}
+			
+			if(actFabObj.line){
+				i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line.dot);
+				i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line);
+				i_audicom.getFabricObject(actFabObj.secDoor).line = false;
+				
+				i_audicom._room_canvas.remove(actFabObj.line.dot);
+				i_audicom._room_canvas.remove(actFabObj.line);
+				actFabObj.line.line = false;
+			}
+			
 		}
 		
 		i_audicom._room_canvas.remove(actFabObj);
