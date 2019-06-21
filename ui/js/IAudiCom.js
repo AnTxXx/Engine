@@ -37,8 +37,6 @@ export class IAudiCom {
      * Bla
      */
     constructor() {
-		
-		
 		this._scale = 55;
 		this._vision_mode = 0;
 		
@@ -158,11 +156,9 @@ export class IAudiCom {
 		this._interval = false;	
 		
 		this._room_canvas.clear();
-		console.log("VORHER");
-		console.log(g_history);
+		
 		g_history.rebuild();
-		console.log("NACHHER");
-		console.log(g_history);
+		
  		this.renderScene();
 		
 		//let canvas_objects = canvas_buffer.getObjects();
@@ -267,6 +263,17 @@ export class IAudiCom {
 	 			   top: Math.round((options.target.top) / this._scale) * this._scale 
 	 			});
 			}
+			
+			
+			if(options.target.type == 'portal' && options.target.line){
+
+				options.target.line.set({ 'x1': options.target.left, 'y1': options.target.top });
+				options.target.line.dot.set({ 'left': options.target.left-4, 'top': options.target.top-4 });
+				this.getFabricObject(options.target.secDoor).line.set({ 'x2': options.target.left, 'y2': options.target.top });
+		
+
+			}
+			
 			//options.target.AGObject.position = new Vector3((options.target.left - options.target.AGObject.size.x*this._scale/2)/this._scale, 1, (options.target.top - options.target.AGObject.size.z*this._scale/2)/this._scale);
 			
 			
@@ -503,10 +510,44 @@ export class IAudiCom {
 						obj.name = getReferenceById(ag_objectID).name;
 						obj.type = 'portal';
 						if(getReferenceById(ag_objectID).exit){
-							obj.secDoor = getIdByReference(getReferenceById(ag_objectID).exit);
+							let secDoorAGObject =  getReferenceById(ag_objectID).exit
+							
+							obj.secDoor = getIdByReference(secDoorAGObject);
+							
+							let dot = new fabric.Circle({
+							    left:   obj.left-4,
+							    top:    obj.top-4,
+							    radius: 4,
+							    fill:   colors_buffer[6][vision_mode_buffer],
+							    objectCaching: false,
+								selectable: false,
+								type: 'portal_dot',
+								opacity:0,
+							});
+							//draw line between portals
+							let line = new fabric.Line([obj.left, obj.top, secDoorAGObject.position.x*_scalebuffer, secDoorAGObject.position.z*_scalebuffer],{
+								fill: colors_buffer[7][vision_mode_buffer],
+								stroke: colors_buffer[7][vision_mode_buffer],
+								strokeWidth: 2,
+								selectable: false,
+								evented: false,
+								type: 'portal_line',
+								dot: dot,
+								opacity:0,
+							});
+							
+
+							obj.line = line;
+							obj.line.dot = dot;
+							room_canvas_buffer.add(dot);
+							room_canvas_buffer.add(line);
+	
+							
 						}else{
 							obj.secDoor = false;
+							obj.line = false;
 						}
+						
 						obj.originX = 'center';
 						obj.originY = 'center';
 						
