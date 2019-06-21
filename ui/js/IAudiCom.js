@@ -155,10 +155,9 @@ export class IAudiCom {
 		play(getReferenceById(g_gamearea.ID), false);
 		this._interval = false;	
 		
-		this._room_canvas.clear();
-		
+		this._room_canvas.clear();		
 		g_history.rebuild();
-		
+
  		this.renderScene();
 		
 		//let canvas_objects = canvas_buffer.getObjects();
@@ -185,7 +184,7 @@ export class IAudiCom {
   	
 	
 	renderScene(){
-		console.log(getReferenceById(g_gamearea.ID));
+		//console.log(getReferenceById(g_gamearea.ID));
 		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
 		
 		this._AGroomID = rooms_buffer[0].ID;
@@ -195,7 +194,7 @@ export class IAudiCom {
 		if(rooms_buffer[0].AGobjects.length > 0){
 			rooms_buffer[0].AGobjects.forEach(function(element) {
  				this_buffer.renderAGObject(element.ID);
-				console.log(element.tag + ": " + element.position.x)
+				//console.log(element.tag + ": " + element.position.x)
 				//console.log(element.position.x);
 			});
 		}

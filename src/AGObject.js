@@ -104,8 +104,11 @@ export class AGObject {
     }
 
     set name(value: string) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'name').set, arguments);
         this._name = value;
     }
+
     get movable() {
         return this._movable;
     }
@@ -120,6 +123,8 @@ export class AGObject {
     }
 
     set size(value: Vector3) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'size').set, arguments);
         this._size = value;
     }
     get direction(): Vector3 {
@@ -134,6 +139,8 @@ export class AGObject {
     }
 
     set position(value: Vector3) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'position').set, arguments);
         this._position = value;
     }
     get position(): Vector3 {
@@ -219,6 +226,7 @@ export class AGObject {
      * @param node The waypoint to be added.
      */
     addRouteNode(node:Vector3){
+        if(!g_loading) g_history.ike(this._ID, this.addRouteNode, arguments);
         this._route.push(node);
     }
 
