@@ -3,7 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading} from "./AGEngine.js";
+import {g_history, g_references, g_loading, g_gamearea} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 
 export class AGSoundSource
@@ -101,7 +101,7 @@ export class AGSoundSource
 
         this._room = getReferenceById(roomID);
 
-        this.audioContext = this._room.audioContext;
+        this.audioContext = g_gamearea.audioContext;
         this.resonanceAudioScene = this._room.resonanceAudioScene;
 
         // Create an AudioElement.

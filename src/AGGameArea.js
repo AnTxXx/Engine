@@ -21,6 +21,10 @@ export class AGGameArea {
         this._audioContext = value;
     }
 
+    get ID() {
+        return this._ID;
+    }
+
     get resonanceAudioScene() {
         return this._resonanceAudioScene;
     }

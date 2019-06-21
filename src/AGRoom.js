@@ -76,9 +76,7 @@ export class AGRoom {
 
         this._listener = value;
     }
-    get audioContext() {
-        return this._audioContext;
-    }
+
     get resonanceAudioScene() {
         return this._resonanceAudioScene;
     }
@@ -89,8 +87,6 @@ export class AGRoom {
 
     // $FlowFixMe
     _resonanceAudioScene;
-    // $FlowFixMe
-    _audioContext;
 
     get AGobjects(): Array<AGObject> {
         return this._AGobjects;
@@ -131,14 +127,12 @@ export class AGRoom {
         g_references.set(this._ID, this);
         console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
         this._positionOnGameArea = positionOnGrid;
-        this._gameArea = g_gamearea;
         this._live = false;
-        // Create an AudioContext
-        this._audioContext = this._gameArea.audioContext;
+
         // Create a (first-order Ambisonic) Resonance Audio scene and pass it
         // the AudioContext.
         // $FlowFixMe
-        this._resonanceAudioScene = this._gameArea.resonanceAudioScene;
+        this._resonanceAudioScene = g_gamearea.resonanceAudioScene;
 
         this.size = size;
 
