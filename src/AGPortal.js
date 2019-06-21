@@ -5,7 +5,8 @@ import type {Type} from "./AGType.js";
 import {AGCondition} from "./AGCondition.js";
 import {evaluateAll} from "./AGCondition.js";
 import {AGRoom} from "./AGRoom.js";
-import {g_history} from "./AGEngine.js";
+import {g_history, g_loading} from "./AGEngine.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class AGPortal extends AGObject{
 
@@ -56,16 +57,17 @@ export class AGPortal extends AGObject{
      * Links two portal with each other.
      * @param portal Portal (AGPortal) this portal should be linked with.
      */
-    linkPortals(portal:AGPortal){
+    linkPortals(portalID:number){
+        let portal:AGPortal = getReferenceById(portalID);
         console.log("[AGPortal] Linking Portal: " + this.name + " to " + portal.name);
         portal.exit = (this);
         this.exit = portal;
-        g_history.ike(this, this.linkPortals, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.linkPortals, arguments);
     }
 
     addCondition(condition:AGCondition){
         this._conditions.push(condition);
-        g_history.ike(this, this.addCondition, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.addCondition, arguments);
     }
 
     /**

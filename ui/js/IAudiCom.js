@@ -10,12 +10,15 @@ import { AGRoom } from "../../lib/AGRoom.js";
 import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGItem } from "../../lib/AGItem.js";
 import { AGEventHandler } from "../../lib/AGEventHandler.js";
+import { getIdByReference, getReferenceById, g_history, g_gamearea } from "../../lib/AGEngine.js";
+
 
 import { Event } from "../../lib/Event.js";
 
 
 export class IAudiCom {
 	
+
     set position(value) {
         this._scale = value;
     }
@@ -33,14 +36,15 @@ export class IAudiCom {
     /**
      * Bla
      */
-    constructor(AGarea, AGroom) {
-		this._AGroom = AGroom;
-		this._AGarea = AGarea;
+    constructor() {
 		this._scale = 55;
 		this._vision_mode = 0;
 		
 		this._interval = '';
-		this._room_canvas;
+		
+		this._room_canvas = new fabric.Canvas('c',{
+		    selection: false, 
+		});
 		
 		this._colors = [
 		  	['#e2e2e2', '#000060'], //0 canvas
@@ -50,7 +54,11 @@ export class IAudiCom {
 		  	['#FDA038', '#DDA0DD'],	//4 wall, portal, exit
 			['#60cd4b', '#38fd4f'],	//5 colors for highlighted objects
 			['#000000', '#ffffff'],	//6 colors for path-points
+			['#000000', '#f02727'],	//7 colors for path-lines
 		];
+		
+		this.renderScene();
+
     }
 	
     /**
@@ -90,6 +98,10 @@ export class IAudiCom {
 					
 					object.set("fill", this._colors[6][this._vision_mode]);
 					break;
+				case 'path_line':
+					object.set("fill", this._colors[7][this._vision_mode]);
+					object.set("stroke", this._colors[7][this._vision_mode]);
+					break;
 			}
 		});
 		
@@ -105,9 +117,10 @@ export class IAudiCom {
 	startArea(){
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
-
 		let canvas_objects = room_buffer.getObjects();
-		play(this._AGarea, true);
+		
+		play(getReferenceById(g_gamearea.ID), true);
+		
 		this._interval = setInterval(function(){				
 			canvas_objects.forEach(function(item, i) {
 				if(item.isObject){
@@ -116,7 +129,7 @@ export class IAudiCom {
 					// item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
 					
 					//remove "dead" objects
-					if(item.AGObject.destructible && item.AGObject.health <= 0){
+					if(getReferenceById(item.AGObjectID).destructible && getReferenceById(item.AGObjectID).health <= 0){
 					//remove path of dead enemies	
 						if(item.type == 'enemy'){
 							item.PathArray.forEach(function(ele) {
@@ -125,30 +138,68 @@ export class IAudiCom {
 						}
 						room_buffer.remove(item);
 					}
-					
-					
 					if(item.type == 'exit'){	
-						
-						
-						if(item.AGObject.reached){
+						if(getReferenceById(item.AGObjectID).reached){
 							$('#win_screen').fadeIn(100);
 						}						
 					}
-					
-					
-	 			   	item.left = item.AGObject.position.x*scale_buffer;
-	  			   	item.top = item.AGObject.position.z*scale_buffer;
-	  			   	item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);  
+	 			   	item.left = getReferenceById(item.AGObjectID).position.x*scale_buffer;
+	  			   	item.top = getReferenceById(item.AGObjectID).position.z*scale_buffer;
+	  			   	item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);  
 				}
 			});	
 			room_buffer.renderAll();
 		}, 33);	
 	}
 	stopArea(){
-		play(this._AGarea, false);
-		this._interval = 0;
+		play(getReferenceById(g_gamearea.ID), false);
+		this._interval = false;	
+		
+		this._room_canvas.clear();		
+		g_history.rebuild();
+
+ 		this.renderScene();
+		
+		//let canvas_objects = canvas_buffer.getObjects();
+		//canvas_buffer.dispose();
+		//$('#c').empty();
+		
+		
+		
+		//console.log(g_gamearea.AGRooms);
+		
+		//let rooms_buffer = g_gamearea.AGRooms;
+		
+		//TODO HIER GEHTS WEITER :)
+		// console.log(rooms_buffer[0].AGobjects);
+// 		this.renderAGRoom(rooms_buffer[0]);
+// 		if(rooms_buffer[0].AGobjects.length > 0){
+// 			rooms_buffer[0].AGobjects.forEach(function(element) {
+//  				this.renderAGObject(element);
+// 			});
+// 		}
+
+		
 	}
   	
+	
+	renderScene(){
+		//console.log(getReferenceById(g_gamearea.ID));
+		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
+		
+		this._AGroomID = rooms_buffer[0].ID;
+		this.renderAGRoom(this._AGroomID);
+		
+		let this_buffer = this;
+		if(rooms_buffer[0].AGobjects.length > 0){
+			rooms_buffer[0].AGobjects.forEach(function(element) {
+ 				this_buffer.renderAGObject(element.ID);
+				//console.log(element.tag + ": " + element.position.x)
+				//console.log(element.position.x);
+			});
+		}
+	}
+	
 	
 	zoomCanvas(zoom_factor){
 		//min : 0.5
@@ -167,12 +218,15 @@ export class IAudiCom {
 		room_buffer.renderAll();
 	}
 	
-	renderAGRoom(ag_room){
-		this._room_canvas = new fabric.Canvas('c',{
-		    selection: false, 
-		    height: ag_room.size.x * this._scale, 
-		    width: ag_room.size.z * this._scale,
-		});
+	renderAGRoom(ag_roomID){
+		
+	
+		
+		
+		this._room_canvas.setHeight(getReferenceById(ag_roomID).size.x * this._scale);
+		this._room_canvas.setWidth(getReferenceById(ag_roomID).size.z * this._scale);
+		
+		
 
 		let options = {
 		   distance: this._scale,
@@ -208,27 +262,34 @@ export class IAudiCom {
 	 			   top: Math.round((options.target.top) / this._scale) * this._scale 
 	 			});
 			}
+			
+			
+			if(options.target.type == 'portal' && options.target.line){
+
+				options.target.line.set({ 'x1': options.target.left, 'y1': options.target.top });
+				options.target.line.dot.set({ 'left': options.target.left-4, 'top': options.target.top-4 });
+				this.getFabricObject(options.target.secDoor).line.set({ 'x2': options.target.left, 'y2': options.target.top });
+		
+
+			}
+			
 			//options.target.AGObject.position = new Vector3((options.target.left - options.target.AGObject.size.x*this._scale/2)/this._scale, 1, (options.target.top - options.target.AGObject.size.z*this._scale/2)/this._scale);
 			
 			
-			options.target.AGObject.position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
+			getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
 			
 		});
 		
 		let w = 0;
 		this._room_canvas.on('object:scaling', options => {	
 			let target = options.target;
+	
+			//console.log("Size: " + options.target.width*target.scaleX/this._scale + " " + options.target.height*target.scaleY/this._scale);
+			//console.log("Position: " + options.target.left/this._scale + " " + options.target.top/this._scale);
 			
-			//update position and size
+			getReferenceById(options.target.AGObjectID).size = new Vector3(options.target.width*target.scaleX/this._scale, 1, options.target.height*target.scaleY/this._scale);
+			getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
 			
-			
-			console.log("Size: " + options.target.width*target.scaleX/this._scale + " " + options.target.height*target.scaleY/this._scale);
-			
-			console.log("Position: " + options.target.left/this._scale + " " + options.target.top/this._scale);
-			
-			options.target.AGObject.size = new Vector3(options.target.width*target.scaleX/this._scale, 1, options.target.height*target.scaleY/this._scale);
-			options.target.AGObject.position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
-			//target.set(attrs);
 			
 			if(!target.strokeWidthUnscaled && target.strokeWidth){
 				target.strokeWidthUnscaled = target.strokeWidth;
@@ -237,106 +298,8 @@ export class IAudiCom {
 				var scale_buffer = target.scaleX > target.scaleY ? target.scaleX : target.scaleY;
 				target.strokeWidth = target.strokeWidthUnscaled / scale_buffer;
 			}
-			//target.set(attrs);
 			
-			
-			
-			//Change wally to wall to reactivate scaling
-			// if(options.target.type == 'wally'){
-// 				var target = options.target,
-// 					w = target.width * target.scaleX,
-// 					offset = w/2,
-// 					h = target.height * target.scaleY,
-// 					snap = { // Closest snapping points
-// 						top: Math.round(target.top  / this._scale) * this._scale,
-// 						left: Math.round(target.left / this._scale) * this._scale,
-// 						bottom: Math.round((target.top + h) / this._scale) * this._scale,
-// 						right: Math.round((target.left + w) / this._scale) * this._scale
-// 					},
-// 					threshold = this._scale,
-// 					dist = { // Distance from snapping points
-// 						top: Math.abs(snap.top - target.top),
-// 						left: Math.abs(snap.left - target.left),
-// 						bottom: Math.abs(snap.bottom - target.top - h),
-// 						right: Math.abs(snap.right - target.left - w)
-// 					},
-// 					attrs = {
-// 						scaleX: target.scaleX,
-// 						scaleY: target.scaleY,
-// 						top: target.top,
-// 						left: target.left
-// 					};
-//
-// 				switch (target.__corner) {
-// 					case 'tl':
-// 						if (dist.left < dist.top && dist.left < threshold) {
-// 							attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-// 							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-// 							attrs.top = target.top + (h - target.height * attrs.scaleY);
-// 							attrs.left = snap.left;
-// 						} else if (dist.top < threshold) {
-// 							attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-// 							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-// 							attrs.left = attrs.left + (w - target.width * attrs.scaleX);
-// 							attrs.top = snap.top;
-// 						}
-// 						break;
-// 					case 'mt':
-// 						if (dist.top < threshold) {
-// 							attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-// 							attrs.top = snap.top;
-// 						}
-// 						break;
-// 					case 'tr':
-// 						if (dist.right < dist.top && dist.right < threshold) {
-// 							attrs.scaleX = (snap.right - target.left) / target.width;
-// 							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-// 							attrs.top = target.top + (h - target.height * attrs.scaleY);
-// 						} else if (dist.top < threshold) {
-// 							attrs.scaleY = (h - (snap.top - target.top)) / target.height;
-// 							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-// 							attrs.top = snap.top;
-// 						}
-// 						break;
-// 					case 'ml':
-// 						if (dist.left < threshold) {
-// 							attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-// 							attrs.left = snap.left;
-// 						}
-// 						break;
-// 					case 'mr':
-// 						if (dist.right < threshold) attrs.scaleX = (snap.right - target.left) / target.width;
-// 						break;
-// 					case 'bl':
-// 						if (dist.left < dist.bottom && dist.left < threshold) {
-// 							attrs.scaleX = (w - (snap.left - target.left)) / target.width;
-// 							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-// 							attrs.left = snap.left;
-// 						} else if (dist.bottom < threshold) {
-// 							attrs.scaleY = (snap.bottom - target.top) / target.height;
-// 							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-// 							attrs.left = attrs.left + (w - target.width * attrs.scaleX);
-// 						}
-// 						break;
-// 					case 'mb':
-// 						if (dist.bottom < threshold) attrs.scaleY = (snap.bottom - target.top) / target.height;
-// 						break;
-// 					case 'br':
-// 						if (dist.right < dist.bottom && dist.right < threshold) {
-// 							attrs.scaleX = (snap.right - target.left) / target.width;
-// 							attrs.scaleY = (attrs.scaleX / target.scaleX) * target.scaleY;
-// 						} else if (dist.bottom < threshold) {
-// 							attrs.scaleY = (snap.bottom - target.top) / target.height;
-// 							attrs.scaleX = (attrs.scaleY / target.scaleY) * target.scaleX;
-// 						}
-// 						break;
-// 				}
-//
-//
-// 			}
-//
-			//update Size of objects
-			
+	
 			
 		});
 	}
@@ -345,14 +308,23 @@ export class IAudiCom {
 	makeThenRenderAGObject(obj_type, obj_left, obj_top){
 
 		let obj_buffer;
+		let obj_buffer_ID;
 		switch(obj_type){
 			
 			case 'enemy':
 				
 				obj_buffer = new AGObject("AGgegner", new Vector3((obj_left/this._scale), 1, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				obj_buffer.tag = "ENEMY";
-				let gegner_ss = new AGSoundSource("urbiurbiurbi", "sounds/car.mp3", true, 1, this._AGroom);
-				obj_buffer.addSoundSource(gegner_ss);
+				
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				
+				
+				getReferenceById(obj_buffer_ID).tag = "ENEMY";
+				
+				let gegner_ss = new AGSoundSource("urbiurbiurbi", "sounds/car.mp3", true, 1, this._AGroomID);
+				let gegner_ss_ID = getIdByReference(gegner_ss);
+				
+				getReferenceById(obj_buffer_ID).addSoundSource(gegner_ss_ID);
+				getReferenceById(obj_buffer_ID).setSpeedSkalar(0);
 				
 				break;
 
@@ -370,70 +342,79 @@ export class IAudiCom {
 // 				let snap_left_buffer = snap_buffer.left < snap_buffer.right ? snap_buffer.left : snap_buffer.right;
 				
 				obj_buffer = new AGObject("Wall", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				obj_buffer.tag = "WALL";
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				getReferenceById(obj_buffer_ID).tag = "WALL";
 				
 				break;
 			case 'portal':
 				obj_buffer = new AGPortal("Portal", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-	
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				
 				break;
 			case 'exit':
 
 				obj_buffer = new AGRoomExit("Exit", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				
+				obj_buffer_ID = getIdByReference(obj_buffer);
 				break;
 			
 		}
-		this._AGroom.add(obj_buffer);
-		this.renderAGObject(obj_buffer);
+		
+		console.log(getReferenceById(this._AGroomID));
+		console.log(this._AGroomID);
+		
+		
+		getReferenceById(this._AGroomID).add(obj_buffer_ID);
+		this.renderAGObject(obj_buffer_ID);
 	}
 	
 	
-	getFabricObject(ag_object){
+	getFabricObject(ag_objectID){
 		let canvas_objects = this._room_canvas.getObjects();
 		let fab_buffer;
 		canvas_objects.forEach(function(item, i) {
-			if(item.isObject && item.AGObject == ag_object){
+			if(item.isObject && item.AGObjectID == ag_objectID){
 				fab_buffer = item;
 			}
 		});	
 		return fab_buffer;
 	}
 	
+	
+	
 
 	//AGObjects
-	renderAGObject(ag_object){
+	renderAGObject(ag_objectID){
 		
 		let _scalebuffer = this._scale
 		let colors_buffer = this._colors;
 		let vision_mode_buffer = this._vision_mode;
 		let room_canvas_buffer = this._room_canvas;
 		
-		if(ag_object.tag){
+		if(getReferenceById(ag_objectID).tag){
 			
-			switch(ag_object.tag){
+			switch(getReferenceById(ag_objectID).tag){
 				case 'ENEMY':
 					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
 					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(ag_object.size.x*_scalebuffer);
-					  	obj.scaleToHeight(ag_object.size.z*_scalebuffer);
-					  	// obj.left = ag_object.position.x*_scalebuffer + ag_object.size.x*_scalebuffer/2;
-// 					    obj.top = ag_object.position.z*_scalebuffer + ag_object.size.z*_scalebuffer/2;
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+					  	// obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer + getReferenceById(ag_objectID).size.x*_scalebuffer/2;
+// 					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer + getReferenceById(ag_objectID).size.z*_scalebuffer/2;
 
-						obj.left = ag_object.position.x*_scalebuffer;
-						obj.top = ag_object.position.z*_scalebuffer;
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
 						obj.fill = colors_buffer[3][vision_mode_buffer];
-						obj.AGObject = ag_object;
+						obj.AGObjectID = ag_objectID;
 					 	obj.PathArray = [];
+						obj.LineArray = [];
 						obj.isObject = true;
 						obj.isRecording = false;
-						obj.name = ag_object.name;
+						obj.name = getReferenceById(ag_objectID).name;
 						obj.type = 'enemy';
 						obj.originX = 'center';
 						obj.originY = 'center';
-						
-						
+
 						obj.hasRotatingPoint = false; 
 						obj.lockScalingX = true;
 						obj.lockScalingY = true;
@@ -448,8 +429,8 @@ export class IAudiCom {
 							bl: false,
 						});
 						
-						if(ag_object.route.length > 0){
-							ag_object.route.forEach(function (item, index) {
+						if(getReferenceById(ag_objectID).route.length > 0){
+							getReferenceById(ag_objectID).route.forEach(function (item, index) {
 								let dot = new fabric.Circle({
 								    left:   (item.x*_scalebuffer)-4,
 								    top:    (item.z*_scalebuffer)-4,
@@ -460,8 +441,26 @@ export class IAudiCom {
 									opacity: 0,
 									type: 'path_dot'
 								});
+								
+								if(obj.PathArray.length >= 1){
+									
+									let last_dot_buffer = obj.PathArray[obj.PathArray.length-1];
+									let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
+										fill: colors_buffer[7][vision_mode_buffer],
+										stroke: colors_buffer[7][vision_mode_buffer],
+										strokeWidth: 2,
+										selectable: false,
+										evented: false,
+										opacity: 0,
+										type: 'path_line'
+									});
+									obj.LineArray.push(line);
+									room_canvas_buffer.add(line);
+								}
+
 								obj.PathArray.push(dot);
 								room_canvas_buffer.add(dot);
+								
 							});
 						}
 					  	room_canvas_buffer.add(obj).renderAll();
@@ -470,18 +469,16 @@ export class IAudiCom {
 			
 				case 'WALL':
 					var obj = new fabric.Rect({
-						width: ag_object.size.x*_scalebuffer,
-						height: ag_object.size.z*_scalebuffer,
+						width: getReferenceById(ag_objectID).size.x*_scalebuffer,
+						height: getReferenceById(ag_objectID).size.z*_scalebuffer,
 						fill: colors_buffer[4][vision_mode_buffer],
-						// left: ag_object.position.x*_scalebuffer + ag_object.size.x*_scalebuffer/2,
-// 						top: ag_object.position.z*_scalebuffer + ag_object.size.z*_scalebuffer/2,
+					
+						left: getReferenceById(ag_objectID).position.x*_scalebuffer,
+						top: getReferenceById(ag_objectID).position.z*_scalebuffer,
 						
-						left: ag_object.position.x*_scalebuffer,
-						top: ag_object.position.z*_scalebuffer,
-						
-						AGObject: ag_object,
+						AGObjectID: ag_objectID,
 						isObject: true,	
-						name: ag_object.name,
+						name: getReferenceById(ag_objectID).name,
 						type: 'wall',
 						strokeWidth: 1,
 						originX: 'center',
@@ -492,32 +489,64 @@ export class IAudiCom {
 					break;
 			}
 		
-		}else if(ag_object.type){
-			switch(ag_object.type){
+		}else if(getReferenceById(ag_objectID).type){
+			switch(getReferenceById(ag_objectID).type){
 				case 'PORTAL':	
 					fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
 					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(ag_object.size.x*_scalebuffer);
-					  	obj.scaleToHeight(ag_object.size.z*_scalebuffer);
-					  	// obj.left = ag_object.position.x*_scalebuffer + ag_object.size.x*_scalebuffer/2;
-// 					    obj.top = ag_object.position.z*_scalebuffer + ag_object.size.z*_scalebuffer/2;
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+					
+					  	obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
 						
-					  	obj.left = ag_object.position.x*_scalebuffer;
-					    obj.top = ag_object.position.z*_scalebuffer;
-						
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
 						obj.fill = colors_buffer[4][vision_mode_buffer];
-						obj.AGObject = ag_object;
+						obj.AGObjectID = ag_objectID;
 					 	
 						obj.isObject = true;
 						obj.isRecording = false;
-						obj.name = ag_object.name;
+						obj.name = getReferenceById(ag_objectID).name;
 						obj.type = 'portal';
-						if(ag_object.exit){
-							obj.secDoor = ag_object.exit;
+						if(getReferenceById(ag_objectID).exit){
+							let secDoorAGObject =  getReferenceById(ag_objectID).exit
+							
+							obj.secDoor = getIdByReference(secDoorAGObject);
+							
+							let dot = new fabric.Circle({
+							    left:   obj.left-4,
+							    top:    obj.top-4,
+							    radius: 4,
+							    fill:   colors_buffer[6][vision_mode_buffer],
+							    objectCaching: false,
+								selectable: false,
+								type: 'portal_dot',
+								opacity:0,
+							});
+							//draw line between portals
+							let line = new fabric.Line([obj.left, obj.top, secDoorAGObject.position.x*_scalebuffer, secDoorAGObject.position.z*_scalebuffer],{
+								fill: colors_buffer[7][vision_mode_buffer],
+								stroke: colors_buffer[7][vision_mode_buffer],
+								strokeWidth: 2,
+								selectable: false,
+								evented: false,
+								type: 'portal_line',
+								dot: dot,
+								opacity:0,
+							});
+							
+
+							obj.line = line;
+							obj.line.dot = dot;
+							room_canvas_buffer.add(dot);
+							room_canvas_buffer.add(line);
+	
+							
 						}else{
 							obj.secDoor = false;
+							obj.line = false;
 						}
+						
 						obj.originX = 'center';
 						obj.originY = 'center';
 						
@@ -541,20 +570,20 @@ export class IAudiCom {
 				case 'EXIT':	
 					fabric.loadSVGFromURL('ui/img/exit.svg', function(objects) {
 					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(ag_object.size.x*_scalebuffer);
-					  	obj.scaleToHeight(ag_object.size.z*_scalebuffer);
-					  	// obj.left = ag_object.position.x*_scalebuffer + ag_object.size.x*_scalebuffer/2;
-// 					    obj.top = ag_object.position.z*_scalebuffer + ag_object.size.z*_scalebuffer/2;
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+					  	// obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer + getReferenceById(ag_objectID).size.x*_scalebuffer/2;
+// 					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer + getReferenceById(ag_objectID).size.z*_scalebuffer/2;
 						
-					  	obj.left = ag_object.position.x*_scalebuffer;
-					    obj.top = ag_object.position.z*_scalebuffer;
+					  	obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
 						
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
 						obj.fill = colors_buffer[4][vision_mode_buffer];
-						obj.AGObject = ag_object;
+						obj.AGObjectID = ag_objectID;
 						obj.isObject = true;
 						obj.isRecording = false;
-						obj.name = ag_object.name;
+						obj.name = getReferenceById(ag_objectID).name;
 						obj.type = 'exit';
 						obj.secDoor = false;
 						obj.originX = 'center';
@@ -583,18 +612,15 @@ export class IAudiCom {
 					  	var obj = fabric.util.groupSVGElements(objects);
 					 	obj.scaleToWidth(1*_scalebuffer);
 					  	obj.scaleToHeight(1*_scalebuffer);
-					  	// obj.left = ag_object.position.x*_scalebuffer + ag_object.size.x*_scalebuffer/2;
-// 					    obj.top = ag_object.position.z*_scalebuffer + ag_object.size.z*_scalebuffer/2;
-							
-						obj.left = ag_object.position.x*_scalebuffer;
-						obj.top = ag_object.position.z*_scalebuffer;
+					  		
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
 
-						obj.angle = Math.atan2(ag_object.direction.z, ag_object.direction.x) * 180 / Math.PI;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
 						obj.fill = colors_buffer[2][vision_mode_buffer];
-						obj.AGObject = ag_object;
-					 	obj.PathArray = [];
+						obj.AGObjectID = ag_objectID;
 						obj.isObject = true;
-						obj.name = ag_object.name;
+						obj.name = getReferenceById(ag_objectID).name;
 						obj.type = 'player';
 					  	room_canvas_buffer.add(obj).renderAll();
 						obj.originX = 'center';

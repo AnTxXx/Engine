@@ -6,7 +6,9 @@ import type {Type} from "./AGType.js";
 import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references} from "./AGEngine.js";
+import {g_history, g_references, g_loading} from "./AGEngine.js";
+import {getReferenceById} from "./AGEngine.js";
+import {g_gamearea} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -31,7 +33,8 @@ export class AGRoom {
     }
 
     set live(value:boolean) {
-        g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments, this);
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments);
         this._live = value;
     }
     get positionOnGameArea(): Vector3 {
@@ -68,13 +71,12 @@ export class AGRoom {
     }
 
     set listener(value: AGObject) {
-        g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments, this);
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments);
 
         this._listener = value;
     }
-    get audioContext() {
-        return this._audioContext;
-    }
+
     get resonanceAudioScene() {
         return this._resonanceAudioScene;
     }
@@ -85,10 +87,8 @@ export class AGRoom {
 
     // $FlowFixMe
     _resonanceAudioScene;
-    // $FlowFixMe
-    _audioContext;
 
-    get AGobjects(): AGObject[] {
+    get AGobjects(): Array<AGObject> {
         return this._AGobjects;
     }
     _name:string;
@@ -122,19 +122,17 @@ export class AGRoom {
      * @param positionOnGrid The position of the room in the overall grid (the game 'map').
      * @param gameArea The AGGameArea this room is part of.
      */
-    constructor(name:string, size:Vector3, positionOnGrid:Vector3, gameArea:AGGameArea){
+    constructor(name:string, size:Vector3, positionOnGrid:Vector3){
         this._ID = Counter.next();
-        g_references.set(this, this._ID);
+        g_references.set(this._ID, this);
         console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
         this._positionOnGameArea = positionOnGrid;
-        this._gameArea = gameArea;
         this._live = false;
-        // Create an AudioContext
-        this._audioContext = gameArea.audioContext;
+
         // Create a (first-order Ambisonic) Resonance Audio scene and pass it
         // the AudioContext.
         // $FlowFixMe
-        this._resonanceAudioScene = gameArea.resonanceAudioScene;
+        this._resonanceAudioScene = g_gamearea.resonanceAudioScene;
 
         this.size = size;
 
@@ -168,7 +166,9 @@ export class AGRoom {
 
         this._lastTime = new Date(0);
 
-        g_history.ike(this, this.constructor, arguments, this);
+        this._AGobjects = [];
+
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
     }
 
     _AGobjects:Array<AGObject>;
@@ -178,12 +178,13 @@ export class AGRoom {
      * Adds a AGObject to the room (and will therefore be considered with every draw loop)
      * @param gameObject The AGObject to add.
      */
-    add(gameObject :AGObject){
+    add(gameObjectID :number){
         if(!this._AGobjects){
             this._AGobjects = [];
         }
+        let gameObject = getReferenceById(gameObjectID);
         this._AGobjects.push(gameObject);
-        g_history.ike(this, this.add, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.add, arguments);
         gameObject.room = this;
     }
 

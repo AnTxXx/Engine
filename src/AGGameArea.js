@@ -6,7 +6,8 @@ import {AGRoom} from "./AGRoom.js";
 
 import {AGSaLo} from "./AGSaLo.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references} from "./AGEngine.js";
+import {g_history, g_references, g_loading} from "./AGEngine.js";
+import {getReferenceById} from "./AGEngine.js";
 
 let debug:number = 0;
 
@@ -20,6 +21,10 @@ export class AGGameArea {
         this._audioContext = value;
     }
 
+    get ID() {
+        return this._ID;
+    }
+
     get resonanceAudioScene() {
         return this._resonanceAudioScene;
     }
@@ -31,10 +36,10 @@ export class AGGameArea {
         return this._listener;
     }
 
-    set listener(value: AGObject) {
-        //TODO: listener function
-        g_history.ike(this, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments, this);
-        this._listener = value;
+    set listener(value:number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments);
+        this._listener = getReferenceById(value);
     }
     get AGRooms(): Array<AGRoom> {
         return this._AGRooms;
@@ -77,7 +82,7 @@ export class AGGameArea {
 
     constructor(name:string, size:Vector3){
         this._ID = Counter.next();
-        g_references.set(this, this._ID);
+        g_references.set(this._ID, this);
         console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
 
         this.AGRooms = [];
@@ -92,19 +97,24 @@ export class AGGameArea {
         this._resonanceAudioScene = new ResonanceAudio(this._audioContext);
         // Connect the scene’s binaural output to stereo out.
         this._resonanceAudioScene.output.connect(this._audioContext.destination);
+
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
     }
 
-    addRoom(room:AGRoom){
-        this.AGRooms.push(room);
+    addRoom(room:number){
+        this.AGRooms.push(getReferenceById(room));
+        if(!g_loading) g_history.ike(this._ID, this.addRoom, arguments);
     }
 
+    clearRooms(){
+        this._AGRooms = [];
+    }
 
-
-    newRoom(name:string, size:Vector3, position:Vector3):AGRoom{
+    /*newRoom(name:string, size:Vector3, position:Vector3):AGRoom{
         let agRoom:AGRoom = new AGRoom(name, size, position, this);
         this.addRoom(agRoom);
         return agRoom;
-    }
+    }*/
 
     draw(){
         this._AGRooms.forEach(function(element) {

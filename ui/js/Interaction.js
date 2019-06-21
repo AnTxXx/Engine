@@ -1,5 +1,6 @@
 import { i_audicom } from "../../lib/main.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
+import { getIdByReference, getReferenceById } from "../../lib/AGEngine.js";
 
 jQuery(function($){
 	
@@ -31,12 +32,12 @@ jQuery(function($){
 	$('#input_obj_name').on('input', function() {
 	    let buffer = $(this).val();
 		i_audicom._room_canvas.getActiveObject().name = buffer;
-		_room_canvas.getActiveObject().AGObject.name = buffer;
+		_room_canvas.getActiveObject().AGObjectID.name = buffer;
 	});
 	
 	
 	$('#input_obj_pos_x').on('input', function() {	
-		i_audicom._room_canvas.getActiveObject().AGObject.position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
 		i_audicom._room_canvas.getActiveObject().set({
 			left: $('#input_obj_pos_x').val()*i_audicom._scale,
 			top: $('#input_obj_pos_y').val()*i_audicom._scale,
@@ -44,7 +45,7 @@ jQuery(function($){
 		i_audicom._room_canvas.renderAll();
 	});
 	$('#input_obj_pos_y').on('input', function() {
-		i_audicom._room_canvas.getActiveObject().AGObject.position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
 		i_audicom._room_canvas.getActiveObject().set({
 			left: $('#input_obj_pos_x').val()*i_audicom._scale,
 			top: $('#input_obj_pos_y').val()*i_audicom._scale,
@@ -87,20 +88,20 @@ jQuery(function($){
 			//render the thing
 			
 			//move to a function
-			switch(obj_type){
-				case 'soundsource':
-					//the fabric.js object
-					obj = new fabric.Rect({
-						width: $(ui.draggable).outerWidth(),
-						height: $(ui.draggable).outerHeight(),
-						fill: $(ui.draggable).css('background-color'),
-						left: (ui.position.left)-$(this).offset().left,
-						top: (ui.position.top)-$(this).offset().top,
-						name: 'soundsource'
-					});
-					break;
-		    		room_canvas.add(obj);	
-			}
+			// switch(obj_type){
+// 				case 'soundsource':
+// 					//the fabric.js object
+// 					obj = new fabric.Rect({
+// 						width: $(ui.draggable).outerWidth(),
+// 						height: $(ui.draggable).outerHeight(),
+// 						fill: $(ui.draggable).css('background-color'),
+// 						left: (ui.position.left)-$(this).offset().left,
+// 						top: (ui.position.top)-$(this).offset().top,
+// 						name: 'soundsource'
+// 					});
+// 					break;
+// 		    		room_canvas.add(obj);
+// 			}
 		}
 	});
 	
@@ -128,17 +129,24 @@ jQuery(function($){
 			$('.ui_box_general').show();
 			
 			
+			$('#id_ span').text(actFabObj.AGObjectID);
+			
 			if(type=='enemy'){
 				$('.bnt_speed').removeClass('gegner_speed_active');
-				$('#btn_speed_' + actFabObj.AGObject.getSpeedSkalar()).addClass('gegner_speed_active');
+				$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
 			}
 			
 			if(type!='player'){
 				$('#ui_delete_box').show();
 			}
+			
+			
+			
 			setTimeout(function(){
 				$('#ui_part_right_inner').fadeIn(100);
 			}, 100);
+			
+			
 		});
 	}
 	
@@ -146,13 +154,12 @@ jQuery(function($){
 	$('.bnt_speed').click(function() {
 		$('.bnt_speed').removeClass('gegner_speed_active');
 		$(this).addClass('gegner_speed_active');
-		actFabObj.AGObject.setSpeedSkalar($(this).attr('speed'));
+		getReferenceById(actFabObj.AGObjectID).setSpeedSkalar($(this).attr('speed'));
 	});
 	
 	//button for path recording
 	$('#btn_path_rec').click(function(){
 		if(actFabObj.isRecording){
-			
 			let first_dot = new fabric.Circle({
 				left:   actFabObj.left,
 				top:    actFabObj.top,
@@ -167,12 +174,12 @@ jQuery(function($){
 			//actFabObj.PathArray.unshift(first_dot);
 			
 			//clear old route and save path to AGObject and set movable true
-			actFabObj.AGObject.clearRoute();
+			getReferenceById(actFabObj.AGObjectID).clearRoute();
 			actFabObj.PathArray.forEach(function(ele){
-				actFabObj.AGObject.addRouteNode(new Vector3(ele.left/i_audicom._scale, 1, ele.top/i_audicom._scale));
+				getReferenceById(actFabObj.AGObjectID).addRouteNode(new Vector3(ele.left/i_audicom._scale, 1, ele.top/i_audicom._scale));
 			});
-			actFabObj.AGObject.movable = true;
-			actFabObj.AGObject.setSpeedSkalar(1);
+			getReferenceById(actFabObj.AGObjectID).movable = true;
+
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
@@ -188,8 +195,11 @@ jQuery(function($){
 			i_audicom._room_canvas.remove(ele);
 		});
 		actFabObj.PathArray = [];	
-		actFabObj.AGObject.clearRoute();
-		actFabObj.AGObject.movable = false;
+		getReferenceById(actFabObj.AGObjectID).clearRoute();
+		getReferenceById(actFabObj.AGObjectID).movable = false;
+		
+		
+		
 	});
 	
 	
@@ -211,20 +221,21 @@ jQuery(function($){
 		// actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
 		//
 		// actFabObj.secDoor = false;
-		// actFabObj.AGObject.clearRoute();
+		// getReferenceById(actFabObj.AGObjectID).clearRoute();
 	});
 
-	
-	
 	$('#btn_delete_object').click(function(){
 
-		actFabObj.AGObject.kill();
+		getReferenceById(actFabObj.AGObjectID).kill();
 		
 		//check if removed element was linked to portal or has path points and remove that stuff
 		//TODO wait for portal remove function in AGPortal
 		
 		if(actFabObj.type == 'enemy'){
 			actFabObj.PathArray.forEach(function(ele) {
+				i_audicom._room_canvas.remove(ele);
+			});
+			actFabObj.LineArray.forEach(function(ele) {
 				i_audicom._room_canvas.remove(ele);
 			});
 		}
@@ -237,6 +248,17 @@ jQuery(function($){
 				fab_buffer.secDoor = false;
 				fab_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);	
 			}
+			
+			if(actFabObj.line){
+				i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line.dot);
+				i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line);
+				i_audicom.getFabricObject(actFabObj.secDoor).line = false;
+				
+				i_audicom._room_canvas.remove(actFabObj.line.dot);
+				i_audicom._room_canvas.remove(actFabObj.line);
+				actFabObj.line.line = false;
+			}
+			
 		}
 		
 		i_audicom._room_canvas.remove(actFabObj);
@@ -246,11 +268,45 @@ jQuery(function($){
 		
 	});
 	
+	
+	
+	// //snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
+// 	i_audicom._room_canvas.on('object:moving', options => {
+//
+// 		getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
+//
+//
+//
+//
+// 		//Change wally to wall to reactivate scaling
+// 		if(options.target.type == 'wally'){
+//  			options.target.set({
+//  			   left: Math.round((options.target.left) / this._scale) * this._scale,
+//  			   top: Math.round((options.target.top) / this._scale) * this._scale
+//  			});
+// 		}
+// 		//options.target.AGObject.position = new Vector3((options.target.left - options.target.AGObject.size.x*this._scale/2)/this._scale, 1, (options.target.top - options.target.AGObject.size.z*this._scale/2)/this._scale);
+//
+// 		if(options.target.type == 'portal' && options.target.line){
+//
+// 			options.target.line.set({ 'x1': options.target.left, 'y1': options.target.top });
+// 			options.target.line.dot.set({ 'left': options.target.left-4, 'top': options.target.top-4 });
+// 			i_audicom.getFabricObject(options.target.secDoor).line.set({ 'x2': options.target.left, 'y2': options.target.top });
+// 			//i_audicom.getFabricObject(options.target.secDoor).line.dots[0].set({ 'left': options.target.left-4, 'top': options.target.top-4 });
+//
+// 		}
+//
+//
+// 	});
+	
+	
+	
+	
 	i_audicom._room_canvas.on('mouse:down', function(e){
 		
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording){
-			
+
 			let dot = new fabric.Circle({
 			    left:   getMouseCoords(e)[0]-4,
 			    top:    getMouseCoords(e)[1]-4,
@@ -260,27 +316,111 @@ jQuery(function($){
 				selectable: false,
 				type: 'path_dot'
 			});
-			i_audicom._room_canvas.add(dot);
+			
+			if(actFabObj.PathArray.length >= 1){
+				let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
+				let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
+					fill: i_audicom._colors[7][i_audicom._vision_mode],
+					stroke: i_audicom._colors[7][i_audicom._vision_mode],
+					strokeWidth: 2,
+					selectable: false,
+					evented: false,
+					type: 'path_line'
+				});
+				
+				actFabObj.LineArray.push(line);
+				i_audicom._room_canvas.add(line);
+			}
+			
 			actFabObj.PathArray.push(dot);
 			i_audicom._room_canvas.setActiveObject(actFabObj);
-		
-		
-		}else if(actFabObj.type=='portal' && actFabObj.isRecording){
+			i_audicom._room_canvas.add(dot);
 			
+		}else if(actFabObj.type=='portal' && actFabObj.isRecording){
 			
 			let obj_buffer = i_audicom._room_canvas.getActiveObject();
 
 			if(obj_buffer){
-				if(obj_buffer.AGObject.type == 'PORTAL'){
+				if(getReferenceById(obj_buffer.AGObjectID).type == 'PORTAL'){
 					//link the portal
 					//mark the portal in canvas
-					actFabObj.AGObject.linkPortals(obj_buffer.AGObject);
+					
+					i_audicom._room_canvas.setActiveObject(actFabObj);
+					
+					getReferenceById(actFabObj.AGObjectID).linkPortals(obj_buffer.AGObjectID);
 					actFabObj.isRecording = false;
 					$('#btn_path_linkdoors').find('i').removeClass('btn_path_rec_blink');
 					
+					//if there is a door, reset color and remove portal from second door
+					if(actFabObj.secDoor){
+						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+						i_audicom.getFabricObject(actFabObj.secDoor).secDoor = false;
+					}
+					
+					if(actFabObj.line){
+						
+						i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line.dot);
+						i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line);
+						i_audicom.getFabricObject(actFabObj.secDoor).line = false;
+						
+						i_audicom._room_canvas.remove(actFabObj.line.dot);
+						i_audicom._room_canvas.remove(actFabObj.line);
+						actFabObj.line.line = false;
+						
+						
+					}
+					
+					//obj_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+					
 					//link fabric objects
-					actFabObj.secDoor = i_audicom.room_canvas.getActiveObject().AGObject;
-					obj_buffer.secDoor = actFabObj.AGObject;
+					actFabObj.secDoor = obj_buffer.AGObjectID;
+					obj_buffer.secDoor = actFabObj.AGObjectID;
+					
+										
+					let dot_1 = new fabric.Circle({
+					    left:   actFabObj.left-4,
+					    top:    actFabObj.top-4,
+					    radius: 4,
+					    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+					    objectCaching: false,
+						selectable: false,
+						type: 'portal_dot'
+					});
+					let dot_2 = new fabric.Circle({
+					    left:   obj_buffer.left-4,
+					    top:    obj_buffer.top-4,
+					    radius: 4,
+					    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+					    objectCaching: false,
+						selectable: false,
+						type: 'portal_dot'
+					});
+					//draw line between portals
+					let line_1 = new fabric.Line([actFabObj.left, actFabObj.top,obj_buffer.left, obj_buffer.top],{
+						fill: i_audicom._colors[7][i_audicom._vision_mode],
+						stroke: i_audicom._colors[7][i_audicom._vision_mode],
+						strokeWidth: 2,
+						selectable: false,
+						evented: false,
+						type: 'portal_line',
+						dot: dot_1,
+					});
+					let line_2 = new fabric.Line([obj_buffer.left, obj_buffer.top,actFabObj.left, actFabObj.top],{
+						fill: i_audicom._colors[7][i_audicom._vision_mode],
+						stroke: i_audicom._colors[7][i_audicom._vision_mode],
+						strokeWidth: 2,
+						selectable: false,
+						evented: false,
+						type: 'portal_line',
+						dot: dot_2,
+						opacity: 0,
+					});
+					i_audicom._room_canvas.add(dot_1);
+					i_audicom._room_canvas.add(dot_2);
+					i_audicom._room_canvas.add(line_1);
+					i_audicom._room_canvas.add(line_2);
+					actFabObj.line = line_1;
+					obj_buffer.line = line_2;
 					
 					//colorize
 					//console.log(i_audicom._colors[5][i_audicom._vision_mode]);
@@ -288,8 +428,10 @@ jQuery(function($){
 					
 					i_audicom.room_canvas.renderAll();
 				}
+			}else{
+				i_audicom._room_canvas.setActiveObject(actFabObj);
 			}
-			i_audicom._room_canvas.setActiveObject(actFabObj);
+			
 			
 			
 		//deselect Object and hide Path-Points	
@@ -301,8 +443,21 @@ jQuery(function($){
 				actFabObj.PathArray.forEach(function(ele) {
 					ele.opacity = 0;
 				});
+				
+				actFabObj.LineArray.forEach(function(ele) {
+					ele.opacity = 0;
+				});
+				
+				
 			}else if(actFabObj.secDoor){
 				i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+				
+				if(actFabObj.line){
+					actFabObj.line.set("opacity", 0);
+					actFabObj.line.dot.set("opacity", 0);
+					i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 0);
+					
+				}
 			}
 			
 			$('#ui_part_right_inner').fadeOut(100, function(){});
@@ -313,71 +468,105 @@ jQuery(function($){
 		
 	});
 	
-	
 	//fabric listeners
 	i_audicom._room_canvas.on('selection:created', function(e){
 		
-		//only load properties if another element is selected
-		if(actFabObj != i_audicom._room_canvas.getActiveObject()){
-			actFabObj = i_audicom._room_canvas.getActiveObject();
-			loadObject(actFabObj.type);
-		}
 		
-		//if element has path array -> show path points
-		if(i_audicom._room_canvas.getActiveObject().PathArray){
-			actFabObj = i_audicom._room_canvas.getActiveObject();
-			actFabObj.PathArray.forEach(function(ele) {
-				ele.opacity = 1;
-			});
-		}else if(actFabObj.secDoor){
-			i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
-		}
 		
+		actFabObj = i_audicom._room_canvas.getActiveObject();
+		if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
+			if(!actFabObj.isRecording){
+				loadObject(actFabObj.type);
+				if(i_audicom._room_canvas.getActiveObject().PathArray){
+					actFabObj = i_audicom._room_canvas.getActiveObject();
+					actFabObj.PathArray.forEach(function(ele) {
+						ele.opacity = 1;
+					});
+					actFabObj.LineArray.forEach(function(ele) {
+						ele.opacity = 1;
+					});
+				}else if(actFabObj.secDoor){
+					
+					console.log(actFabObj.line);
+					
+					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+					
+					if(actFabObj.line){
+						actFabObj.line.set("opacity", 1);
+						actFabObj.line.dot.set("opacity", 1);
+						i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 1);
+					}
+					
+					
+					
+				}	
+			}
+		}
 	});
 	
 	
 	i_audicom._room_canvas.on('selection:updated', function(e){
-		
 		//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
-		
-		if(actFabObj.isRecording && actFabObj.type=='portal'){
-	
+		if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
 			// let actObj_buffer = room_canvas.getActiveObject();
 //
 // 			if(actObj_buffer.type=='portal'){
 // 				actFabObj.secDoor = room_canvas.getActiveObject();
 // 				actObj_buffer.secDoor = actObj;
-// 				actFabObj.AGObject.linkPortals(actObj_buffer.AGObject);
+// 				getReferenceById(actFabObj.AGObjectID).linkPortals(actObj_buffer.AGObjectID);
 //
 // 			}
 			//canvas.setActiveObject(actObj);
 	
 		}else{
-			if(actFabObj != i_audicom._room_canvas.getActiveObject() && actFabObj.PathArray){
-				//if another object is selected hide path of current object
-				actFabObj.PathArray.forEach(function(ele) {
-					ele.opacity = 0;
-				});
-				
-				
-			//show path-points if object has a path array
-			}else if(i_audicom._room_canvas.getActiveObject().PathArray){
-				
+			
+			//if another element is selected reset highlights and hide paths
+			if(actFabObj != i_audicom._room_canvas.getActiveObject()){	
+				if(actFabObj.PathArray){
+					actFabObj.PathArray.forEach(function(ele) {
+						ele.opacity = 0;
+					});
+					actFabObj.LineArray.forEach(function(ele) {
+						ele.opacity = 0;
+					});
+				}else if(actFabObj.secDoor){
+					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+					if(actFabObj.line){
+						
+						actFabObj.line.set("opacity", 0);
+						actFabObj.line.dot.set("opacity", 0);
+						i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 0);
+					}
+				}
+			}
+			
+			//show highlights or paths of new active fab object
+			if(i_audicom._room_canvas.getActiveObject().PathArray){
 				i_audicom._room_canvas.getActiveObject().PathArray.forEach(function(ele) {
 					ele.opacity = 1;
 				});
-			//if another object is selected hide highlight-color of portal
-			}else if(actFabObj != i_audicom._room_canvas.getActiveObject() && actFabObj.secDoor){
-				i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-			}else{
+				i_audicom._room_canvas.getActiveObject().LineArray.forEach(function(ele) {
+					ele.opacity = 1;
+				});
 				
-				if(i_audicom._room_canvas.getActiveObject().secDoor){
-					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
-				}	
+			//if another object is selected hide highlight-color of portal
+			}else if(i_audicom._room_canvas.getActiveObject().secDoor){
+				i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+				
+				
+				if(i_audicom._room_canvas.getActiveObject().line){
+				
+					
+					i_audicom._room_canvas.getActiveObject().line.set("opacity", 1);
+					i_audicom._room_canvas.getActiveObject().line.dot.set("opacity", 1);
+					i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).line.dot.set("opacity", 1);
+				}
+				
 			}
 			actFabObj = i_audicom._room_canvas.getActiveObject();
+			loadObject(actFabObj.type);
 		}
-		loadObject(actFabObj.type);
+		
 	});
 	
 	

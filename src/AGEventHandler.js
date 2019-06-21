@@ -6,7 +6,7 @@ import {Event} from "./Event.js";
 import {AGObject} from "./AGObject.js";
 import type {Action, Trigger} from "./EventType.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history} from "./AGEngine.js";
+import {g_history, g_loading} from "./AGEngine.js";
 
 export class AGEventHandler{
     get ID() {
@@ -23,7 +23,7 @@ export class AGEventHandler{
 
     addEvent(event:Event){
         this._events.push(event);
-        g_history.ike(this, this.addEvent, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.addEvent, arguments);
     }
 
     removeEvent(event:Event){
@@ -35,7 +35,8 @@ export class AGEventHandler{
 
     constructor(){
         this._ID = Counter.next();
-        g_references.set(this, this._ID);
+        g_references.set(this._ID, this);
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
         console.log("[AGEventHandler] Creating AGEventHandler object [ID: " + this._ID + "].");
         this._events = [];
     }

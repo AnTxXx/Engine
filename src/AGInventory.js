@@ -3,21 +3,26 @@
 import {AGItem} from "./AGItem.js";
 import {AGObject} from "./AGObject.js";
 import {g_history} from "./AGEngine.js";
-import {g_references} from "./AGEngine.js";
+import {g_references, g_loading} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class AGInventory{
 
     _inventory:Array<AGItem>;
     _attachedTo:AGObject;
+    _ID:number;
+
+    get ID() {
+        return this._ID;
+    }
 
     constructor(object:AGObject) {
         this._ID = Counter.next();
-        g_references.set(this, this._ID);
+        g_references.set(this._ID, this);
         console.log("[AGInventory] Creating AGInventory object [ID: " + this._ID + "]. for Object: " + object.name);
         this._inventory = [];
         this._attachedTo = object;
-        g_history.ike(this, this.constructor, arguments, this);
     }
 
 
@@ -29,10 +34,17 @@ export class AGInventory{
         this._inventory = value;
     }
 
+    addItem(itemID:number){
+        let item = getReferenceById(itemID);
+        this._inventory.push(item);
+        console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
+        if(!g_loading) g_history.ike(this._ID, this.addItem, arguments);
+    }
+
+    //can only be triggered through events
     addItem(item:AGItem){
         this._inventory.push(item);
         console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
-        g_history.ike(this, this.addItem, arguments, this);
     }
 
     removeItem(item:AGItem){
