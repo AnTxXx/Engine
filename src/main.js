@@ -107,14 +107,6 @@ g_history.rebuild();
 //console.log(g_gamearea.AGRooms[0].AGobjects);
 //console.log(g_references);
 
-export let i_audicom = new IAudiCom(room_1ID);
-
-//render the objects
-i_audicom.renderAGRoom(room_1ID);
-i_audicom.renderAGObject(playerID);
-i_audicom.renderAGObject(gegnerID);
-i_audicom.renderAGObject(door1ID);
-i_audicom.renderAGObject(door2ID);
-i_audicom.renderAGObject(exit1ID);
+export let i_audicom = new IAudiCom();
 
 // TODO: eine art pushforce pro objekt, damit das staerkere Objekt das schwaechere zurueckdraengen kann?
