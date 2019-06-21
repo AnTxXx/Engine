@@ -34,7 +34,7 @@ export class AGRoom {
 
     set live(value:boolean) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments);
         this._live = value;
     }
     get positionOnGameArea(): Vector3 {
@@ -72,7 +72,7 @@ export class AGRoom {
 
     set listener(value: AGObject) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments);
 
         this._listener = value;
     }
@@ -92,7 +92,7 @@ export class AGRoom {
     // $FlowFixMe
     _audioContext;
 
-    get AGobjects(): AGObject[] {
+    get AGobjects(): Array<AGObject> {
         return this._AGobjects;
     }
     _name:string;
@@ -172,7 +172,9 @@ export class AGRoom {
 
         this._lastTime = new Date(0);
 
-        if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
+        this._AGobjects = [];
+
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
     }
 
     _AGobjects:Array<AGObject>;
@@ -188,7 +190,7 @@ export class AGRoom {
         }
         let gameObject = getReferenceById(gameObjectID);
         this._AGobjects.push(gameObject);
-        if(!g_loading) g_history.ike(this, this.add, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.add, arguments);
         gameObject.room = this;
     }
 

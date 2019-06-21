@@ -34,7 +34,7 @@ export class AGGameArea {
 
     set listener(value:number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments);
         this._listener = getReferenceById(value);
     }
     get AGRooms(): Array<AGRoom> {
@@ -77,9 +77,9 @@ export class AGGameArea {
     _history:AGSaLo;
 
     constructor(name:string, size:Vector3){
-        //this._ID = Counter.next();
-        //g_references.set(this._ID, this);
-        //console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
+        this._ID = Counter.next();
+        g_references.set(this._ID, this);
+        console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
 
         this.AGRooms = [];
         this.name = name;
@@ -94,12 +94,12 @@ export class AGGameArea {
         // Connect the scene’s binaural output to stereo out.
         this._resonanceAudioScene.output.connect(this._audioContext.destination);
 
-        //if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
     }
 
     addRoom(room:number){
         this.AGRooms.push(getReferenceById(room));
-        if(!g_loading) g_history.ike(this, this.addRoom, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.addRoom, arguments);
     }
 
     clearRooms(){

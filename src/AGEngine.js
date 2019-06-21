@@ -9,12 +9,13 @@ import {Vector3} from "./js/three/Vector3.js";
 
 let debug = 0;
 
+export let g_loading:boolean = false;
 export let g_references:Map<number, Object> = new Map();
 export let g_history:AGSaLo = new AGSaLo();
 export let g_eventHandler:AGEventHandler = new AGEventHandler();
 export let g_gamearea:AGGameArea = new AGGameArea("Area", new Vector3(30,2.5,10));
 export let g_controls:AGNavigation;
-export let g_loading:boolean = false;
+
 
 //let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
 //let AGGameArea = new AGGameArea("main", new Vector3(20,20,0)); //simulate something "static", probably (quite sure :p) not state of the art

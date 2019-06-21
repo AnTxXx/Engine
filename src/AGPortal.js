@@ -62,12 +62,12 @@ export class AGPortal extends AGObject{
         console.log("[AGPortal] Linking Portal: " + this.name + " to " + portal.name);
         portal.exit = (this);
         this.exit = portal;
-        if(!g_loading) g_history.ike(this, this.linkPortals, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.linkPortals, arguments);
     }
 
     addCondition(condition:AGCondition){
         this._conditions.push(condition);
-        if(!g_loading) g_history.ike(this, this.addCondition, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.addCondition, arguments);
     }
 
     /**

@@ -22,7 +22,7 @@ export class AGObject {
 
     set damage(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set, arguments);
         this._damage = value;
     }
 
@@ -32,7 +32,7 @@ export class AGObject {
 
     set dangerous(value: boolean) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set, arguments);
         this._dangerous = value;
     }
     get range(): number {
@@ -41,7 +41,7 @@ export class AGObject {
 
     set range(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set, arguments);
         this._range = value;
     }
     get destructible():boolean {
@@ -50,7 +50,7 @@ export class AGObject {
 
     set destructible(value:boolean) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set, arguments);
         this._destructible = value;
     }
 
@@ -60,7 +60,7 @@ export class AGObject {
 
     set health(value:number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set, arguments);
         this._health = value;
     }
     get ID() {
@@ -112,7 +112,7 @@ export class AGObject {
 
     set movable(value:boolean) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set, arguments);
         this._movable = value;
     }
     get size(): Vector3 {
@@ -146,12 +146,12 @@ export class AGObject {
 
     set speed(value: Vector3) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set, arguments);
         this._speed = value;
     }
 
     setSpeedSkalar(value:number){
-        if(!g_loading) g_history.ike(this, this.setSpeedSkalar, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.setSpeedSkalar, arguments);
         this.speed = new Vector3(value, value, value);
     }
 
@@ -166,7 +166,7 @@ export class AGObject {
 
     set tag(value: string) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set, arguments);
         this._tag = value;
     }
 
@@ -211,7 +211,7 @@ export class AGObject {
         for(i = 0; i < routes.length; i++) {
             this._route.push(routes[i]);
         }
-        if(!g_loading) g_history.ike(this, this.addRoute, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.addRoute, arguments);
     }
 
     /**
@@ -242,7 +242,7 @@ export class AGObject {
         this._ID = Counter.next();
         g_references.set(this._ID, this);
 
-        if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
 
         console.log("[AGObject] Creating AGObject object [ID: " + this._ID + "]: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
@@ -276,7 +276,7 @@ export class AGObject {
     addSoundSource(sourceID: number){
         let source = getReferenceById(sourceID);
         source.setPosition(this._position);
-        if(!g_loading) g_history.ike(this, this.addSoundSource, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.addSoundSource, arguments);
         this._AGSoundSources.push(source);
     }
 

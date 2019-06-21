@@ -15,7 +15,7 @@ export class AGPlayer extends AGObject {
     set hitSound(valueID: number) {
         let value = getReferenceById(valueID);
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments);
         this._hitSound = value;
     }
 

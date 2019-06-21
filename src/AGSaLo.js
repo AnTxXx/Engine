@@ -2,6 +2,7 @@
 
 import {g_references, g_loading, setLoading, g_gamearea} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
+import {getReferenceById} from "./AGEngine.js";
 
 export class AGSaLo {
 
@@ -11,23 +12,22 @@ export class AGSaLo {
         this._savedObjects = [];
     }
 
-    ike(obj:Object, func:Function, args:Array<Object>, context:Object){
+    ike(objID:number, func:Function, args:Array<Object>){
         let _args = Array.prototype.slice.call(args);
-        this._savedObjects.push(new SaLoCommand(obj, func, _args, context));
+        this._savedObjects.push(new SaLoCommand(objID, func, _args));
         //g_references.set(obj.id, obj);
     }
 
     rebuild(){
         g_references.clear();
         Counter.reset();
-        g_gamearea.clearRooms();
         setLoading(true);
         for(let i = 0; i < this._savedObjects.length; i++){
             let obj = this._savedObjects[i];
             if(obj.func.toString().startsWith('class')) {
                 let newObject = Reflect.construct(obj.func, obj.args);
             } else {
-                obj.func.apply(obj.context, obj.args);
+                obj.func.apply(getReferenceById(obj.objID), obj.args);
             }
         }
         setLoading(false);
@@ -36,9 +36,12 @@ export class AGSaLo {
 
 
 export class SaLoCommand {
-    get obj(): Object {
-        return this._obj;
+    get objID(): number {
+        return this._objID;
     }
+    /*get obj(): Object {
+        return this._obj;
+    }*/
 
     get func() {
         return this._func;
@@ -48,19 +51,20 @@ export class SaLoCommand {
         return this._args;
     }
 
+    /*
     get context() {
         return this._context;
-    }
+    }*/
 
-    _obj:Object;
+    _objID:number;
     _func:Function;
     _args:Array<Object>;
-    _context:Object;
+    //_context:Object;
 
-    constructor(obj: Object, func:Function, args:Array<Object>, context:Object) {
-        this._obj = obj;
+    constructor(objID: number, func:Function, args:Array<Object>) {
         this._func = func;
         this._args = args;
-        this._context = context;
+        this._objID = objID;
+        //this._context = context;
     }
 }

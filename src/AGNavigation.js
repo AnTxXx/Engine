@@ -159,7 +159,7 @@ export class AGNavigation {
         gRight = right;
         gInteract = interact;
 
-        if(!g_loading) g_history.ike(this, this.constructor, arguments, this);
+        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
         //moveTimestamp = new Date(0);
     }
 
