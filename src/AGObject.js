@@ -226,6 +226,7 @@ export class AGObject {
      * @param node The waypoint to be added.
      */
     addRouteNode(node:Vector3){
+        if(!g_loading) g_history.ike(this._ID, this.addRouteNode, arguments);
         this._route.push(node);
     }
 
