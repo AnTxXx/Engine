@@ -65,6 +65,7 @@ export class AGSoundSource
     }
 
     set tag(value: string) {
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set, arguments);
         this._tag = value;
     }
 

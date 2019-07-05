@@ -142,9 +142,9 @@ export class AGObject {
         // $FlowFixMe
         if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'position').set, arguments);
         this._position = value;
-        console.log(this._position);
-        console.log(this._direction);
-        console.log(this._size);
+        //console.log(this._position);
+        //console.log(this._direction);
+        //console.log(this._size);
     }
     get position(): Vector3 {
         return this._position;

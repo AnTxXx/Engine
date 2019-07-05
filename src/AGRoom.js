@@ -208,7 +208,7 @@ export class AGRoom {
     betweenPlayerObjectRayIntersect(obj:AGObject):Array<AGObject>{
         let returnArr:Array<AGObject> = [];
         for(let i = 0; i < this._AGobjects.length; i++){
-            if(hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener) returnArr.push((this._AGobjects[i]));
+            if(obj != null && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener) returnArr.push((this._AGobjects[i]));
         }
         return returnArr;
     }

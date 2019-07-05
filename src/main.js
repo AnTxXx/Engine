@@ -25,7 +25,7 @@ setControl(getReferenceById(controlsID));
 //let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
 //let areaID:number = getIdByReference(g_gamearea);
 
-let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 19.0), new Vector3(10.0, 0.0, 10.0));
+let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID:number = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 
@@ -43,11 +43,17 @@ let portalCorridorToFinal:AGPortal = new AGPortal("PortalCorridorToFinal", new V
 let portalFinalFromCorridor:AGPortal = new AGPortal("PortalFinalFromCorridor", new Vector3(1.0, 1.0, 9.0), new Vector3(1,0,0), new Vector3(1,1,1));
 let wallFirstFinalRoom:AGObject = new AGObject("WallFinalRoomFirst", new Vector3(4.5, 1.0, 8.0), new Vector3(1,0,0), new Vector3(1,1,4));
 let wallSecondFinalRoom:AGObject = new AGObject("WallFinalRoomSecond", new Vector3(8.1, 1.0, 5.6), new Vector3(1,0,0), new Vector3(1,1,3.34));
-let waterFall:AGObject = new AGObject("Waterfall", new Vector3(8.7, 1, 0.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let waterFall_1:AGObject = new AGObject("Waterfall", new Vector3(8.7, 1, 0.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let waterFall_2:AGObject = new AGObject("Waterfall", new Vector3(4.5, 1, 4.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let waterFall_3:AGObject = new AGObject("Waterfall", new Vector3(8, 1, 9.3), new Vector3(1,0,0), new Vector3(1,1,1));
+let waterFall_4:AGObject = new AGObject("Waterfall", new Vector3(11, 1, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
 let steps:AGSoundSource = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
 let ouch:AGSoundSource = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
-let magic:AGSoundSource = new AGSoundSource("Magic", "sounds/steps.wav", true, 1, room_1ID);
-let waterfall:AGSoundSource = new AGSoundSource("Waterfall", "sounds/ouch.mp3", false, 1, room_1ID);
+let magic:AGSoundSource = new AGSoundSource("Magic", "sounds/magic.mp3", true, 1, room_1ID);
+let waterfall_1:AGSoundSource = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, room_1ID);
+let waterfall_2:AGSoundSource = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, room_1ID);
+let waterfall_3:AGSoundSource = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, room_1ID);
+let waterfall_4:AGSoundSource = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, room_1ID);
 
 
 let playerID:number = getIdByReference(player);
@@ -64,11 +70,18 @@ let portalCorridorToFinalID:number = getIdByReference(portalCorridorToFinal);
 let portalFinalFromCorridorID:number = getIdByReference(portalFinalFromCorridor);
 let wallFirstFinalRoomID:number = getIdByReference(wallFirstFinalRoom);
 let wallSecondFinalRoomID:number = getIdByReference(wallSecondFinalRoom);
-let waterFallID:number = getIdByReference(waterFall);
 let stepsID:number = getIdByReference(steps);
 let ouchID:number = getIdByReference(ouch);
 let magicID:number = getIdByReference(magic);
-let waterfallID:number = getIdByReference(waterfall);
+let waterfall_1ID:number = getIdByReference(waterfall_1);
+let waterfall_2ID:number = getIdByReference(waterfall_2);
+let waterfall_3ID:number = getIdByReference(waterfall_3);
+let waterfall_4ID:number = getIdByReference(waterfall_4);
+
+let waterFall_1ID:number = getIdByReference(waterFall_1);
+let waterFall_2ID:number = getIdByReference(waterFall_2);
+let waterFall_3ID:number = getIdByReference(waterFall_3);
+let waterFall_4ID:number = getIdByReference(waterFall_4);
 
 g_gamearea.listener = getIdByReference(player);
 getReferenceById(room_1ID).listener = g_gamearea.listener;
@@ -88,7 +101,10 @@ getReferenceById(room_1ID).add(portalCorridorToFinalID);
 getReferenceById(room_1ID).add(portalFinalFromCorridorID);
 getReferenceById(room_1ID).add(wallFirstFinalRoomID);
 getReferenceById(room_1ID).add(wallSecondFinalRoomID);
-getReferenceById(room_1ID).add(waterFallID);
+getReferenceById(room_1ID).add(waterFall_1ID);
+getReferenceById(room_1ID).add(waterFall_2ID);
+getReferenceById(room_1ID).add(waterFall_3ID);
+getReferenceById(room_1ID).add(waterFall_4ID);
 
 
 getReferenceById(wallWestSmallRoomID).tag = "WALL";
@@ -98,20 +114,26 @@ getReferenceById(wallLeftCorridorID).tag = "WALL";
 getReferenceById(wallRightCorridorID).tag = "WALL";
 getReferenceById(wallFirstFinalRoomID).tag = "WALL";
 getReferenceById(wallSecondFinalRoomID).tag = "WALL";
-getReferenceById(waterFallID).tag = "WALL";
+getReferenceById(waterFall_1ID).tag = "WALL";
+getReferenceById(waterFall_2ID).tag = "WALL";
+getReferenceById(waterFall_3ID).tag = "WALL";
+getReferenceById(waterFall_4ID).tag = "WALL";
 
 //Soundtags
 getReferenceById(stepsID).tag = "STEPS";
 getReferenceById(ouchID).tag = "OUCH";
 getReferenceById(magicID).tag = "MAGIC";
-getReferenceById(waterfallID).tag = "WATERFALL";
+getReferenceById(waterfall_1ID).tag = "WATERFALL";
+getReferenceById(waterfall_2ID).tag = "WATERFALL";
+getReferenceById(waterfall_3ID).tag = "WATERFALL";
+getReferenceById(waterfall_4ID).tag = "WATERFALL";
 
 //Skeleton
 getReferenceById(skeletonID).setSpeedSkalar(2);
 getReferenceById(skeletonID).movable = true;
 getReferenceById(skeletonID).destructible = true;
 getReferenceById(skeletonID).health = 4;
-getReferenceById(skeletonID).addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
+getReferenceById(skeletonID).addRoute(new Vector3(12,1,0.5), new Vector3(12,1,2.5));
 
 getReferenceById(skeletonID).addSoundSource(stepsID);
 getReferenceById(skeletonID).tag = "ENEMY";
@@ -126,6 +148,18 @@ getReferenceById(playerID).hitSound = ouchID;
 getReferenceById(playerID).dangerous = true;
 getReferenceById(playerID).damage = 1;
 getReferenceById(playerID).range = 2;
+
+//Waterfall
+getReferenceById(waterFall_1ID).collidable = false;
+getReferenceById(waterFall_2ID).collidable = false;
+getReferenceById(waterFall_3ID).collidable = false;
+getReferenceById(waterFall_4ID).collidable = false;
+
+getReferenceById(waterFall_1ID).addSoundSource(waterfall_1ID);
+getReferenceById(waterFall_2ID).addSoundSource(waterfall_2ID);
+getReferenceById(waterFall_3ID).addSoundSource(waterfall_3ID);
+getReferenceById(waterFall_4ID).addSoundSource(waterfall_4ID);
+
 
 //EVENT ITEM TEST
 
