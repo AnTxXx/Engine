@@ -25,76 +25,96 @@ setControl(getReferenceById(controlsID));
 //let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
 //let areaID:number = getIdByReference(g_gamearea);
 
-let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 10.0), new Vector3(5.0, 0.0, 5.0));
+let room_1:AGRoom = new AGRoom("Erster Raum", new Vector3(10.0, 2.5, 19.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID:number = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 
-let gegner:AGObject = new AGObject("gegner", new Vector3(2,1,8), new Vector3(1,0,0), new Vector3(1,1,1));
-let gegner_ss:AGSoundSource = new AGSoundSource("schritte", "sounds/steps.wav", true, 1, room_1ID);
-let player:AGPlayer = new AGPlayer("spieler", new Vector3(8.0, 1.0, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
-let player_hit:AGSoundSource = new AGSoundSource("hit", "sounds/ouch.mp3", false, 1, room_1ID);
-let door1:AGPortal = new AGPortal("Tuere 1", new Vector3(5.0, 1.0, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
-let door2:AGPortal = new AGPortal("Tuere 2", new Vector3(3.0, 1.0, 3.0), new Vector3(1,0,0), new Vector3(1,1,1));
+let player:AGPlayer = new AGPlayer("Player", new Vector3(18.2, 1.0, 8.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let exit:AGRoomExit = new AGRoomExit("Exit", new Vector3(18.0, 1.0, 5.0), new Vector3(1,0,0), new Vector3(1,1,1));
+let wallWestSmallRoom:AGObject = new AGObject("WallSmallRoomWest", new Vector3(13.5, 1.0, 8.0), new Vector3(1,0,0), new Vector3(1,1,4));
+let wallNorthSmallRoom:AGObject = new AGObject("WallSmallRoomNorth", new Vector3(16.5, 1.0, 6.5), new Vector3(1,0,0), new Vector3(5,1,1));
+let portalSmallRoom:AGPortal = new AGPortal("PortalSmallRoom", new Vector3(14.5, 1.0, 8.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let wallSouthCorridor:AGObject = new AGObject("WallCorridorSouth", new Vector3(9.5, 1.0, 3.5), new Vector3(1,0,0), new Vector3(19,1,1));
+let wallLeftCorridor:AGObject = new AGObject("WallCorridorLeft", new Vector3(4.0, 1.0, 2.0), new Vector3(1,0,0), new Vector3(1,1,1.65));
+let wallRightCorridor:AGObject = new AGObject("WallCorridorRight", new Vector3(7.5, 1.0, 2.2), new Vector3(1,0,0), new Vector3(1,1,1.65))
+let portalCorridorRoomFromSmallRoom:AGPortal = new AGPortal("PortalCorridorRoomFromSmallRoom", new Vector3(1.0, 1.0, 1.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let skeleton:AGObject = new AGObject("Skeleton", new Vector3(11.5, 1, 2.5), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
+let portalCorridorToFinal:AGPortal = new AGPortal("PortalCorridorToFinal", new Vector3(17.5, 1.0, 1.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let portalFinalFromCorridor:AGPortal = new AGPortal("PortalFinalFromCorridor", new Vector3(1.0, 1.0, 9.0), new Vector3(1,0,0), new Vector3(1,1,1));
+let wallFirstFinalRoom:AGObject = new AGObject("WallFinalRoomFirst", new Vector3(4.5, 1.0, 8.0), new Vector3(1,0,0), new Vector3(1,1,4));
+let wallSecondFinalRoom:AGObject = new AGObject("WallFinalRoomSecond", new Vector3(8.1, 1.0, 5.7), new Vector3(1,0,0), new Vector3(1,1,3.34));
+let waterFall:AGObject = new AGObject("Waterfall", new Vector3(8.7, 1, 0.5), new Vector3(1,0,0), new Vector3(1,1,4));
+let skeletonSound:AGSoundSource = new AGSoundSource("SkeletonSound", "sounds/steps.wav", true, 1, room_1ID);
+let playerHit:AGSoundSource = new AGSoundSource("hit", "sounds/ouch.mp3", false, 1, room_1ID);
 
-let exit1:AGRoomExit = new AGRoomExit("Ausgang", new Vector3(5.0, 1.0, 1.0), new Vector3(1,0,0), new Vector3(1,1,1));
 
-let gegnerID:number = getIdByReference(gegner);
-let gegner_ssID:number = getIdByReference(gegner_ss);
 let playerID:number = getIdByReference(player);
-let player_hitID:number = getIdByReference(player_hit);
-let door1ID:number = getIdByReference(door1);
-let door2ID:number = getIdByReference(door2);
-let exit1ID:number = getIdByReference(exit1);
-
-//let wallSOUTH:AGObject = new AGObject("wall_south", new Vector3(5,1,10), new Vector3(1,0,0), new Vector3(5,1,1));
+let exitID:number = getIdByReference(exit);
+let wallWestSmallRoomID:number = getIdByReference(wallWestSmallRoom);
+let wallNorthSmallRoomID:number = getIdByReference(wallNorthSmallRoom);
+let portalSmallRoomID:number = getIdByReference(portalSmallRoom);
+let wallSouthCorridorID:number = getIdByReference(wallSouthCorridor);
+let wallLeftCorridorID:number = getIdByReference(wallLeftCorridor);
+let wallRightCorridorID:number = getIdByReference(wallRightCorridor);
+let portalCorridorRoomFromSmallRoomID:number = getIdByReference(portalCorridorRoomFromSmallRoom);
+let skeletonID:number = getIdByReference(skeleton);
+let portalCorridorToFinalID:number = getIdByReference(portalCorridorToFinal);
+let portalFinalFromCorridorID:number = getIdByReference(portalFinalFromCorridor);
+let wallFirstFinalRoomID:number = getIdByReference(wallFirstFinalRoom);
+let wallSecondFinalRoomID:number = getIdByReference(wallSecondFinalRoom);
+let waterFallID:number = getIdByReference(waterFall);
+let skeletonSoundID:number = getIdByReference(skeletonSound);
+let playerHitID:number = getIdByReference(playerHit);
 
 g_gamearea.listener = getIdByReference(player);
+getReferenceById(room_1ID).listener = g_gamearea.listener;
 
-getReferenceById(gegnerID).addSoundSource(gegner_ssID);
-getReferenceById(gegnerID).tag = "ENEMY";
+//Add ObjectsToRoom
+getReferenceById(room_1ID).add(playerID);
+getReferenceById(room_1ID).add(exitID);
+getReferenceById(room_1ID).add(wallWestSmallRoomID);
+getReferenceById(room_1ID).add(wallNorthSmallRoomID);
+getReferenceById(room_1ID).add(portalSmallRoomID);
+getReferenceById(room_1ID).add(wallSouthCorridorID);
+getReferenceById(room_1ID).add(wallLeftCorridorID);
+getReferenceById(room_1ID).add(wallRightCorridorID);
+getReferenceById(room_1ID).add(portalCorridorRoomFromSmallRoomID);
+getReferenceById(room_1ID).add(skeletonID);
+getReferenceById(room_1ID).add(portalCorridorToFinalID);
+getReferenceById(room_1ID).add(portalFinalFromCorridorID);
+getReferenceById(room_1ID).add(wallFirstFinalRoomID);
+getReferenceById(room_1ID).add(wallSecondFinalRoomID);
+getReferenceById(room_1ID).add(waterFallID);
 
-getReferenceById(room_1ID).add(gegnerID);
-getReferenceById(room_1ID).add(door1ID);
-getReferenceById(room_1ID).add(door2ID);
-getReferenceById(room_1ID).add(exit1ID);
-//room_1.add(wallSOUTH);
+//Skeleton
+getReferenceById(skeletonID).setSpeedSkalar(2);
+getReferenceById(skeletonID).movable = true;
+getReferenceById(skeletonID).destructible = true;
+getReferenceById(skeletonID).health = 4;
+getReferenceById(skeletonID).addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
 
-//player.setSpeedSkalar(1);
+getReferenceById(skeletonID).addSoundSource(skeletonSoundID);
+getReferenceById(skeletonID).tag = "ENEMY";
+
+//Link Portals
+getReferenceById(portalSmallRoomID).linkPortals(portalCorridorRoomFromSmallRoomID);
+getReferenceById(portalCorridorToFinalID).linkPortals(portalFinalFromCorridorID);
+
 getReferenceById(playerID).speed = new Vector3(0.1, 0.0, 0.1);
-getReferenceById(playerID).hitSound = player_hitID;
+getReferenceById(playerID).hitSound = playerHitID;
 
 getReferenceById(playerID).dangerous = true;
 getReferenceById(playerID).damage = 1;
 getReferenceById(playerID).range = 2;
 
-getReferenceById(room_1ID).add(playerID);
-getReferenceById(room_1ID).listener = g_gamearea.listener;
-
-//gegner.addRoute(new Vector3(1,1,10), new Vector3(10,1,10), new Vector3(10, 1, 10), new Vector3(1,1,1));
-getReferenceById(gegnerID).addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
-
-
-//gegner.setSpeedSkalar(1);
-//gegner.movable = true;
-
-getReferenceById(gegnerID).setSpeedSkalar(2);
-getReferenceById(gegnerID).movable = true;
-
-getReferenceById(gegnerID).destructible = true;
-getReferenceById(gegnerID).health = 4;
-
-getReferenceById(door1ID).linkPortals(door2ID);
-
-
 //EVENT ITEM TEST
 
-let key:AGItem = new AGItem("Schluessel", "Ein Schluessel zum Oeffnen von Tueren.", 1);
+/*let key:AGItem = new AGItem("Schluessel", "Ein Schluessel zum Oeffnen von Tueren.", 1);
 let keyID:number = getIdByReference(key);
 
 getReferenceById(gegnerID).inventory.addItem(keyID);
 g_eventHandler.addEvent(new Event(gegnerID, "ONCONTACT", "MOVE", playerID, keyID, 1));
-getReferenceById(door1ID).addCondition(new AGCondition(playerID, "INVENTORY", keyID));
-
+getReferenceById(door1ID).addCondition(new AGCondition(playerID, "INVENTORY", keyID));*/
 //EVENT ITEM TEST
 
 getReferenceById(room_1ID).live = true;
