@@ -140,6 +140,15 @@ jQuery(function($){
 				$('#ui_delete_box').show();
 			}
 			
+			
+			if(getReferenceById(actFabObj.AGObjectID).collidable){
+				$('#cb_colli').prop('checked', true);
+			}else{
+				
+				$('#cb_colli').prop('checked', false);
+			}
+			
+			
 			$('.btn_ss').removeClass('ss_active');
 			//ICI
 			let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
@@ -157,14 +166,6 @@ jQuery(function($){
 					  	
 					};
 				}
-		
-			
-			
-			
-				
-			
-			
-			
 			
 			setTimeout(function(){
 				$('#ui_part_right_inner').fadeIn(100);

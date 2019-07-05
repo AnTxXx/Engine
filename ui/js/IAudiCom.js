@@ -110,7 +110,7 @@ export class IAudiCom {
 		this._room_canvas.renderAll();
 
 		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,.btn,#canvas_container,label" ).toggleClass("contrast");
+		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,.btn,#canvas_container,label,.gegner_speed_active,.ss_active" ).toggleClass("contrast");
 
 	}
 	

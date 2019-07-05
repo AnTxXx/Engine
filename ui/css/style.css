@@ -399,6 +399,11 @@ body.contrast{
 	color:white;
 }
 
+.gegner_speed_active.contrast, .ss_active.contrast{
+	background-color:#d077d4 !important;
+	
+}
+
 
 #id_{
 	color:#999;
@@ -410,4 +415,6 @@ body.contrast{
 #ui_sound_box{
 	margin:20px 0;
 }
+
+
 
