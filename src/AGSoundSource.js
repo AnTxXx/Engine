@@ -65,6 +65,7 @@ export class AGSoundSource
     }
 
     set tag(value: string) {
+        // $FlowFixMe
         if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set, arguments);
         this._tag = value;
     }
@@ -142,14 +143,14 @@ export class AGSoundSource
         //TODO: activate filter when obstruction between listener and soundsource
         this._obstructionFilter = this.audioContext.createBiquadFilter();
         this._obstructionFilter.type = "lowpass";
-        this._obstructionFilter.frequency.value = 400;
-        this._obstructionFilter.gain.value = -10;
+        this._obstructionFilter.frequency.value = 300;
+        this._obstructionFilter.gain.value = -8;
 
         //this.audioElementSource.connect(this. _obstructionFilter);
         //this. _obstructionFilter.connect(this.source.input);
 
         this.source.setRolloff('logarithmic');
-        this.source.setMaxDistance(6);
+        this.source.setMaxDistance(8);
 
         this.audioElementSource.connect(this.source.input);
         this._name = name;
@@ -188,7 +189,7 @@ export class AGSoundSource
         }
 
         //check objects between sound source and player
-        //console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
+        //if(this._object.name.localeCompare("Waterfall3")==0) console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
         if(this._room.betweenPlayerObjectRayIntersect(this._object).length>0){
             this.audioElementSource.disconnect();
             this.audioElementSource.connect(this. _obstructionFilter);

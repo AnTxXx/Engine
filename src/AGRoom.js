@@ -208,7 +208,7 @@ export class AGRoom {
     betweenPlayerObjectRayIntersect(obj:AGObject):Array<AGObject>{
         let returnArr:Array<AGObject> = [];
         for(let i = 0; i < this._AGobjects.length; i++){
-            if(obj != null && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener) returnArr.push((this._AGobjects[i]));
+            if(obj != null && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener && (g_gamearea.listener.position.distanceTo(obj.position) < obj.position.distanceTo(this._AGobjects[i]))) returnArr.push((this._AGobjects[i]));
         }
         return returnArr;
     }
@@ -318,7 +318,7 @@ export class AGRoom {
             this._listener.position.y,
             this._listener.position.z);
 
-        this._resonanceAudioScene.setListenerOrientation(this._listener.direction.x, this._listener.direction.y, this._listener.direction.z, 0, 1, 0);
+        this._resonanceAudioScene.setListenerOrientation(-this._listener.direction.x, 0, this._listener.direction.z, 0, 1, 0);
 
         this._lastTime = new Date();
     }

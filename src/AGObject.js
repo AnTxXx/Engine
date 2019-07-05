@@ -83,6 +83,8 @@ export class AGObject {
     }
 
     set collidable(value:boolean) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'collidable').set, arguments);
         this._collidable = value;
     }
     get blockedObjects(): Array<AGObject> {
