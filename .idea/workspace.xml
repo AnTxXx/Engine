@@ -4,15 +4,13 @@
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGPhysics.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPhysics.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPortal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoom.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGObject.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGPhysics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPhysics.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPortal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGRoom.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/node_modules/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,8 +29,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1017">
-              <caret line="82" column="47" selection-start-line="82" selection-start-column="47" selection-end-line="82" selection-end-column="47" />
+            <state relative-caret-position="317">
+              <caret line="106" column="38" selection-start-line="106" selection-start-column="38" selection-end-line="106" selection-end-column="38" />
               <folding>
                 <element signature="e#9#101#0" expanded="true" />
               </folding>
@@ -43,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AGPortal.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="48" column="45" selection-start-line="48" selection-start-column="45" selection-end-line="48" selection-end-column="45" />
+            <state relative-caret-position="467">
+              <caret line="70" column="58" selection-start-line="70" selection-start-column="58" selection-end-line="70" selection-end-column="58" />
               <folding>
                 <element signature="e#9#48#0" expanded="true" />
               </folding>
@@ -67,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AGRoom.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="842">
-              <caret line="235" column="32" lean-forward="true" selection-start-line="235" selection-start-column="32" selection-end-line="235" selection-end-column="32" />
+            <state relative-caret-position="230">
+              <caret line="127" column="71" selection-start-line="127" selection-start-column="71" selection-end-line="127" selection-end-column="71" />
               <folding>
                 <element signature="e#9#55#0" expanded="true" />
               </folding>
@@ -97,11 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AGSoundSource.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="535">
-              <caret line="175" column="10" selection-start-line="175" selection-start-column="10" selection-end-line="175" selection-end-column="10" />
+            <state relative-caret-position="-723">
+              <caret line="123" column="33" selection-start-line="123" selection-start-column="33" selection-end-line="123" selection-end-column="33" />
               <folding>
                 <element signature="e#9#55#0" expanded="true" />
               </folding>
@@ -110,24 +108,21 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/flow/bom.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="699" column="40" selection-start-line="699" selection-start-column="24" selection-end-line="699" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AGObject.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="285" column="43" selection-start-line="285" selection-start-column="43" selection-end-line="285" selection-end-column="43" />
+            <state relative-caret-position="385">
+              <caret line="299" column="35" selection-start-line="299" selection-start-column="35" selection-end-line="299" selection-end-column="35" />
               <folding>
                 <element signature="e#9#55#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AGEventHandler.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-              <folding>
-                <element signature="e#10#53#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -148,10 +143,13 @@
       <find>Fix</find>
       <find>gameArea</find>
       <find>controls</find>
-      <find>addSound</find>
       <find>hitbou</find>
       <find>source</find>
+      <find>addSound</find>
       <find>hitBoundingBox</find>
+      <find>coll</find>
+      <find>Wall</find>
+      <find>.add(pl</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -172,12 +170,12 @@
         <option value="$PROJECT_DIR$/src/AGEngine.js" />
         <option value="$PROJECT_DIR$/src/Event.js" />
         <option value="$PROJECT_DIR$/src/AGInventory.js" />
-        <option value="$PROJECT_DIR$/src/main.js" />
-        <option value="$PROJECT_DIR$/src/AGPortal.js" />
-        <option value="$PROJECT_DIR$/src/AGObject.js" />
         <option value="$PROJECT_DIR$/src/AGPhysics.js" />
         <option value="$PROJECT_DIR$/src/AGRoom.js" />
+        <option value="$PROJECT_DIR$/src/AGPortal.js" />
         <option value="$PROJECT_DIR$/src/AGSoundSource.js" />
+        <option value="$PROJECT_DIR$/src/main.js" />
+        <option value="$PROJECT_DIR$/src/AGObject.js" />
       </list>
     </option>
   </component>
@@ -335,12 +333,12 @@
       <option name="presentableId" value="Default" />
       <updated>1560502181989</updated>
       <workItem from="1560502197247" duration="25125000" />
-      <workItem from="1562314364258" duration="5006000" />
+      <workItem from="1562314364258" duration="10816000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31160000" />
+    <option name="totallyTimeSpent" value="36970000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -547,16 +545,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AGObject.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="285" column="43" selection-start-line="285" selection-start-column="43" selection-end-line="285" selection-end-column="43" />
-          <folding>
-            <element signature="e#9#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AGPhysics.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -574,40 +562,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.js">
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/flow/bom.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1017">
-          <caret line="82" column="47" selection-start-line="82" selection-start-column="47" selection-end-line="82" selection-end-column="47" />
-          <folding>
-            <element signature="e#9#101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AGPortal.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="48" column="45" selection-start-line="48" selection-start-column="45" selection-end-line="48" selection-end-column="45" />
-          <folding>
-            <element signature="e#9#48#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="299">
+          <caret line="699" column="40" selection-start-line="699" selection-start-column="24" selection-end-line="699" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AGRoom.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="842">
-          <caret line="235" column="32" lean-forward="true" selection-start-line="235" selection-start-column="32" selection-end-line="235" selection-end-column="32" />
+        <state relative-caret-position="230">
+          <caret line="127" column="71" selection-start-line="127" selection-start-column="71" selection-end-line="127" selection-end-column="71" />
           <folding>
             <element signature="e#9#55#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="106" column="38" selection-start-line="106" selection-start-column="38" selection-end-line="106" selection-end-column="38" />
+          <folding>
+            <element signature="e#9#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/AGSoundSource.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="535">
-          <caret line="175" column="10" selection-start-line="175" selection-start-column="10" selection-end-line="175" selection-end-column="10" />
+        <state relative-caret-position="-723">
+          <caret line="123" column="33" selection-start-line="123" selection-start-column="33" selection-end-line="123" selection-end-column="33" />
+          <folding>
+            <element signature="e#9#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AGPortal.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="467">
+          <caret line="70" column="58" selection-start-line="70" selection-start-column="58" selection-end-line="70" selection-end-column="58" />
+          <folding>
+            <element signature="e#9#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AGObject.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="299" column="35" selection-start-line="299" selection-start-column="35" selection-end-line="299" selection-end-column="35" />
           <folding>
             <element signature="e#9#55#0" expanded="true" />
           </folding>

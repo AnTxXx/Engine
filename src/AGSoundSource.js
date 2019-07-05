@@ -60,6 +60,14 @@ export class AGSoundSource
         this._audioElement = value;
     }
 
+    get tag(): string {
+        return this._tag;
+    }
+
+    set tag(value: string) {
+        this._tag = value;
+    }
+
     /*constructor(name, pos:Vector3, dir:Vector3) {
         super(name, pos, dir);
     }*/
@@ -93,7 +101,13 @@ export class AGSoundSource
     // $FlowFixMe
     resonanceAudioScene;
 
-    // $FlowFixMe
+    _obstructionFilter:BiquadFilterNode;
+
+    _tag:string;
+
+
+
+// $FlowFixMe
     /**
      * Creates a new sound source for the room.
      * @param name Name of the sound source.
@@ -125,16 +139,16 @@ export class AGSoundSource
 
         this.source = this.resonanceAudioScene.createSource();
         //TODO: activate filter when obstruction between listener and soundsource
-        /*let biquadFilter = this.audioContext.createBiquadFilter();
-        biquadFilter.type = "lowpass";
-        biquadFilter.frequency.value = 400;
-        biquadFilter.gain.value = -5;
+        this._obstructionFilter = this.audioContext.createBiquadFilter();
+        this._obstructionFilter.type = "lowpass";
+        this._obstructionFilter.frequency.value = 400;
+        this._obstructionFilter.gain.value = -10;
 
-        this.audioElementSource.connect(biquadFilter);
-        biquadFilter.connect(this.source.input);*/
+        //this.audioElementSource.connect(this. _obstructionFilter);
+        //this. _obstructionFilter.connect(this.source.input);
 
         this.source.setRolloff('logarithmic');
-        this.source.setMaxDistance(4);
+        this.source.setMaxDistance(6);
 
         this.audioElementSource.connect(this.source.input);
         this._name = name;
@@ -174,6 +188,14 @@ export class AGSoundSource
 
         //check objects between sound source and player
         //console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
+        if(this._room.betweenPlayerObjectRayIntersect(this._object).length>0){
+            this.audioElementSource.disconnect();
+            this.audioElementSource.connect(this. _obstructionFilter);
+            this. _obstructionFilter.connect(this.source.input);
+        } else {
+            this.audioElementSource.disconnect();
+            this.audioElementSource.connect(this.source.input);
+        }
     }
 
     /**

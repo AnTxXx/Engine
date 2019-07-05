@@ -142,6 +142,9 @@ export class AGObject {
         // $FlowFixMe
         if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'position').set, arguments);
         this._position = value;
+        console.log(this._position);
+        console.log(this._direction);
+        console.log(this._size);
     }
     get position(): Vector3 {
         return this._position;
@@ -289,6 +292,15 @@ export class AGObject {
         this._AGSoundSources.push(source);
     }
 
+    clearSoundSources(){
+        this._AGSoundSources = [];
+    }
+
+    getSoundSources(){
+        return this._AGSoundSources;
+    }
+
+
     /**
      * the draw-loop
      */
@@ -363,6 +375,7 @@ export class AGObject {
     kill(){
         console.log("[AGObject] " + this.name + ": killed.");
         this.room.removeAGObject(this);
+        if(!g_loading) g_history.ike(this._ID, this.kill, arguments);
     }
 
     interact(){
