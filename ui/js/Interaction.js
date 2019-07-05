@@ -191,9 +191,18 @@ jQuery(function($){
 	
 	//button for path deleting
 	$('#btn_path_delete').click(function(){
+		
+		
 		actFabObj.PathArray.forEach(function(ele) {
 			i_audicom._room_canvas.remove(ele);
 		});
+		
+		actFabObj.LineArray.forEach(function(ele) {
+			i_audicom._room_canvas.remove(ele);
+		});
+		
+		
+		actFabObj.LineArray = [];	
 		actFabObj.PathArray = [];	
 		getReferenceById(actFabObj.AGObjectID).clearRoute();
 		getReferenceById(actFabObj.AGObjectID).movable = false;
@@ -216,12 +225,34 @@ jQuery(function($){
 	});
 	
 	//delete linked portal
-	$('#btn_path_deletedoors').click(function(){	
-		//TODO wait for urbi too unlink portal function in AGPortal
-		// actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-		//
-		// actFabObj.secDoor = false;
-		// getReferenceById(actFabObj.AGObjectID).clearRoute();
+	$('#btn_path_deletedoors').click(function(){
+		
+		//ICI
+		//actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+		
+			
+		
+		
+	
+		
+		let sec_door_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
+		
+		i_audicom._room_canvas.remove(actFabObj.line.dot);
+		i_audicom._room_canvas.remove(sec_door_buffer.line.dot);
+		i_audicom._room_canvas.remove(actFabObj.line);
+		i_audicom._room_canvas.remove(sec_door_buffer.line);
+		actFabObj.line = false;
+		sec_door_buffer.line = false;
+		
+		
+		sec_door_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+		sec_door_buffer.secDoor = false;
+		actFabObj.secDoor = false;
+		i_audicom._room_canvas.renderAll();
+		
+		getReferenceById(actFabObj.AGObjectID).unlink();
+		
+		//getReferenceById(actFabObj.AGObjectID).clearRoute();
 	});
 
 	$('#btn_delete_object').click(function(){
@@ -487,7 +518,7 @@ jQuery(function($){
 					});
 				}else if(actFabObj.secDoor){
 					
-					console.log(actFabObj.line);
+					
 					
 					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
