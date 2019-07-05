@@ -494,6 +494,8 @@ jQuery(function($){
 			$('#ui_part_right_inner').fadeOut(100, function(){});
 			
 			//TODO check if recording; if yes -> stop recording	
+		}else{
+			i_audicom._room_canvas.setActiveObject(actFabObj);
 		}
 		
 		
@@ -501,9 +503,6 @@ jQuery(function($){
 	
 	//fabric listeners
 	i_audicom._room_canvas.on('selection:created', function(e){
-		
-		
-		
 		actFabObj = i_audicom._room_canvas.getActiveObject();
 		if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
 			if(!actFabObj.isRecording){
@@ -532,11 +531,16 @@ jQuery(function($){
 					
 				}	
 			}
+		}else{
+			loadObject(actFabObj.type);
 		}
 	});
 	
 	
 	i_audicom._room_canvas.on('selection:updated', function(e){
+		
+		
+		
 		//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
 		if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
 			// let actObj_buffer = room_canvas.getActiveObject();

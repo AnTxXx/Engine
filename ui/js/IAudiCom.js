@@ -213,8 +213,27 @@ export class IAudiCom {
 			if(item.type == 'grid_line'){
 				item.strokeWidth = (1/room_buffer.getZoom())*1;
 			}
-		});	
-		console.log(room_buffer.getZoom());
+		});
+		
+		//console.log(room_buffer.width*room_buffer.getZoom());
+		
+		
+		let width_buffer = room_buffer.width*room_buffer.getZoom();
+		let height_buffer = room_buffer.height*room_buffer.getZoom();
+		let middle_width_buffer = $('#ui_part_middle').width();
+		
+		
+		
+		if(width_buffer < middle_width_buffer){
+			$('#canvas_container').width(room_buffer.width*room_buffer.getZoom());
+		}
+		
+		if(height_buffer < 600){
+			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
+		}
+		
+		
+		
 		room_buffer.renderAll();
 	}
 	
@@ -359,8 +378,7 @@ export class IAudiCom {
 			
 		}
 		
-		console.log(getReferenceById(this._AGroomID));
-		console.log(this._AGroomID);
+		
 		
 		
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
