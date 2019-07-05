@@ -35,17 +35,19 @@ let wallWestSmallRoom:AGObject = new AGObject("WallSmallRoomWest", new Vector3(1
 let wallNorthSmallRoom:AGObject = new AGObject("WallSmallRoomNorth", new Vector3(16.5, 1.0, 6.5), new Vector3(1,0,0), new Vector3(5,1,1));
 let portalSmallRoom:AGPortal = new AGPortal("PortalSmallRoom", new Vector3(14.5, 1.0, 8.5), new Vector3(1,0,0), new Vector3(1,1,1));
 let wallSouthCorridor:AGObject = new AGObject("WallCorridorSouth", new Vector3(9.5, 1.0, 3.5), new Vector3(1,0,0), new Vector3(19,1,1));
-let wallLeftCorridor:AGObject = new AGObject("WallCorridorLeft", new Vector3(4.0, 1.0, 2.0), new Vector3(1,0,0), new Vector3(1,1,1.65));
+let wallLeftCorridor:AGObject = new AGObject("WallCorridorLeft", new Vector3(4.0, 1.0, 2.2), new Vector3(1,0,0), new Vector3(1,1,1.65));
 let wallRightCorridor:AGObject = new AGObject("WallCorridorRight", new Vector3(7.5, 1.0, 2.2), new Vector3(1,0,0), new Vector3(1,1,1.65))
 let portalCorridorRoomFromSmallRoom:AGPortal = new AGPortal("PortalCorridorRoomFromSmallRoom", new Vector3(1.0, 1.0, 1.5), new Vector3(1,0,0), new Vector3(1,1,1));
 let skeleton:AGObject = new AGObject("Skeleton", new Vector3(11.5, 1, 2.5), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 let portalCorridorToFinal:AGPortal = new AGPortal("PortalCorridorToFinal", new Vector3(17.5, 1.0, 1.5), new Vector3(1,0,0), new Vector3(1,1,1));
 let portalFinalFromCorridor:AGPortal = new AGPortal("PortalFinalFromCorridor", new Vector3(1.0, 1.0, 9.0), new Vector3(1,0,0), new Vector3(1,1,1));
 let wallFirstFinalRoom:AGObject = new AGObject("WallFinalRoomFirst", new Vector3(4.5, 1.0, 8.0), new Vector3(1,0,0), new Vector3(1,1,4));
-let wallSecondFinalRoom:AGObject = new AGObject("WallFinalRoomSecond", new Vector3(8.1, 1.0, 5.7), new Vector3(1,0,0), new Vector3(1,1,3.34));
-let waterFall:AGObject = new AGObject("Waterfall", new Vector3(8.7, 1, 0.5), new Vector3(1,0,0), new Vector3(1,1,4));
-let skeletonSound:AGSoundSource = new AGSoundSource("SkeletonSound", "sounds/steps.wav", true, 1, room_1ID);
-let playerHit:AGSoundSource = new AGSoundSource("hit", "sounds/ouch.mp3", false, 1, room_1ID);
+let wallSecondFinalRoom:AGObject = new AGObject("WallFinalRoomSecond", new Vector3(8.1, 1.0, 5.6), new Vector3(1,0,0), new Vector3(1,1,3.34));
+let waterFall:AGObject = new AGObject("Waterfall", new Vector3(8.7, 1, 0.5), new Vector3(1,0,0), new Vector3(1,1,1));
+let steps:AGSoundSource = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
+let ouch:AGSoundSource = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+let magic:AGSoundSource = new AGSoundSource("Magic", "sounds/steps.wav", true, 1, room_1ID);
+let waterfall:AGSoundSource = new AGSoundSource("Waterfall", "sounds/ouch.mp3", false, 1, room_1ID);
 
 
 let playerID:number = getIdByReference(player);
@@ -63,8 +65,10 @@ let portalFinalFromCorridorID:number = getIdByReference(portalFinalFromCorridor)
 let wallFirstFinalRoomID:number = getIdByReference(wallFirstFinalRoom);
 let wallSecondFinalRoomID:number = getIdByReference(wallSecondFinalRoom);
 let waterFallID:number = getIdByReference(waterFall);
-let skeletonSoundID:number = getIdByReference(skeletonSound);
-let playerHitID:number = getIdByReference(playerHit);
+let stepsID:number = getIdByReference(steps);
+let ouchID:number = getIdByReference(ouch);
+let magicID:number = getIdByReference(magic);
+let waterfallID:number = getIdByReference(waterfall);
 
 g_gamearea.listener = getIdByReference(player);
 getReferenceById(room_1ID).listener = g_gamearea.listener;
@@ -86,6 +90,22 @@ getReferenceById(room_1ID).add(wallFirstFinalRoomID);
 getReferenceById(room_1ID).add(wallSecondFinalRoomID);
 getReferenceById(room_1ID).add(waterFallID);
 
+
+getReferenceById(wallWestSmallRoomID).tag = "WALL";
+getReferenceById(wallNorthSmallRoomID).tag = "WALL";
+getReferenceById(wallSouthCorridorID).tag = "WALL";
+getReferenceById(wallLeftCorridorID).tag = "WALL";
+getReferenceById(wallRightCorridorID).tag = "WALL";
+getReferenceById(wallFirstFinalRoomID).tag = "WALL";
+getReferenceById(wallSecondFinalRoomID).tag = "WALL";
+getReferenceById(waterFallID).tag = "WALL";
+
+//Soundtags
+getReferenceById(stepsID).tag = "STEPS";
+getReferenceById(ouchID).tag = "OUCH";
+getReferenceById(magicID).tag = "MAGIC";
+getReferenceById(waterfallID).tag = "WATERFALL";
+
 //Skeleton
 getReferenceById(skeletonID).setSpeedSkalar(2);
 getReferenceById(skeletonID).movable = true;
@@ -93,7 +113,7 @@ getReferenceById(skeletonID).destructible = true;
 getReferenceById(skeletonID).health = 4;
 getReferenceById(skeletonID).addRoute(new Vector3(9,1,8), new Vector3(2,1,8));
 
-getReferenceById(skeletonID).addSoundSource(skeletonSoundID);
+getReferenceById(skeletonID).addSoundSource(stepsID);
 getReferenceById(skeletonID).tag = "ENEMY";
 
 //Link Portals
@@ -101,7 +121,7 @@ getReferenceById(portalSmallRoomID).linkPortals(portalCorridorRoomFromSmallRoomI
 getReferenceById(portalCorridorToFinalID).linkPortals(portalFinalFromCorridorID);
 
 getReferenceById(playerID).speed = new Vector3(0.1, 0.0, 0.1);
-getReferenceById(playerID).hitSound = playerHitID;
+getReferenceById(playerID).hitSound = ouchID;
 
 getReferenceById(playerID).dangerous = true;
 getReferenceById(playerID).damage = 1;
