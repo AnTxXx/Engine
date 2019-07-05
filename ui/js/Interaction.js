@@ -151,7 +151,7 @@ jQuery(function($){
 				}else{
 					for (var i = 0; i < ss_buffer.length; i++) {
 						if(ss_buffer[i].tag){
-							console.log(ss_buffer[i].tag);
+							
 							$('#btn_sound_' + ss_buffer[i].tag.toLowerCase()).addClass('ss_active');
 						}
 					  	

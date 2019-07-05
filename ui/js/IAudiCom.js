@@ -148,8 +148,8 @@ export class IAudiCom {
 					
 					
 					if(item==room_buffer.getActiveObject()){
-						$('#coord_x span').text(item.left);
-						$('#coord_y span').text(item.top);
+						$('#coord_x span').text(getReferenceById(item.AGObjectID).position.x);
+						$('#coord_y span').text(getReferenceById(item.AGObjectID).position.z);
 						
 					}
 					
