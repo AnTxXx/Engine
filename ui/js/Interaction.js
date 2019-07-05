@@ -143,14 +143,23 @@ jQuery(function($){
 			$('.btn_ss').removeClass('ss_active');
 			//ICI
 			let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
-			if(ss_buffer.length==0){
-				$('.btn_ss').removeClass('ss_active');
-				$('#btn_sound_none').addClass('ss_active');
-			}else{
-				for (var i = 0; i < ss_buffer.length; i++) {
-				  	$('#btn_sound_' + ss_buffer[i].tag.toLowerCase()).addClass('ss_active');
-				};
-			}
+			
+			
+				if(ss_buffer.length==0){
+					$('.btn_ss').removeClass('ss_active');
+					$('#btn_sound_none').addClass('ss_active');
+				}else{
+					for (var i = 0; i < ss_buffer.length; i++) {
+						if(ss_buffer[i].tag){
+							console.log(ss_buffer[i].tag);
+							$('#btn_sound_' + ss_buffer[i].tag.toLowerCase()).addClass('ss_active');
+						}
+					  	
+					};
+				}
+		
+			
+			
 			
 				
 			
@@ -534,6 +543,9 @@ jQuery(function($){
 	
 	//fabric listeners
 	i_audicom._room_canvas.on('selection:created', function(e){
+		
+		
+		
 		actFabObj = i_audicom._room_canvas.getActiveObject();
 		if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
 			if(!actFabObj.isRecording){

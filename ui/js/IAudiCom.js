@@ -145,6 +145,14 @@ export class IAudiCom {
 					}
 	 			   	item.left = getReferenceById(item.AGObjectID).position.x*scale_buffer;
 	  			   	item.top = getReferenceById(item.AGObjectID).position.z*scale_buffer;
+					
+					
+					if(item==room_buffer.getActiveObject()){
+						$('#coord_x span').text(item.left);
+						$('#coord_y span').text(item.top);
+						
+					}
+					
 	  			   	item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);  
 				}
 			});	
@@ -267,19 +275,22 @@ export class IAudiCom {
 		switch(ss_name){
 			case 'steps':
 				ss_buffer = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, roomID_buffer);
-				
+				ss_buffer.tag = "STEPS"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'waterfall':
 				ss_buffer = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, roomID_buffer);
+				ss_buffer.tag = "WATERFALL"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'magic':
 				ss_buffer = new AGSoundSource("Magic", "sounds/magic.mp3", true, 1, roomID_buffer);
+				ss_buffer.tag = "MAGIC"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'ouch':
 				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.mp3", true, 1, roomID_buffer);
+				ss_buffer.tag = "OUCH"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'none':
