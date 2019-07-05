@@ -71,13 +71,13 @@ Fast Ray-Box Intersection
 by Andrew Woo
 from "Graphics Gems", Academic Press, 1990
 */
-export function hitBoundingBox(target:AGObject, source:AGObject):boolean{
+export function hitBoundingBox(target:AGObject, source:AGObject, direction?:Vector3):boolean{
 
     let v_minB:Vector3 = new Vector3(target.position.x-target.size.x/2, target.position.y-target.size.y/2, target.position.z-target.size.z/2);
     let v_maxB:Vector3 = new Vector3(target.position.x+target.size.x/2, target.position.y+target.size.y/2, target.position.z+target.size.z/2);
 
     let v_origin:Vector3 = source.position;
-    let v_direction:Vector3 = source.direction;
+    let v_direction:Vector3 = direction === undefined ? source.direction : direction;
 
 
     let NUMDIM:number = 3, RIGHT:number = 0, LEFT:number = 1, MIDDLE:number = 2;

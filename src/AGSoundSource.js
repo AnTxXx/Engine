@@ -5,9 +5,18 @@ import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_references, g_loading, g_gamearea} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
+import {hitBoundingBox} from "./AGPhysics.js";
+import {AGObject} from "./AGObject.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
+    get object(): AGObject {
+        return this._object;
+    }
+
+    set object(value: AGObject) {
+        this._object = value;
+    }
 
     get ID() {
         return this._ID;
@@ -74,6 +83,8 @@ export class AGSoundSource
     source:Object;
     _type:Type;
     _ID:number;
+
+    _object:AGObject;
 
     _room:AGRoom;
 
@@ -160,6 +171,9 @@ export class AGSoundSource
             this.audioElement.loop = this.looping;
             this.audioElement.play();
         }
+
+        //check objects between sound source and player
+        //console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
     }
 
     /**

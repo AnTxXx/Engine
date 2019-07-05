@@ -284,6 +284,7 @@ export class AGObject {
     addSoundSource(sourceID: number){
         let source = getReferenceById(sourceID);
         source.setPosition(this._position);
+        source.object = this;
         if(!g_loading) g_history.ike(this._ID, this.addSoundSource, arguments);
         this._AGSoundSources.push(source);
     }
