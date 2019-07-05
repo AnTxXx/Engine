@@ -148,7 +148,7 @@ jQuery(function($){
 				$('#btn_sound_none').addClass('ss_active');
 			}else{
 				for (var i = 0; i < ss_buffer.length; i++) {
-				  	$('btn_sound_' + ss_buffer[i].tag).addClass('ss_active');
+				  	$('#btn_sound_' + ss_buffer[i].tag.toLowerCase()).addClass('ss_active');
 				};
 			}
 			
@@ -174,13 +174,9 @@ jQuery(function($){
 	
 	
 	$('.btn_ss').click(function(){	
-		if($(this).attr('ss')=='none'){
 			$('.btn_ss').removeClass('ss_active');
 			$(this).addClass('ss_active');
-		}else{
-			$(this).addClass('ss_active');
-		}
-		i_audicom.addSoundSource($(this).attr('ss'));
+			i_audicom.addSoundSource(actFabObj.AGObjectID, $(this).attr('ss'));
 	});
 	
 	

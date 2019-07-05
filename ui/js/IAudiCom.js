@@ -247,24 +247,40 @@ export class IAudiCom {
 			$('#canvas_container').height(600);
 			$('#canvas_container').removeClass('canvas_no_overflow_y');
 		}
-		
-		
-		
 		room_buffer.renderAll();
 	}
 	
 	
-	addSoundSource(ss_name){
-		console.log(ss_name);
+	addSoundSource(ag_object_id, ss_name){
+		
+		let ag_object_buffer = getReferenceById(ag_object_id)
+		
+		//console.log(getReferenceById(ag_object_id));
+		ag_object_buffer.clearSoundSources();
+		
+		//ICI
+		
+		let roomID_buffer = getReferenceById(g_gamearea.ID).AGRooms[0].ID;
+		
+		let ss_buffer;
+		
 		switch(ss_name){
 			case 'steps':
+				ss_buffer = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, roomID_buffer);
 				
+				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'waterfall':
-				
+				ss_buffer = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, roomID_buffer);
+				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'magic':
-				
+				ss_buffer = new AGSoundSource("Magic", "sounds/magic.mp3", true, 1, roomID_buffer);
+				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				break;
+			case 'ouch':
+				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.mp3", true, 1, roomID_buffer);
+				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'none':
 				
@@ -384,10 +400,7 @@ export class IAudiCom {
 				
 				getReferenceById(obj_buffer_ID).tag = "ENEMY";
 				
-				let gegner_ss = new AGSoundSource("urbiurbiurbi", "sounds/car.mp3", true, 1, this._AGroomID);
-				let gegner_ss_ID = getIdByReference(gegner_ss);
 				
-				getReferenceById(obj_buffer_ID).addSoundSource(gegner_ss_ID);
 				getReferenceById(obj_buffer_ID).setSpeedSkalar(0);
 				
 				break;
