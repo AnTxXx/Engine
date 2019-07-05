@@ -204,9 +204,11 @@ export class IAudiCom {
 	zoomCanvas(zoom_factor){
 		//min : 0.5
 		//max : 1.5
+		
+		
+		
 		let room_buffer = this._room_canvas;
 		room_buffer.setZoom(room_buffer.getZoom()*zoom_factor);
-		
 		//set stroke-width to 1 again
 		let canvas_objects = room_buffer.getObjects();
 		canvas_objects.forEach(function(item, i) {
@@ -216,20 +218,34 @@ export class IAudiCom {
 		});
 		
 		//console.log(room_buffer.width*room_buffer.getZoom());
-		
-		
 		let width_buffer = room_buffer.width*room_buffer.getZoom();
 		let height_buffer = room_buffer.height*room_buffer.getZoom();
 		let middle_width_buffer = $('#ui_part_middle').width();
 		
 		
+		// $('.canvas-container').height(room_buffer.height*room_buffer.getZoom());
+		// $('.canvas_room').height(room_buffer.height*room_buffer.getZoom());
+		//
+		// $('.canvas-container').width(room_buffer.width*room_buffer.getZoom());
+		// $('.canvas_room').width(room_buffer.width*room_buffer.getZoom());
 		
 		if(width_buffer < middle_width_buffer){
 			$('#canvas_container').width(room_buffer.width*room_buffer.getZoom());
+			$('#canvas_container').addClass('canvas_no_overflow_x');
+		}else{
+			$('#canvas_container').removeClass('canvas_no_overflow_x');
 		}
 		
 		if(height_buffer < 600){
+			
+			$('#canvas_container').addClass('canvas_no_overflow_y');
+			
 			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
+			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
+			
+		}else{
+			$('#canvas_container').height(600);
+			$('#canvas_container').removeClass('canvas_no_overflow_y');
 		}
 		
 		
@@ -237,15 +253,33 @@ export class IAudiCom {
 		room_buffer.renderAll();
 	}
 	
+	
+	addSoundSource(ss_name){
+		console.log(ss_name);
+		switch(ss_name){
+			case 'steps':
+				
+				break;
+			case 'waterfall':
+				
+				break;
+			case 'magic':
+				
+				break;
+			case 'none':
+				
+				break;
+			
+		}
+		
+	}
+	
 	renderAGRoom(ag_roomID){
 		
 	
 		
-		
-		this._room_canvas.setHeight(getReferenceById(ag_roomID).size.x * this._scale);
-		this._room_canvas.setWidth(getReferenceById(ag_roomID).size.z * this._scale);
-		
-		
+		this._room_canvas.setWidth(getReferenceById(ag_roomID).size.x * this._scale);
+		this._room_canvas.setHeight(getReferenceById(ag_roomID).size.z * this._scale);
 
 		let options = {
 		   distance: this._scale,
@@ -259,16 +293,27 @@ export class IAudiCom {
 		   }
 		};
 
+		
+		
 		//grid for the canvas
+		let gridHeight = options.height / options.distance;
 		let gridLen = options.width / options.distance;
 		
 		for (var i = 0; i < gridLen; i++) {
-		  var distance   = i * options.distance,
-		      horizontal = new fabric.Line([ distance, 0, distance, options.width], options.param),
-		      vertical   = new fabric.Line([ 0, distance, options.width, distance], options.param);
-		  this._room_canvas.add(horizontal);
-		  this._room_canvas.add(vertical);
+			var distance   = i * options.distance,
+			vertical = new fabric.Line([ distance, 0, distance, options.height], options.param);
+			 
+			this._room_canvas.add(vertical);
+		 
 		};
+		
+		for (var i = 0; i < gridHeight; i++) {
+		  	var distance   = i * options.distance,
+		 	horizontal   = new fabric.Line([ 0, distance, options.width, distance], options.param);
+		 	this._room_canvas.add(horizontal);
+		};
+		
+		
 		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
 		this._room_canvas.renderAll();
 
@@ -360,7 +405,7 @@ export class IAudiCom {
 // 				let snap_top_buffer = snap_buffer.top < snap_buffer.bottom ? snap_buffer.top : snap_buffer.bottom;
 // 				let snap_left_buffer = snap_buffer.left < snap_buffer.right ? snap_buffer.left : snap_buffer.right;
 				
-				obj_buffer = new AGObject("Wall", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer = new AGObject("Structure", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				obj_buffer_ID = getIdByReference(obj_buffer);
 				getReferenceById(obj_buffer_ID).tag = "WALL";
 				

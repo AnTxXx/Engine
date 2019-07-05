@@ -140,6 +140,21 @@ jQuery(function($){
 				$('#ui_delete_box').show();
 			}
 			
+			$('.btn_ss').removeClass('ss_active');
+			//ICI
+			let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
+			if(ss_buffer.length==0){
+				$('.btn_ss').removeClass('ss_active');
+				$('#btn_sound_none').addClass('ss_active');
+			}else{
+				for (var i = 0; i < ss_buffer.length; i++) {
+				  	$('btn_sound_' + ss_buffer[i].tag).addClass('ss_active');
+				};
+			}
+			
+				
+			
+			
 			
 			
 			setTimeout(function(){
@@ -156,6 +171,18 @@ jQuery(function($){
 		$(this).addClass('gegner_speed_active');
 		getReferenceById(actFabObj.AGObjectID).setSpeedSkalar($(this).attr('speed'));
 	});
+	
+	
+	$('.btn_ss').click(function(){	
+		if($(this).attr('ss')=='none'){
+			$('.btn_ss').removeClass('ss_active');
+			$(this).addClass('ss_active');
+		}else{
+			$(this).addClass('ss_active');
+		}
+		i_audicom.addSoundSource($(this).attr('ss'));
+	});
+	
 	
 	//button for path recording
 	$('#btn_path_rec').click(function(){
@@ -206,11 +233,19 @@ jQuery(function($){
 		actFabObj.PathArray = [];	
 		getReferenceById(actFabObj.AGObjectID).clearRoute();
 		getReferenceById(actFabObj.AGObjectID).movable = false;
-		
-		
-		
 	});
 	
+	
+	
+	
+
+	$('#cb_colli').click(function(){
+		if($('#cb_colli').is(":checked")){
+			getReferenceById(actFabObj.AGObjectID).collidable = true;
+		}else{
+			getReferenceById(actFabObj.AGObjectID).collidable = false;
+		}
+	});
 	
 	
 	//button for portal-linking

@@ -88,6 +88,13 @@ canvas{
 	
 }
 
+.canvas_no_overflow_x{
+	overflow-x: hidden !important;
+}
+.canvas_no_overflow_y{
+	overflow-y: hidden !important;
+}
+
 /*text-inputs*/
 #canvas_dim_box span{
 	color:#BFBFBF;
@@ -217,7 +224,7 @@ button:focus{
 #btn_path_play{
 	
 }
-.gegner_speed_active{
+.gegner_speed_active, .ss_active{
 	background-color:#98eea4 !important;
 }
 
@@ -397,3 +404,10 @@ body.contrast{
 	color:#999;
 	font-style:italic;
 }
+#ui_colli_box{
+	margin:20px 0;
+}
+#ui_sound_box{
+	margin:20px 0;
+}
+

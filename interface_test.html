@@ -50,9 +50,7 @@
 				
 				
 				<h2>Structures</h2>
-				
-				
-				
+
 				<div id = "sb_object_wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
 					<i class="fas fa-map"></i>
 				</div><!--sb_object-->
@@ -98,7 +96,7 @@
 				
 				
 				<div id = "canvas_controls_box">
-					<h2>Canvas Zoom</h2>
+					<h2>Raum Zoom</h2>
 					<div id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></div>
 					<div id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></div>				
 				</div><!--scene_controls_box-->
@@ -160,13 +158,13 @@
 					
 					
 					<div class = "ui_box_special ui_box ui_box_enemy">
-						Gegnerpfad:
+						Path:
 						<br>
 						<div id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></div>
 						<div id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></div>
 					</div><!--ui_box-->
 					<div id = "ui_box_gegner_speed" class = "ui_box_special ui_box ui_box_enemy">
-						Gegnergeschwindigkeit:<br>
+						Speed:<br>
 						<div id = "btn_speed_0" class = "btn bnt_speed" speed = '0'>0</div>
 						<div id = "btn_speed_1" class = "btn bnt_speed" speed = '1'>1</div>
 						<div id = "btn_speed_2" class = "btn bnt_speed" speed = '2'>2</div>
@@ -177,12 +175,32 @@
 					</div><!--ui_box-->
 					
 					<div class = "ui_box_special ui_box ui_box_portal">
-						Portal verlinken:
+						Link Portals:
 						<br>
 						<div id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></div>
 						<div id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></div>
 					</div><!--ui_box-->
 					
+					
+					<div id = "ui_sound_box" class = "ui_box_special ui_box ui_box_general">
+						Sound Sources:
+						<br>
+						<div id = "btn_sound_none" class = "btn btn_ss" ss = 'none'><i class="fas fa-times"></i></div>
+						<div id = "btn_sound_steps" class = "btn btn_ss" ss = 'steps'><i class="fas fa-shoe-prints"></i></div>
+						<div id = "btn_sound_magic" class = "btn btn_ss" ss = 'magic'><i class="fas fa-magic"></i></div>
+						<div id = "btn_sound_watefall" class = "btn btn_ss" ss = 'waterfall'><i class="fas fa-water"></i></div>
+						<div id = "btn_sound_ouch" class = "btn btn_ss" ss = 'ouch'><i class="fas fa-band-aid"></i></div>
+						
+						
+						
+					
+						
+					</div><!--ui_box-->
+					
+					
+					<div id = "ui_colli_box" class = "ui_box_special ui_box ui_box_general">
+						<input id = "cb_colli" type="checkbox" name="collidable" value="collidable" checked> Collidable<br>
+					</div><!--ui_box-->
 					
 					
 					<div id = "ui_delete_box" class = "ui_box_special ui_box">
