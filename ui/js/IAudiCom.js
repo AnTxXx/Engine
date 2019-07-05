@@ -279,12 +279,12 @@ export class IAudiCom {
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'waterfall':
-				ss_buffer = new AGSoundSource("Waterfall", "sounds/waterfall.mp3", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, roomID_buffer);
 				ss_buffer.tag = "WATERFALL"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'magic':
-				ss_buffer = new AGSoundSource("Magic", "sounds/magic.mp3", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, roomID_buffer);
 				ss_buffer.tag = "MAGIC"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
