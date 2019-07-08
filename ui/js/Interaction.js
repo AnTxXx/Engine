@@ -1,6 +1,6 @@
 import { i_audicom } from "../../lib/main.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
-import { getIdByReference, getReferenceById } from "../../lib/AGEngine.js";
+import { getIdByReference, getReferenceById, g_gamearea } from "../../lib/AGEngine.js";
 
 jQuery(function($){
 	
@@ -11,6 +11,7 @@ jQuery(function($){
 	let actFabObj = '';
 	
 	$('#btn_start_scene').click(function(){
+		g_gamearea.audioContext.resume();
 		i_audicom.startArea();
 	});
 	$('#btn_stop_scene').click(function(){
@@ -339,6 +340,28 @@ jQuery(function($){
 		$('#ui_part_right_inner').fadeOut(100, function(){});
 		
 	});
+	
+	
+	
+	//overlay box
+	
+	$('#overlay').click(function(e){
+		if(!$(e.target).is('a')){
+			$('#overlay').fadeOut(200);
+		}	
+		
+	
+		
+	});
+	
+	$('#win_screen').click(function(){
+		$(this).fadeOut(200);
+	});
+	
+	$('#btn_help').click(function(){
+		$('#overlay').fadeIn(200);
+	});
+		
 	
 	
 	
