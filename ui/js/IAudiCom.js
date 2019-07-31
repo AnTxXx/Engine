@@ -49,7 +49,7 @@ export class IAudiCom {
 		this._colors = [
 		  	['#e2e2e2', '#000060'], //0 canvas
 		  	['#ebebeb', '#cccccc'],	//1 grid
-		  	['#A06FEB', '#FFFACD'],	//2 player
+		  	['#6fafeb', '#FFFACD'],	//2 player
 		  	['#d47070', '#F7CA18'],	//3 enemy
 		  	['#FDA038', '#DDA0DD'],	//4 wall, portal, exit
 			['#60cd4b', '#38fd4f'],	//5 colors for highlighted objects
@@ -58,8 +58,16 @@ export class IAudiCom {
 			['#7079d4', '#39adff'],	//8 colors for generic objects
 		];
 		
+		//fixed interim roomID 
+		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
+		this._AGroomID = rooms_buffer[0].ID;
+		
+		//prefill the inputs with Room name and Dimensions
+		$('#input_room_name').val(getReferenceById(this._AGroomID).name);
+		$('#tb_canvas_dim_width').val(getReferenceById(this._AGroomID).size.x);
+		$('#tb_canvas_dim_height').val(getReferenceById(this._AGroomID).size.z);
+		
 		this.renderScene();
-
     }
 	
     /**
@@ -187,35 +195,34 @@ export class IAudiCom {
 		
 	}
   	
-	newScene(){
-		let room_buffer = this._room_canvas;
-		let scale_buffer = this._scale;
-		let canvas_objects = room_buffer.getObjects();
+	newScene(){	
+		if(confirm("Clear all objects of current room?")){
+			let room_buffer = this._room_canvas;
+			let scale_buffer = this._scale;
+			let canvas_objects = room_buffer.getObjects();
 				
-		canvas_objects.forEach(function(item, i){
-			if(item.isObject && item.type != 'player'){
-				getReferenceById(item.AGObjectID).kill();
-	 		}
-			if(item.type !='grid_line' && item.type != 'player'){
-				room_buffer.remove(item);
-			}
-		});
+			canvas_objects.forEach(function(item, i){
+				if(item.isObject && item.type != 'player'){
+					getReferenceById(item.AGObjectID).kill();
+		 		}
+				if(item.type !='grid_line' && item.type != 'player'){
+					room_buffer.remove(item);
+				}
+			});
 		
-		room_buffer.renderAll();
-			
+			room_buffer.renderAll();	
+		}	
 	}
 	
 	
 	renderScene(){
 		//console.log(getReferenceById(g_gamearea.ID));
-		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
 		
-		this._AGroomID = rooms_buffer[0].ID;
 		this.renderAGRoom(this._AGroomID);
-		
+
 		let this_buffer = this;
-		if(rooms_buffer[0].AGobjects.length > 0){
-			rooms_buffer[0].AGobjects.forEach(function(element) {
+		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
+			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
  				this_buffer.renderAGObject(element.ID);
 				//console.log(element.tag + ": " + element.position.x)
 				//console.log(element.position.x);

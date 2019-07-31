@@ -40,6 +40,11 @@ jQuery(function($){
 		_room_canvas.getActiveObject().AGObjectID.name = buffer;
 	});
 	
+	$('#input_room_name').on('input', function() {
+	    let buffer = $(this).val();
+		getReferenceById(i_audicom._AGroomID).name = buffer;
+	});
+	
 	
 	$('#input_obj_pos_x').on('input', function() {	
 		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
@@ -70,6 +75,7 @@ jQuery(function($){
 			
 			$('#ui_part_right').addClass('lower_opacity');
 			$('#ui_part_left').addClass('lower_opacity');
+			$('#ui_controls').addClass('lower_opacity');
 			
 			switch($(this).attr('obj_type')){
 			case 'enemy':
@@ -99,6 +105,7 @@ jQuery(function($){
 			
 			$('#ui_part_right').removeClass('lower_opacity');
  			$('#ui_part_left').removeClass('lower_opacity');
+			$('#ui_controls').removeClass('lower_opacity');
 		}
 	});
 	$('#c').droppable({
@@ -163,58 +170,72 @@ jQuery(function($){
 		//Portale: Verlinkung
 		//Spieler: HP, Reichweite, Schaden
 		//Raumziel
-		
-		$('#ui_part_right_inner').fadeOut(100, function(){
-			$('#input_obj_name').val(actFabObj.name);
-			$('#input_obj_width').val(Math.round(actFabObj.width/i_audicom._scale));
-			$('#input_obj_height').val(Math.round(actFabObj.height/i_audicom._scale));
 
-			$('#input_obj_pos_x').val(actFabObj.left/i_audicom._scale);
-			$('#input_obj_pos_y').val(actFabObj.top/i_audicom._scale);
-			
-			$('.ui_box_special').hide();
-			
-			$('.ui_box_' + type).show();
-			$('.ui_box_general').show();
+		$('#ui_part_right_inner').fadeOut(100, function(){
 			
 			
-			$('#id_ span').text(actFabObj.AGObjectID);
-			
-			if(type=='enemy'){
-				$('.bnt_speed').removeClass('gegner_speed_active');
-				$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
-			}
-			
-			if(type!='player'){
-				$('#ui_delete_box').show();
-			}
-			
-			
-			if(getReferenceById(actFabObj.AGObjectID).collidable){
-				$('#cb_colli').prop('checked', true);
-			}else{
+			if(type =='room'){
+				$('#input_room_name').val(getReferenceById(i_audicom._AGroomID).name);
 				
-				$('#cb_colli').prop('checked', false);
-			}
+				$('#tb_canvas_dim_width').val(getReferenceById(i_audicom._AGroomID).size.x);
+				$('#tb_canvas_dim_height').val(getReferenceById(i_audicom._AGroomID).size.z);
+				
+				$('.ui_box_special').hide();
+				$('.ui_box_general').hide();
+				$('.ui_box_room').show();
+				
+			}else{
+				$('#input_obj_name').val(actFabObj.name);
+				$('#input_obj_width').val(Math.round(actFabObj.width/i_audicom._scale));
+				$('#input_obj_height').val(Math.round(actFabObj.height/i_audicom._scale));
+
+				$('#input_obj_pos_x').val(actFabObj.left/i_audicom._scale);
+				$('#input_obj_pos_y').val(actFabObj.top/i_audicom._scale);
+			
+				$('.ui_box_special').hide();
+			
+				$('.ui_box_' + type).show();
+				$('.ui_box_general').show();
 			
 			
-			$('.btn_ss').removeClass('ss_active');
-			//ICI
-			let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
+				$('#id_ span').text(actFabObj.AGObjectID);
+			
+				if(type=='enemy'){
+					$('.bnt_speed').removeClass('gegner_speed_active');
+					$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
+				}
+			
+				if(type!='player'){
+					$('#ui_delete_box').show();
+				}
 			
 			
+				if(getReferenceById(actFabObj.AGObjectID).collidable){
+					$('#cb_colli').prop('checked', true);
+				}else{
+				
+					$('#cb_colli').prop('checked', false);
+				}
+			
+			
+				$('.btn_ss').removeClass('ss_active');
+				//ICI
+				let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
 				if(ss_buffer.length==0){
 					$('.btn_ss').removeClass('ss_active');
 					$('#btn_sound_none').addClass('ss_active');
 				}else{
 					for (var i = 0; i < ss_buffer.length; i++) {
 						if(ss_buffer[i].tag){
-							
+						
 							$('#btn_sound_' + ss_buffer[i].tag.toLowerCase()).addClass('ss_active');
 						}
-					  	
+				  	
 					};
 				}
+			}
+			
+			
 			
 			setTimeout(function(){
 				$('#ui_part_right_inner').fadeIn(100);
@@ -223,6 +244,13 @@ jQuery(function($){
 			
 		});
 	}
+	
+	
+	//change dimensionsroom
+	$('#btn_set_dim').click(function(){
+		setCanvasDimensions($('#tb_canvas_dim_width').val(), $('#tb_canvas_dim_height').val())
+	});
+	
 	
 	//change speed of enemy
 	$('.bnt_speed').click(function() {
@@ -266,6 +294,7 @@ jQuery(function($){
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
+			$('#ui_controls').removeClass('no_click lower_opacity');
 			$('#ui_part_left').removeClass('no_click lower_opacity');
 			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
 			
@@ -273,6 +302,7 @@ jQuery(function($){
 			actFabObj.isRecording = true;
 			$(this).find('i').addClass('btn_path_rec_blink');
 			
+			$('#ui_controls').addClass('no_click lower_opacity');
 			$('#ui_part_left').addClass('no_click lower_opacity');
 			$('.ui_box_special:visible').not('#ui_box_enemy_path').addClass('no_click').addClass('lower_opacity');
 			
@@ -319,6 +349,7 @@ jQuery(function($){
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
 			$('#ui_part_left').removeClass('no_click lower_opacity');
+			$('#ui_controls').removeClass('no_click lower_opacity');
 			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_link_portals').removeClass('lower_opacity');
 			
 		}else{
@@ -326,6 +357,7 @@ jQuery(function($){
 			$(this).find('i').addClass('btn_path_rec_blink');
 			
 			$('#ui_part_left').addClass('no_click lower_opacity');
+			$('#ui_controls').addClass('no_click lower_opacity');
 			$('.ui_box_special:visible').not('#ui_box_link_portals').addClass('no_click').addClass('lower_opacity');
 			
 		}
@@ -579,6 +611,7 @@ jQuery(function($){
 					obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
 					$('#ui_part_left').removeClass('no_click lower_opacity');
+					$('#ui_controls').removeClass('no_click lower_opacity');
 					$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
 					
 					i_audicom.room_canvas.renderAll();
@@ -615,7 +648,9 @@ jQuery(function($){
 				}
 			}
 			
-			$('#ui_part_right_inner').fadeOut(100, function(){});
+			
+			loadObject('room');
+			
 			
 			//TODO check if recording; if yes -> stop recording	
 		}else{
@@ -753,9 +788,10 @@ jQuery(function($){
 	}
 
 	function setCanvasDimensions(width, height){
-		i_audicom._room_canvas.setHeight(width);
-		i_audicom._room_canvas.setWidth(height);
+		i_audicom._room_canvas.setWidth(width * i_audicom._scale);
+		i_audicom._room_canvas.setHeight(height * i_audicom._scale);
 		i_audicom._room_canvas.renderAll();
+		//set room size of AGRoom (what happens with objects, which "fall out")
 	}
 
 	function drawObjects(obj_type, obj_left, obj_top){

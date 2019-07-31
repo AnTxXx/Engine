@@ -13,7 +13,7 @@ h2{
 #wrapper{
 	position:relative;
 	height:100vh;
-	padding:0 25px;
+	
 	-webkit-box-sizing: border-box;
 	  -moz-box-sizing: border-box;
 	  box-sizing: border-box;
@@ -37,7 +37,6 @@ h2{
 
 /* UI */
 .ui_part{
-	padding:15px;
 	float:left;
   	-moz-transition: width 0.2s ease-out;
   	-webkit-transition: width 0.2s ease-out;
@@ -49,19 +48,29 @@ h2{
 	  box-sizing: border-box;
 }
 #ui_part_left{
-	width:15%;
+	padding:15px;
+	margin-top:80px;
+	position:absolute;
+	left:0;
 }
 #ui_part_middle{
-	width:60%;
+	padding:15px;
+	position:relative;
+	max-width:100%;
 }
 .ui_part_middle_expanded{
-	width:80% !important;
+	width:60% !important;
 }
 #ui_part_right{
-	width:5%;
+	margin-top:80px;
+	width:220px;	
+	position:absolute;
+	right:-220px;
+	top:0;
+	padding:15px 0 15px 15px;
 }
 .ui_part_right_expanded{
-	width:25% !important;
+	
 }
 .ui_box{
 	margin:10px 0;
@@ -69,8 +78,19 @@ h2{
 .ui_box_special{
 	display:none;
 }
-#ui_part_right_inner{
-	
+.ui_box_room{
+	display:block;
+}
+
+#r_cont{
+	height:10px;
+	position:relative;
+	width:100%;
+	padding-left:70px;
+	padding-right:240px;
+}
+#btn_set_dim{
+	margin-left:7px;
 }
 
 /*canvas*/
@@ -79,9 +99,6 @@ h2{
 	overflow: scroll;
 	max-height:600px;
 	/*border:1px solid #a1a1a1;*/
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
 }
 
 canvas{
@@ -103,7 +120,7 @@ canvas{
 
 #canvas_dim_box input[type=text]{
 	margin-top:0;
-	width:90px;
+	width:60px;
 }
 
 #input_obj_width, #input_obj_height, #input_obj_pos_x, #input_obj_pos_y{
@@ -123,7 +140,7 @@ canvas{
 	font-size:25px;
 	text-align:center;
 	line-height:60px;
-	margin:5px;
+	margin:0 5px;
 }
 
 .bg_enemy{
@@ -261,8 +278,12 @@ button:focus{
 	transform: translate(0px, 2px);
 	  -webkit-transform: translate(0px, 2px);
 }
+#ui_part_left .btn{
+	display:block;
+}
 
 input[type=text], textarea{
+	width:100%;
 	border:1px solid #7F7F7F;
 	padding:10px 10px;
 	margin:5px 0;
@@ -357,6 +378,22 @@ input[type=file] + label:hover{
     -o-transition: background-color 0.3s;
     transition: background-color 0.3s;
 }
+
+/*controls*/
+
+#ui_controls{
+	text-align:center;
+}
+
+.control_box{
+	margin:20px 0;
+}
+
+/**/
+.tb_canvas_dim{
+	width:30px;
+}
+
 
 /*ui-stuff*/
 .ui-draggable-dragging.drag_obj{
