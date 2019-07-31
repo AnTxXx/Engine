@@ -6,13 +6,14 @@ h1, h2, h3, h4, h5, h6{
 	font-family: 'Dosis', sans-serif;
 }
 h2{
+	margin-top:5px;
 	margin-bottom:5px;
 }
 
 #wrapper{
 	position:relative;
 	height:100vh;
-	padding:25px;
+	padding:0 25px;
 	-webkit-box-sizing: border-box;
 	  -moz-box-sizing: border-box;
 	  box-sizing: border-box;
@@ -128,6 +129,9 @@ canvas{
 .bg_enemy{
 	background-color:#d47070;
 }
+.bg_generic{
+	background-color:#7079d4;
+}
 
 .bg_portal, .bg_wall, .bg_exit{
 	background-color:#FDA038;
@@ -240,7 +244,7 @@ button:focus{
 	display:inline-block;
 	padding:10px 15px;
 	background-color:#BFBFBF;
-
+	margin:2px 0;
 }
 .btn:hover{
 	background-color:#98eea4;
@@ -370,39 +374,7 @@ input[type=file] + label:hover{
 	opacity:0;
 }
 
-/*contrast*/
-h1.contrast, h2.contrast, h3.contrast, h4.contrast, h5.contrast, h6.contrast{
-	color:white;
-}
-.sb_object_structure.contrast{
-	background-color:#DDA0DD;
-	color:#05182A;
-}
-.sb_object_creature.contrast{
-	background-color:#F7CA18;
-	color:#05182A;
-}
-body.contrast{
-	background-color:#0F4880;
-	color:white;
-}
-.btn.contrast, label.contrast{
-	background-color:#7FFFD4;
-	color:#05182A;
-}
-#canvas_container.contrast{
-	/*border:3px solid white;*/
-}
 
-#btn_delete_object.contrast{
-	background-color:#f02727;
-	color:white;
-}
-
-.gegner_speed_active.contrast, .ss_active.contrast{
-	background-color:#d077d4 !important;
-	
-}
 
 
 #id_{
@@ -423,8 +395,8 @@ body.contrast{
 	background-color:rgba(204, 204, 204, 0.5);
 	top:0;
 	left:0;
-	
 	min-height:100vh;
+	display:none;
 }
 #overlay_text_box{
 	background-color:white;
@@ -497,3 +469,98 @@ a:hover { text-decoration:none; color:#333333; outline: 0;}
 a:active { text-decoration:none; color:#33b7b5; outline: 0;}
 a:focus { text-decoration:none; color:#33b7b5; outline: 0;}
 
+
+/*interface*/
+.interface_box{
+	display:inline-block;
+}
+
+/*contrast*/
+h1.contrast, h2.contrast, h3.contrast, h4.contrast, h5.contrast, h6.contrast{
+	color:white;
+}
+.sb_object_structure.contrast{
+	background-color:#DDA0DD;
+	color:#05182A;
+}
+.sb_object_creature.contrast{
+	background-color:#F7CA18;
+	color:#05182A;
+}
+.sb_object_generic.contrast{
+	
+	background-color:#39adff;
+	color:#05182A;
+}
+body.contrast{
+	background-color:#0F4880;
+	color:white;
+}
+.btn.contrast, label.contrast{
+	background-color:#7FFFD4;
+	color:#05182A;
+}
+#canvas_container.contrast{
+	/*border:3px solid white;*/
+}
+
+#btn_delete_object.contrast{
+	background-color:#f02727;
+	color:white;
+}
+
+.gegner_speed_active.contrast, .ss_active.contrast{
+	background-color:#d077d4 !important;
+	
+}
+
+.enemy_dd{
+	background-color:transparent;
+	background-image: url('../img/enemy_dd_nc.svg');
+	background-size:100%;
+}
+.enemy_dd.contrast{
+	background-color:transparent;
+	background-image: url('../img/enemy_dd_c.svg');
+	background-size:100%;
+}
+
+.generic_dd{
+	background-color:transparent;
+	background-image: url('../img/generic_dd_nc.svg');
+	background-size:100%;
+}
+.generic_dd.contrast{
+	background-color:transparent;
+	background-image: url('../img/generic_dd_c.svg');
+	background-size:100%;
+}
+
+.portal_dd{
+	background-color:transparent;
+	background-image: url('../img/portal_dd_nc.svg');
+	background-size:100%;
+}
+.portal_dd.contrast{
+	background-color:transparent;
+	background-image: url('../img/portal_dd_c.svg');
+	background-size:100%;
+}
+
+.exit_dd{
+	background-color:transparent;
+	background-image: url('../img/exit_dd_nc.svg');
+	background-size:100%;
+}
+.exit_dd.contrast{
+	background-color:transparent;
+	background-image: url('../img/exit_dd_c.svg');
+	background-size:100%;
+}
+
+.lower_opacity{
+	opacity:0.2;
+}
+.no_click{
+	pointer-events:none;
+}

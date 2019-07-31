@@ -55,6 +55,7 @@ export class IAudiCom {
 			['#60cd4b', '#38fd4f'],	//5 colors for highlighted objects
 			['#000000', '#ffffff'],	//6 colors for path-points
 			['#000000', '#f02727'],	//7 colors for path-lines
+			['#7079d4', '#39adff'],	//8 colors for generic objects
 		];
 		
 		this.renderScene();
@@ -84,15 +85,11 @@ export class IAudiCom {
 
 				case 'enemy':
 					object.set("fill", this._colors[3][this._vision_mode]);
-
 					break;
 				case 'portal':
-
-					object.set("fill", this._colors[4][this._vision_mode]);
-					
-					break;
 				case 'wall':
-					object.set("fill", this._colors[4][this._vision_mode]);
+				case 'exit':
+					object.set("fill", this._colors[4][this._vision_mode]);			
 					break;
 				case 'path_dot':
 					
@@ -102,15 +99,15 @@ export class IAudiCom {
 					object.set("fill", this._colors[7][this._vision_mode]);
 					object.set("stroke", this._colors[7][this._vision_mode]);
 					break;
+				default:
+					object.set("fill", this._colors[8][this._vision_mode]);
 			}
 		});
-		
-		
 		
 		this._room_canvas.renderAll();
 
 		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,.btn,#canvas_container,label,.gegner_speed_active,.ss_active" ).toggleClass("contrast");
+		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active" ).toggleClass("contrast");
 
 	}
 	
@@ -190,6 +187,24 @@ export class IAudiCom {
 		
 	}
   	
+	newScene(){
+		let room_buffer = this._room_canvas;
+		let scale_buffer = this._scale;
+		let canvas_objects = room_buffer.getObjects();
+				
+		canvas_objects.forEach(function(item, i){
+			if(item.isObject && item.type != 'player'){
+				getReferenceById(item.AGObjectID).kill();
+	 		}
+			if(item.type !='grid_line' && item.type != 'player'){
+				room_buffer.remove(item);
+			}
+		});
+		
+		room_buffer.renderAll();
+			
+	}
+	
 	
 	renderScene(){
 		//console.log(getReferenceById(g_gamearea.ID));
@@ -212,8 +227,6 @@ export class IAudiCom {
 	zoomCanvas(zoom_factor){
 		//min : 0.5
 		//max : 1.5
-		
-		
 		
 		let room_buffer = this._room_canvas;
 		room_buffer.setZoom(room_buffer.getZoom()*zoom_factor);
@@ -296,7 +309,6 @@ export class IAudiCom {
 			case 'none':
 				
 				break;
-			
 		}
 		
 	}
@@ -347,27 +359,9 @@ export class IAudiCom {
 		//snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
 		this._room_canvas.on('object:moving', options => {
 			//Change wally to wall to reactivate scaling
-			if(options.target.type == 'wally'){
-	 			options.target.set({
-	 			   left: Math.round((options.target.left) / this._scale) * this._scale,
-	 			   top: Math.round((options.target.top) / this._scale) * this._scale 
-	 			});
-			}
 			
 			
-			if(options.target.type == 'portal' && options.target.line){
-
-				options.target.line.set({ 'x1': options.target.left, 'y1': options.target.top });
-				options.target.line.dot.set({ 'left': options.target.left-4, 'top': options.target.top-4 });
-				this.getFabricObject(options.target.secDoor).line.set({ 'x2': options.target.left, 'y2': options.target.top });
-		
-
-			}
-			
-			//options.target.AGObject.position = new Vector3((options.target.left - options.target.AGObject.size.x*this._scale/2)/this._scale, 1, (options.target.top - options.target.AGObject.size.z*this._scale/2)/this._scale);
-			
-			
-			getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
+			//getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
 			
 		});
 		
@@ -444,6 +438,10 @@ export class IAudiCom {
 				obj_buffer = new AGRoomExit("Exit", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				obj_buffer_ID = getIdByReference(obj_buffer);
 				break;
+			case 'generic':
+				obj_buffer = new AGObject("Generic", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				getReferenceById(obj_buffer_ID).tag = "GENERIC";
 			
 		}
 		
@@ -574,6 +572,45 @@ export class IAudiCom {
 					obj.hasRotatingPoint = false; 
 					room_canvas_buffer.add(obj).renderAll();
 					break;
+				default:
+					fabric.loadSVGFromURL('ui/img/generic.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+					  	// obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer + getReferenceById(ag_objectID).size.x*_scalebuffer/2;
+// 					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer + getReferenceById(ag_objectID).size.z*_scalebuffer/2;
+
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[8][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+					 	obj.PathArray = [];
+						obj.LineArray = [];
+						obj.isObject = true;
+						obj.isRecording = false;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'generic';
+						obj.originX = 'center';
+						obj.originY = 'center';
+
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						
+						
+					  	room_canvas_buffer.add(obj).renderAll();
+					});
 			}
 		
 		}else if(getReferenceById(ag_objectID).type){
@@ -633,10 +670,9 @@ export class IAudiCom {
 							obj.secDoor = false;
 							obj.line = false;
 						}
-						
+					
 						obj.originX = 'center';
 						obj.originY = 'center';
-						
 						obj.hasRotatingPoint = false; 
 						obj.lockScalingX = true;
 						obj.lockScalingY = true;
@@ -729,6 +765,40 @@ export class IAudiCom {
 					
 					});
 					break;
+				default:
+					fabric.loadSVGFromURL('ui/img/generic.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(1*_scalebuffer);
+					  	obj.scaleToHeight(1*_scalebuffer);
+					  		
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[4][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+						obj.isObject = true;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'generic';
+					  	room_canvas_buffer.add(obj).renderAll();
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						room_canvas_buffer.add(obj).renderAll();
+					
+					});
 			}	
 		}
 	}
