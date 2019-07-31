@@ -5,6 +5,8 @@ import {Counter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
 import {g_references} from "./AGEngine.js";
 import {g_history, g_loading} from "./AGEngine.js";
+import {isPointInsideAABB} from "./AGPhysics.js";
+import {Plane} from "./js/three/Plane.js";
 
 let gForward, gBackward, gLeft, gRight, gInteract;
 
@@ -117,10 +119,25 @@ export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
     object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     object.room.checkForCollision();
 
-    if(!allowedCollision(object, objectPartOfCollisions(object.room.collisions, object)) ||
+    /*if(!allowedCollision(object, objectPartOfCollisions(object.room.collisions, object)) ||
         !object.room.pointInsideRoom(object.position, object.size)){
         object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
         console.log("[AGNavigation] " + object.name + ": Can't move forward.");
+    }*/
+
+    let PoC:Array<AGObject> = objectPartOfCollisions(object.room.collisions, object);
+
+    if(!allowedCollision(object, PoC)) {
+        console.log("[AGNavigation] " + object.name + ": Can't move forward. Colliding with other object.");
+        //TODO: HIER WEITER MACHEN
+        // TEST
+        planeIntersectPlane(PoC, object);
+        //
+        pointOfIntersection(PoC, object);
+        object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
+    } else if(!object.room.pointInsideRoom(object.position, object.size)){
+        console.log("[AGNavigation] " + object.name + ": Can't move forward. Colliding with room boundaries.");
+        object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     }
 
     /*if(object.gameArea.objectPartOfCollision(object)!=null){
@@ -129,6 +146,103 @@ export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
     }*/
     //console.log(object.position.x + " " + object.position.y + " " + object.position.z +
     //    " " + direction.x + " " + direction.y + " " + direction.z);
+}
+
+function pointOfIntersection(PoC_arr:Array<AGObject>, obj:AGObject){
+    let point:Vector3;
+    for(let i = -1; i <= 1; i+=2){
+        for(let j = -1; j <= 1; j+=2){
+            for(let k = -1; k <= 1; k+=2){
+                point = new Vector3(obj.position.x-(obj.size.x/2)*(i), obj.position.y-(obj.size.y/2)*(j), obj.position.z-(obj.size.z/2)*(k));
+                if(isPointInsideAABB(point, PoC_arr[0])){
+                    console.log("[AGNavigation] " + obj.name + ": Playing sound at position: " + point.x + " " + point.y + " " + point.z);
+                }
+            }
+        }
+    }
+}
+//https://stackoverflow.com/questions/6408670/line-of-intersection-between-two-planes
+function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
+    let r_points:Array<Vector3> = [], r_normals:Array<Vector3> = [];
+    let plane1_arr:Array<Plane> = calculatePlanesCCW(PoC_arr[0]);
+    let plane2_arr:Array<Plane> = calculatePlanesCCW(obj);
+
+    for(let i = 0; i < plane1_arr.length; i++){
+        for(let j = 0; j < plane2_arr.length; j++){
+            let plane1:Plane = plane1_arr[i];
+            let plane2:Plane = plane2_arr[j];
+
+            let p3_normal:Vector3 = new Vector3();
+            p3_normal.crossVectors(plane1.normal, plane2.normal);
+            const det:number = p3_normal.lengthSq();
+
+            //console.log(p3_normal.clone().cross(plane2.normal).clone().multiplyScalar(plane1.constant).clone().add(plane1.clone().normal.cross(p3_normal).clone().multiplyScalar(plane2.constant)));
+            if(det !== 0.0){
+                r_points.push((p3_normal.clone().cross(plane2.normal).clone().multiplyScalar(plane1.constant).add(plane1.clone().normal.cross(p3_normal).clone().multiplyScalar(plane2.constant))).clone().divideScalar(det));
+                r_normals.push(p3_normal);
+            } else {
+                console.log("nah");
+            }
+
+        }
+    }
+
+    console.log(r_points);
+    console.log(r_normals);
+}
+
+function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
+    let return_arr:Array<AGObject> = [];
+
+    let plane_a:Plane = new Plane();
+    let plane_b:Plane = new Plane();
+    let plane_c:Plane = new Plane();
+    let plane_d:Plane = new Plane();
+    let plane_e:Plane = new Plane();
+    let plane_f:Plane = new Plane();
+    let v1:Vector3, v2:Vector3, v3:Vector3;
+
+    v1 = extractPlanePoint(obj, -1,+1,-1);
+    v2 = extractPlanePoint(obj, -1, -1, -1);
+    v3 = extractPlanePoint(obj, +1, -1, -1);
+    plane_a.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    return_arr.push(plane_a);
+
+    v1 = extractPlanePoint(obj, +1,+1,-1);
+    v2 = extractPlanePoint(obj, +1, -1, -1);
+    v3 = extractPlanePoint(obj, +1, -1, +1);
+    plane_b.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    return_arr.push(plane_b);
+
+    v1 = extractPlanePoint(obj, -1,+1,+1);
+    v2 = extractPlanePoint(obj, -1, +1, -1);
+    v3 = extractPlanePoint(obj, +1, +1, -1);
+    plane_c.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    return_arr.push(plane_c);
+
+    v1 = extractPlanePoint(obj, +1,+1,+1);
+    v2 = extractPlanePoint(obj, +1, -1, +1);
+    v3 = extractPlanePoint(obj, -1, -1, +1);
+    plane_d.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    return_arr.push(plane_d);
+
+    v1 = extractPlanePoint(obj, -1,+1,+1);
+    v2 = extractPlanePoint(obj, -1, -1, +1);
+    v3 = extractPlanePoint(obj, -1, -1, -1);
+    plane_e.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    return_arr.push(plane_e);
+
+    v1 = extractPlanePoint(obj, +1,-1,+1);
+    v2 = extractPlanePoint(obj, +1, -1, -1);
+    v3 = extractPlanePoint(obj, -1, -1, -1);
+    plane_f.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    return_arr.push(plane_f);
+
+    return return_arr;
+}
+
+function extractPlanePoint(obj:AGObject, x:number, y:number, z:number):Vector3{
+    return new Vector3(obj.position.x+(obj.size.x/2*x), obj.position.y+(obj.size.x/2*y), obj.position.z+(obj.size.z/2*z));
 }
 
 /**
