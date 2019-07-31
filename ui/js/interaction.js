@@ -248,7 +248,7 @@ jQuery(function($){
 	
 	//change dimensionsroom
 	$('#btn_set_dim').click(function(){
-		setCanvasDimensions($('#tb_canvas_dim_width').val(), $('#tb_canvas_dim_height').val())
+		i_audicom.setAGRoomDimensions($('#tb_canvas_dim_width').val(), $('#tb_canvas_dim_height').val())
 	});
 	
 	
@@ -787,12 +787,7 @@ jQuery(function($){
 		return [posX, posY]
 	}
 
-	function setCanvasDimensions(width, height){
-		i_audicom._room_canvas.setWidth(width * i_audicom._scale);
-		i_audicom._room_canvas.setHeight(height * i_audicom._scale);
-		i_audicom._room_canvas.renderAll();
-		//set room size of AGRoom (what happens with objects, which "fall out")
-	}
+	
 
 	function drawObjects(obj_type, obj_left, obj_top){
 

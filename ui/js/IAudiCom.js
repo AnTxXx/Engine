@@ -320,6 +320,17 @@ export class IAudiCom {
 		
 	}
 	
+	
+	setAGRoomDimensions(width, height){
+		this._room_canvas.setWidth(width * this._scale);
+		this._room_canvas.setHeight(height * this._scale);
+		this._room_canvas.renderAll();
+
+		//set room size of AGRoom (what happens with objects, which "fall out")
+		getReferenceById(this._AGroomID).size = new Vector3(width, 2.5, height);
+	}
+	
+	
 	renderAGRoom(ag_roomID){
 		
 	
