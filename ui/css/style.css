@@ -414,10 +414,11 @@ input[type=file] + label:hover{
 
 
 
-#id_{
+#id_,#coord_x,#coord_y{
 	color:#999;
 	font-style:italic;
 }
+
 #ui_colli_box{
 	margin:20px 0;
 }

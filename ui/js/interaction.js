@@ -663,6 +663,8 @@ jQuery(function($){
 	//fabric listeners
 	i_audicom._room_canvas.on({
 	    'selection:created': function(e){
+			outputFabPos();
+			
 			actFabObj = i_audicom._room_canvas.getActiveObject();
 			if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
 				if(!actFabObj.isRecording){
@@ -691,7 +693,7 @@ jQuery(function($){
 			}
 	    },
 	    'selection:updated': function(e){
-		
+			outputFabPos();
 			//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
 			if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
 				// let actObj_buffer = room_canvas.getActiveObject();
@@ -756,6 +758,9 @@ jQuery(function($){
 	    },
 		'object:moving': function(e) {
 			
+			outputFabPos();
+			
+			
 			//if moved outside, slide object along border of canvas
 			if(actFabObj.left - actFabObj.getScaledWidth()/2 <= 0){
 				actFabObj.left = actFabObj.getScaledWidth()/2;
@@ -787,7 +792,10 @@ jQuery(function($){
 		return [posX, posY]
 	}
 
-	
+	function outputFabPos(){
+		$('#coord_x span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.x * 10) / 10);
+		$('#coord_y span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.z * 10) / 10);
+	}
 
 	function drawObjects(obj_type, obj_left, obj_top){
 
