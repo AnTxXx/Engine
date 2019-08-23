@@ -176,6 +176,9 @@ jQuery(function($){
 	
 	
 	
+	
+	
+	
 	$( "#test_button").focus(function() {
 		console.log("huhu");
 	});
@@ -286,6 +289,9 @@ jQuery(function($){
 			$(this).addClass('ss_active');
 			i_audicom.addSoundSource(actFabObj.AGObjectID, $(this).attr('ss'));
 	});
+	
+	
+	
 	
 	
 	//button for path recording
@@ -510,6 +516,11 @@ jQuery(function($){
 	
 	
 	i_audicom._room_canvas.on('mouse:down', function(e){
+		
+		
+		
+		
+		
 		
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording){
