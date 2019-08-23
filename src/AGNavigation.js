@@ -4,7 +4,7 @@ import {AGObject} from "./AGObject.js";
 import {Counter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
 import {g_references} from "./AGEngine.js";
-import {g_history, g_loading} from "./AGEngine.js";
+import {g_history, g_loading, g_IAudiCom} from "./AGEngine.js";
 import {isPointInsideAABB} from "./AGPhysics.js";
 import {Plane} from "./js/three/Plane.js";
 

@@ -4,6 +4,7 @@ import {AGSaLo} from "./AGSaLo.js";
 import {AGEventHandler} from "./AGEventHandler.js";
 import {AGNavigation} from "./AGNavigation.js";
 import {Vector3} from "./js/three/Vector3.js";
+import {IAudiCom} from "../ui/js/IAudiCom.js";
 //import * as ResonanceAudio from './js/resonance/resonance-audio.min.js';
 //import * as bla from './js/resonance/resonance-audio.js';
 
@@ -15,6 +16,12 @@ export let g_history:AGSaLo = new AGSaLo();
 export let g_eventHandler:AGEventHandler = new AGEventHandler();
 export let g_gamearea:AGGameArea = new AGGameArea("Area", new Vector3(30,2.5,10));
 export let g_controls:AGNavigation;
+
+export let g_IAudiCom:IAudiCom;
+
+export function setIAudiCom(IAC:IAudiCom){
+    g_IAudiCom = IAC;
+}
 
 
 //let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
