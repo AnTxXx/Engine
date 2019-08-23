@@ -17,6 +17,10 @@ jQuery(function($){
 	$('#btn_stop_scene').click(function(){
 		i_audicom.stopArea();
 	});
+	$('#btn_new_scene').click(function(){
+		i_audicom.newScene();
+	});
+	
 	
 	$('#btn_change_vision_mode').click(function(){
 		i_audicom.toggleVisionMode();
@@ -34,6 +38,11 @@ jQuery(function($){
 	    let buffer = $(this).val();
 		i_audicom._room_canvas.getActiveObject().name = buffer;
 		_room_canvas.getActiveObject().AGObjectID.name = buffer;
+	});
+	
+	$('#input_room_name').on('input', function() {
+	    let buffer = $(this).val();
+		getReferenceById(i_audicom._AGroomID).name = buffer;
 	});
 	
 	
@@ -63,6 +72,26 @@ jQuery(function($){
 		scroll: false,
 		helper: 'clone',
 		drag: function(e, ui){
+			
+			$('#ui_part_right').addClass('lower_opacity');
+			$('#ui_part_left').addClass('lower_opacity');
+			$('#ui_controls').addClass('lower_opacity');
+			
+			switch($(this).attr('obj_type')){
+			case 'enemy':
+				ui.helper.addClass('enemy_dd');
+				break;
+			case 'portal':
+				ui.helper.addClass('portal_dd');
+				break;
+			case 'exit':
+				ui.helper.addClass('exit_dd');
+				break;
+			case 'generic':
+				ui.helper.addClass('generic_dd');
+				break;
+			}
+			
 			ui.helper.animate({
  				width: i_audicom._scale,
  				height: i_audicom._scale,
@@ -71,6 +100,12 @@ jQuery(function($){
  			 	
  			});
 			ui.helper.empty();
+		},
+		stop: function(e, ui){
+			
+			$('#ui_part_right').removeClass('lower_opacity');
+ 			$('#ui_part_left').removeClass('lower_opacity');
+			$('#ui_controls').removeClass('lower_opacity');
 		}
 	});
 	$('#c').droppable({
@@ -81,11 +116,31 @@ jQuery(function($){
 		drop: function( event, ui ) {  
 			let obj_type = $(ui.draggable).attr('obj_type');
 			let obj;
-			let left_buff = (ui.position.left)-$(this).offset().left + i_audicom._scale/2;
-			let top_buff = (ui.position.top)-$(this).offset().top + i_audicom._scale/2;	
+			let left_buff = (((ui.position.left)-$(this).offset().left + i_audicom._scale/2)/i_audicom._room_canvas.getZoom())+5;
+			let top_buff = (((ui.position.top)-$(this).offset().top + i_audicom._scale/2)/i_audicom._room_canvas.getZoom())+5;
+			
+			
+			//if placed partially outside place it inside at the border
+			if(left_buff - i_audicom._scale/2 <= 0){
+				left_buff = i_audicom._scale/2;
+			}
+			if(top_buff - i_audicom._scale/2 <= 0){
+				top_buff = i_audicom._scale/2;
+			}
+			if(left_buff + i_audicom._scale/2 >= i_audicom._room_canvas.width){
+				left_buff = i_audicom._room_canvas.width - i_audicom._scale/2;
+			}
+			
+			if(top_buff + i_audicom._scale/2 >= i_audicom._room_canvas.height){
+				top_buff = i_audicom._room_canvas.height - i_audicom._scale/2;
+			}
+			
+			
 			let agobject_buffer;
 			
+			
 			i_audicom.makeThenRenderAGObject(obj_type, left_buff, top_buff);
+			
 			//render the thing
 			
 			//move to a function
@@ -107,6 +162,27 @@ jQuery(function($){
 	});
 	
 	
+	
+	$('.canvas-container').mousemove(function(e) {
+		
+		
+	
+		$('#mouse_coords_x span').text(getMouseCoords(e)[0]*2/110);
+		$('#mouse_coords_y span').text(getMouseCoords(e)[1]*2/110);
+		//ici
+		
+		
+	});
+	
+	
+	
+	$( "#test_button").focus(function() {
+		console.log("huhu");
+	});
+	
+	
+	
+	
 	function loadObject(type){
 		
 		//all: position, SoSo, Namen, Löschenbutton
@@ -115,58 +191,72 @@ jQuery(function($){
 		//Portale: Verlinkung
 		//Spieler: HP, Reichweite, Schaden
 		//Raumziel
-		
-		$('#ui_part_right_inner').fadeOut(100, function(){
-			$('#input_obj_name').val(actFabObj.name);
-			$('#input_obj_width').val(Math.round(actFabObj.width/i_audicom._scale));
-			$('#input_obj_height').val(Math.round(actFabObj.height/i_audicom._scale));
 
-			$('#input_obj_pos_x').val(actFabObj.left/i_audicom._scale);
-			$('#input_obj_pos_y').val(actFabObj.top/i_audicom._scale);
-			
-			$('.ui_box_special').hide();
-			
-			$('.ui_box_' + type).show();
-			$('.ui_box_general').show();
+		$('#ui_part_right_inner').fadeOut(100, function(){
 			
 			
-			$('#id_ span').text(actFabObj.AGObjectID);
-			
-			if(type=='enemy'){
-				$('.bnt_speed').removeClass('gegner_speed_active');
-				$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
-			}
-			
-			if(type!='player'){
-				$('#ui_delete_box').show();
-			}
-			
-			
-			if(getReferenceById(actFabObj.AGObjectID).collidable){
-				$('#cb_colli').prop('checked', true);
-			}else{
+			if(type =='room'){
+				$('#input_room_name').val(getReferenceById(i_audicom._AGroomID).name);
 				
-				$('#cb_colli').prop('checked', false);
-			}
+				$('#tb_canvas_dim_width').val(getReferenceById(i_audicom._AGroomID).size.x);
+				$('#tb_canvas_dim_height').val(getReferenceById(i_audicom._AGroomID).size.z);
+				
+				$('.ui_box_special').hide();
+				$('.ui_box_general').hide();
+				$('.ui_box_room').show();
+				
+			}else{
+				$('#input_obj_name').val(actFabObj.name);
+				$('#input_obj_width').val(Math.round(actFabObj.width/i_audicom._scale));
+				$('#input_obj_height').val(Math.round(actFabObj.height/i_audicom._scale));
+
+				$('#input_obj_pos_x').val(actFabObj.left/i_audicom._scale);
+				$('#input_obj_pos_y').val(actFabObj.top/i_audicom._scale);
+			
+				$('.ui_box_special').hide();
+			
+				$('.ui_box_' + type).show();
+				$('.ui_box_general').show();
 			
 			
-			$('.btn_ss').removeClass('ss_active');
-			//ICI
-			let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
+				$('#id_ span').text(actFabObj.AGObjectID);
+			
+				if(type=='enemy'){
+					$('.bnt_speed').removeClass('gegner_speed_active');
+					$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
+				}
+			
+				if(type!='player'){
+					$('#ui_delete_box').show();
+				}
 			
 			
+				if(getReferenceById(actFabObj.AGObjectID).collidable){
+					$('#cb_colli').prop('checked', true);
+				}else{
+				
+					$('#cb_colli').prop('checked', false);
+				}
+			
+			
+				$('.btn_ss').removeClass('ss_active');
+				//ICI
+				let ss_buffer = getReferenceById(actFabObj.AGObjectID).getSoundSources();
 				if(ss_buffer.length==0){
 					$('.btn_ss').removeClass('ss_active');
 					$('#btn_sound_none').addClass('ss_active');
 				}else{
 					for (var i = 0; i < ss_buffer.length; i++) {
 						if(ss_buffer[i].tag){
-							
+						
 							$('#btn_sound_' + ss_buffer[i].tag.toLowerCase()).addClass('ss_active');
 						}
-					  	
+				  	
 					};
 				}
+			}
+			
+			
 			
 			setTimeout(function(){
 				$('#ui_part_right_inner').fadeIn(100);
@@ -175,6 +265,13 @@ jQuery(function($){
 			
 		});
 	}
+	
+	
+	//change dimensionsroom
+	$('#btn_set_dim').click(function(){
+		i_audicom.setAGRoomDimensions($('#tb_canvas_dim_width').val(), $('#tb_canvas_dim_height').val())
+	});
+	
 	
 	//change speed of enemy
 	$('.bnt_speed').click(function() {
@@ -193,6 +290,7 @@ jQuery(function($){
 	
 	//button for path recording
 	$('#btn_path_rec').click(function(){
+		
 		if(actFabObj.isRecording){
 			let first_dot = new fabric.Circle({
 				left:   actFabObj.left,
@@ -217,9 +315,18 @@ jQuery(function($){
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
+			$('#ui_controls').removeClass('no_click lower_opacity');
+			$('#ui_part_left').removeClass('no_click lower_opacity');
+			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
+			
 		}else{
 			actFabObj.isRecording = true;
 			$(this).find('i').addClass('btn_path_rec_blink');
+			
+			$('#ui_controls').addClass('no_click lower_opacity');
+			$('#ui_part_left').addClass('no_click lower_opacity');
+			$('.ui_box_special:visible').not('#ui_box_enemy_path').addClass('no_click').addClass('lower_opacity');
+			
 		}
 	});
 	
@@ -240,6 +347,7 @@ jQuery(function($){
 		actFabObj.PathArray = [];	
 		getReferenceById(actFabObj.AGObjectID).clearRoute();
 		getReferenceById(actFabObj.AGObjectID).movable = false;
+		
 	});
 	
 	
@@ -260,9 +368,19 @@ jQuery(function($){
 		if(actFabObj.isRecording){
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
+			
+			$('#ui_part_left').removeClass('no_click lower_opacity');
+			$('#ui_controls').removeClass('no_click lower_opacity');
+			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_link_portals').removeClass('lower_opacity');
+			
 		}else{
 			actFabObj.isRecording = true;
 			$(this).find('i').addClass('btn_path_rec_blink');
+			
+			$('#ui_part_left').addClass('no_click lower_opacity');
+			$('#ui_controls').addClass('no_click lower_opacity');
+			$('.ui_box_special:visible').not('#ui_box_link_portals').addClass('no_click').addClass('lower_opacity');
+			
 		}
 	});
 	
@@ -271,12 +389,6 @@ jQuery(function($){
 		
 		//ICI
 		//actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-		
-			
-		
-		
-	
-		
 		let sec_door_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
 		
 		i_audicom._room_canvas.remove(actFabObj.line.dot);
@@ -461,8 +573,7 @@ jQuery(function($){
 						i_audicom._room_canvas.remove(actFabObj.line.dot);
 						i_audicom._room_canvas.remove(actFabObj.line);
 						actFabObj.line.line = false;
-						
-						
+							
 					}
 					
 					//obj_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
@@ -470,8 +581,7 @@ jQuery(function($){
 					//link fabric objects
 					actFabObj.secDoor = obj_buffer.AGObjectID;
 					obj_buffer.secDoor = actFabObj.AGObjectID;
-					
-										
+									
 					let dot_1 = new fabric.Circle({
 					    left:   actFabObj.left-4,
 					    top:    actFabObj.top-4,
@@ -521,6 +631,10 @@ jQuery(function($){
 					//console.log(i_audicom._colors[5][i_audicom._vision_mode]);
 					obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
+					$('#ui_part_left').removeClass('no_click lower_opacity');
+					$('#ui_controls').removeClass('no_click lower_opacity');
+					$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
+					
 					i_audicom.room_canvas.renderAll();
 				}
 			}else{
@@ -555,7 +669,9 @@ jQuery(function($){
 				}
 			}
 			
-			$('#ui_part_right_inner').fadeOut(100, function(){});
+			
+			loadObject('room');
+			
 			
 			//TODO check if recording; if yes -> stop recording	
 		}else{
@@ -566,113 +682,130 @@ jQuery(function($){
 	});
 	
 	//fabric listeners
-	i_audicom._room_canvas.on('selection:created', function(e){
-		
-		
-		
-		actFabObj = i_audicom._room_canvas.getActiveObject();
-		if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
-			if(!actFabObj.isRecording){
-				loadObject(actFabObj.type);
-				if(i_audicom._room_canvas.getActiveObject().PathArray){
-					actFabObj = i_audicom._room_canvas.getActiveObject();
-					actFabObj.PathArray.forEach(function(ele) {
-						ele.opacity = 1;
-					});
-					actFabObj.LineArray.forEach(function(ele) {
-						ele.opacity = 1;
-					});
-				}else if(actFabObj.secDoor){
-					
-					
-					
-					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
-					
-					if(actFabObj.line){
-						actFabObj.line.set("opacity", 1);
-						actFabObj.line.dot.set("opacity", 1);
-						i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 1);
-					}
-					
-					
-					
-				}	
-			}
-		}else{
-			loadObject(actFabObj.type);
-		}
-	});
-	
-	
-	i_audicom._room_canvas.on('selection:updated', function(e){
-		
-		
-		
-		//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
-		if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
-			// let actObj_buffer = room_canvas.getActiveObject();
-//
-// 			if(actObj_buffer.type=='portal'){
-// 				actFabObj.secDoor = room_canvas.getActiveObject();
-// 				actObj_buffer.secDoor = actObj;
-// 				getReferenceById(actFabObj.AGObjectID).linkPortals(actObj_buffer.AGObjectID);
-//
-// 			}
-			//canvas.setActiveObject(actObj);
-	
-		}else{
+	i_audicom._room_canvas.on({
+	    'selection:created': function(e){
+			outputFabPos();
 			
-			//if another element is selected reset highlights and hide paths
-			if(actFabObj != i_audicom._room_canvas.getActiveObject()){	
-				if(actFabObj.PathArray){
-					actFabObj.PathArray.forEach(function(ele) {
-						ele.opacity = 0;
-					});
-					actFabObj.LineArray.forEach(function(ele) {
-						ele.opacity = 0;
-					});
-				}else if(actFabObj.secDoor){
-					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-					if(actFabObj.line){
-						
-						actFabObj.line.set("opacity", 0);
-						actFabObj.line.dot.set("opacity", 0);
-						i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 0);
-					}
-				}
-			}
-			
-			//show highlights or paths of new active fab object
-			if(i_audicom._room_canvas.getActiveObject().PathArray){
-				i_audicom._room_canvas.getActiveObject().PathArray.forEach(function(ele) {
-					ele.opacity = 1;
-				});
-				i_audicom._room_canvas.getActiveObject().LineArray.forEach(function(ele) {
-					ele.opacity = 1;
-				});
-				
-			//if another object is selected hide highlight-color of portal
-			}else if(i_audicom._room_canvas.getActiveObject().secDoor){
-				i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
-				
-				
-				if(i_audicom._room_canvas.getActiveObject().line){
-				
-					
-					i_audicom._room_canvas.getActiveObject().line.set("opacity", 1);
-					i_audicom._room_canvas.getActiveObject().line.dot.set("opacity", 1);
-					i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).line.dot.set("opacity", 1);
-				}
-				
-			}
 			actFabObj = i_audicom._room_canvas.getActiveObject();
-			loadObject(actFabObj.type);
-		}
+			if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
+				if(!actFabObj.isRecording){
+					loadObject(actFabObj.type);
+					if(i_audicom._room_canvas.getActiveObject().PathArray){
+						actFabObj = i_audicom._room_canvas.getActiveObject();
+						actFabObj.PathArray.forEach(function(ele) {
+							ele.opacity = 1;
+						});
+						actFabObj.LineArray.forEach(function(ele) {
+							ele.opacity = 1;
+						});
+					}else if(actFabObj.secDoor){
+						
+						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+					
+						if(actFabObj.line){
+							actFabObj.line.set("opacity", 1);
+							actFabObj.line.dot.set("opacity", 1);
+							i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 1);
+						}
+					}	
+				}
+			}else{
+				loadObject(actFabObj.type);
+			}
+	    },
+	    'selection:updated': function(e){
+			outputFabPos();
+			//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
+			if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
+				// let actObj_buffer = room_canvas.getActiveObject();
+	//
+	// 			if(actObj_buffer.type=='portal'){
+	// 				actFabObj.secDoor = room_canvas.getActiveObject();
+	// 				actObj_buffer.secDoor = actObj;
+	// 				getReferenceById(actFabObj.AGObjectID).linkPortals(actObj_buffer.AGObjectID);
+	//
+	// 			}
+				//canvas.setActiveObject(actObj);
+	
+			}else{
+			
+				//if another element is selected reset highlights and hide paths
+				if(actFabObj != i_audicom._room_canvas.getActiveObject()){	
+					if(actFabObj.PathArray){
+						actFabObj.PathArray.forEach(function(ele) {
+							ele.opacity = 0;
+						});
+						actFabObj.LineArray.forEach(function(ele) {
+							ele.opacity = 0;
+						});
+					}else if(actFabObj.secDoor){
+						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+						if(actFabObj.line){
+						
+							actFabObj.line.set("opacity", 0);
+							actFabObj.line.dot.set("opacity", 0);
+							i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 0);
+						}
+					}
+				}
+			
+				//show highlights or paths of new active fab object
+				if(i_audicom._room_canvas.getActiveObject().PathArray){
+					i_audicom._room_canvas.getActiveObject().PathArray.forEach(function(ele) {
+						ele.opacity = 1;
+					});
+					i_audicom._room_canvas.getActiveObject().LineArray.forEach(function(ele) {
+						ele.opacity = 1;
+					});
+				
+				//if another object is selected hide highlight-color of portal
+				}else if(i_audicom._room_canvas.getActiveObject().secDoor){
+					i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+				
+				
+					if(i_audicom._room_canvas.getActiveObject().line){
+				
+					
+						i_audicom._room_canvas.getActiveObject().line.set("opacity", 1);
+						i_audicom._room_canvas.getActiveObject().line.dot.set("opacity", 1);
+						i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).line.dot.set("opacity", 1);
+					}
+				
+				}
+				actFabObj = i_audicom._room_canvas.getActiveObject();
+				loadObject(actFabObj.type);
+			}
 		
+	    },
+		'object:moving': function(e) {
+			
+			outputFabPos();
+			
+			
+			//if moved outside, slide object along border of canvas
+			if(actFabObj.left - actFabObj.getScaledWidth()/2 <= 0){
+				actFabObj.left = actFabObj.getScaledWidth()/2;
+			}
+			if(actFabObj.top - actFabObj.getScaledHeight()/2 <= 0){
+				actFabObj.top = actFabObj.getScaledHeight()/2;
+			}
+			if(actFabObj.top + actFabObj.getScaledHeight()/2 >= i_audicom._room_canvas.height){
+				actFabObj.top = i_audicom._room_canvas.height - actFabObj.getScaledHeight()/2;
+			}
+			if(actFabObj.left + actFabObj.getScaledWidth()/2 >= i_audicom._room_canvas.width){
+				actFabObj.left = i_audicom._room_canvas.width - actFabObj.getScaledWidth()/2;
+			}
+			if(e.target.type == 'portal' && e.target.line){
+				e.target.line.set({ 'x1': e.target.left, 'y1': e.target.top });
+				e.target.line.dot.set({ 'left': e.target.left-4, 'top': e.target.top-4 });
+				i_audicom.getFabricObject(e.target.secDoor).line.set({ 'x2': e.target.left, 'y2': e.target.top });
+			}
+			getReferenceById(e.target.AGObjectID).position = new Vector3(e.target.left/i_audicom._scale, 1, e.target.top/i_audicom._scale);
+		}
 	});
 	
 	
-	
+	//misc
 	function getMouseCoords(event){
 		var pointer = i_audicom._room_canvas.getPointer(event.e);
 		var posX = pointer.x;
@@ -680,16 +813,13 @@ jQuery(function($){
 		return [posX, posY]
 	}
 
-	function setCanvasDimensions(width, height){
-		i_audicom._room_canvas.setHeight(width);
-		i_audicom._room_canvas.setWidth(height);
-		i_audicom._room_canvas.renderAll();
+	function outputFabPos(){
+		$('#coord_x span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.x * 10) / 10);
+		$('#coord_y span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.z * 10) / 10);
 	}
 
 	function drawObjects(obj_type, obj_left, obj_top){
 
 	}
-	
-	
 
 });
