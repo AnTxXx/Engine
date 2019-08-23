@@ -415,6 +415,7 @@ input[type=file] + label:hover{
 	position:absolute;
 	top:5px;
 	left:5px;
+	display:none;
 }
 
 #id_,#coord_x,#coord_y, #mouse_coords{
