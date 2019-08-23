@@ -358,6 +358,12 @@ export class IAudiCom {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
 	renderAGRoom(ag_roomID){
 		
 	
@@ -520,6 +526,9 @@ export class IAudiCom {
 		let vision_mode_buffer = this._vision_mode;
 		let room_canvas_buffer = this._room_canvas;
 		
+		//add details for tapping
+		$('#fabric_objects_container').append('<details obj_id = "'+ ag_objectID +'"></details>');
+
 		if(getReferenceById(ag_objectID).tag){
 			
 			switch(getReferenceById(ag_objectID).tag){
@@ -847,6 +856,32 @@ export class IAudiCom {
 			}	
 		}
 	}
+	
+	
+	drawDot(x_, y_){
+		let dot = new fabric.Circle({
+			left:   x_*this._scale - 1,
+			top:    y_*this._scale - 1,
+			radius: 2,
+		    fill:   '#f51a1a',
+			type: 'debug',
+			selectable: false,
+		});
+		this._room_canvas.add(dot);
+		this._room_canvas.renderAll();
+	}
+	
+	deleteDots(){
+		let room_buffer = this._room_canvas;
+		let canvas_objects = room_buffer.getObjects();
+		canvas_objects.forEach(function(item, i){
+			if(item.type == 'debug'){
+					room_buffer.remove(item);
+			}
+		});	
+		room_buffer.renderAll();
+	}
+	
 
    
 }
