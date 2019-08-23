@@ -199,9 +199,8 @@ button:hover{
 }
 button:focus{
 
-  	outline: none;
+  	
 }
-
 
 .bg_red{
 	background-color:#d47070;
@@ -412,9 +411,13 @@ input[type=file] + label:hover{
 }
 
 
+#mouse_coords{
+	position:absolute;
+	top:5px;
+	left:5px;
+}
 
-
-#id_,#coord_x,#coord_y{
+#id_,#coord_x,#coord_y, #mouse_coords{
 	color:#999;
 	font-style:italic;
 }
@@ -601,4 +604,10 @@ body.contrast{
 }
 .no_click{
 	pointer-events:none;
+}
+
+.displace{
+	position: absolute !important;
+	top: -9999px !important;
+	left: -9999px !important;
 }

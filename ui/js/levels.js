@@ -3,7 +3,7 @@
 // Schleiche aus der Höhle an den schlafenden Monster vorbei
 // ******************* //
 
-let room_1 = new AGRoom("Erster Raum", new Vector3(17.0, 2.5, 7.0), new Vector3(10.0, 0.0, 10.0));
+let room_1 = new AGRoom("First Room", new Vector3(17.0, 2.5, 7.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 
@@ -109,7 +109,7 @@ getReferenceById(exitID).addSoundSource(waterfallID);
 // Frogger-Verschnitt
 // ******************* //
 
-let room_1 = new AGRoom("Erster Raum", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
+let room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 
@@ -227,7 +227,7 @@ getReferenceById(exitID).addSoundSource(magic_exit_ID);
 // Der Klassiker
 // ******************* //
 
-let room_1 = new AGRoom("Erster Raum", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
+let room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 

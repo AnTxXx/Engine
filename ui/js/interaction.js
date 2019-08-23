@@ -162,6 +162,27 @@ jQuery(function($){
 	});
 	
 	
+	
+	$('.canvas-container').mousemove(function(e) {
+		
+		
+	
+		$('#mouse_coords_x span').text(getMouseCoords(e)[0]*2/110);
+		$('#mouse_coords_y span').text(getMouseCoords(e)[1]*2/110);
+		//ici
+		
+		
+	});
+	
+	
+	
+	$( "#test_button").focus(function() {
+		console.log("huhu");
+	});
+	
+	
+	
+	
 	function loadObject(type){
 		
 		//all: position, SoSo, Namen, Löschenbutton

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang = "en">
 <head>
 	<meta charset="utf-8">
 	<title>AudiCom</title>
@@ -31,7 +31,30 @@
 
 <body>
 	<div id = "wrapper">
+		
+		<div id = "mouse_coords">
+			Mouse:<br>
+			<div id = "mouse_coords_x">X: <span></span></div>
+			<div id = "mouse_coords_y">Y: <span></span></div>
+		</div><!--mouse_coords-->
+		
 		<div id = "btn_help"><i class="fas fa-question"></i></div>
+		
+		
+		
+		
+		
+		<div id = "fabric_objects_container" class = "displace">
+			
+			
+			
+			
+			
+		</div><!--fabric_objects_container-->
+		
+		
+		
+		
 		
 		<div id = "win_screen">
 			
@@ -52,18 +75,18 @@
 				
 						
 					<div id = "color_controls_box" class = "control_box">
-						<div id = "btn_change_vision_mode" class = "btn"><i class="fas fa-brush"></i></div>
+						<button id = "btn_change_vision_mode" class = "btn"><i class="fas fa-brush"></i></button>
 					</div><!--scene_controls_box-->
 					
 					<div id = "scene_controls_box" class = "control_box">
-						<div id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></div>
-						<div id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></div>	
-						<div id = "btn_new_scene" class = "btn"><i class="fas fa-star-of-life"></i></div>
+						<button id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></button>
+						<button id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></button>	
+						<button id = "btn_new_scene" class = "btn"><i class="fas fa-star-of-life"></i></button>
 					</div><!--scene_controls_box-->
 		    	
 					<div id = "canvas_controls_box" class = "control_box">
-						<div id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></div>		
-						<div id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></div>		
+						<button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>		
+						<button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		
 					</div><!--scene_controls_box-->
 					
 					
@@ -126,7 +149,7 @@
 									<input id = "tb_canvas_dim_width" class = "tb_canvas_dim" placeholder="w (m)" maxlength="100" type="text" name="tb_canvas_dim_width" value="">
 									<span>X</span>
 									<input id = "tb_canvas_dim_height" class = "tb_canvas_dim" placeholder="h (m)" maxlength="100" type="text" name="tb_canvas_dim_height" value="">
-									<div id = "btn_set_dim" class = "btn"><i class="fas fa-check"></i></div>
+									<button id = "btn_set_dim" class = "btn"><i class="fas fa-check"></i></button>
 								
 								
 							</div><!--ui_box-->
@@ -137,8 +160,9 @@
 								
 						
 								<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
+								<br>
 								<span id = "id_">ID:<span></span></span>
-								<br><br>
+								<br>
 								<span id = "coord_x">X:<span></span></span><br>
 								<span id = "coord_y">Y:<span></span></span>
 							</div><!--ui_box-->
@@ -150,12 +174,12 @@
 								<input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
 							</div> -->
 					
-							<!--<div class = "ui_box">
+							<div class = "ui_box">
 								Position:<br>
 								<input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
 								<span>X</span>
 								<input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">
-							</div>ui_box-->
+							</div><!--ui-box-->
 					
 							<!-- <div class = "ui_box">
 								Obj-Rotation:<br>
@@ -167,16 +191,16 @@
 							<div id = "ui_box_enemy_path" class = "ui_box_special ui_box ui_box_enemy">
 								Path:
 								<br>
-								<div id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></div>
-								<div id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></div>
+								<button id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></button>
+								<button id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></button>
 							</div><!--ui_box-->
 							<div id = "ui_box_gegner_speed" class = "ui_box_special ui_box ui_box_enemy">
 								Speed:<br>
-								<div id = "btn_speed_0" class = "btn bnt_speed" speed = '0'>0</div>
-								<div id = "btn_speed_1" class = "btn bnt_speed" speed = '1'>1</div>
-								<div id = "btn_speed_2" class = "btn bnt_speed" speed = '2'>2</div>
-								<div id = "btn_speed_3" class = "btn bnt_speed" speed = '3'>3</div>
-								<div id = "btn_speed_4" class = "btn bnt_speed" speed = '4'>4</div>
+								<button id = "btn_speed_0" class = "btn bnt_speed" speed = '0'>0</button>
+								<button id = "btn_speed_1" class = "btn bnt_speed" speed = '1'>1</button>
+								<button id = "btn_speed_2" class = "btn bnt_speed" speed = '2'>2</button>
+								<button id = "btn_speed_3" class = "btn bnt_speed" speed = '3'>3</button>
+								<button id = "btn_speed_4" class = "btn bnt_speed" speed = '4'>4</button>
 						
 						
 							</div><!--ui_box-->
@@ -184,21 +208,23 @@
 							<div id = "ui_box_link_portals" class = "ui_box_special ui_box ui_box_portal">
 								Link Portals:
 								<br>
-								<div id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></div>
-								<div id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></div>
+								<button id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></button>
+								<button id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></button>
 							</div><!--ui_box-->
 					
 					
 							<div id = "ui_sound_box" class = "ui_box_special ui_box ui_box_general">
 								Sound Sources:
 								<br>
-								<div id = "btn_sound_none" class = "btn btn_ss" ss = 'none'><i class="fas fa-times"></i></div>
-								<div id = "btn_sound_steps" class = "btn btn_ss" ss = 'steps'><i class="fas fa-shoe-prints"></i></div>
-								<div id = "btn_sound_magic" class = "btn btn_ss" ss = 'magic'><i class="fas fa-magic"></i></div>
-								<div id = "btn_sound_waterfall" class = "btn btn_ss" ss = 'waterfall'><i class="fas fa-water"></i></div>
-								<div id = "btn_sound_ouch" class = "btn btn_ss" ss = 'ouch'><i class="fas fa-band-aid"></i></div>
-								<div id = "btn_sound_car" class = "btn btn_ss" ss = 'car'><i class="fas fa-truck-pickup"></i></div>
-								<div id = "btn_sound_monster" class = "btn btn_ss" ss = 'monster'><i class="fas fa-dragon"></i></div>
+								<button id = "btn_sound_none" class = "btn btn_ss" ss = 'none'><i class="fas fa-times"></i></button>
+								<button id = "btn_sound_steps" class = "btn btn_ss" ss = 'steps'><i class="fas fa-shoe-prints"></i></button>
+								<button id = "btn_sound_magic" class = "btn btn_ss" ss = 'magic'><i class="fas fa-magic"></i></button>
+								<button id = "btn_sound_waterfall" class = "btn btn_ss" ss = 'waterfall'><i class="fas fa-water"></i></button>
+								<button id = "btn_sound_ouch" class = "btn btn_ss" ss = 'ouch'><i class="fas fa-band-aid"></i></button>
+								<button id = "btn_sound_car" class = "btn btn_ss" ss = 'car'><i class="fas fa-truck-pickup"></i></button>
+								<button id = "btn_sound_truck" class = "btn btn_ss" ss = 'truck'><i class="fas fa-truck"></i></button>
+								<button id = "btn_sound_motorcycle" class = "btn btn_ss" ss = 'motorcycle'><i class="fas fa-motorcycle"></i></button>
+								<button id = "btn_sound_monster" class = "btn btn_ss" ss = 'monster'><i class="fas fa-dragon"></i></button>
 							</div><!--ui_box-->
 					
 					
@@ -209,10 +235,11 @@
 					
 							<div id = "ui_delete_box" class = "ui_box_special ui_box">
 						
-								<div id = "btn_delete_object" class = "btn">
+								<button id = "btn_delete_object" class = "btn">
 									<i class="fas fa-trash-alt"></i>&nbsp;&nbsp;<span>Delete Object</span>
-								</div><!---->
-							</div><!--ui_box-->
+								</button>
+								
+							</div>-->
 					
 							<div id = "path_coords">
 					
@@ -245,7 +272,9 @@
 				
 				
 		</div><!--r_cont-->
-			
+		
+		
+		
 
 		
 		<div id = "overlay">

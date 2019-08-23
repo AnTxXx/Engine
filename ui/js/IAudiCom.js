@@ -323,6 +323,22 @@ export class IAudiCom {
 				ss_buffer.tag = "MONSTER"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
+				
+				
+			case 'truck':
+				ss_buffer = new AGSoundSource("Monster", "sounds/truck.wav", true, 1, roomID_buffer);
+				ss_buffer.tag = "TRUCK"; 
+				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				break;	
+			case 'motorcycle':
+				ss_buffer = new AGSoundSource("Monster", "sounds/motorcycle.wav", true, 1, roomID_buffer);
+				ss_buffer.tag = "MOTORCYCLE"; 
+				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				break;
+				
+				
+				
+				
 			case 'none':
 				
 				
