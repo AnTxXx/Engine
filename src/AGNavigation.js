@@ -167,6 +167,8 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
     let plane1_arr:Array<Plane> = calculatePlanesCCW(PoC_arr[0]);
     let plane2_arr:Array<Plane> = calculatePlanesCCW(obj);
 
+    if(g_IAudiCom) g_IAudiCom.deleteDots();
+
     for(let i = 0; i < plane1_arr.length; i++){
         for(let j = 0; j < plane2_arr.length; j++){
             let plane1:Plane = plane1_arr[i];
@@ -180,11 +182,14 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
             if(det !== 0.0){
                 let vToPush:Vector3 = (p3_normal.clone().cross(plane2.normal).clone().multiplyScalar(plane1.constant).add(plane1.clone().normal.cross(p3_normal).clone().multiplyScalar(plane2.constant))).clone().divideScalar(det);
                 if(pointInsideSphere(vToPush, obj)){
+                    if(g_IAudiCom) {
+                        g_IAudiCom.drawDot(vToPush.x, vToPush.z);
+                    }
                     r_points.push(vToPush);
                     r_normals.push(p3_normal);
                 }
             } else {
-                console.log("nah");
+                //console.log("nah");
             }
 
         }
