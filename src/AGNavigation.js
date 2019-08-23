@@ -178,8 +178,11 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
 
             //console.log(p3_normal.clone().cross(plane2.normal).clone().multiplyScalar(plane1.constant).clone().add(plane1.clone().normal.cross(p3_normal).clone().multiplyScalar(plane2.constant)));
             if(det !== 0.0){
-                r_points.push((p3_normal.clone().cross(plane2.normal).clone().multiplyScalar(plane1.constant).add(plane1.clone().normal.cross(p3_normal).clone().multiplyScalar(plane2.constant))).clone().divideScalar(det));
-                r_normals.push(p3_normal);
+                let vToPush:Vector3 = (p3_normal.clone().cross(plane2.normal).clone().multiplyScalar(plane1.constant).add(plane1.clone().normal.cross(p3_normal).clone().multiplyScalar(plane2.constant))).clone().divideScalar(det);
+                if(pointInsideSphere(vToPush, obj)){
+                    r_points.push(vToPush);
+                    r_normals.push(p3_normal);
+                }
             } else {
                 console.log("nah");
             }
@@ -189,6 +192,12 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
 
     console.log(r_points);
     console.log(r_normals);
+}
+
+function pointInsideSphere(point:Vector3, obj:AGObject):boolean{
+    //console.log((point.clone().distanceTo(obj.position.clone())));
+    if((point.clone().distanceTo(obj.position.clone())) <= (obj.position.clone().add(obj.size)).clone().distanceTo(obj.position)) return true;
+    return false;
 }
 
 function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
