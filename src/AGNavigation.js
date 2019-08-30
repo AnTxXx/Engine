@@ -195,8 +195,8 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
         }
     }
 
-    console.log(r_points);
-    console.log(r_normals);
+    //console.log(r_points);
+    //console.log(r_normals);
 }
 
 function pointInsideSphere(point:Vector3, obj:AGObject):boolean{
@@ -220,6 +220,7 @@ function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
     v2 = extractPlanePoint(obj, -1, -1, -1);
     v3 = extractPlanePoint(obj, +1, -1, -1);
     plane_a.setFromCoplanarPoints(v1.clone(), v2.clone(), v3.clone());
+    console.log(plane_a);
     return_arr.push(plane_a);
 
     v1 = extractPlanePoint(obj, +1,+1,-1);
@@ -256,7 +257,8 @@ function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
 }
 
 function extractPlanePoint(obj:AGObject, x:number, y:number, z:number):Vector3{
-    return new Vector3(obj.position.x+(obj.size.x/2*x), obj.position.y+(obj.size.x/2*y), obj.position.z+(obj.size.z/2*z));
+    let returnV:Vector3 = new Vector3(obj.position.x+(obj.size.x/2*x), obj.position.y+(obj.size.x/2*y), obj.position.z+(obj.size.z/2*z));
+    return returnV;
 }
 
 /**
