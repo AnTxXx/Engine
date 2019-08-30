@@ -20,8 +20,7 @@ jQuery(function($){
 	$('#btn_new_scene').click(function(){
 		i_audicom.newScene();
 	});
-	
-	
+
 	$('#btn_change_vision_mode').click(function(){
 		i_audicom.toggleVisionMode();
 	});
@@ -473,6 +472,33 @@ jQuery(function($){
 	
 	$('#btn_help').click(function(){
 		$('#overlay').fadeIn(200);
+	});
+	
+	
+	
+	$("#level_dropdown").change(function() {
+	    // Pure JS
+	    
+		
+		
+		switch(this.value){
+			case 'Level 1':
+				i_audicom.loadLevel(1);
+				break;
+			case 'Level 2':
+				i_audicom.loadLevel(2);
+				break;
+			case 'Level 3':
+				i_audicom.loadLevel(3);
+				break;
+		}
+		
+		
+	   	//var selectedText = this.options[this.selectedIndex].text;
+
+	    // jQuery
+	    //var selectedVal = $(this).find(':selected').val();
+	    //var selectedText = $(this).find(':selected').text();
 	});
 		
 	

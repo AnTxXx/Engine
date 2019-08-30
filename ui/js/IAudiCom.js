@@ -10,7 +10,7 @@ import { AGRoom } from "../../lib/AGRoom.js";
 import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGItem } from "../../lib/AGItem.js";
 import { AGEventHandler } from "../../lib/AGEventHandler.js";
-import { getIdByReference, getReferenceById, g_history, g_gamearea } from "../../lib/AGEngine.js";
+import { getIdByReference, getReferenceById, g_history, g_gamearea, g_references } from "../../lib/AGEngine.js";
 
 
 import { Event } from "../../lib/Event.js";
@@ -59,13 +59,8 @@ export class IAudiCom {
 		];
 		
 		//fixed interim roomID 
-		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
-		this._AGroomID = rooms_buffer[0].ID;
 		
-		//prefill the inputs with Room name and Dimensions
-		$('#input_room_name').val(getReferenceById(this._AGroomID).name);
-		$('#tb_canvas_dim_width').val(getReferenceById(this._AGroomID).size.x);
-		$('#tb_canvas_dim_height').val(getReferenceById(this._AGroomID).size.z);
+		
 		
 		this.renderScene();
     }
@@ -115,7 +110,7 @@ export class IAudiCom {
 		this._room_canvas.renderAll();
 
 		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active" ).toggleClass("contrast");
+		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help" ).toggleClass("contrast");
 
 	}
 	
@@ -215,20 +210,6 @@ export class IAudiCom {
 	}
 	
 	
-	renderScene(){
-		//console.log(getReferenceById(g_gamearea.ID));
-		
-		this.renderAGRoom(this._AGroomID);
-
-		let this_buffer = this;
-		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
-			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
- 				this_buffer.renderAGObject(element.ID);
-				//console.log(element.tag + ": " + element.position.x)
-				//console.log(element.position.x);
-			});
-		}
-	}
 	
 	
 	zoomCanvas(zoom_factor){
@@ -881,6 +862,194 @@ export class IAudiCom {
 		});	
 		room_buffer.renderAll();
 	}
+	
+	
+	
+	renderScene(){
+		//console.log(getReferenceById(g_gamearea.ID));
+		
+		console.log(g_gamearea.ID);
+	
+		
+		
+		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
+		this._AGroomID = rooms_buffer[0].ID;
+		
+		
+		//prefill the inputs with Room name and Dimensions
+		$('#input_room_name').val(getReferenceById(this._AGroomID).name);
+		$('#tb_canvas_dim_width').val(getReferenceById(this._AGroomID).size.x);
+		$('#tb_canvas_dim_height').val(getReferenceById(this._AGroomID).size.z);
+		
+		
+		this.renderAGRoom(this._AGroomID);
+
+		let this_buffer = this;
+		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
+			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
+ 				this_buffer.renderAGObject(element.ID);
+				//console.log(element.tag + ": " + element.position.x)
+				//console.log(element.position.x);
+			});
+		}
+	}
+	
+	
+	
+	
+	loadLevel(lvl_){
+		
+		
+		play(getReferenceById(g_gamearea.ID), false);
+		
+		
+		this._room_canvas.clear();		
+		g_references.clear();
+		
+		//stop level clear everything
+		
+		switch(lvl_){
+			
+			case 1:
+				
+				
+				
+				break;
+				
+			case 2:
+				
+				
+				let room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
+				let room_1ID = getIdByReference(room_1);
+				g_gamearea.addRoom(room_1ID);
+
+				let player = new AGPlayer("Player", new Vector3(1, 1.0, 5), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				let exit = new AGRoomExit("Exit", new Vector3(18.5, 1.0, 5.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+
+				let skeleton_1 = new AGObject("Skeleton", new Vector3(3.5, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
+				let skeleton_2 = new AGObject("Skeleton", new Vector3(11, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
+				let skeleton_3 = new AGObject("Skeleton", new Vector3(14.5, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
+				let skeleton_4 = new AGObject("Skeleton", new Vector3(16, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
+
+				let steps = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
+				let car_1 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
+				let car_2 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
+				let car_3 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
+				let car_4 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
+				let ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+				let magic_exit = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
+
+				let playerID = getIdByReference(player);
+				let exitID = getIdByReference(exit);
+
+				let skeleton_1ID = getIdByReference(skeleton_1);
+				let skeleton_2ID = getIdByReference(skeleton_2);
+				let skeleton_3ID = getIdByReference(skeleton_3);
+				let skeleton_4ID = getIdByReference(skeleton_4);
+
+				let ouchID = getIdByReference(ouch);
+				let car_1ID = getIdByReference(car_1);
+				let car_2ID = getIdByReference(car_2);
+				let car_3ID = getIdByReference(car_3);
+				let car_4ID = getIdByReference(car_4);
+				let magic_exit_ID = getIdByReference(magic_exit);
+
+				g_gamearea.listener = getIdByReference(player);
+				getReferenceById(room_1ID).listener = g_gamearea.listener;
+
+				//Add ObjectsToRoom
+				getReferenceById(room_1ID).add(playerID);
+				getReferenceById(room_1ID).add(exitID);
+
+				getReferenceById(room_1ID).add(skeleton_1ID);
+				getReferenceById(room_1ID).add(skeleton_2ID);
+				getReferenceById(room_1ID).add(skeleton_3ID);
+				getReferenceById(room_1ID).add(skeleton_4ID);
+
+				//Soundtags
+				getReferenceById(car_1ID).tag = "CAR";
+				getReferenceById(car_2ID).tag = "CAR";
+				getReferenceById(car_3ID).tag = "CAR";
+				getReferenceById(car_4ID).tag = "CAR";
+				getReferenceById(ouchID).tag = "OUCH";
+				getReferenceById(magic_exit_ID).tag = "MAGIC";
+
+				//Car 1
+				getReferenceById(skeleton_1ID).setSpeedSkalar(1);
+				getReferenceById(skeleton_1ID).movable = true;
+				getReferenceById(skeleton_1ID).destructible = true;
+				getReferenceById(skeleton_1ID).health = 4;
+				getReferenceById(skeleton_1ID).addRoute(new Vector3(3.5, 1, 9), new Vector3(3.5, 1, 1));
+
+				getReferenceById(skeleton_1ID).addSoundSource(car_1ID);
+				getReferenceById(skeleton_1ID).tag = "ENEMY";
+
+				//Car 2
+				getReferenceById(skeleton_2ID).setSpeedSkalar(3);
+				getReferenceById(skeleton_2ID).movable = true;
+				getReferenceById(skeleton_2ID).destructible = true;
+				getReferenceById(skeleton_2ID).health = 4;
+				getReferenceById(skeleton_2ID).addRoute(new Vector3(7, 1, 1), new Vector3(11, 1, 2), new Vector3(7, 1, 3), new Vector3(11, 1, 4),
+														new Vector3(7, 1, 5), new Vector3(11, 1, 6), new Vector3(7, 1, 7), new Vector3(11, 1, 8),
+														new Vector3(7, 1, 9), new Vector3(11, 1, 9),
+														new Vector3(7, 1, 8), new Vector3(11, 1, 7), new Vector3(7, 1, 6), new Vector3(11, 1, 5),
+														new Vector3(7, 1, 4), new Vector3(11, 1, 3), new Vector3(7, 1, 2), new Vector3(11, 1, 1),
+
+				);
+
+				getReferenceById(skeleton_2ID).addSoundSource(car_2ID);
+				getReferenceById(skeleton_2ID).tag = "ENEMY";
+
+				//Car 3
+				getReferenceById(skeleton_3ID).setSpeedSkalar(1);
+				getReferenceById(skeleton_3ID).movable = true;
+				getReferenceById(skeleton_3ID).destructible = true;
+				getReferenceById(skeleton_3ID).health = 4;
+				getReferenceById(skeleton_3ID).addRoute(new Vector3(14.5, 1, 9), new Vector3(14.5, 1, 1));
+
+				getReferenceById(skeleton_3ID).addSoundSource(car_3ID);
+				getReferenceById(skeleton_3ID).tag = "ENEMY";
+
+				//Car 4
+				getReferenceById(skeleton_4ID).setSpeedSkalar(2);
+				getReferenceById(skeleton_4ID).movable = true;
+				getReferenceById(skeleton_4ID).destructible = true;
+				getReferenceById(skeleton_4ID).health = 4;
+				getReferenceById(skeleton_4ID).addRoute(new Vector3(16, 1, 9), new Vector3(16, 1, 1));
+
+				getReferenceById(skeleton_4ID).addSoundSource(car_4ID);
+				getReferenceById(skeleton_4ID).tag = "ENEMY";
+
+				//Player Settings
+				getReferenceById(playerID).speed = new Vector3(0.1, 0.0, 0.1);
+				getReferenceById(playerID).hitSound = ouchID;
+
+				getReferenceById(playerID).dangerous = true;
+				getReferenceById(playerID).damage = 1;
+				getReferenceById(playerID).range = 2;
+
+				//Exit Sound
+				getReferenceById(exitID).addSoundSource(magic_exit_ID);
+				
+				//i_audicom = new IAudiCom();
+				
+				
+				break;
+				
+			case 3:
+				break;
+			
+			
+			
+		}
+		
+		
+ 		this.renderScene();
+		
+		
+		
+	}
+	
 	
 
    
