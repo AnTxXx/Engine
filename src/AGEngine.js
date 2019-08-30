@@ -23,6 +23,11 @@ export let g_controls:AGNavigation;
 Game Area in which the audio game is played. It holds all audio game objects.
  */
 
+export function rebuildHandlerGameArea(){
+    g_eventHandler = new AGEventHandler();
+    g_gamearea = new AGGameArea("Area", new Vector3(30,2.5,10));
+}
+
 export function setControl(controls:AGNavigation){
     g_controls = controls;
 }
