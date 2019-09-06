@@ -135,9 +135,11 @@ export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
         //
         //pointOfIntersection(PoC, object);
 
-        pointOfIntersectionForSound(PoC[0], object);
+
+
 
         object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
+        pointOfIntersectionForSound(PoC[0], object);
     } else if(!object.room.pointInsideRoom(object.position, object.size)){
         console.log("[AGNavigation] " + object.name + ": Can't move forward. Colliding with room boundaries.");
         object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
@@ -173,51 +175,114 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
     p3 = p3TOP.clone().sub((p3TOP.clone().sub(p3BOTTOM).clone().multiplyScalar(0.5)));
     p4 = p4TOP.clone().sub((p4TOP.clone().sub(p4BOTTOM).clone().multiplyScalar(0.5)));
 
+    console.log(getAngle(object.direction));
+    object.direction.normalize();
+
+    p1 = rotateAroundPoint(object.position, p1, getAngle(object.direction));
+    p2 = rotateAroundPoint(object.position, p2, getAngle(object.direction));
+    p3 = rotateAroundPoint(object.position, p3, getAngle(object.direction));
+    p4 = rotateAroundPoint(object.position, p4, getAngle(object.direction));
+
+
+    //p1.add(object.direction);
+    //p2.add(object.direction);
+    //p3.add(object.direction);
+    //p4.add(object.direction);
+
+
+
+    let points:Array<Vector3> = [];
+    points.push(p2);
+    points.push(p3);
+    points.push(p4);
+    points.push(p1);
+
     //build directions between points
     let dirs:Array<Vector3> = [];
     dirs.push(p1.clone().sub(p2).normalize());
     dirs.push(p2.clone().sub(p3).normalize());
     dirs.push(p3.clone().sub(p4).normalize());
     dirs.push(p4.clone().sub(p1).normalize());
-    dirs.push(p1.clone().sub(p4).normalize());
-    dirs.push(p4.clone().sub(p3).normalize());
-    dirs.push(p3.clone().sub(p2).normalize());
-    dirs.push(p2.clone().sub(p1).normalize());
+    //dirs.push(p1.clone().sub(p4).normalize());
+    //dirs.push(p4.clone().sub(p3).normalize());
+    //dirs.push(p3.clone().sub(p2).normalize());
+    //dirs.push(p2.clone().sub(p1).normalize());
 
     //shoot the rays to object
     let intersectPoints:Array<Vector3> = [];
-    //TODO HIER
-    let pt:Vector3 = frbIntersectionPoint(collisionObject, p2, dirs[0]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p3, dirs[1]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p4, dirs[2]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p1, dirs[3]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p4, dirs[4]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p3, dirs[5]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p2, dirs[6]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
-    pt = frbIntersectionPoint(collisionObject, p1, dirs[7]);
-    if(pt !== null && pt !== undefined) intersectPoints.push(pt);
+
+    let smallest:Vector3 = null;
+    let smallestDist:number = Number.MAX_VALUE;
+    let dist:number = 0;
+
+   let pairDistancePoint:Array<[number, Vector3]> = [];
+
+   for(let i = 0; i < 4; i++){
+       let dist:number = extractPointToArray(collisionObject, points[i], dirs[i], intersectPoints);
+       if(dist !== undefined || dist !== 0){
+           pairDistancePoint.push([dist, intersectPoints[intersectPoints.length-1]]);
+           if(pairDistancePoint[pairDistancePoint.length-1][0] < smallestDist){
+               smallestDist = pairDistancePoint[pairDistancePoint.length-1][0];
+               smallest = pairDistancePoint[pairDistancePoint.length-1][1];
+           }
+       }
+   }
+
+   //console.log(pairDistancePoint);
+
+    //console.log(extractPointToArray(collisionObject, p2, dirs[0], intersectPoints));
+    //console.log(extractPointToArray(collisionObject, p3, dirs[1], intersectPoints));
+    //console.log(extractPointToArray(collisionObject, p4, dirs[2], intersectPoints));
+    //console.log(extractPointToArray(collisionObject, p1, dirs[3], intersectPoints));
+
+    //console.log(extractPointToArray(collisionObject, p4, dirs[4], intersectPoints));
+    //console.log(extractPointToArray(collisionObject, p3, dirs[5], intersectPoints));
+    //console.log(extractPointToArray(collisionObject, p2, dirs[6], intersectPoints));
+    //console.log(extractPointToArray(collisionObject, p1, dirs[7], intersectPoints));
+
+    //console.log(smallest);
+    //console.log(smallestDist);
 
     if(g_IAudiCom) g_IAudiCom.deleteDots();
 
-    console.log(intersectPoints);
+    //console.log(intersectPoints);
 
-    for(let i = 0; i < 8; i++){
+    //for(let i = 0; i < intersectPoints.length; i++){
 
-            if(g_IAudiCom) {
-                console.log(intersectPoints[i].distanceTo(object.position));
-                g_IAudiCom.drawDot(intersectPoints[i][0], intersectPoints[i][2]);
+            if(g_IAudiCom && smallest != null) {
+                //console.log(intersectPoints[i].distanceTo(object.position));
+                g_IAudiCom.drawDot(smallest.x, smallest.z);
+                if(object.type === "PLAYER") object.hitSound.playOnceAtPosition(smallest);
+                /*
+                for(let i = 0; i < 4; i++){
+                    g_IAudiCom.drawDot(points[i].x, points[i].z);
+                }*/
             }
+    //}
+}
+
+function getAngle(dir:Vector3):number{
+    let angle = Math.atan2(dir.x, dir.z);
+    let degrees = 180*angle/Math.PI;
+    return (180+Math.round(degrees))%360;
+}
+
+function rotateAroundPoint(center:Vector3, point:Vector3, angle:number):Vector3{
+    let radians = (Math.PI / 180) * angle,
+        cos = Math.cos(radians),
+        sin = Math.sin(radians),
+        nx = (cos * (point.x - center.x)) + (sin * (point.z - center.z)) + center.x,
+        nz = (cos * (point.z - center.z)) - (sin * (point.x - center.x)) + center.z;
+    return new Vector3(nx, point.y, nz);
+}
+
+function extractPointToArray(collisionObject:AGObject, point:Vector3, dir:Vector3, arrToAdd:Array<Vector3>):number{
+    let pt:Vector3 = frbIntersectionPoint(collisionObject, point, dir);
+    if(pt!==null) {
+        arrToAdd.push(pt);
+        return point.distanceTo(pt);
     }
-
-
-
+    return 0;
 }
 
 function pointOfIntersection(PoC_arr:Array<AGObject>, obj:AGObject){

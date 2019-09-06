@@ -66,7 +66,7 @@ export function isAABBInsideRoom(point:Vector3, size:Vector3, room:AGRoom):boole
     point.z + size.z/2 <= room.size.z);
 }
 
-export function frbIntersectionPoint(target:AGObject, source:Vector3, direction:Vector3):?Vector3 {
+export function frbIntersectionPoint(target:AGObject, source:Vector3, direction:Vector3):Vector3 {
     let v_minB:Vector3 = new Vector3(target.position.x-target.size.x/2, target.position.y-target.size.y/2, target.position.z-target.size.z/2);
     let v_maxB:Vector3 = new Vector3(target.position.x+target.size.x/2, target.position.y+target.size.y/2, target.position.z+target.size.z/2);
 
@@ -119,7 +119,7 @@ export function frbIntersectionPoint(target:AGObject, source:Vector3, direction:
     /* Ray origin inside bounding box */
     if(inside)	{
         coord = origin;
-        return (coord);
+        return new Vector3(coord[0], coord[1], coord[2]);
     }
 
 
@@ -137,16 +137,16 @@ export function frbIntersectionPoint(target:AGObject, source:Vector3, direction:
             whichPlane = i;
 
     /* Check final candidate actually inside box */
-    if (maxT[whichPlane] < 0.) return (null);
+    if (maxT[whichPlane] < 0.) return null;
     for (i = 0; i < NUMDIM; i++)
         if (whichPlane != i) {
             coord[i] = origin[i] + maxT[whichPlane] *dir[i];
             if (coord[i] < minB[i] || coord[i] > maxB[i])
-                return (false);
+                return null;
         } else {
             coord[i] = candidatePlane[i];
         }
-    return (coord);
+    return new Vector3(coord[0], coord[1], coord[2]);
 }
 
 /*
