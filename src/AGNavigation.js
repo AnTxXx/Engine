@@ -13,55 +13,6 @@ let gForward, gBackward, gLeft, gRight, gInteract;
 //let moveTimestamp;
 
 /**
- * Function to move object (AGObject) based on its direction and speed. If the movement is not possible
- * (e.g., collision), the object does not move.
- * @param object Object (AGObject) to be moved.
- * @param add If the object should move forward (true) or backward (false).
- */
-//OLD
-/*export function move(object:AGObject, add:boolean){
-
-    let collisionArray:Array<AGObject>;
-    if(add){
-        //console.log("Prediction:");
-        //console.log(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())));
-
-        //calculate the point where the object should be moved to
-        let testPoint:Vector3 = object.position.clone().add(object.speed.clone().multiply(object.direction.clone()));
-
-        //get a collision-array of all objects that intersect with the calculated new position of the object
-        collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
-
-        //checks if there is no collision happening and the object doesn't collide with itself
-        if((collisionArray.length !== 0 && collisionArray[0].type !== "PORTAL" && object !== collisionArray[0])){
-            console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by other object: " + collisionArray[0].name + ".");
-        } else
-            //checks if the new point is still inside the room
-            if(!object.room.pointInsideRoom(testPoint, object.size)){
-            console.log("[AGNavigation] " + object.name + ": Can't move forward. Blocked by room boundaries.");
-        }
-        else {
-            object.position.add(object.speed.clone().multiply(object.direction.clone()));
-        }
-    } else {
-        //same as above but with .sub
-
-        //console.log("Prediction:");
-        //console.log(object.position.clone().sub(object.speed.clone().multiply(object.direction.clone())));
-        let testPoint:Vector3 = object.position.clone().sub(object.speed.clone().multiply(object.direction.clone()));
-        collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
-        if((collisionArray.length !== 0 && collisionArray[0].type !== "PORTAL" && object !== collisionArray[0])){
-            console.log("[AGNavigation] " + object.name + ": Can't move Backward. Blocked by other object: " + collisionArray[0].name + ".");
-        } else if(!object.room.pointInsideRoom(testPoint, object.size)){
-            console.log("[AGNavigation] " + object.name + ": Can't move Backward. Blocked by room boundaries.");
-        }
-        else {
-            object.position.sub(object.speed.clone().multiply(object.direction.clone()));
-        }
-    }
-}*/
-
-/**
  * Private function: if a collision is allowed (e.g., collision with portal) or not.
  * @param obj The object (AGObject) to be checked with.
  * @param collArray The array of AGObjects with the current collisions.
@@ -77,33 +28,6 @@ function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
     return true;
 }
 
-/**
- * Moves an object (AGObject) into a give direction (Vector3), independent of its current facing direction
- * @param object The object (AGObject) that is going to be moved.
- * @param direction The direction (Vector3) the object is moved towards.
- */
-/*export function moveTo(object:AGObject, direction:Vector3, timeStamp:Date){
-    let timeDiff = new Date() - timeStamp;
-    timeDiff /= 1000;
-    //Math.abs(timeDiff);
-
-    let collisionArray:Array<AGObject>;
-    //console.log("Prediction:");
-    //console.log(object.position.clone().add(object.speed.clone().multiply(object.direction.clone())));
-    let testPoint:Vector3 = object.position.clone().add(object.speed.clone().multiply(direction.clone().multiplyScalar(timeDiff)));
-    collisionArray = object.room.predictCollisionByPointAndSize(testPoint, object.size);
-
-    if(allowedCollision(object, collisionArray)){
-        //console.log("moving");
-        object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
-    } else {
-        console.log("[AGNavigation] " + object.name + ": Can't move forward.");
-    }
-
-    //console.log(object.position.x + " " + object.position.y + " " + object.position.z +
-    //    " " + direction.x + " " + direction.y + " " + direction.z);
-}*/
-
 //new moveTo function that forces collision and does not stop before it without triggering collision
 export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
     let timeDiff;
@@ -114,43 +38,23 @@ export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
         timeDiff = 1;
     }
 
-    //Math.abs(timeDiff);
-
     object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     object.room.checkForCollision();
-
-    /*if(!allowedCollision(object, objectPartOfCollisions(object.room.collisions, object)) ||
-        !object.room.pointInsideRoom(object.position, object.size)){
-        object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
-        console.log("[AGNavigation] " + object.name + ": Can't move forward.");
-    }*/
 
     let PoC:Array<AGObject> = objectPartOfCollisions(object.room.collisions, object);
 
     if(!allowedCollision(object, PoC)) {
         console.log("[AGNavigation] " + object.name + ": Can't move forward. Colliding with other object.");
-        //TODO: HIER WEITER MACHEN
-        // TEST
-        //planeIntersectPlane(PoC, object);
-        //
-        //pointOfIntersection(PoC, object);
 
-
-
-
-        object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
+        //Calculate position for collision sound, can be put before or after the sub
         pointOfIntersectionForSound(PoC[0], object);
+        object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
+
+
     } else if(!object.room.pointInsideRoom(object.position, object.size)){
         console.log("[AGNavigation] " + object.name + ": Can't move forward. Colliding with room boundaries.");
         object.position.sub(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     }
-
-    /*if(object.gameArea.objectPartOfCollision(object)!=null){
-        object.position.add(object.speed.clone().multiply(-direction));
-        console.log("Can't move forward. Blocked. " + object.position.x + " " + object.position.y + " " + object.position.z);
-    }*/
-    //console.log(object.position.x + " " + object.position.y + " " + object.position.z +
-    //    " " + direction.x + " " + direction.y + " " + direction.z);
 }
 
 function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
@@ -175,22 +79,13 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
     p3 = p3TOP.clone().sub((p3TOP.clone().sub(p3BOTTOM).clone().multiplyScalar(0.5)));
     p4 = p4TOP.clone().sub((p4TOP.clone().sub(p4BOTTOM).clone().multiplyScalar(0.5)));
 
-    console.log(getAngle(object.direction));
-    object.direction.normalize();
-
+    //rotate the corners according to the direction of the object
     p1 = rotateAroundPoint(object.position, p1, getAngle(object.direction));
     p2 = rotateAroundPoint(object.position, p2, getAngle(object.direction));
     p3 = rotateAroundPoint(object.position, p3, getAngle(object.direction));
     p4 = rotateAroundPoint(object.position, p4, getAngle(object.direction));
 
-
-    //p1.add(object.direction);
-    //p2.add(object.direction);
-    //p3.add(object.direction);
-    //p4.add(object.direction);
-
-
-
+    //array for the 4 points, so it is easier to iterate later on
     let points:Array<Vector3> = [];
     points.push(p2);
     points.push(p3);
@@ -203,30 +98,27 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
     dirs.push(p2.clone().sub(p3).normalize());
     dirs.push(p3.clone().sub(p4).normalize());
     dirs.push(p4.clone().sub(p1).normalize());
-    //dirs.push(p1.clone().sub(p4).normalize());
-    //dirs.push(p4.clone().sub(p3).normalize());
-    //dirs.push(p3.clone().sub(p2).normalize());
-    //dirs.push(p2.clone().sub(p1).normalize());
 
-    //shoot the rays to object
     let intersectPoints:Array<Vector3> = [];
 
+    //closest point after iteration
     let smallest:Vector3 = null;
     let smallestDist:number = Number.MAX_VALUE;
-    let dist:number = 0;
 
-   let pairDistancePoint:Array<[number, Vector3]> = [];
+    //saves pair of Distance and Vector
+    let pairDistancePoint:Array<[number, Vector3]> = [];
 
-   for(let i = 0; i < 4; i++){
-       let dist:number = extractPointToArray(collisionObject, points[i], dirs[i], intersectPoints);
-       if(dist !== undefined || dist !== 0){
-           pairDistancePoint.push([dist, intersectPoints[intersectPoints.length-1]]);
-           if(pairDistancePoint[pairDistancePoint.length-1][0] < smallestDist){
-               smallestDist = pairDistancePoint[pairDistancePoint.length-1][0];
-               smallest = pairDistancePoint[pairDistancePoint.length-1][1];
-           }
-       }
-   }
+    //shoot rays from 4 directions, over corners
+    for(let i = 0; i < 4; i++){
+        let dist:number = extractPointToArray(collisionObject, points[i], dirs[i], intersectPoints);
+        if(dist !== undefined || dist !== 0){
+            pairDistancePoint.push([dist, intersectPoints[intersectPoints.length-1]]);
+            if(pairDistancePoint[pairDistancePoint.length-1][0] < smallestDist){
+                smallestDist = pairDistancePoint[pairDistancePoint.length-1][0];
+                smallest = pairDistancePoint[pairDistancePoint.length-1][1];
+            }
+        }
+    }
 
    //console.log(pairDistancePoint);
 
@@ -284,7 +176,7 @@ function extractPointToArray(collisionObject:AGObject, point:Vector3, dir:Vector
     }
     return 0;
 }
-
+/*
 function pointOfIntersection(PoC_arr:Array<AGObject>, obj:AGObject){
     let point:Vector3;
     for(let i = -1; i <= 1; i+=2){
@@ -292,12 +184,13 @@ function pointOfIntersection(PoC_arr:Array<AGObject>, obj:AGObject){
             for(let k = -1; k <= 1; k+=2){
                 point = new Vector3(obj.position.x-(obj.size.x/2)*(i), obj.position.y-(obj.size.y/2)*(j), obj.position.z-(obj.size.z/2)*(k));
                 if(isPointInsideAABB(point, PoC_arr[0])){
-                    console.log("[AGNavigation] " + obj.name + ": Playing sound at position: " + point.x + " " + point.y + " " + point.z);
+                    console.log("[AGNavigation] " + obj.name + ": Playing sound at position: " + Math.round(point.x) + " " + Math.round(point.y) + " " + Math.round(point.z));
                 }
             }
         }
     }
-}
+}*/
+/*
 //https://stackoverflow.com/questions/6408670/line-of-intersection-between-two-planes
 function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
     let r_points:Array<Vector3> = [], r_normals:Array<Vector3> = [];
@@ -336,12 +229,14 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
     //console.log(r_normals);
 }
 
+ */
+/*
 function pointInsideSphere(point:Vector3, obj:AGObject):boolean{
     //console.log((point.clone().distanceTo(obj.position.clone())));
     if((point.clone().distanceTo(obj.position.clone())) <= (obj.position.clone().add(obj.size)).clone().distanceTo(obj.position)) return true;
     return false;
-}
-
+}*/
+/*
 function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
     let return_arr:Array<AGObject> = [];
 
@@ -392,6 +287,7 @@ function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
 
     return return_arr;
 }
+ */
 
 function extractPlanePoint(obj:AGObject, x:number, y:number, z:number):Vector3{
     let returnV:Vector3 = new Vector3(obj.position.x+(obj.size.x/2*x), obj.position.y+(obj.size.x/2*y), obj.position.z+(obj.size.z/2*z));

@@ -4,16 +4,9 @@
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGNavigation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGPhysics.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPhysics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGNavigation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGObject.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGPhysics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPhysics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSoundSource.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/ui/js/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -78,7 +71,7 @@
       <workItem from="1567151268265" duration="22000" />
       <workItem from="1567151310921" duration="6758000" />
       <workItem from="1567757197675" duration="26000" />
-      <workItem from="1567757257997" duration="13351000" />
+      <workItem from="1567757257997" duration="16769000" />
     </task>
     <servers />
   </component>
