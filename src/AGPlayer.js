@@ -8,16 +8,6 @@ import {g_controls, g_loading} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 
 export class AGPlayer extends AGObject {
-    get hitSound(): AGSoundSource {
-        return this._hitSound;
-    }
-
-    set hitSound(valueID: number) {
-        let value = getReferenceById(valueID);
-        // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGPlayer.prototype, 'hitSound').set, arguments);
-        this._hitSound = value;
-    }
 
 
     navigation:AGNavigation;
@@ -40,7 +30,7 @@ export class AGPlayer extends AGObject {
     }
 
     moveSound:AGSoundSource;
-    _hitSound:AGSoundSource;
+
     health:number;
 
     /**

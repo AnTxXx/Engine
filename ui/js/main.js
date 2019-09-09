@@ -102,6 +102,7 @@ room_1.add(door2);
 //player.setSpeedSkalar(1);
 player.speed = new Vector3(0.1, 0.0, 0.1);
 player.hitSound = player_hit;
+player_hit.update = false;
 
 room_1.add(player);
 room_1.listener = area.listener;

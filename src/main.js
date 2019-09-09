@@ -16,6 +16,8 @@ import { IAudiCom } from "../ui/js/IAudiCom.js";
 
 import {AGRoomExit} from "./AGRoomExit.js";
 import {getIdByReference, getReferenceById} from "./AGEngine.js";
+import {g_IAudiCom} from "./AGEngine.js";
+import {setIAudiCom} from "./AGEngine.js";
 
 
 let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 32);
@@ -146,5 +148,6 @@ console.log(g_history);
 //console.log(g_references);
 
 export let i_audicom = new IAudiCom();
+setIAudiCom(i_audicom);
 
 // TODO: eine art pushforce pro objekt, damit das staerkere Objekt das schwaechere zurueckdraengen kann?
