@@ -20,8 +20,7 @@ jQuery(function($){
 	$('#btn_new_scene').click(function(){
 		i_audicom.newScene();
 	});
-	
-	
+
 	$('#btn_change_vision_mode').click(function(){
 		i_audicom.toggleVisionMode();
 	});
@@ -63,6 +62,22 @@ jQuery(function($){
 		i_audicom._room_canvas.renderAll();
 	});
 	
+	
+	/*key input*/
+	$(document).on('keypress',function(e) {
+	    if(e.which == 13) {
+			
+			if($(document.activeElement).is('details')){
+				$('#input_obj_name').focus()
+			}
+	       
+			if($(document.activeElement).hasClass('sb_object')){
+				var type_buffer = $(document.activeElement).attr('type');
+				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2);
+			}
+
+	    }
+	});
 	
 	
 	//jq dnd-stuff
@@ -164,14 +179,12 @@ jQuery(function($){
 	
 	
 	$('.canvas-container').mousemove(function(e) {
-		
-		
-	
-		$('#mouse_coords_x span').text(getMouseCoords(e)[0]*2/110);
-		$('#mouse_coords_y span').text(getMouseCoords(e)[1]*2/110);
-		//ici
-		
-		
+		$('#mouse_coords').fadeIn(100);
+		$('#mouse_coords_x span').text(Math.round((getMouseCoords(e)[0]*2/110) * 10) / 10);
+		$('#mouse_coords_y span').text(Math.round((getMouseCoords(e)[1]*2/110) * 10) / 10);
+	});
+	$('.canvas-container').mouseleave(function(){
+		$('#mouse_coords').fadeOut(100);
 	});
 	
 	
@@ -179,9 +192,6 @@ jQuery(function($){
 	
 	
 	
-	$( "#test_button").focus(function() {
-		console.log("huhu");
-	});
 	
 	
 	
@@ -479,6 +489,33 @@ jQuery(function($){
 	$('#btn_help').click(function(){
 		$('#overlay').fadeIn(200);
 	});
+	
+	
+	
+	$("#level_dropdown").change(function() {
+	    // Pure JS
+	    
+		
+		
+		switch(this.value){
+			case 'Level 1':
+				i_audicom.loadLevel(1);
+				break;
+			case 'Level 2':
+				i_audicom.loadLevel(2);
+				break;
+			case 'Level 3':
+				i_audicom.loadLevel(3);
+				break;
+		}
+		
+		
+	   	//var selectedText = this.options[this.selectedIndex].text;
+
+	    // jQuery
+	    //var selectedVal = $(this).find(':selected').val();
+	    //var selectedText = $(this).find(':selected').text();
+	});
 		
 	
 	
@@ -513,14 +550,21 @@ jQuery(function($){
 // 	});
 	
 	
+	$( "#fabric_objects_container details").focus(function() {
+		let this_buffer = $(this);
+		i_audicom._room_canvas.getObjects().forEach(function(e) {
+		          if(e.AGObjectID == this_buffer.attr('obj_id')) {
+		              i_audicom._room_canvas.setActiveObject(e);
+					  i_audicom._room_canvas.trigger('selection:created', {target: e});
+					  i_audicom._room_canvas.renderAll();
+		          }
+		 });
+	});
+	
+	
 	
 	
 	i_audicom._room_canvas.on('mouse:down', function(e){
-		
-		
-		
-		
-		
 		
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording){
@@ -725,6 +769,7 @@ jQuery(function($){
 			}
 	    },
 	    'selection:updated': function(e){
+			
 			outputFabPos();
 			//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
 			if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
@@ -762,7 +807,9 @@ jQuery(function($){
 			
 				//show highlights or paths of new active fab object
 				if(i_audicom._room_canvas.getActiveObject().PathArray){
+					
 					i_audicom._room_canvas.getActiveObject().PathArray.forEach(function(ele) {
+						
 						ele.opacity = 1;
 					});
 					i_audicom._room_canvas.getActiveObject().LineArray.forEach(function(ele) {
