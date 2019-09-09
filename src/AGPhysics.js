@@ -66,6 +66,89 @@ export function isAABBInsideRoom(point:Vector3, size:Vector3, room:AGRoom):boole
     point.z + size.z/2 <= room.size.z);
 }
 
+export function frbIntersectionPoint(target:AGObject, source:Vector3, direction:Vector3):Vector3 {
+    let v_minB:Vector3 = new Vector3(target.position.x-target.size.x/2, target.position.y-target.size.y/2, target.position.z-target.size.z/2);
+    let v_maxB:Vector3 = new Vector3(target.position.x+target.size.x/2, target.position.y+target.size.y/2, target.position.z+target.size.z/2);
+
+    let v_origin:Vector3 = source;
+    let v_direction:Vector3 = direction;
+
+    let NUMDIM:number = 3, RIGHT:number = 0, LEFT:number = 1, MIDDLE:number = 2;
+    let minB:Array<number> = [0, 0, 0], maxB:Array<number> = [0, 0, 0]; /*box*/
+    let origin:Array<number> = [0, 0, 0], dir:Array<number> = [0, 0, 0]; /*ray*/
+    let coord:Array<number> = [0, 0, 0]; /* hit point */
+
+    let inside:boolean = true;
+    let quadrant:Array<number> = [0, 0, 0];
+    let i:number;
+    let whichPlane:number;
+    let maxT:Array<number> = [0, 0, 0];
+    let candidatePlane:Array<number> = [0, 0, 0];
+
+    minB[0] = v_minB.x;
+    minB[1] = v_minB.y;
+    minB[2] = v_minB.z;
+
+    maxB[0] = v_maxB.x;
+    maxB[1] = v_maxB.y;
+    maxB[2] = v_maxB.z;
+
+    origin[0] = v_origin.x;
+    origin[1] = v_origin.y;
+    origin[2] = v_origin.z;
+
+    dir[0] = v_direction.x;
+    dir[1] = v_direction.y;
+    dir[2] = v_direction.z;
+
+    /* Find candidate planes; this loop can be avoided if
+       rays cast all from the eye(assume perpsective view) */
+    for (i=0; i<NUMDIM; i++)
+        if(origin[i] < minB[i]) {
+            quadrant[i] = LEFT;
+            candidatePlane[i] = minB[i];
+            inside = false;
+        } else if (origin[i] > maxB[i]) {
+            quadrant[i] = RIGHT;
+            candidatePlane[i] = maxB[i];
+            inside = false;
+        }else	{
+            quadrant[i] = MIDDLE;
+        }
+
+    /* Ray origin inside bounding box */
+    if(inside)	{
+        coord = origin;
+        return new Vector3(coord[0], coord[1], coord[2]);
+    }
+
+
+    /* Calculate T distances to candidate planes */
+    for (i = 0; i < NUMDIM; i++)
+        if (quadrant[i] != MIDDLE && dir[i] !=0.)
+            maxT[i] = (candidatePlane[i]-origin[i]) / dir[i];
+        else
+            maxT[i] = -1.;
+
+    /* Get largest of the maxT's for final choice of intersection */
+    whichPlane = 0;
+    for (i = 1; i < NUMDIM; i++)
+        if (maxT[whichPlane] < maxT[i])
+            whichPlane = i;
+
+    /* Check final candidate actually inside box */
+    if (maxT[whichPlane] < 0.) return null;
+    for (i = 0; i < NUMDIM; i++)
+        if (whichPlane != i) {
+            coord[i] = origin[i] + maxT[whichPlane] *dir[i];
+            if (coord[i] < minB[i] || coord[i] > maxB[i])
+                return null;
+        } else {
+            coord[i] = candidatePlane[i];
+        }
+    return new Vector3(coord[0], coord[1], coord[2]);
+}
+
 /*
 Fast Ray-Box Intersection
 by Andrew Woo

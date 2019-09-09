@@ -182,6 +182,18 @@ export class AGObject {
         this._tag = value;
     }
 
+    get hitSound(): AGSoundSource {
+        return this._hitSound;
+    }
+
+    set hitSound(valueID: number) {
+        let value = getReferenceById(valueID);
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'hitSound').set, arguments);
+        this._hitSound = value;
+    }
+
+
     _type:Type;
 
     _room:AGRoom;
@@ -199,6 +211,8 @@ export class AGObject {
     _movable:boolean;
     _route:Array<Vector3>;
     _currentRoute:number;
+
+    _hitSound:AGSoundSource;
 
     _collidable:boolean;
     _blockedObjects:Array<AGObject>;
@@ -310,7 +324,7 @@ export class AGObject {
         //as long as the draw loop is called, the sound should be played.
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
             //console.log(this.position);
-            this._AGSoundSources[i].setPosition(this.position);
+            if(this._AGSoundSources[i].update) this._AGSoundSources[i].setPosition(this.position);
             this._AGSoundSources[i].play();
         }
 

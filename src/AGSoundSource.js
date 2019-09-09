@@ -10,6 +10,13 @@ import {AGObject} from "./AGObject.js";
 
 export class AGSoundSource
   /*extends AGObject*/ {
+    get update(): boolean {
+        return this._update;
+    }
+
+    set update(value: boolean) {
+        this._update = value;
+    }
     get object(): AGObject {
         return this._object;
     }
@@ -94,6 +101,8 @@ export class AGSoundSource
     _type:Type;
     _ID:number;
 
+    _update:boolean;
+
     _object:AGObject;
 
     _room:AGRoom;
@@ -125,6 +134,7 @@ export class AGSoundSource
         this.file = file;
         this.interval = interval;
         this._playing = false;
+        this._update = true;
 
         this._room = getReferenceById(roomID);
 
@@ -204,11 +214,20 @@ export class AGSoundSource
      * Stops the sound source.
      */
     stop(){
-        if(this.playing){
-            this.playing = false;
-            this.audioElement.pause();
-            this.audioElement.currentTime = 0;
-        }
+       this.playing = false;
+       this.audioElement.pause();
+       this.audioElement.currentTime = 0;
+    }
+
+    /**
+     * Plays the sound source on the given position at least once (depending on loop property of the AGSoundSource)
+     * @param pos The Vector3 position where the sound is played at
+     */
+    playOnceAtPosition(pos:Vector3){
+        console.log("[AGSoundSource] Playing AGSoundSource [ID: " + this._ID + "]: " + this._name + " at position " + pos.x.toFixed(2) + "/" + pos.y.toFixed(2) + "/" + pos.z.toFixed(2) + ".");
+        this.stop();
+        this.setPosition(pos);
+        this.play();
     }
 
 }
