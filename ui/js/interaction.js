@@ -63,6 +63,22 @@ jQuery(function($){
 	});
 	
 	
+	/*key input*/
+	$(document).on('keypress',function(e) {
+	    if(e.which == 13) {
+			
+			if($(document.activeElement).is('details')){
+				$('#input_obj_name').focus()
+			}
+	       
+			if($(document.activeElement).hasClass('sb_object')){
+				var type_buffer = $(document.activeElement).attr('type');
+				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2);
+			}
+
+	    }
+	});
+	
 	
 	//jq dnd-stuff
 	$('.sb_object').draggable({

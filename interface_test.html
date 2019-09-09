@@ -37,7 +37,7 @@
 			<div id = "mouse_coords_x">X: <span></span></div>
 			<div id = "mouse_coords_y">Y: <span></span></div>
 		</div><!--mouse_coords-->
-		
+		<div id = "fabric_objects_container" class = "displace">
 		
 		<div id = "misc_ctrls_box">
 			<select id = "level_dropdown">
@@ -50,7 +50,9 @@
 		</div><!--misc_box-->
 		
 		
-		<div id = "fabric_objects_container" class = "displace"></div><!--fabric_objects_container-->
+		
+			
+		</div><!--fabric_objects_container-->
 		
 		<div id = "win_screen">
 			<p><i class="fas fa-trophy"></i>&nbsp;You won the game!&nbsp;<i class="fas fa-trophy"></i></p>
@@ -82,29 +84,25 @@
 					
 					<div id = "ui_controls">
 						
-						<div id = "sb_object_enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
+						<div tabindex="0" id = "sb_object_enemy" type = "enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
 							<i class="fas fa-skull"></i>
 						</div><!--sb_object-->
 					
-						<div id = "sb_object_generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
+						<div tabindex="0" id = "sb_object_generic" type = "generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
 							<i class="fas fa-circle"></i>
 						</div><!--sb_object-->
             	
-						<div id = "sb_object_wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
+						<div tabindex="0" id = "sb_object_wall" type = "wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
 							<i class="fas fa-map"></i>
 						</div><!--sb_object-->
 					
-						<div id = "sb_object_portal" class = "sb_object bg_portal sb_object_structure" obj_type = "portal">
+						<div tabindex="0" id = "sb_object_portal" type = "portal" class = "sb_object bg_portal sb_object_structure" obj_type = "portal">
 							<i class="fas fa-dungeon"></i>
 						</div><!--sb_object-->
 					
-						<div id = "sb_object_exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
+						<div tabindex="0" id = "sb_object_exit" type = "exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
 							<i class="fas fa-sign-out-alt"></i>
 						</div><!--sb_object-->
-						
-						
-						
-						
 						
 					</div><!--ui_controls-->
 					

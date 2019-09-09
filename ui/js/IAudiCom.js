@@ -482,6 +482,7 @@ export class IAudiCom {
 		
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
 		this.renderAGObject(obj_buffer_ID);
+		return obj_buffer_ID;
 	}
 	
 	
@@ -496,9 +497,6 @@ export class IAudiCom {
 		return fab_buffer;
 	}
 	
-	
-	
-
 	//AGObjects
 	renderAGObject(ag_objectID){
 		
@@ -508,7 +506,7 @@ export class IAudiCom {
 		let room_canvas_buffer = this._room_canvas;
 		
 		//add details for tapping
-		$('#fabric_objects_container').append('<details obj_id = "'+ ag_objectID +'"></details>');
+		$('#fabric_objects_container').append('<details id = "fabobject_"'+ ag_objectID + '" obj_id = "'+ ag_objectID +'"></details>');
 
 		if(getReferenceById(ag_objectID).tag){
 			
