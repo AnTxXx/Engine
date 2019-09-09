@@ -3,10 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEngine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGNavigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGPhysics.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPhysics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/js/three/Matrix3.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Matrix3.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/js/three/Plane.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Plane.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGNavigation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSoundSource.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,6 +78,7 @@
       <workItem from="1567151310921" duration="6758000" />
       <workItem from="1567757197675" duration="26000" />
       <workItem from="1567757257997" duration="16769000" />
+      <workItem from="1568019469952" duration="1851000" />
     </task>
     <servers />
   </component>

@@ -92,12 +92,21 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
     points.push(p4);
     points.push(p1);
 
+    points.push(p4);
+    points.push(p3);
+    points.push(p2);
+    points.push(p1);
+
     //build directions between points
     let dirs:Array<Vector3> = [];
     dirs.push(p1.clone().sub(p2).normalize());
     dirs.push(p2.clone().sub(p3).normalize());
     dirs.push(p3.clone().sub(p4).normalize());
     dirs.push(p4.clone().sub(p1).normalize());
+    dirs.push(p1.clone().sub(p4).normalize());
+    dirs.push(p4.clone().sub(p3).normalize());
+    dirs.push(p3.clone().sub(p2).normalize());
+    dirs.push(p2.clone().sub(p1).normalize());
 
     let intersectPoints:Array<Vector3> = [];
 
@@ -108,11 +117,14 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
     //saves pair of Distance and Vector
     let pairDistancePoint:Array<[number, Vector3]> = [];
 
-    //shoot rays from 4 directions, over corners
-    for(let i = 0; i < 4; i++){
+    if(g_IAudiCom) g_IAudiCom.deleteDots();
+
+    //shoot rays from 8 directions, over corners
+    for(let i = 0; i < 8; i++){
         let dist:number = extractPointToArray(collisionObject, points[i], dirs[i], intersectPoints);
-        if(dist !== undefined || dist !== 0){
+        if(dist !== undefined && dist !== 0){
             pairDistancePoint.push([dist, intersectPoints[intersectPoints.length-1]]);
+            //g_IAudiCom.drawDot(pairDistancePoint[pairDistancePoint.length-1][1].x, pairDistancePoint[pairDistancePoint.length-1][1].z);
             if(pairDistancePoint[pairDistancePoint.length-1][0] < smallestDist){
                 smallestDist = pairDistancePoint[pairDistancePoint.length-1][0];
                 smallest = pairDistancePoint[pairDistancePoint.length-1][1];
@@ -135,7 +147,7 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
     //console.log(smallest);
     //console.log(smallestDist);
 
-    if(g_IAudiCom) g_IAudiCom.deleteDots();
+
 
     //console.log(intersectPoints);
 
@@ -145,10 +157,10 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
                 //console.log(intersectPoints[i].distanceTo(object.position));
                 g_IAudiCom.drawDot(smallest.x, smallest.z);
                 if(object.type === "PLAYER") object.hitSound.playOnceAtPosition(smallest);
-                /*
+
                 for(let i = 0; i < 4; i++){
-                    g_IAudiCom.drawDot(points[i].x, points[i].z);
-                }*/
+                    //g_IAudiCom.drawDot(points[i].x, points[i].z);
+                }
             }
     //}
 }
