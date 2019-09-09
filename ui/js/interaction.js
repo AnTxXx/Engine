@@ -39,44 +39,51 @@ jQuery(function($){
 		_room_canvas.getActiveObject().AGObjectID.name = buffer;
 	});
 	
+	$('#input_obj_x').on('input', function() {
+	    let buffer_x = $(this).val();
+		let buffer_y = $('#input_obj_y').val();
+		i_audicom._room_canvas.getActiveObject().left = buffer_x*i_audicom._scale;
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3(buffer_x, 1, buffer_y);
+		$('#coord_x span').text(buffer_x);
+		i_audicom._room_canvas.renderAll();
+	});
+	$('#input_obj_y').on('input', function() {
+		let buffer_x = $('#input_obj_x').val();
+		let buffer_y = $(this).val();
+		i_audicom._room_canvas.getActiveObject().top = buffer_y*i_audicom._scale;
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3(buffer_x, 1, buffer_y);
+		$('#coord_y span').text(buffer_y);
+		i_audicom._room_canvas.renderAll();
+	});
+
+	
 	$('#input_room_name').on('input', function() {
 	    let buffer = $(this).val();
 		getReferenceById(i_audicom._AGroomID).name = buffer;
 	});
 	
-	
-	$('#input_obj_pos_x').on('input', function() {	
-		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
-		i_audicom._room_canvas.getActiveObject().set({
-			left: $('#input_obj_pos_x').val()*i_audicom._scale,
-			top: $('#input_obj_pos_y').val()*i_audicom._scale,
-		});
-		i_audicom._room_canvas.renderAll();
-	});
-	$('#input_obj_pos_y').on('input', function() {
-		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3($('#input_obj_pos_x').val(), 1, $('#input_obj_pos_y').val());
-		i_audicom._room_canvas.getActiveObject().set({
-			left: $('#input_obj_pos_x').val()*i_audicom._scale,
-			top: $('#input_obj_pos_y').val()*i_audicom._scale,
-		});
-		i_audicom._room_canvas.renderAll();
-	});
-	
-	
 	/*key input*/
-	$(document).on('keypress',function(e) {
+	$(document).on('keydown',function(e) {
 	    if(e.which == 13) {
 			
 			if($(document.activeElement).is('details')){
-				$('#input_obj_name').focus()
+				$('#input_obj_name').focus();
 			}
 	       
 			if($(document.activeElement).hasClass('sb_object')){
 				var type_buffer = $(document.activeElement).attr('type');
-				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2);
+				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2, true);	
 			}
-
 	    }
+		
+		if(event.key == "Escape"){
+			if($('#overlay').is(":visible")){
+				if(!$(e.target).is('a')){
+					$('#overlay').fadeOut(200);
+				}	
+			}
+		}
+
 	});
 	
 	
@@ -188,14 +195,6 @@ jQuery(function($){
 	});
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	function loadObject(type){
 		
 		//all: position, SoSo, Namen, Löschenbutton
@@ -206,8 +205,7 @@ jQuery(function($){
 		//Raumziel
 
 		$('#ui_part_right_inner').fadeOut(100, function(){
-			
-			
+
 			if(type =='room'){
 				$('#input_room_name').val(getReferenceById(i_audicom._AGroomID).name);
 				
@@ -332,6 +330,7 @@ jQuery(function($){
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
 			$('#ui_controls').removeClass('no_click lower_opacity');
+			$('.misc_ctrls').removeClass('no_click lower_opacity');
 			$('#ui_part_left').removeClass('no_click lower_opacity');
 			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
 			
@@ -340,6 +339,7 @@ jQuery(function($){
 			$(this).find('i').addClass('btn_path_rec_blink');
 			
 			$('#ui_controls').addClass('no_click lower_opacity');
+			$('.misc_ctrls').addClass('no_click lower_opacity');
 			$('#ui_part_left').addClass('no_click lower_opacity');
 			$('.ui_box_special:visible').not('#ui_box_enemy_path').addClass('no_click').addClass('lower_opacity');
 			
@@ -386,6 +386,7 @@ jQuery(function($){
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
 			$('#ui_part_left').removeClass('no_click lower_opacity');
+			$('.misc_ctrls').removeClass('no_click lower_opacity');
 			$('#ui_controls').removeClass('no_click lower_opacity');
 			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_link_portals').removeClass('lower_opacity');
 			
@@ -394,6 +395,7 @@ jQuery(function($){
 			$(this).find('i').addClass('btn_path_rec_blink');
 			
 			$('#ui_part_left').addClass('no_click lower_opacity');
+			$('.misc_ctrls').addClass('no_click lower_opacity');
 			$('#ui_controls').addClass('no_click lower_opacity');
 			$('.ui_box_special:visible').not('#ui_box_link_portals').addClass('no_click').addClass('lower_opacity');
 			
@@ -476,10 +478,7 @@ jQuery(function($){
 	$('#overlay').click(function(e){
 		if(!$(e.target).is('a')){
 			$('#overlay').fadeOut(200);
-		}	
-		
-	
-		
+		}		
 	});
 	
 	$('#win_screen').click(function(){
@@ -493,13 +492,13 @@ jQuery(function($){
 	
 	
 	$("#level_dropdown").change(function() {
-	    // Pure JS
 	    
-		
+	   
 		
 		switch(this.value){
 			case 'Level 1':
 				i_audicom.loadLevel(1);
+				
 				break;
 			case 'Level 2':
 				i_audicom.loadLevel(2);
@@ -550,8 +549,9 @@ jQuery(function($){
 // 	});
 	
 	
-	$( "#fabric_objects_container details").focus(function() {
-		let this_buffer = $(this);
+	$( "#fabric_objects_container" ).on( "focus",'details',function(e) {
+		let this_buffer = $(e.target);
+		
 		i_audicom._room_canvas.getObjects().forEach(function(e) {
 		          if(e.AGObjectID == this_buffer.attr('obj_id')) {
 		              i_audicom._room_canvas.setActiveObject(e);
@@ -560,8 +560,6 @@ jQuery(function($){
 		          }
 		 });
 	});
-	
-	
 	
 	
 	i_audicom._room_canvas.on('mouse:down', function(e){
@@ -687,6 +685,7 @@ jQuery(function($){
 					obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
 					$('#ui_part_left').removeClass('no_click lower_opacity');
+					$('.misc_ctrls').removeClass('no_click lower_opacity');
 					$('#ui_controls').removeClass('no_click lower_opacity');
 					$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
 					
@@ -872,12 +871,24 @@ jQuery(function($){
 	}
 
 	function outputFabPos(){
+		
+		let buff1 = Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.x * 10) / 10;
+		let buff2 = Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.z * 10) / 10;
+		
+		
+		
 		$('#coord_x span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.x * 10) / 10);
 		$('#coord_y span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.z * 10) / 10);
+
+		$('#input_obj_x').val(buff1);
+		$('#input_obj_y').val(buff2);
 	}
 
 	function drawObjects(obj_type, obj_left, obj_top){
 
 	}
+
+	
+
 
 });

@@ -37,21 +37,18 @@
 			<div id = "mouse_coords_x">X: <span></span></div>
 			<div id = "mouse_coords_y">Y: <span></span></div>
 		</div><!--mouse_coords-->
-		<div id = "fabric_objects_container" class = "displace"></div><!--fabric_objects_container-->
 		
-		<div id = "misc_ctrls_box">
+		
+		<div id = "misc_ctrls_box" class = "misc_ctrls">
 			<select id = "level_dropdown">
 			  <option level="1">Level 1</option>
 			  <option level="2">Level 2</option>
 			  <option level="3">Level 3</option>
 			</select>
 			
-			<div id = "btn_help"><i class="fas fa-question"></i></div>
+			<button id = "btn_help" class = "misc_ctrls"><i class="fas fa-question"></i></button>
+			<div id = "fabric_objects_container" class = "displace"></div><!--fabric_objects_container-->
 		</div><!--misc_box-->
-		
-		
-		
-			
 		
 		
 		<div id = "win_screen">
@@ -69,6 +66,11 @@
 					<div id = "scene_controls_box" class = "control_box">
 						<button id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></button>
 						<button id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></button>	
+						
+					</div><!--scene_controls_box-->
+					
+					
+					<div class = "control_box">
 						<button id = "btn_new_scene" class = "btn"><i class="fas fa-star-of-life"></i></button>
 					</div><!--scene_controls_box-->
 		    	
@@ -145,10 +147,14 @@
 						
 								<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
 								<br>
-								<span id = "id_">ID:<span></span></span>
+								
+								X: <input id = "input_obj_x" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:10px"><br>
+								Y: <input id = "input_obj_y" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
 								<br>
-								<span id = "coord_x">X:<span></span></span><br>
-								<span id = "coord_y">Y:<span></span></span>
+								<span id = "id_">ID: <span></span></span>
+								<br>
+								<span id = "coord_x">X: <span></span></span><br>
+								<span id = "coord_y">Y: <span></span></span>
 							</div><!--ui_box-->
 					
 							<!-- <div class = "ui_box">
@@ -274,8 +280,9 @@
 					<li>Mit einem Klick auf den Playbutton (unter Scene-Controls) startest Du das Demolevel.</li>
 					<li>Du steuerst den Charakter (Avatar) mit den Pfeiltasten. Am besten schrittweise, Du kannst also dazwischen auch mal die Pfeiltasten loslassen. &#9786;</li>
 					<li>Du kannst auch zus&auml;tzliche Objekte (links) auf die Spielfl&auml;che (in der Mitte) ziehen;<br>bedenke aber bitte Punkt 1.</li>
-					<li>Die Demo hier ist ein kleines Spiel, in dem Du durch Ger&auml;usche zum Ziel gelenkt wirst. Achte also auf magische T&ouml;ne oder Wasserf&auml;lle.</li>
+					<li>Du kannst (fast) alle Elemente mit der Tab-Taste fokusieren und mit der Enter-Taste auswählen.</li>
 					<li>Falls Dir etwas auff&auml;llt oder du Ideen hast, die Du uns gerne mitteilen m&ouml;chtest; oder auch einfach nur so &uuml;ber Audio Games quatschen magst, kannst Du uns unter <a href = "mailto:hallo@audicom.at">hallo@audicom.at</a> erreichen!</li>
+					<li>Um diese Anleitung zu schließen, drücke die ESC-Taste.</li>
 			
 				</ol>
 				<p class = "centered bigger">Viel Spaß!</p>

@@ -110,11 +110,20 @@ export class IAudiCom {
 		this._room_canvas.renderAll();
 
 		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help" ).toggleClass("contrast");
+		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help,#overlay_text_box" ).toggleClass("contrast");
 
 	}
 	
 	startArea(){
+		
+		this.disableKeyScrolling();
+		
+		$('#ui_part_right').addClass('no_click lower_opacity');
+		
+		$('.misc_ctrls').addClass('no_click lower_opacity');
+		$('#ui_controls').addClass('no_click lower_opacity');
+		$('.control_box .btn').not('#btn_stop_scene').addClass('no_click lower_opacity');
+		
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
 		let canvas_objects = room_buffer.getObjects();
@@ -123,7 +132,29 @@ export class IAudiCom {
 		
 		this._interval = setInterval(function(){				
 			canvas_objects.forEach(function(item, i) {
+				
+				
+				
+				
+				
 				if(item.isObject){
+					
+					
+					if(item.type == 'player'){
+						
+						if(item.left + 200 > $('#canvas_container').width() + $('#canvas_container').scrollLeft()){
+							$('#canvas_container').scrollLeft( $('#canvas_container').scrollLeft() + 1 );
+						}else if(item.left - 200 < $('#canvas_container').scrollLeft()){
+							$('#canvas_container').scrollLeft( $('#canvas_container').scrollLeft() - 1 );
+						}
+						
+						if(item.top + 200 > $('#canvas_container').height() + $('#canvas_container').scrollTop()){
+							$('#canvas_container').scrollTop( $('#canvas_container').scrollTop() + 1 );
+						}else if(item.top - 200 < $('#canvas_container').scrollTop()){
+							$('#canvas_container').scrollTop( $('#canvas_container').scrollTop() - 1 );
+						}
+					}
+					
 	 				// item.left = item.AGObject.position.x*scale_buffer + item.AGObject.size.x*scale_buffer/2;
 					// item.top = item.AGObject.position.z*scale_buffer + item.AGObject.size.z*scale_buffer/2;
 					// item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
@@ -160,6 +191,16 @@ export class IAudiCom {
 		}, 33);	
 	}
 	stopArea(){
+		
+		this.disableKeyScrolling();
+		
+		
+		$('#ui_part_right').removeClass('no_click lower_opacity');
+		$('.misc_ctrls').removeClass('no_click lower_opacity');
+		$('#ui_controls').removeClass('no_click lower_opacity');
+		$('.control_box .btn').not('#btn_stop_scene').removeClass('no_click lower_opacity');
+		$('#fabric_objects_container').empty();
+		
 		play(getReferenceById(g_gamearea.ID), false);
 		this._interval = false;	
 		
@@ -421,8 +462,8 @@ export class IAudiCom {
 		});
 	}
 
-	//
-	makeThenRenderAGObject(obj_type, obj_left, obj_top){
+	//obj_focus -> setfocus after rendering it
+	makeThenRenderAGObject(obj_type, obj_left, obj_top, obj_focus){
 
 		let obj_buffer;
 		let obj_buffer_ID;
@@ -481,7 +522,7 @@ export class IAudiCom {
 		
 		
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
-		this.renderAGObject(obj_buffer_ID);
+		this.renderAGObject(obj_buffer_ID, obj_focus);
 		return obj_buffer_ID;
 	}
 	
@@ -498,7 +539,7 @@ export class IAudiCom {
 	}
 	
 	//AGObjects
-	renderAGObject(ag_objectID){
+	renderAGObject(ag_objectID, obj_focus){
 		
 		let _scalebuffer = this._scale
 		let colors_buffer = this._colors;
@@ -506,8 +547,12 @@ export class IAudiCom {
 		let room_canvas_buffer = this._room_canvas;
 		
 		//add details for tapping
-		$('#fabric_objects_container').append('<details id = "fabobject_"'+ ag_objectID + '" obj_id = "'+ ag_objectID +'"></details>');
-
+		$('#fabric_objects_container').append('<details id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'"></details>');
+		
+		//$('#fabobject_'+ag_objectID).attr('autofocus' , 'true');
+		
+		
+		
 		if(getReferenceById(ag_objectID).tag){
 			
 			switch(getReferenceById(ag_objectID).tag){
@@ -834,6 +879,14 @@ export class IAudiCom {
 					});
 			}	
 		}
+		
+		// $('#fabobject_'+ag_objectID).focus();
+// 		console.log('#fabobject_'+ag_objectID);
+		// $('#input_obj_name').focus()
+//
+// 		$('#fabric_objects_container').append('<details id = "fabobject_"'+ ag_objectID + '" obj_id = "'+ ag_objectID +'"></details>');
+//
+		
 	}
 	
 	
@@ -892,12 +945,23 @@ export class IAudiCom {
 		}
 	}
 	
+	disableKeyScrolling(){
+		window.addEventListener("keydown", function(e) {
+		    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+		        e.preventDefault();
+		    }
+		}, false);
+	}
+	enableKeyScrolling(){
+		window.removeEventListener("keydown");
+	}
+	
 	
 	
 	
 	loadLevel(lvl_){
 		
-		
+		$('#fabric_objects_container').empty();
 		play(getReferenceById(g_gamearea.ID), false);
 		
 		
