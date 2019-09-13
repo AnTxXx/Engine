@@ -56,6 +56,47 @@ jQuery(function($){
 		i_audicom._room_canvas.renderAll();
 	});
 
+
+
+
+	$('#input_obj_w').on('input', function() {
+		
+		let new_size = $('#input_obj_w').val();
+		let old_size = i_audicom._room_canvas.getActiveObject().width/i_audicom._scale;
+		let new_scale = new_size/old_size;
+		i_audicom._room_canvas.getActiveObject().scaleX = new_scale;
+		i_audicom._room_canvas.renderAll();
+		
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).size = new Vector3(i_audicom._room_canvas.getActiveObject().width*i_audicom._room_canvas.getActiveObject().scaleX/i_audicom._scale, 1, i_audicom._room_canvas.getActiveObject().height*i_audicom._room_canvas.getActiveObject().scaleY/i_audicom._scale);
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3(i_audicom._room_canvas.getActiveObject().left/i_audicom._scale, 1, i_audicom._room_canvas.getActiveObject().top/i_audicom._scale);
+		if(!i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled && i_audicom._room_canvas.getActiveObject().strokeWidth){
+			i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled = i_audicom._room_canvas.getActiveObject().strokeWidth;
+		}
+		if(i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled){
+			var scale_buffer = i_audicom._room_canvas.getActiveObject().scaleX > i_audicom._room_canvas.getActiveObject().scaleY ? i_audicom._room_canvas.getActiveObject().scaleX : i_audicom._room_canvas.getActiveObject().scaleY;
+			i_audicom._room_canvas.getActiveObject().strokeWidth = i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled / scale_buffer;
+		}
+		
+	});
+	$('#input_obj_h').on('input', function() {
+		
+		let new_size = $('#input_obj_h').val();
+		let old_size = i_audicom._room_canvas.getActiveObject().height/i_audicom._scale;
+		let new_scale = new_size/old_size;
+		i_audicom._room_canvas.getActiveObject().scaleY = new_scale;
+		i_audicom._room_canvas.renderAll();
+		
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).size = new Vector3(i_audicom._room_canvas.getActiveObject().width*i_audicom._room_canvas.getActiveObject().scaleX/i_audicom._scale, 1, i_audicom._room_canvas.getActiveObject().height*i_audicom._room_canvas.getActiveObject().scaleY/i_audicom._scale);
+		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3(i_audicom._room_canvas.getActiveObject().left/i_audicom._scale, 1, i_audicom._room_canvas.getActiveObject().top/i_audicom._scale);
+		if(!i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled && i_audicom._room_canvas.getActiveObject().strokeWidth){
+			i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled = i_audicom._room_canvas.getActiveObject().strokeWidth;
+		}
+		if(i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled){
+			var scale_buffer = i_audicom._room_canvas.getActiveObject().scaleX > i_audicom._room_canvas.getActiveObject().scaleY ? i_audicom._room_canvas.getActiveObject().scaleX : i_audicom._room_canvas.getActiveObject().scaleY;
+			i_audicom._room_canvas.getActiveObject().strokeWidth = i_audicom._room_canvas.getActiveObject().strokeWidthUnscaled / scale_buffer;
+		}
+	});
+
 	
 	$('#input_room_name').on('input', function() {
 	    let buffer = $(this).val();
@@ -64,9 +105,12 @@ jQuery(function($){
 	
 	/*key input*/
 	$(document).on('keydown',function(e) {
-	    if(e.which == 13) {
+		
+		if (event.keyCode == 13 && event.shiftKey) {
+		   	$('.faboject_:first').focus();
+		}else if(e.which == 13) {
 			
-			if($(document.activeElement).is('details')){
+			if($(document.activeElement).hasClass('faboject_')){
 				$('#input_obj_name').focus();
 			}
 	       
@@ -83,7 +127,6 @@ jQuery(function($){
 				}	
 			}
 		}
-
 	});
 	
 	
@@ -405,26 +448,7 @@ jQuery(function($){
 	//delete linked portal
 	$('#btn_path_deletedoors').click(function(){
 		
-		//ICI
-		//actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-		let sec_door_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
-		
-		i_audicom._room_canvas.remove(actFabObj.line.dot);
-		i_audicom._room_canvas.remove(sec_door_buffer.line.dot);
-		i_audicom._room_canvas.remove(actFabObj.line);
-		i_audicom._room_canvas.remove(sec_door_buffer.line);
-		actFabObj.line = false;
-		sec_door_buffer.line = false;
-		
-		
-		sec_door_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-		sec_door_buffer.secDoor = false;
-		actFabObj.secDoor = false;
-		i_audicom._room_canvas.renderAll();
-		
-		getReferenceById(actFabObj.AGObjectID).unlink();
-		
-		//getReferenceById(actFabObj.AGObjectID).clearRoute();
+		deletePortal();
 	});
 
 	$('#btn_delete_object').click(function(){
@@ -491,10 +515,7 @@ jQuery(function($){
 	
 	
 	
-	$("#level_dropdown").change(function() {
-	    
-	   
-		
+	$("#level_dropdown").change(function() {		
 		switch(this.value){
 			case 'Level 1':
 				i_audicom.loadLevel(1);
@@ -507,8 +528,6 @@ jQuery(function($){
 				i_audicom.loadLevel(3);
 				break;
 		}
-		
-		
 	   	//var selectedText = this.options[this.selectedIndex].text;
 
 	    // jQuery
@@ -516,6 +535,22 @@ jQuery(function($){
 	    //var selectedText = $(this).find(':selected').text();
 	});
 		
+	$("#portal_dropdown").change(function(){	
+		let portal_buffer = '';
+		let value_buffer = $(this).val();
+		
+		if(value_buffer == ''){
+			deletePortal();
+		}else{
+			i_audicom._room_canvas.getObjects().forEach(function(e) {
+				if(e.AGObjectID == value_buffer) {
+					  portal_buffer = e;
+				}
+			});
+			linkPortalsUI(portal_buffer);
+		}		
+	});
+	
 	
 	
 	
@@ -549,7 +584,7 @@ jQuery(function($){
 // 	});
 	
 	
-	$( "#fabric_objects_container" ).on( "focus",'details',function(e) {
+	$( "#fabric_objects_container" ).on( "focus",'.faboject_',function(e) {
 		let this_buffer = $(e.target);
 		
 		i_audicom._room_canvas.getObjects().forEach(function(e) {
@@ -598,107 +633,14 @@ jQuery(function($){
 			
 		}else if(actFabObj.type=='portal' && actFabObj.isRecording){
 			
-			let obj_buffer = i_audicom._room_canvas.getActiveObject();
-
-			if(obj_buffer){
-				if(getReferenceById(obj_buffer.AGObjectID).type == 'PORTAL'){
-					//link the portal
-					//mark the portal in canvas
-					
-					i_audicom._room_canvas.setActiveObject(actFabObj);
-					
-					getReferenceById(actFabObj.AGObjectID).linkPortals(obj_buffer.AGObjectID);
-					actFabObj.isRecording = false;
-					$('#btn_path_linkdoors').find('i').removeClass('btn_path_rec_blink');
-					
-					//if there is a door, reset color and remove portal from second door
-					if(actFabObj.secDoor){
-						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-						i_audicom.getFabricObject(actFabObj.secDoor).secDoor = false;
-					}
-					
-					if(actFabObj.line){
-						
-						i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line.dot);
-						i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line);
-						i_audicom.getFabricObject(actFabObj.secDoor).line = false;
-						
-						i_audicom._room_canvas.remove(actFabObj.line.dot);
-						i_audicom._room_canvas.remove(actFabObj.line);
-						actFabObj.line.line = false;
-							
-					}
-					
-					//obj_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
-					
-					//link fabric objects
-					actFabObj.secDoor = obj_buffer.AGObjectID;
-					obj_buffer.secDoor = actFabObj.AGObjectID;
-									
-					let dot_1 = new fabric.Circle({
-					    left:   actFabObj.left-4,
-					    top:    actFabObj.top-4,
-					    radius: 4,
-					    fill:   i_audicom._colors[6][i_audicom._vision_mode],
-					    objectCaching: false,
-						selectable: false,
-						type: 'portal_dot'
-					});
-					let dot_2 = new fabric.Circle({
-					    left:   obj_buffer.left-4,
-					    top:    obj_buffer.top-4,
-					    radius: 4,
-					    fill:   i_audicom._colors[6][i_audicom._vision_mode],
-					    objectCaching: false,
-						selectable: false,
-						type: 'portal_dot'
-					});
-					//draw line between portals
-					let line_1 = new fabric.Line([actFabObj.left, actFabObj.top,obj_buffer.left, obj_buffer.top],{
-						fill: i_audicom._colors[7][i_audicom._vision_mode],
-						stroke: i_audicom._colors[7][i_audicom._vision_mode],
-						strokeWidth: 2,
-						selectable: false,
-						evented: false,
-						type: 'portal_line',
-						dot: dot_1,
-					});
-					let line_2 = new fabric.Line([obj_buffer.left, obj_buffer.top,actFabObj.left, actFabObj.top],{
-						fill: i_audicom._colors[7][i_audicom._vision_mode],
-						stroke: i_audicom._colors[7][i_audicom._vision_mode],
-						strokeWidth: 2,
-						selectable: false,
-						evented: false,
-						type: 'portal_line',
-						dot: dot_2,
-						opacity: 0,
-					});
-					i_audicom._room_canvas.add(dot_1);
-					i_audicom._room_canvas.add(dot_2);
-					i_audicom._room_canvas.add(line_1);
-					i_audicom._room_canvas.add(line_2);
-					actFabObj.line = line_1;
-					obj_buffer.line = line_2;
-					
-					//colorize
-					//console.log(i_audicom._colors[5][i_audicom._vision_mode]);
-					obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
-					
-					$('#ui_part_left').removeClass('no_click lower_opacity');
-					$('.misc_ctrls').removeClass('no_click lower_opacity');
-					$('#ui_controls').removeClass('no_click lower_opacity');
-					$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
-					
-					i_audicom.room_canvas.renderAll();
-				}
-			}else{
-				i_audicom._room_canvas.setActiveObject(actFabObj);
-			}
 			
+			linkPortalsUI(i_audicom._room_canvas.getActiveObject());
 			
 			
 		//deselect Object and hide Path-Points	
 		}else if(!i_audicom._room_canvas.getActiveObject()){
+			
+			
 			
 			//TODO stop recording
 			
@@ -713,6 +655,9 @@ jQuery(function($){
 				
 				
 			}else if(actFabObj.secDoor){
+				
+				
+				
 				i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
 				
 				if(actFabObj.line){
@@ -754,6 +699,8 @@ jQuery(function($){
 						});
 					}else if(actFabObj.secDoor){
 						
+						portalSelect();
+					
 						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 					
 						if(actFabObj.line){
@@ -761,9 +708,13 @@ jQuery(function($){
 							actFabObj.line.dot.set("opacity", 1);
 							i_audicom.getFabricObject(actFabObj.secDoor).line.dot.set("opacity", 1);
 						}
+					}else if (actFabObj.type = 'portal'){
+						portalSelect();
 					}	
 				}
+				
 			}else{
+				
 				loadObject(actFabObj.type);
 			}
 	    },
@@ -794,6 +745,10 @@ jQuery(function($){
 							ele.opacity = 0;
 						});
 					}else if(actFabObj.secDoor){
+						
+						
+						portalSelect();
+						
 						i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
 						if(actFabObj.line){
 						
@@ -817,6 +772,10 @@ jQuery(function($){
 				
 				//if another object is selected hide highlight-color of portal
 				}else if(i_audicom._room_canvas.getActiveObject().secDoor){
+					
+					
+					portalSelect();
+					
 					i_audicom.getFabricObject(i_audicom._room_canvas.getActiveObject().secDoor).set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
 				
 				
@@ -858,9 +817,72 @@ jQuery(function($){
 				i_audicom.getFabricObject(e.target.secDoor).line.set({ 'x2': e.target.left, 'y2': e.target.top });
 			}
 			getReferenceById(e.target.AGObjectID).position = new Vector3(e.target.left/i_audicom._scale, 1, e.target.top/i_audicom._scale);
-		}
+		},
+		
+		'object:scaling': function(e){
+			
+			outputFabPos();
+			
+			
+			
+			
+			//console.log("Size: " + options.target.width*target.scaleX/this._scale + " " + options.target.height*target.scaleY/this._scale);
+			//console.log("Position: " + options.target.left/this._scale + " " + options.target.top/this._scale);
+			
+			getReferenceById(e.target.AGObjectID).size = new Vector3(e.target.width*e.target.scaleX/i_audicom._scale, 1, e.target.height*e.target.scaleY/i_audicom._scale);
+			getReferenceById(e.target.AGObjectID).position = new Vector3(e.target.left/i_audicom._scale, 1, e.target.top/i_audicom._scale);
+			
+			
+			if(!e.target.strokeWidthUnscaled && e.target.strokeWidth){
+				e.target.strokeWidthUnscaled = e.target.strokeWidth;
+			}
+			if(e.target.strokeWidthUnscaled){
+				var scale_buffer = e.target.scaleX > e.target.scaleY ? e.target.scaleX : e.target.scaleY;
+				e.target.strokeWidth = e.target.strokeWidthUnscaled / scale_buffer;
+			}
+			
+			
+		},
 	});
 	
+	
+	function portalSelect(){
+		$('.other_portal').remove();	
+		
+		
+		
+		i_audicom._room_canvas.getObjects().forEach(function(e) {
+			if(e.type == "portal") {
+				  if(i_audicom._room_canvas.getActiveObject().AGObjectID != e.AGObjectID){
+					  $('#portal_dropdown').append('<option class = "other_portal" value="'+ e.AGObjectID +'">'+ e.name +'</option>');
+				  }  
+			}
+		});
+		$("#portal_dropdown option[value="+ i_audicom._room_canvas.getActiveObject().secDoor +"]").prop('selected', 'selected');
+	}
+	
+	function deletePortal(){
+		//ICI
+		//actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+		let sec_door_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
+		
+		i_audicom._room_canvas.remove(actFabObj.line.dot);
+		i_audicom._room_canvas.remove(sec_door_buffer.line.dot);
+		i_audicom._room_canvas.remove(actFabObj.line);
+		i_audicom._room_canvas.remove(sec_door_buffer.line);
+		actFabObj.line = false;
+		sec_door_buffer.line = false;
+		
+		
+		sec_door_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+		sec_door_buffer.secDoor = false;
+		actFabObj.secDoor = false;
+		i_audicom._room_canvas.renderAll();
+		
+		getReferenceById(actFabObj.AGObjectID).unlink();
+		
+		//getReferenceById(actFabObj.AGObjectID).clearRoute();
+	}
 	
 	//misc
 	function getMouseCoords(event){
@@ -869,19 +891,131 @@ jQuery(function($){
 		var posY = pointer.y;
 		return [posX, posY]
 	}
+	
+	function linkPortalsUI(fabObj_){
+		
+		
+		
+		let obj_buffer = fabObj_;
+		
+		
 
+		if(obj_buffer){
+			if(getReferenceById(obj_buffer.AGObjectID).type == 'PORTAL'){
+				//link the portal
+				//mark the portal in canvas
+				
+				i_audicom._room_canvas.setActiveObject(actFabObj);
+				
+				getReferenceById(actFabObj.AGObjectID).linkPortals(obj_buffer.AGObjectID);
+				actFabObj.isRecording = false;
+				$('#btn_path_linkdoors').find('i').removeClass('btn_path_rec_blink');
+				
+				//if there is a door, reset color and remove portal from second door
+				if(actFabObj.secDoor){
+					i_audicom.getFabricObject(actFabObj.secDoor).set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+					i_audicom.getFabricObject(actFabObj.secDoor).secDoor = false;
+				}
+				
+				if(actFabObj.line){
+					
+					i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line.dot);
+					i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line);
+					i_audicom.getFabricObject(actFabObj.secDoor).line = false;
+					
+					i_audicom._room_canvas.remove(actFabObj.line.dot);
+					i_audicom._room_canvas.remove(actFabObj.line);
+					actFabObj.line.line = false;
+						
+				}
+				
+				//obj_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
+				
+				//link fabric objects
+				actFabObj.secDoor = obj_buffer.AGObjectID;
+				obj_buffer.secDoor = actFabObj.AGObjectID;
+								
+				let dot_1 = new fabric.Circle({
+				    left:   actFabObj.left-4,
+				    top:    actFabObj.top-4,
+				    radius: 4,
+				    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+				    objectCaching: false,
+					selectable: false,
+					type: 'portal_dot'
+				});
+				let dot_2 = new fabric.Circle({
+				    left:   obj_buffer.left-4,
+				    top:    obj_buffer.top-4,
+				    radius: 4,
+				    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+				    objectCaching: false,
+					selectable: false,
+					type: 'portal_dot'
+				});
+				//draw line between portals
+				let line_1 = new fabric.Line([actFabObj.left, actFabObj.top,obj_buffer.left, obj_buffer.top],{
+					fill: i_audicom._colors[7][i_audicom._vision_mode],
+					stroke: i_audicom._colors[7][i_audicom._vision_mode],
+					strokeWidth: 2,
+					selectable: false,
+					evented: false,
+					type: 'portal_line',
+					dot: dot_1,
+				});
+				let line_2 = new fabric.Line([obj_buffer.left, obj_buffer.top,actFabObj.left, actFabObj.top],{
+					fill: i_audicom._colors[7][i_audicom._vision_mode],
+					stroke: i_audicom._colors[7][i_audicom._vision_mode],
+					strokeWidth: 2,
+					selectable: false,
+					evented: false,
+					type: 'portal_line',
+					dot: dot_2,
+					opacity: 0,
+				});
+				i_audicom._room_canvas.add(dot_1);
+				i_audicom._room_canvas.add(dot_2);
+				i_audicom._room_canvas.add(line_1);
+				i_audicom._room_canvas.add(line_2);
+				actFabObj.line = line_1;
+				obj_buffer.line = line_2;
+				
+				//colorize
+				//console.log(i_audicom._colors[5][i_audicom._vision_mode]);
+				obj_buffer.set("fill", i_audicom._colors[5][i_audicom._vision_mode]);
+				
+				$('#ui_part_left').removeClass('no_click lower_opacity');
+				$('.misc_ctrls').removeClass('no_click lower_opacity');
+				$('#ui_controls').removeClass('no_click lower_opacity');
+				$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
+				
+				i_audicom.room_canvas.renderAll();
+			}
+		}else{
+			i_audicom._room_canvas.setActiveObject(actFabObj);
+		}
+		
+	}
+	
+	
 	function outputFabPos(){
 		
 		let buff1 = Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.x * 10) / 10;
 		let buff2 = Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.z * 10) / 10;
 		
-		
+		let buff3 = Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).size.x * 10) / 10;
+		let buff4 = Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).size.z * 10) / 10;
 		
 		$('#coord_x span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.x * 10) / 10);
 		$('#coord_y span').text(Math.round(getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position.z * 10) / 10);
 
 		$('#input_obj_x').val(buff1);
 		$('#input_obj_y').val(buff2);
+		
+		
+		$('#input_obj_w').val(buff3);
+		$('#input_obj_h').val(buff4);
+		
 	}
 
 	function drawObjects(obj_type, obj_left, obj_top){

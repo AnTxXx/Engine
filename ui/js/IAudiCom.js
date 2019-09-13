@@ -132,11 +132,6 @@ export class IAudiCom {
 		
 		this._interval = setInterval(function(){				
 			canvas_objects.forEach(function(item, i) {
-				
-				
-				
-				
-				
 				if(item.isObject){
 					
 					
@@ -193,8 +188,7 @@ export class IAudiCom {
 	stopArea(){
 		
 		this.disableKeyScrolling();
-		
-		
+	
 		$('#ui_part_right').removeClass('no_click lower_opacity');
 		$('.misc_ctrls').removeClass('no_click lower_opacity');
 		$('#ui_controls').removeClass('no_click lower_opacity');
@@ -212,9 +206,7 @@ export class IAudiCom {
 		//let canvas_objects = canvas_buffer.getObjects();
 		//canvas_buffer.dispose();
 		//$('#c').empty();
-		
-		
-		
+
 		//console.log(g_gamearea.AGRooms);
 		
 		//let rooms_buffer = g_gamearea.AGRooms;
@@ -438,28 +430,8 @@ export class IAudiCom {
 			
 		});
 		
-		let w = 0;
-		this._room_canvas.on('object:scaling', options => {	
-			let target = options.target;
-	
-			//console.log("Size: " + options.target.width*target.scaleX/this._scale + " " + options.target.height*target.scaleY/this._scale);
-			//console.log("Position: " + options.target.left/this._scale + " " + options.target.top/this._scale);
-			
-			getReferenceById(options.target.AGObjectID).size = new Vector3(options.target.width*target.scaleX/this._scale, 1, options.target.height*target.scaleY/this._scale);
-			getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
-			
-			
-			if(!target.strokeWidthUnscaled && target.strokeWidth){
-				target.strokeWidthUnscaled = target.strokeWidth;
-			}
-			if(target.strokeWidthUnscaled){
-				var scale_buffer = target.scaleX > target.scaleY ? target.scaleX : target.scaleY;
-				target.strokeWidth = target.strokeWidthUnscaled / scale_buffer;
-			}
-			
-	
-			
-		});
+		
+		
 	}
 
 	//obj_focus -> setfocus after rendering it
@@ -547,11 +519,10 @@ export class IAudiCom {
 		let room_canvas_buffer = this._room_canvas;
 		
 		//add details for tapping
-		$('#fabric_objects_container').append('<details id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'"></details>');
-		
-		//$('#fabobject_'+ag_objectID).attr('autofocus' , 'true');
-		
-		
+
+		$('<div tabindex = "0" id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'" class = "faboject_">test</div>').prependTo('#fabric_objects_container');
+
+		$('.faboject_:first')
 		
 		if(getReferenceById(ag_objectID).tag){
 			
