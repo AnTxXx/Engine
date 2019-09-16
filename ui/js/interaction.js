@@ -719,7 +719,7 @@ jQuery(function($){
 			}
 	    },
 	    'selection:updated': function(e){
-			
+			portalSelect();
 			outputFabPos();
 			//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
 			if(actFabObj.isRecording && actFabObj.type=='portal' || actFabObj.isRecording && actFabObj.type=='enemy' ){
@@ -848,8 +848,6 @@ jQuery(function($){
 	
 	function portalSelect(){
 		$('.other_portal').remove();	
-		
-		
 		
 		i_audicom._room_canvas.getObjects().forEach(function(e) {
 			if(e.type == "portal") {
