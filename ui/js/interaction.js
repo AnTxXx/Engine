@@ -43,6 +43,7 @@ jQuery(function($){
 	    let buffer_x = $(this).val();
 		let buffer_y = $('#input_obj_y').val();
 		i_audicom._room_canvas.getActiveObject().left = buffer_x*i_audicom._scale;
+		i_audicom._room_canvas.getActiveObject().setCoords();
 		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3(buffer_x, 1, buffer_y);
 		$('#coord_x span').text(buffer_x);
 		i_audicom._room_canvas.renderAll();
@@ -51,6 +52,7 @@ jQuery(function($){
 		let buffer_x = $('#input_obj_x').val();
 		let buffer_y = $(this).val();
 		i_audicom._room_canvas.getActiveObject().top = buffer_y*i_audicom._scale;
+		i_audicom._room_canvas.getActiveObject().setCoords();
 		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).position = new Vector3(buffer_x, 1, buffer_y);
 		$('#coord_y span').text(buffer_y);
 		i_audicom._room_canvas.renderAll();
@@ -65,6 +67,7 @@ jQuery(function($){
 		let old_size = i_audicom._room_canvas.getActiveObject().width/i_audicom._scale;
 		let new_scale = new_size/old_size;
 		i_audicom._room_canvas.getActiveObject().scaleX = new_scale;
+		i_audicom._room_canvas.getActiveObject().setCoords();
 		i_audicom._room_canvas.renderAll();
 		
 		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).size = new Vector3(i_audicom._room_canvas.getActiveObject().width*i_audicom._room_canvas.getActiveObject().scaleX/i_audicom._scale, 1, i_audicom._room_canvas.getActiveObject().height*i_audicom._room_canvas.getActiveObject().scaleY/i_audicom._scale);
@@ -84,6 +87,7 @@ jQuery(function($){
 		let old_size = i_audicom._room_canvas.getActiveObject().height/i_audicom._scale;
 		let new_scale = new_size/old_size;
 		i_audicom._room_canvas.getActiveObject().scaleY = new_scale;
+		i_audicom._room_canvas.getActiveObject().setCoords();
 		i_audicom._room_canvas.renderAll();
 		
 		getReferenceById(i_audicom._room_canvas.getActiveObject().AGObjectID).size = new Vector3(i_audicom._room_canvas.getActiveObject().width*i_audicom._room_canvas.getActiveObject().scaleX/i_audicom._scale, 1, i_audicom._room_canvas.getActiveObject().height*i_audicom._room_canvas.getActiveObject().scaleY/i_audicom._scale);
