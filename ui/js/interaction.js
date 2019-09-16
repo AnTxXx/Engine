@@ -136,8 +136,9 @@ jQuery(function($){
 		containment: 'window',
 		scroll: false,
 		helper: 'clone',
-		drag: function(e, ui){
-			
+		start: function(e, ui){
+			i_audicom._room_canvas.discardActiveObject().renderAll();
+			loadObject('room');
 			$('#ui_part_right').addClass('lower_opacity');
 			$('#ui_part_left').addClass('lower_opacity');
 			$('#ui_controls').addClass('lower_opacity');
