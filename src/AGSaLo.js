@@ -4,12 +4,16 @@ import {g_references, g_loading, setLoading, g_gamearea} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 import {getReferenceById} from "./AGEngine.js";
 import {Vector3} from "./js/three/Vector3.js";
+import {g_history} from "./AGEngine.js";
 
 //import {clone} from "./js/Lodash/core.js"
 
 //let _ = require('lodash/core');
 
 export class AGSaLo {
+    get savedObjects() {
+        return this._savedObjects;
+    }
 
     _savedObjects:Array<SaLoCommand>;
 
@@ -41,6 +45,7 @@ export class AGSaLo {
             }
         }
         setLoading(false);
+        //console.log(g_history);
     }
 }
 

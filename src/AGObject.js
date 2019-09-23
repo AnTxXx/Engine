@@ -254,6 +254,7 @@ export class AGObject {
      * Clears the route.
      */
     clearRoute(){
+        if(!g_loading) g_history.ike(this._ID, this.clearRoute, arguments);
         this._route = [];
     }
 
@@ -288,11 +289,7 @@ export class AGObject {
         this._inventory = new AGInventory(this);
         this._destructible = false;
         this._health = 1;
-
-
-
     }
-
 
     _AGSoundSources:Array<AGSoundSource>;
 
