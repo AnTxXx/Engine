@@ -63,6 +63,7 @@ export class IAudiCom {
 		
 		
 		this.renderScene();
+		//this.renderPathDot();
     }
 	
     /**
@@ -200,7 +201,9 @@ export class IAudiCom {
 		
 		this._room_canvas.clear();		
 		g_history.rebuild();
-
+		
+		
+		
  		this.renderScene();
 		
 		//let canvas_objects = canvas_buffer.getObjects();
@@ -495,6 +498,9 @@ export class IAudiCom {
 		
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
 		this.renderAGObject(obj_buffer_ID, obj_focus);
+		
+		
+		
 		return obj_buffer_ID;
 	}
 	
@@ -509,6 +515,34 @@ export class IAudiCom {
 		});	
 		return fab_buffer;
 	}
+	
+	
+	// renderPathDot(){
+//
+// 		let _scalebuffer = this._scale
+// 		let colors_buffer = this._colors;
+// 		let vision_mode_buffer = this._vision_mode;
+// 		let room_canvas_buffer = this._room_canvas;
+//
+//
+//
+//
+// 		let dot = new fabric.Circle({
+// 		    left:   4,
+// 		    top:   	4,
+// 		    radius: 4,
+// 		    fill:   this._colors[6][this._vision_mode],
+// 		    objectCaching: false,
+// 			selectable: false,
+// 			type: 'path_dot_'
+// 		});
+//
+// 		//i_audicom._room_canvas.setActiveObject(actFabObj);
+// 		this._room_canvas.add(dot).renderAll();
+//
+//
+//
+// 	}
 	
 	//AGObjects
 	renderAGObject(ag_objectID, obj_focus){
@@ -528,6 +562,10 @@ export class IAudiCom {
 			
 			switch(getReferenceById(ag_objectID).tag){
 				case 'ENEMY':
+					
+					
+					
+					
 					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
 					  	var obj = fabric.util.groupSVGElements(objects);
 					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
@@ -564,6 +602,11 @@ export class IAudiCom {
 						});
 						
 						if(getReferenceById(ag_objectID).route.length > 0){
+							
+							
+							
+							
+							
 							getReferenceById(ag_objectID).route.forEach(function (item, index) {
 								let dot = new fabric.Circle({
 								    left:   (item.x*_scalebuffer)-4,
@@ -889,9 +932,6 @@ export class IAudiCom {
 	
 	renderScene(){
 		//console.log(getReferenceById(g_gamearea.ID));
-		
-		console.log(g_gamearea.ID);
-	
 		
 		
 		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;

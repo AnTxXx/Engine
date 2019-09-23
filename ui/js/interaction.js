@@ -62,7 +62,6 @@ jQuery(function($){
 
 
 	$('#input_obj_w').on('input', function() {
-		
 		let new_size = $('#input_obj_w').val();
 		let old_size = i_audicom._room_canvas.getActiveObject().width/i_audicom._scale;
 		let new_scale = new_size/old_size;
@@ -111,17 +110,32 @@ jQuery(function($){
 	$(document).on('keydown',function(e) {
 		
 		if (event.keyCode == 13 && event.shiftKey) {
-		   	$('.faboject_:first').focus();
+			
+			if($(document.activeElement).hasClass('faboject_')){
+				
+				$('#ui_controls div').first().focus();
+				loadObject('room');
+			}else{
+				
+				$('.faboject_:first').focus();
+			}
+			 	
 		}else if(e.which == 13) {
 			
 			if($(document.activeElement).hasClass('faboject_')){
 				$('#input_obj_name').focus();
+			
 			}
-	       
+			
 			if($(document.activeElement).hasClass('sb_object')){
 				var type_buffer = $(document.activeElement).attr('type');
 				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2, true);	
 			}
+			
+			if($(document.activeElement).hasClass('input_position')){
+				addPathPoint(actFabObj.left, actFabObj.top);
+			}
+			
 	    }
 		
 		if(event.key == "Escape"){
@@ -131,6 +145,14 @@ jQuery(function($){
 				}	
 			}
 		}
+	});
+	$(document).on("focusout", ".faboject_", function(){	
+		setTimeout(function(){
+			if(!$(document.activeElement).hasClass('faboject_') && !$(document.activeElement).attr('id') == 'input_obj_name'){
+				loadObject('room');
+				i_audicom._room_canvas.discardActiveObject().renderAll();
+			}
+		}, 10);	
 	});
 	
 	
@@ -348,10 +370,62 @@ jQuery(function($){
 	
 	
 	
+	//button for path
+	
+	$('#btn_add_to_path').click(function(){
+		addPathPoint(actFabObj.left, actFabObj.top);
+	});
+	
+
+	function addPathPoint(left_, top_){
+		
+		let dot = new fabric.Circle({
+		    left:   left_-4,
+		    top:    top_-4,
+		    radius: 4,
+		    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+		    objectCaching: false,
+			selectable: false,
+			type: 'path_dot'
+		});
+		
+		if(actFabObj.PathArray.length >= 1){
+			let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
+			let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
+				fill: i_audicom._colors[7][i_audicom._vision_mode],
+				stroke: i_audicom._colors[7][i_audicom._vision_mode],
+				strokeWidth: 2,
+				selectable: false,
+				evented: false,
+				type: 'path_line'
+			});
+			
+			actFabObj.LineArray.push(line);
+			i_audicom._room_canvas.add(line);
+		}
+		
+		actFabObj.PathArray.push(dot);
+		i_audicom._room_canvas.setActiveObject(actFabObj);
+		i_audicom._room_canvas.add(dot);
+		
+		//clear old route and save path to AGObject and set movable true
+		getReferenceById(actFabObj.AGObjectID).clearRoute();
+		actFabObj.PathArray.forEach(function(ele){
+			
+			getReferenceById(actFabObj.AGObjectID).addRouteNode(new Vector3(ele.left/i_audicom._scale, 1, ele.top/i_audicom._scale));
+		});
+		getReferenceById(actFabObj.AGObjectID).movable = true;
+		
+	}
+	
+	
 	
 	
 	//button for path recording
 	$('#btn_path_rec').click(function(){
+		
+		
+		
 		
 		if(actFabObj.isRecording){
 			let first_dot = new fabric.Circle({
@@ -363,23 +437,25 @@ jQuery(function($){
 				selectable: false,
 				type: 'path_dot'
 			});
-			
-			//i_audicom._room_canvas.add(first_dot);
-			//actFabObj.PathArray.unshift(first_dot);
-			
-			//clear old route and save path to AGObject and set movable true
+
+			i_audicom._room_canvas.add(first_dot);
+			actFabObj.PathArray.unshift(first_dot);
+
 			getReferenceById(actFabObj.AGObjectID).clearRoute();
 			actFabObj.PathArray.forEach(function(ele){
 				getReferenceById(actFabObj.AGObjectID).addRouteNode(new Vector3(ele.left/i_audicom._scale, 1, ele.top/i_audicom._scale));
 			});
 			getReferenceById(actFabObj.AGObjectID).movable = true;
-
+			
+			
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
 			
 			$('#ui_controls').removeClass('no_click lower_opacity');
 			$('.misc_ctrls').removeClass('no_click lower_opacity');
 			$('#ui_part_left').removeClass('no_click lower_opacity');
+			$('#btn_add_to_path').removeClass('no_click lower_opacity');
+			
 			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
 			
 		}else{
@@ -389,9 +465,16 @@ jQuery(function($){
 			$('#ui_controls').addClass('no_click lower_opacity');
 			$('.misc_ctrls').addClass('no_click lower_opacity');
 			$('#ui_part_left').addClass('no_click lower_opacity');
+			$('#btn_add_to_path').addClass('no_click lower_opacity');
 			$('.ui_box_special:visible').not('#ui_box_enemy_path').addClass('no_click').addClass('lower_opacity');
 			
 		}
+		
+		console.log("PathArray");
+		console.log(actFabObj.PathArray);
+		console.log(getReferenceById(actFabObj.AGObjectID).route);
+		
+		
 	});
 	
 	//button for path deleting
@@ -429,6 +512,8 @@ jQuery(function($){
 	
 	//button for portal-linking
 	$('#btn_path_linkdoors').click(function(){
+		
+		
 		if(actFabObj.isRecording){
 			actFabObj.isRecording = false;
 			$(this).find('i').removeClass('btn_path_rec_blink');
@@ -602,45 +687,20 @@ jQuery(function($){
 	});
 	
 	
+	
+	
 	i_audicom._room_canvas.on('mouse:down', function(e){
 		
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording){
-
-			let dot = new fabric.Circle({
-			    left:   getMouseCoords(e)[0]-4,
-			    top:    getMouseCoords(e)[1]-4,
-			    radius: 4,
-			    fill:   i_audicom._colors[6][i_audicom._vision_mode],
-			    objectCaching: false,
-				selectable: false,
-				type: 'path_dot'
-			});
 			
-			if(actFabObj.PathArray.length >= 1){
-				let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
-				let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
-					fill: i_audicom._colors[7][i_audicom._vision_mode],
-					stroke: i_audicom._colors[7][i_audicom._vision_mode],
-					strokeWidth: 2,
-					selectable: false,
-					evented: false,
-					type: 'path_line'
-				});
-				
-				actFabObj.LineArray.push(line);
-				i_audicom._room_canvas.add(line);
-			}
 			
-			actFabObj.PathArray.push(dot);
-			i_audicom._room_canvas.setActiveObject(actFabObj);
-			i_audicom._room_canvas.add(dot);
+		
+			addPathPoint(getMouseCoords(e)[0], getMouseCoords(e)[1]);
 			
 		}else if(actFabObj.type=='portal' && actFabObj.isRecording){
 			
-			
 			linkPortalsUI(i_audicom._room_canvas.getActiveObject());
-			
 			
 		//deselect Object and hide Path-Points	
 		}else if(!i_audicom._room_canvas.getActiveObject()){

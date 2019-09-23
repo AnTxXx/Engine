@@ -154,8 +154,8 @@
 								<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
 								<br>
 								
-								X: <input id = "input_obj_x" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:10px"><br>
-								Y: <input id = "input_obj_y" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
+								X: <input id = "input_obj_x" class = "input_position" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:10px"><br>
+								Y: <input id = "input_obj_y" class = "input_position" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
 								
 								
 							</div><!--ui_box-->
@@ -190,6 +190,9 @@
 							<div id = "ui_box_enemy_path" class = "ui_box_special ui_box ui_box_enemy">
 								Path:
 								<br>
+								
+								<button id = "btn_add_to_path" class = "btn"><i class="fas fa-thumbtack"></i></button>
+								
 								<button id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></button>
 								<button id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></button>
 							</div><!--ui_box-->
