@@ -133,7 +133,7 @@ jQuery(function($){
 			}
 			
 			if($(document.activeElement).hasClass('input_position')){
-				addPathPoint(actFabObj.left, actFabObj.top);
+				//addPathPoint(actFabObj.left, actFabObj.top);
 			}
 			
 	    }
