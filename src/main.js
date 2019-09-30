@@ -42,7 +42,7 @@ let wallVertical = new AGObject("WallVertical", new Vector3(13.5, 1.0, 6), new V
 
 
 let waterfall = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
-let ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 let monster_1 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 let monster_2 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 let monster_3 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);

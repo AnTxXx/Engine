@@ -306,6 +306,7 @@ export class AGObject {
     }
 
     clearSoundSources(){
+        if(!g_loading) g_history.ike(this._ID, this.addSoundSource, arguments);
         this._AGSoundSources = [];
     }
 
