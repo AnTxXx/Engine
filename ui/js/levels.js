@@ -18,7 +18,7 @@ let wallVertical = new AGObject("WallVertical", new Vector3(13.5, 1.0, 6), new V
 
 
 let waterfall = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
-let ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 let monster_1 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 let monster_2 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 let monster_3 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
@@ -122,11 +122,11 @@ let skeleton_3 = new AGObject("Skeleton", new Vector3(14.5, 1, 1), new Vector3(1
 let skeleton_4 = new AGObject("Skeleton", new Vector3(16, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 
 let steps = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
-let car_1 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-let car_2 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-let car_3 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-let car_4 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-let ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+let car_1 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
+let car_2 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
+let car_3 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
+let car_4 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
+let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 let magic_exit = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
 
 let playerID = getIdByReference(player);
@@ -250,7 +250,7 @@ let waterFall_2 = new AGObject("Waterfall2", new Vector3(4.5, 1, 4.5), new Vecto
 let waterFall_3 = new AGObject("Waterfall3", new Vector3(8, 1, 9.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 let waterFall_4 = new AGObject("Waterfall4", new Vector3(11, 1, 5.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 let steps = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
-let ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 let magic_1 = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
 let magic_2 = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
 let magic_3 = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);

@@ -123,7 +123,7 @@ export class IAudiCom {
 		
 		$('.misc_ctrls').addClass('no_click lower_opacity');
 		$('#ui_controls').addClass('no_click lower_opacity');
-		$('.control_box .btn').not('#btn_stop_scene').addClass('no_click lower_opacity');
+		$('.control_box .btn').not('#btn_stop_scene').not('#btn_change_vision_mode').addClass('no_click lower_opacity');
 		
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
@@ -193,7 +193,7 @@ export class IAudiCom {
 		$('#ui_part_right').removeClass('no_click lower_opacity');
 		$('.misc_ctrls').removeClass('no_click lower_opacity');
 		$('#ui_controls').removeClass('no_click lower_opacity');
-		$('.control_box .btn').not('#btn_stop_scene').removeClass('no_click lower_opacity');
+		$('.control_box .btn').not('#btn_stop_scene').not('#btn_change_vision_mode').removeClass('no_click lower_opacity');
 		$('#fabric_objects_container').empty();
 		
 		play(getReferenceById(g_gamearea.ID), false);
@@ -326,12 +326,12 @@ export class IAudiCom {
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'ouch':
-				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.mp3", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.wav", true, 1, roomID_buffer);
 				ss_buffer.tag = "OUCH"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'car':
-				ss_buffer = new AGSoundSource("Car", "sounds/car.mp3", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Car", "sounds/car.wav", true, 1, roomID_buffer);
 				ss_buffer.tag = "CAR"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
@@ -1005,7 +1005,7 @@ export class IAudiCom {
 
 
 				var waterfall = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
-				var ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+				var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 				var monster_1 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 				var monster_2 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 				var monster_3 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
@@ -1115,11 +1115,11 @@ export class IAudiCom {
 				var skeleton_4 = new AGObject("Skeleton", new Vector3(16, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 
 				var steps = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
-				var car_1 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-				var car_2 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-				var car_3 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-				var car_4 = new AGSoundSource("Car", "sounds/car.mp3", true, 1, room_1ID);
-				var ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+				var car_1 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
+				var car_2 = new AGSoundSource("Car", "sounds/truck.wav", true, 1, room_1ID);
+				var car_3 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
+				var car_4 = new AGSoundSource("Car", "sounds/motorcycle.wav", true, 1, room_1ID);
+				var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 				var magic_exit = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
 
 				var playerID = getIdByReference(player);
@@ -1248,7 +1248,7 @@ export class IAudiCom {
 				var waterFall_3 = new AGObject("Waterfall3", new Vector3(8, 1, 9.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var waterFall_4 = new AGObject("Waterfall4", new Vector3(11, 1, 5.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var steps = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
-				var ouch = new AGSoundSource("Ouch", "sounds/ouch.mp3", false, 1, room_1ID);
+				var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 				var magic_1 = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
 				var magic_2 = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
 				var magic_3 = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);

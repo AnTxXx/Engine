@@ -58,7 +58,7 @@ jQuery(function($){
 		i_audicom._room_canvas.renderAll();
 	});
 
-
+	
 
 
 	$('#input_obj_w').on('input', function() {
@@ -133,7 +133,7 @@ jQuery(function($){
 			}
 			
 			if($(document.activeElement).hasClass('input_position')){
-				//addPathPoint(actFabObj.left, actFabObj.top);
+				addPathPoint(actFabObj.left, actFabObj.top);
 			}
 			
 	    }
@@ -153,7 +153,17 @@ jQuery(function($){
 				i_audicom._room_canvas.discardActiveObject().renderAll();
 			}
 		}, 10);	
+		
+		
 	});
+	
+	
+	// $(document).on("focusout", "#btn_start_scene", function(){
+// 		setTimeout(function(){
+// 			//alert("huhu");
+// 		}, 10);
+// 	});
+	
 	
 	
 	//jq dnd-stuff
@@ -337,12 +347,9 @@ jQuery(function($){
 				}
 			}
 			
-			
-			
 			setTimeout(function(){
 				$('#ui_part_right_inner').fadeIn(100);
 			}, 100);
-			
 			
 		});
 	}
@@ -470,9 +477,7 @@ jQuery(function($){
 			
 		}
 		
-		console.log("PathArray");
-		console.log(actFabObj.PathArray);
-		console.log(getReferenceById(actFabObj.AGObjectID).route);
+		
 		
 		
 	});
@@ -509,6 +514,11 @@ jQuery(function($){
 		}
 	});
 	
+	
+	function changeOpacities(){
+		
+		
+	}
 	
 	//button for portal-linking
 	$('#btn_path_linkdoors').click(function(){

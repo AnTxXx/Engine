@@ -146,7 +146,7 @@ jQuery(function($){
 	});
 	
 	$('#btn_set_file').click(function(){	
-		let ss_buffer = new AGSoundSource("blabla", "sounds/car.mp3", true, 1, room.audioContext, room.resonanceAudioScene);
+		let ss_buffer = new AGSoundSource("blabla", "sounds/car.wav", true, 1, room.audioContext, room.resonanceAudioScene);
 		room_canvas.getActiveObject().AGObject.addSoundSource(ss_buffer);
 	});
 
