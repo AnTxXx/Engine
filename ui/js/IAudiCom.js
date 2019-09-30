@@ -119,11 +119,20 @@ export class IAudiCom {
 		
 		this.disableKeyScrolling();
 		
-		$('#ui_part_right').addClass('no_click lower_opacity');
 		
-		$('.misc_ctrls').addClass('no_click lower_opacity');
+		/*lower opacity and disable click for elements*/
+		$('#ui_part_right').addClass('no_click lower_opacity');
+		$('select').addClass('no_click lower_opacity');
 		$('#ui_controls').addClass('no_click lower_opacity');
-		$('.control_box .btn').not('#btn_stop_scene').not('#btn_change_vision_mode').addClass('no_click lower_opacity');
+		$('.btn').not('#btn_stop_scene').not('#btn_change_vision_mode').not('#btn_help').addClass('no_click lower_opacity');
+		
+		/*remove tab-index after play was clicked*/
+		$('.faboject_').prop('tabIndex', -1);
+		$('input').prop('tabIndex', -1);
+		$('select').prop('tabIndex', -1);
+		$('.sb_object').prop('tabIndex', -1);
+		$('.btn').not('#btn_stop_scene').not('#btn_change_vision_mode').not('#btn_help').prop('tabIndex', -1);
+		
 		
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
@@ -190,11 +199,19 @@ export class IAudiCom {
 		
 		this.disableKeyScrolling();
 	
+		/*make clickable again*/
 		$('#ui_part_right').removeClass('no_click lower_opacity');
-		$('.misc_ctrls').removeClass('no_click lower_opacity');
+		$('select').removeClass('no_click lower_opacity');
 		$('#ui_controls').removeClass('no_click lower_opacity');
-		$('.control_box .btn').not('#btn_stop_scene').not('#btn_change_vision_mode').removeClass('no_click lower_opacity');
+		$('.btn').not('#btn_stop_scene').not('#btn_change_vision_mode').not('#btn_help').removeClass('no_click lower_opacity');
 		$('#fabric_objects_container').empty();
+		
+		/*add tab-index after play was clicked*/
+		$('.faboject_').prop('tabIndex', 0);
+		$('input').prop('tabIndex', 0);
+		$('select').prop('tabIndex', 0);
+		$('.sb_object').prop('tabIndex', 0);
+		$('.btn').not('#btn_stop_scene').not('#btn_change_vision_mode').not('#btn_help').prop('tabIndex', 0);
 		
 		play(getReferenceById(g_gamearea.ID), false);
 		this._interval = false;	
@@ -366,6 +383,38 @@ export class IAudiCom {
 	
 	
 	setAGRoomDimensions(width, height){
+		
+		let room_buffer = this._room_canvas;
+		let old_width = room_buffer.getWidth();
+		let old_height = room_buffer.getHeight();
+		
+		let new_width = width * this._scale;
+		let new_height = height * this._scale;
+		
+		let that = this;
+		
+		//delete objects which lie outside boundaries after resize
+		if(new_width < old_width || new_height < old_height){
+			//Check if objects lie outside
+			let scale_buffer = this._scale;
+			let canvas_objects = room_buffer.getObjects();	
+			canvas_objects.forEach(function(item, i){
+				if(item.type != 'grid_line'){	
+					let item_right_buffer = item.left + Math.round(item.width * item.scaleX)/2;
+					let item_top_buffer = item.top + Math.round(item.height * item.scaleY)/2;
+					if(item_right_buffer > new_width || item_top_buffer > new_height){	
+						if(item.type == 'player'){
+							item.left = 0.5*that._scale;
+							item.top = 0.5*that._scale;
+							item.setCoords();
+							getReferenceById(item.AGObjectID).position = new Vector3(0.5, 1, 0.5);
+						}else{
+							that.deleteItem(item);
+						}
+					}
+				}
+			});
+		}		
 		this._room_canvas.setWidth(width * this._scale);
 		this._room_canvas.setHeight(height * this._scale);
 		this._room_canvas.renderAll();
@@ -373,12 +422,52 @@ export class IAudiCom {
 		//set room size of AGRoom (what happens with objects, which "fall out")
 		getReferenceById(this._AGroomID).size = new Vector3(width, 2.5, height);
 	}
+
 	
+	deleteItem(_fabobject){
+		let room_buffer = this._room_canvas;
+		
+		getReferenceById(_fabobject.AGObjectID).kill();
 	
+		//check if removed element was linked to portal or has path points and remove that stuff
+		//TODO wait for portal remove function in AGPortal
 	
+		if(_fabobject.type == 'enemy'){
+			_fabobject.PathArray.forEach(function(ele) {
+				room_buffer.remove(ele);
+			});
+			_fabobject.LineArray.forEach(function(ele) {
+				room_buffer.remove(ele);
+			});
+		}
 	
+		if(_fabobject.type == 'portal'){
+			//_fabobject.secDoor
+			let fab_buffer = this.getFabricObject(_fabobject.secDoor);
+		
+			if(fab_buffer){
+				fab_buffer.secDoor = false;
+				fab_buffer.set("fill", this._colors[4][this._vision_mode]);	
+			}
+		
+			if(_fabobject.line){
+				this._room_canvas.remove(this.getFabricObject(_fabobject.secDoor).line.dot);
+				this._room_canvas.remove(this.getFabricObject(_fabobject.secDoor).line);
+				this.getFabricObject(_fabobject.secDoor).line = false;
+			
+				this._room_canvas.remove(_fabobject.line.dot);
+				this._room_canvas.remove(_fabobject.line);
+				_fabobject.line.line = false;
+			}
+		
+		}
 	
+		this._room_canvas.remove(_fabobject);
+		this._room_canvas.renderAll();
 	
+		
+	
+	}
 	
 	
 	renderAGRoom(ag_roomID){

@@ -16,6 +16,11 @@ jQuery(function($){
 	});
 	$('#btn_stop_scene').click(function(){
 		i_audicom.stopArea();
+		
+		
+		
+		$('#btn_new_scene').prop('tabIndex', 0);
+		
 	});
 	$('#btn_new_scene').click(function(){
 		i_audicom.newScene();
@@ -550,49 +555,14 @@ jQuery(function($){
 		
 		deletePortal();
 	});
-
+	
+	
+	
+	
+	
 	$('#btn_delete_object').click(function(){
-
-		getReferenceById(actFabObj.AGObjectID).kill();
-		
-		//check if removed element was linked to portal or has path points and remove that stuff
-		//TODO wait for portal remove function in AGPortal
-		
-		if(actFabObj.type == 'enemy'){
-			actFabObj.PathArray.forEach(function(ele) {
-				i_audicom._room_canvas.remove(ele);
-			});
-			actFabObj.LineArray.forEach(function(ele) {
-				i_audicom._room_canvas.remove(ele);
-			});
-		}
-		
-		if(actFabObj.type == 'portal'){
-			//actFabObj.secDoor
-			let fab_buffer = i_audicom.getFabricObject(actFabObj.secDoor);
-			
-			if(fab_buffer){
-				fab_buffer.secDoor = false;
-				fab_buffer.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);	
-			}
-			
-			if(actFabObj.line){
-				i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line.dot);
-				i_audicom._room_canvas.remove(i_audicom.getFabricObject(actFabObj.secDoor).line);
-				i_audicom.getFabricObject(actFabObj.secDoor).line = false;
-				
-				i_audicom._room_canvas.remove(actFabObj.line.dot);
-				i_audicom._room_canvas.remove(actFabObj.line);
-				actFabObj.line.line = false;
-			}
-			
-		}
-		
-		i_audicom._room_canvas.remove(actFabObj);
-		i_audicom._room_canvas.renderAll();
-		
+		i_audicom.deleteItem(actFabObj);
 		$('#ui_part_right_inner').fadeOut(100, function(){});
-		
 	});
 	
 	
