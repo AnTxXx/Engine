@@ -70,11 +70,10 @@ export class AGRoom {
         return this._listener;
     }
 
-    set listener(value: AGObject) {
+    set listener(valueID: number) {
+        this._listener = getReferenceById(valueID);
         // $FlowFixMe
         if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments);
-
-        this._listener = value;
     }
 
     get resonanceAudioScene() {

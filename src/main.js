@@ -63,7 +63,7 @@ let wallHorizontalID = getIdByReference(wallHorizontal);
 let wallVerticalID = getIdByReference(wallVertical);
 
 g_gamearea.listener = getIdByReference(player);
-getReferenceById(room_1ID).listener = g_gamearea.listener;
+getReferenceById(room_1ID).listener = getIdByReference(player);
 
 //Add ObjectsToRoom
 getReferenceById(room_1ID).add(playerID);
