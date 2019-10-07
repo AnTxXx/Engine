@@ -317,6 +317,47 @@ export class AGNavigation {
         return this._ID;
     }
 
+
+    get forward(): number {
+        return gForward;
+    }
+
+    set forward(value: number) {
+        gForward = value;
+    }
+
+    get backward(): number {
+        return gBackward;
+    }
+
+    set backward(value: number) {
+        gBackward = value;
+    }
+
+    get left(): number {
+        return gLeft;
+    }
+
+    set left(value: number) {
+        gLeft = value;
+    }
+
+    get right(): number {
+        return gRight;
+    }
+
+    set right(value: number) {
+        gRight = value;
+    }
+
+    get interact(): number {
+        return gInteract;
+    }
+
+    set interact(value: number) {
+        gInteract = value;
+    }
+
     /**
      *
      * @param forward Keycode for forward-movement.
