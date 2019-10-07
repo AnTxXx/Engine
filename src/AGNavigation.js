@@ -323,6 +323,8 @@ export class AGNavigation {
     }
 
     set forward(value: number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'forward').set, arguments);
         gForward = value;
     }
 
@@ -331,6 +333,8 @@ export class AGNavigation {
     }
 
     set backward(value: number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'backward').set, arguments);
         gBackward = value;
     }
 
@@ -339,6 +343,8 @@ export class AGNavigation {
     }
 
     set left(value: number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'left').set, arguments);
         gLeft = value;
     }
 
@@ -347,6 +353,8 @@ export class AGNavigation {
     }
 
     set right(value: number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'right').set, arguments);
         gRight = value;
     }
 
@@ -386,6 +394,7 @@ export class AGNavigation {
     draw(player:AGObject){
         //if(moveTimestamp.getTime() === new Date(0).getTime()) moveTimestamp = new Date();
         window.onkeydown = function(e) {
+            if(e.keyCode===-1) return;
             switch(e.keyCode){
                 case gForward:
                     //move(player, true);
