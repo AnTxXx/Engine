@@ -5,13 +5,22 @@ import {Counter} from "./IDGenerator.js";
 import {getReferenceById} from "./AGEngine.js";
 import {Vector3} from "./js/three/Vector3.js";
 import {g_history} from "./AGEngine.js";
+import {AGEventHandler} from "./AGEventHandler.js";
+import {AGGameArea} from "./AGGameArea.js";
+import {AGNavigation} from "./AGNavigation.js";
+import {AGRoom} from "./AGRoom.js";
+import {AGPlayer} from "./AGPlayer.js";
+import {AGRoomExit} from "./AGRoomExit.js";
+import {AGObject} from "./AGObject.js";
+import {AGSoundSource} from "./AGSoundSource.js";
+
 
 //import {clone} from "./js/Lodash/core.js"
 
 //let _ = require('lodash/core');
 
 export class AGSaLo {
-    _classes:Array<Class>;
+    _classes:Array<Function>;
 
 
     get savedObjects() {
@@ -22,16 +31,14 @@ export class AGSaLo {
 
     constructor(){
         this._savedObjects = [];
-
-        this._classes.push(AGEventHandler.prototype);
-
-
+        this._classes = [];
+        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype);
     }
 
-    ike(objID:number, func:Function, args:Array<Object>){
+    ike(objID:number, func:string, fclass:string, args:Array<Object>){
         let _args = Array.prototype.slice.call(args);
 
-        this._savedObjects.push(new SaLoCommand(objID, func, cloneArguments(_args)));
+        this._savedObjects.push(new SaLoCommand(objID, func, fclass, cloneArguments(_args)));
         //g_references.set(obj.id, obj);
     }
 
@@ -41,29 +48,12 @@ export class AGSaLo {
         Counter.reset();
 
         //TODO JSON HIN UND HER
-        let replacer = (key, value) => {
-            // if we get a function give us the code for that function
-            if (typeof value === 'function') {
-                return value.toString();
-            }
-            return value;
-        }
-        const serialized = JSON.stringify(this._savedObjects, replacer, 2);
-        console.log(serialized);
+        const serialized = JSON.stringify(this._savedObjects);
 
-        let reviver = (key, value) => {
-            if (typeof value === 'string'
-                && value.indexOf('function ') === 0) {
-                let functionTemplate = `(${value})`;
-                return eval(functionTemplate);
-            }
-            return value;
-        }
-
-        const parsedObject = JSON.parse(serialized, reviver);
+        const parsedObject = JSON.parse(serialized);
 
         console.log(parsedObject);
-        //TODO
+
         setLoading(true);
         for(let i = 0; i < parsedObject.length; i++){
             let obj = parsedObject[i];
@@ -73,19 +63,67 @@ export class AGSaLo {
             //obj.args
             let args = cloneArguments(obj._args);
 
+            if(obj._func === obj._fclass){
+                let constructor:Function = getConstructor(obj._func, this._classes);
+                console.log(constructor);
+                let newObject = Reflect.construct(constructor, args);
+            } else {
+                let applyFunc:Function = getFunction(obj._fclass, obj._func, this._classes);
+                
+                if(applyFunc) applyFunc.apply(getReferenceById(obj._objID), args)
+            }
+
             //obj.func
-            if(obj._func.toString().startsWith('class')) {
+            /*if(obj._func.toString().startsWith('class')) {
                 let newObject = Reflect.construct(obj._func, args);
                 //g_references.set(obj.objID, newObject);
             } else {
                 obj._func.apply(getReferenceById(obj.objID), args);
-            }
+            }*/
         }
         setLoading(false);
         //console.log(g_history);
     }
 }
 
+function getFunction(classname:string, funct:string, obj:Array<Function>):?Function{
+    let returnFunc:Function = null;
+    obj.forEach(function (item) {
+        if(item.constructor.name === classname){
+            console.log(classname + " " + item.constructor.name);
+            if(funct.indexOf('set ') === 0){
+                if(Object.getOwnPropertyDescriptor(item, funct.substring(4))){
+                    // $FlowFixMe
+                    returnFunc = Object.getOwnPropertyDescriptor(item, funct.substring(4)).set;
+                } else {
+                    // $FlowFixMe
+                    returnFunc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(item), funct.substring(4)).set;
+                }
+            } else {
+                if(Object.getOwnPropertyDescriptor(item, funct)){
+                    // $FlowFixMe
+                    returnFunc = Object.getOwnPropertyDescriptor(item, funct).value;
+                } else {
+                    // $FlowFixMe
+                    returnFunc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(item), funct).value;
+                }
+            }
+
+            console.log(returnFunc);
+        }
+    })
+    return returnFunc;
+    //Object.getOwnPropertyDescriptor(((class) classname).prototype, funct)
+}
+
+function getConstructor(classname:string, obj:Array<Function>):?Function{
+    let returnFunc = null;
+    obj.forEach(function (item) {
+        if(item.constructor.name === classname) returnFunc = item.constructor;
+    })
+    return returnFunc;
+}
+/*
 function prepareForStringify(obj:Array<SaLoCommand>){
     let rString: Array<Array<string>> = [];
     for(let i = 0; i < obj.length; i++) {
@@ -96,7 +134,7 @@ function prepareForStringify(obj:Array<SaLoCommand>){
         rString.push(string);
     }
     return JSON.stringify(rString);
-}
+}*/
 
 function cloneArguments(args:Array<Object>):Array<Object> {
     let arr:Object = [];
@@ -120,8 +158,13 @@ export class SaLoCommand {
         return this._obj;
     }*/
 
-    get func() {
+
+    get func(): string {
         return this._func;
+    }
+
+    get fclass(): string {
+        return this._fclass;
     }
 
     get args() {
@@ -134,14 +177,16 @@ export class SaLoCommand {
     }*/
 
     _objID:number;
-    _func:Function;
+    _func:string;
+    _fclass:string;
     _args:Array<Object>;
     //_context:Object;
 
-    constructor(objID: number, func:Function, args:Array<Object>) {
+    constructor(objID: number, func:string, fclass:string, args:Array<Object>) {
         this._func = func;
         this._args = args;
         this._objID = objID;
+        this._fclass = fclass;
         //this._context = context;
     }
 }

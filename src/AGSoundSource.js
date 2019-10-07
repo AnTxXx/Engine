@@ -73,7 +73,7 @@ export class AGSoundSource
 
     set tag(value: string) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set, arguments);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set.name, this.constructor.name, arguments);
         this._tag = value;
     }
 
@@ -167,7 +167,7 @@ export class AGSoundSource
         this._type = "SOUNDSOURCE";
         this._looping = looping;
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     /**

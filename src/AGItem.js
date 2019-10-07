@@ -55,6 +55,6 @@ export class AGItem {
         this._description = description;
         this._charges = charges;
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 }
