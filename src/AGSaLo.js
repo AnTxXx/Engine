@@ -11,6 +11,9 @@ import {g_history} from "./AGEngine.js";
 //let _ = require('lodash/core');
 
 export class AGSaLo {
+    _classes:Array<Class>;
+
+
     get savedObjects() {
         return this._savedObjects;
     }
@@ -19,6 +22,10 @@ export class AGSaLo {
 
     constructor(){
         this._savedObjects = [];
+
+        this._classes.push(AGEventHandler.prototype);
+
+
     }
 
     ike(objID:number, func:Function, args:Array<Object>){
