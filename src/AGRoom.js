@@ -34,7 +34,7 @@ export class AGRoom {
 
     set live(value:boolean) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set, arguments);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set.name, this.constructor.name, arguments);
         this._live = value;
     }
     get positionOnGameArea(): Vector3 {
@@ -70,11 +70,10 @@ export class AGRoom {
         return this._listener;
     }
 
-    set listener(value: AGObject) {
+    set listener(valueID: number) {
+        this._listener = getReferenceById(valueID);
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set, arguments);
-
-        this._listener = value;
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set.name, this.constructor.name, arguments);
     }
 
     get resonanceAudioScene() {
@@ -168,7 +167,7 @@ export class AGRoom {
 
         this._AGobjects = [];
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     _AGobjects:Array<AGObject>;
@@ -184,7 +183,7 @@ export class AGRoom {
         }
         let gameObject = getReferenceById(gameObjectID);
         this._AGobjects.push(gameObject);
-        if(!g_loading) g_history.ike(this._ID, this.add, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.add.name, this.constructor.name, arguments);
         gameObject.room = this;
     }
 
@@ -208,7 +207,7 @@ export class AGRoom {
     betweenPlayerObjectRayIntersect(obj:AGObject):Array<AGObject>{
         let returnArr:Array<AGObject> = [];
         for(let i = 0; i < this._AGobjects.length; i++){
-            if(obj != null && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener && (g_gamearea.listener.position.distanceTo(obj.position) < obj.position.distanceTo(this._AGobjects[i]))) returnArr.push((this._AGobjects[i]));
+            if(obj && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener && (g_gamearea.listener.position.distanceTo(obj.position) < obj.position.distanceTo(this._AGobjects[i]))) returnArr.push((this._AGobjects[i]));
         }
         return returnArr;
     }

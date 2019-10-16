@@ -23,7 +23,7 @@ export class AGEventHandler{
 
     addEvent(event:Event){
         this._events.push(event);
-        if(!g_loading) g_history.ike(this._ID, this.addEvent, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.addEvent.name, this.constructor.name, arguments);
     }
 
     removeEvent(event:Event){
@@ -36,7 +36,7 @@ export class AGEventHandler{
     constructor(){
         this._ID = Counter.next();
         g_references.set(this._ID, this);
-        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[AGEventHandler] Creating AGEventHandler object [ID: " + this._ID + "].");
         this._events = [];
     }

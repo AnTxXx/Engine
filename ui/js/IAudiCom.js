@@ -1085,7 +1085,7 @@ export class IAudiCom {
 			
 			case 1:
 				
-				var controls = new AGNavigation(38, 40, 37, 39, 32);
+				var controls = new AGNavigation(38, 40, 37, 39, 67);
 				var controlsID = getIdByReference(controls);
 				
 				that._controlsID = controlsID;
@@ -1129,7 +1129,7 @@ export class IAudiCom {
 				var wallVerticalID = getIdByReference(wallVertical);
 
 				g_gamearea.listener = getIdByReference(player);
-				getReferenceById(room_1ID).listener = g_gamearea.listener;
+				getReferenceById(room_1ID).listener = getIdByReference(player);
 
 				//Add ObjectsToRoom
 				getReferenceById(room_1ID).add(playerID);
@@ -1199,13 +1199,7 @@ export class IAudiCom {
 				break;
 				
 			case 2:
-				
-				
-				var controls = new AGNavigation(38, 40, 37, 39, 32);
-				
-				controls.left = -1;
-				controls.right = -1;
-				
+				var controls = new AGNavigation(38, 40, -1, -1, 67);
 				var controlsID = getIdByReference(controls);
 				
 				that._controlsID = controlsID;
@@ -1248,7 +1242,7 @@ export class IAudiCom {
 				var magic_exit_ID = getIdByReference(magic_exit);
 
 				g_gamearea.listener = getIdByReference(player);
-				getReferenceById(room_1ID).listener = g_gamearea.listener;
+				getReferenceById(room_1ID).listener = getIdByReference(player);
 
 				//Add ObjectsToRoom
 				getReferenceById(room_1ID).add(playerID);
@@ -1331,7 +1325,7 @@ export class IAudiCom {
 				
 			case 3:
 				
-				var controls = new AGNavigation(38, 40, 37, 39, 32);
+				var controls = new AGNavigation(38, 40, 37, 39, 67);
 				var controlsID = getIdByReference(controls);
 				
 				that._controlsID = controlsID;
@@ -1399,7 +1393,7 @@ export class IAudiCom {
 				var waterFall_4ID = getIdByReference(waterFall_4);
 
 				g_gamearea.listener = getIdByReference(player);
-				getReferenceById(room_1ID).listener = g_gamearea.listener;
+				getReferenceById(room_1ID).listener = getIdByReference(player);
 
 				//Add ObjectsToRoom
 				getReferenceById(room_1ID).add(playerID);

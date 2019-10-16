@@ -38,7 +38,7 @@ export class AGGameArea {
 
     set listener(value:number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set, arguments);
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set.name, this.constructor.name, arguments);
         this._listener = getReferenceById(value);
     }
     get AGRooms(): Array<AGRoom> {
@@ -98,12 +98,12 @@ export class AGGameArea {
         // Connect the scene’s binaural output to stereo out.
         this._resonanceAudioScene.output.connect(this._audioContext.destination);
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     addRoom(room:number){
         this.AGRooms.push(getReferenceById(room));
-        if(!g_loading) g_history.ike(this._ID, this.addRoom, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.addRoom.name, this.constructor.name, arguments);
     }
 
     clearRooms(){

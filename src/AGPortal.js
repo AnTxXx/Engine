@@ -62,18 +62,18 @@ export class AGPortal extends AGObject{
         console.log("[AGPortal] Linking Portal: " + this.name + " to " + portal.name);
         portal.exit = (this);
         this.exit = portal;
-        if(!g_loading) g_history.ike(this._ID, this.linkPortals, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.linkPortals.name, this.constructor.name, arguments);
     }
 
     unlink(){
         if(this._exit != null && this._exit.exit != null) this._exit.exit = null;
         this._exit = null;
-        if(!g_loading) g_history.ike(this._ID, this.unlink, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.unlink.name, this.constructor.name, arguments);
     }
 
     addCondition(condition:AGCondition){
         this._conditions.push(condition);
-        if(!g_loading) g_history.ike(this._ID, this.addCondition, arguments);
+        if(!g_loading) g_history.ike(this._ID, this.addCondition.name, this.constructor.name, arguments);
     }
 
     /**
