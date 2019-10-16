@@ -269,7 +269,6 @@ export class AGObject {
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
         this._ID = Counter.next();
         g_references.set(this._ID, this);
-
         if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
 
         console.log("[AGObject] Creating AGObject object [ID: " + this._ID + "]: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);

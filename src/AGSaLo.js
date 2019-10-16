@@ -13,6 +13,7 @@ import {AGPlayer} from "./AGPlayer.js";
 import {AGRoomExit} from "./AGRoomExit.js";
 import {AGObject} from "./AGObject.js";
 import {AGSoundSource} from "./AGSoundSource.js";
+import {AGPortal} from "./AGPortal.js";
 
 
 //import {clone} from "./js/Lodash/core.js"
@@ -32,7 +33,7 @@ export class AGSaLo {
     constructor(){
         this._savedObjects = [];
         this._classes = [];
-        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype);
+        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype);
     }
 
     ike(objID:number, func:string, fclass:string, args:Array<Object>){
@@ -51,8 +52,8 @@ export class AGSaLo {
         const serialized = JSON.stringify(this._savedObjects);
 
         const parsedObject = JSON.parse(serialized);
-
         console.log(parsedObject);
+        //console.log(parsedObject);
 
         setLoading(true);
         for(let i = 0; i < parsedObject.length; i++){
@@ -63,9 +64,18 @@ export class AGSaLo {
             //obj.args
             let args = cloneArguments(obj._args);
 
+            //prepare args (e.g., x,y,z -> Vector3)
+            for(let i = 0; i < args.length; i++){
+                let type = typeof args[i];
+                if(type === "object" && args[i].x != null && args[i].y != null && args[i].z != null){
+                    args[i] = new Vector3(args[i].x, args[i].y, args[i].z);
+                }
+            }
+            //------------------------------------
+
             if(obj._func === obj._fclass){
                 let constructor:Function = getConstructor(obj._func, this._classes);
-                console.log(constructor);
+                //console.log(constructor);
                 let newObject = Reflect.construct(constructor, args);
             } else {
                 let applyFunc:Function = getFunction(obj._fclass, obj._func, this._classes);
@@ -90,7 +100,7 @@ function getFunction(classname:string, funct:string, obj:Array<Function>):?Funct
     let returnFunc:Function = null;
     obj.forEach(function (item) {
         if(item.constructor.name === classname){
-            console.log(classname + " " + item.constructor.name);
+            //console.log(classname + " " + item.constructor.name);
             if(funct.indexOf('set ') === 0){
                 if(Object.getOwnPropertyDescriptor(item, funct.substring(4))){
                     // $FlowFixMe
@@ -109,7 +119,7 @@ function getFunction(classname:string, funct:string, obj:Array<Function>):?Funct
                 }
             }
 
-            console.log(returnFunc);
+            //console.log(returnFunc);
         }
     })
     return returnFunc;

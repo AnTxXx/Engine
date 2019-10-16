@@ -20,7 +20,7 @@ import {g_IAudiCom} from "./AGEngine.js";
 import {setIAudiCom} from "./AGEngine.js";
 
 
-let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 32);
+let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 67);
 let controlsID:number = getIdByReference(controls);
 setControl(getReferenceById(controlsID));
 
