@@ -10,6 +10,107 @@ jQuery(function($){
 	//the active Fabric-Object
 	let actFabObj = '';
 	
+	
+	let key_assign_rec = false;
+	
+	$('.btn_key_assign').bind("keyup",function(e){
+		let keycode_buffer = e.which;
+		
+		//numpad to number:
+		if(keycode_buffer >= 96 && keycode_buffer <= 105){
+			keycode_buffer = keycode_buffer - 48;
+		}
+
+		//Esc-Taste -> Clear key-assignment
+		if(keycode_buffer == 27 || (keycode_buffer >= 37 && keycode_buffer <= 40) || (keycode_buffer >= 65 && keycode_buffer <= 90) || (keycode_buffer >= 48 && keycode_buffer <= 57)){
+			
+			let nav_buffer = getReferenceById(i_audicom._controlsID);
+			//erase double assignments
+			$('.btn_key_assign').each(function( index ) {
+				if($(this).attr('keycode') == keycode_buffer){					
+					switch($(this).attr('id')){
+						case 'btn_key_up':
+							$(this).text("-");
+							$(this).attr('keycode', -1);
+							nav_buffer.forward = -1;
+							break;
+						case 'btn_key_down':
+							$(this).text("-");
+							$(this).attr('keycode', -1);
+							nav_buffer.backward = -1;
+							break;
+						case 'btn_key_left':
+							$(this).text("-");
+							$(this).attr('keycode', -1);
+							nav_buffer.left = -1;
+							break;
+						case 'btn_key_right':
+							$(this).text("-");
+							$(this).attr('keycode', -1);
+							nav_buffer.right = -1;
+							break;
+						case 'btn_key_interact':
+							$(this).text("-");
+							$(this).attr('keycode', -1);
+							nav_buffer.interact = -1;
+							break;	
+					}
+					
+				}
+			  
+			});
+			
+			//arrow-keys
+			switch(keycode_buffer){
+				case 37:
+					$(this).text('←');
+					break;
+				case 38:
+					$(this).text('↑');
+					break;
+				case 39:
+					$(this).text('→');
+					break;
+				case 40:
+					$(this).text('↓');
+					break;
+				case 27:
+					keycode_buffer = -1;
+					$(this).text("-");
+					break;
+				default:
+					$(this).text(String.fromCharCode(keycode_buffer));
+			}	
+			
+			$(this).attr('keycode', keycode_buffer);
+			
+			//hier abfragen welche richtung geändert wurde
+			switch($(this).attr('id')){
+				case 'btn_key_up':
+					nav_buffer.forward = keycode_buffer;
+					break;
+				case 'btn_key_down':
+					nav_buffer.backward = keycode_buffer;
+					break;
+				case 'btn_key_left':
+					nav_buffer.left = keycode_buffer;
+					break;
+				case 'btn_key_right':
+					nav_buffer.right = keycode_buffer;
+					break;
+				case 'btn_key_interact':
+					nav_buffer.interact = keycode_buffer;
+					break;	
+			}
+		
+		}
+
+	});
+	
+
+	
+	
+	
 	$('#btn_start_scene').click(function(){
 		g_gamearea.audioContext.resume();
 		i_audicom.startArea();
@@ -325,6 +426,16 @@ jQuery(function($){
 				if(type!='player'){
 					$('#ui_delete_box').show();
 				}
+				
+				if(type =='player'){
+					let nav_buffer = getReferenceById(i_audicom._controlsID);
+					
+					loadNavigationForUI($('#btn_key_up'), nav_buffer.forward);
+					loadNavigationForUI($('#btn_key_down'), nav_buffer.backward);
+					loadNavigationForUI($('#btn_key_left'), nav_buffer.left);
+					loadNavigationForUI($('#btn_key_right'), nav_buffer.right);
+					loadNavigationForUI($('#btn_key_interact'), nav_buffer.interact);
+				}
 			
 			
 				if(getReferenceById(actFabObj.AGObjectID).collidable){
@@ -360,6 +471,35 @@ jQuery(function($){
 	}
 	
 	
+	
+	function loadNavigationForUI(jq_obj_, keycode_){	
+		switch(keycode_){
+			case 37:
+				jq_obj_.text('←');
+				jq_obj_.attr('keycode', keycode_);
+				break;
+			case 38:
+				jq_obj_.text('↑');
+				jq_obj_.attr('keycode', keycode_);
+				break;
+			case 39:
+				jq_obj_.text('→');
+				jq_obj_.attr('keycode', keycode_);
+				break;
+			case 40:
+				jq_obj_.text('↓');
+				jq_obj_.attr('keycode', keycode_);
+				break;
+			case -1:
+				jq_obj_.text("-");
+				jq_obj_.attr('keycode', -1);
+				break;
+			default:
+				jq_obj_.text(String.fromCharCode(keycode_));
+		}	
+	}
+	
+	
 	//change dimensionsroom
 	$('#btn_set_dim').click(function(){
 		i_audicom.setAGRoomDimensions($('#tb_canvas_dim_width').val(), $('#tb_canvas_dim_height').val())
@@ -391,6 +531,22 @@ jQuery(function($){
 
 	function addPathPoint(left_, top_){
 		
+		
+		if(actFabObj.PathArray.length == 0){
+			let first_dot = new fabric.Circle({
+				left:   actFabObj.left,
+				top:    actFabObj.top,
+				radius: 4,
+			    fill:   i_audicom._colors[6][i_audicom._vision_mode],
+			    objectCaching: false,
+				selectable: false,
+				type: 'path_dot'
+			});
+			
+			actFabObj.PathArray.unshift(first_dot);
+			i_audicom._room_canvas.add(first_dot);
+		}
+		
 		let dot = new fabric.Circle({
 		    left:   left_-4,
 		    top:    top_-4,
@@ -402,6 +558,7 @@ jQuery(function($){
 		});
 		
 		if(actFabObj.PathArray.length >= 1){
+	
 			let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
 			let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
 				fill: i_audicom._colors[7][i_audicom._vision_mode],
@@ -440,18 +597,25 @@ jQuery(function($){
 		
 		
 		if(actFabObj.isRecording){
-			let first_dot = new fabric.Circle({
-				left:   actFabObj.left,
-				top:    actFabObj.top,
-				radius: 4,
-			    fill:   i_audicom._colors[6][i_audicom._vision_mode],
-			    objectCaching: false,
+
+			let first_dot_buffer = actFabObj.PathArray[0];
+			let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
+			
+			let line = new fabric.Line([first_dot_buffer.left + 4, first_dot_buffer.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
+				fill: i_audicom._colors[7][i_audicom._vision_mode],
+				stroke: i_audicom._colors[7][i_audicom._vision_mode],
+				strokeWidth: 2,
 				selectable: false,
-				type: 'path_dot'
+				evented: false,
+				type: 'path_line'
 			});
 
-			i_audicom._room_canvas.add(first_dot);
-			actFabObj.PathArray.unshift(first_dot);
+			actFabObj.LineArray.push(line);
+			i_audicom._room_canvas.add(line);
+			
+
+			
+			
 
 			getReferenceById(actFabObj.AGObjectID).clearRoute();
 			actFabObj.PathArray.forEach(function(ele){
@@ -740,6 +904,7 @@ jQuery(function($){
 							ele.opacity = 1;
 						});
 						actFabObj.LineArray.forEach(function(ele) {
+							
 							ele.opacity = 1;
 						});
 					}else if(actFabObj.secDoor){

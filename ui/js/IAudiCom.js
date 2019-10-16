@@ -58,8 +58,8 @@ export class IAudiCom {
 			['#7079d4', '#39adff'],	//8 colors for generic objects
 		];
 		
-		//fixed interim roomID 
 		
+		this._controlsID = 3;
 		
 		
 		this.renderScene();
@@ -1060,11 +1060,22 @@ export class IAudiCom {
 	
 	
 	loadLevel(lvl_){
+		let that = this;
 		
+		//restore default view
+		$('#ui_part_right_inner').hide();
+		$('#input_room_name').val(getReferenceById(that._AGroomID).name);
+		$('#tb_canvas_dim_width').val(getReferenceById(that._AGroomID).size.x);
+		$('#tb_canvas_dim_height').val(getReferenceById(that._AGroomID).size.z);
+		$('.ui_box_special').hide();
+		$('.ui_box_general').hide();
+		$('.ui_box_room').show();
+		$('#ui_part_right_inner').show();	
 		$('#fabric_objects_container').empty();
+		
+		
+		
 		play(getReferenceById(g_gamearea.ID), false);
-		
-		
 		this._room_canvas.clear();		
 		g_references.clear();
 		rebuildHandlerGameArea();
@@ -1076,6 +1087,9 @@ export class IAudiCom {
 				
 				var controls = new AGNavigation(38, 40, 37, 39, 32);
 				var controlsID = getIdByReference(controls);
+				
+				that._controlsID = controlsID;
+				
 				setControl(getReferenceById(controlsID));
 				
 				
@@ -1188,7 +1202,14 @@ export class IAudiCom {
 				
 				
 				var controls = new AGNavigation(38, 40, 37, 39, 32);
+				
+				controls.left = -1;
+				controls.right = -1;
+				
 				var controlsID = getIdByReference(controls);
+				
+				that._controlsID = controlsID;
+				
 				setControl(getReferenceById(controlsID));
 				
 				var room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
@@ -1312,6 +1333,8 @@ export class IAudiCom {
 				
 				var controls = new AGNavigation(38, 40, 37, 39, 32);
 				var controlsID = getIdByReference(controls);
+				
+				that._controlsID = controlsID;
 				setControl(getReferenceById(controlsID));
 				
 				var room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));

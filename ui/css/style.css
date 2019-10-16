@@ -131,6 +131,11 @@ canvas{
 	width:80px;
 }
 
+/*player*/
+.key_label{
+	width:80px;
+	display:inline-block;
+}
 
 /*sb*/
 .sb_object{	
@@ -258,7 +263,10 @@ button:focus{
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	display:inline-block;
-	padding:10px 15px;
+	width:44px;
+	height:44px;
+	padding:0;
+	text-align:center;
 	background-color:#BFBFBF;
 	margin:2px 0;
 }
@@ -298,8 +306,11 @@ input[type=text], textarea, input[type=number]{
 	border-radius: 2px;
 }
 
-#input_obj_x, #input_obj_y, #input_obj_w, #input_obj_h{
+#input_obj_w, #input_obj_h{
 	width:80px;
+}
+#input_obj_x, #input_obj_y{
+	width:60px;
 }
 
 input[type=text]:focus, textarea:focus, select:focus, input[type=number]:focus{

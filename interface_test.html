@@ -147,19 +147,33 @@
 					
 							<div class = "ui_box ui_box_special ui_box_general" style = "margin-top:0">
 								
-							<span id = "id_" style = "margin-top:-5px">ID: <span></span> /</span>
-							
-							<span id = "coord_x">X: <span></span> /</span>
-							<span id = "coord_y">Y: <span></span></span>
+								<span id = "id_" style = "margin-top:-5px">ID: <span></span> /</span>
+								
+								<span id = "coord_x">X: <span></span> /</span>
+								<span id = "coord_y">Y: <span></span></span>
 								<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
 								<br>
 								
-								X: <input id = "input_obj_x" class = "input_position" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:10px"><br>
+								X: <input id = "input_obj_x" class = "input_position" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:10px">
 								Y: <input id = "input_obj_y" class = "input_position" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
 								
 								
 							</div><!--ui_box-->
-					
+							
+							<div class = "ui_box ui_box_special ui_box_player">
+								
+								
+								
+								<span class = "key_label">Forward:</span><button id = "btn_key_up" class = "btn btn_key_assign" keycode = "38">&uarr;</button><br>
+								<span class = "key_label">Backwards:</span><button id = "btn_key_down" class = "btn btn_key_assign" keycode = "40">&darr;</button><br>
+								<span class = "key_label">Turn left:</span><button id = "btn_key_left" class = "btn btn_key_assign" keycode = "37">&larr;</button><br>
+								<span class = "key_label">Turn right:</span><button id = "btn_key_right" class = "btn btn_key_assign" keycode = "39">&rarr;</button><br>
+								<span class = "key_label">Action:</span><button id = "btn_key_interact" class = "btn btn_key_assign">C</button>
+								
+							</div><!--ui_box-->
+							
+							
+							
 							<!-- <div class = "ui_box">
 								Größe:<br>
 								<input id = "input_obj_width" class = "" placeholder="Width" maxlength="100" type="text" name="" value="1">
@@ -245,7 +259,7 @@
 							<div id = "ui_delete_box" class = "ui_box_special ui_box">
 						
 								<button id = "btn_delete_object" class = "btn">
-									<i class="fas fa-trash-alt"></i>&nbsp;&nbsp;<span>Delete Object</span>
+									<i class="fas fa-trash-alt"></i>
 								</button>
 								
 							</div>
