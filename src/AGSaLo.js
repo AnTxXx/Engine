@@ -43,6 +43,10 @@ export class AGSaLo {
         //g_references.set(obj.id, obj);
     }
 
+    printLevel(){
+        console.log(JSON.stringify(this._savedObjects));
+    }
+
     rebuild(){
         console.log(g_history);
         g_references.clear();
@@ -52,7 +56,8 @@ export class AGSaLo {
         const serialized = JSON.stringify(this._savedObjects);
 
         const parsedObject = JSON.parse(serialized);
-        console.log(parsedObject);
+
+        this.printLevel();
         //console.log(parsedObject);
 
         setLoading(true);
