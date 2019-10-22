@@ -164,32 +164,35 @@ export class IAudiCom {
 					// item.top = item.AGObject.position.z*scale_buffer + item.AGObject.size.z*scale_buffer/2;
 					// item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
 					
-					//remove "dead" objects
-					if(getReferenceById(item.AGObjectID).destructible && getReferenceById(item.AGObjectID).health <= 0){
-					//remove path of dead enemies	
-						if(item.type == 'enemy'){
-							item.PathArray.forEach(function(ele) {
-								room_buffer.remove(ele);
-							});
+					// check if not null or undefined
+					if(getReferenceById(item.AGObjectID)){
+						//remove "dead" objects [URB WZ HERE]
+						if (getReferenceById(item.AGObjectID).destructible && getReferenceById(item.AGObjectID).health <= 0) {
+							//remove path of dead enemies
+							if (item.type == 'enemy') {
+								item.PathArray.forEach(function (ele) {
+									room_buffer.remove(ele);
+								});
+							}
+							room_buffer.remove(item);
 						}
-						room_buffer.remove(item);
+						if (item.type == 'exit') {
+							if (getReferenceById(item.AGObjectID).reached) {
+								$('#win_screen').fadeIn(100);
+							}
+						}
+						item.left = getReferenceById(item.AGObjectID).position.x * scale_buffer;
+						item.top = getReferenceById(item.AGObjectID).position.z * scale_buffer;
+
+
+						if (item == room_buffer.getActiveObject()) {
+							$('#coord_x span').text(getReferenceById(item.AGObjectID).position.x);
+							$('#coord_y span').text(getReferenceById(item.AGObjectID).position.z);
+
+						}
+
+						item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);
 					}
-					if(item.type == 'exit'){	
-						if(getReferenceById(item.AGObjectID).reached){
-							$('#win_screen').fadeIn(100);
-						}						
-					}
-	 			   	item.left = getReferenceById(item.AGObjectID).position.x*scale_buffer;
-	  			   	item.top = getReferenceById(item.AGObjectID).position.z*scale_buffer;
-					
-					
-					if(item==room_buffer.getActiveObject()){
-						$('#coord_x span').text(getReferenceById(item.AGObjectID).position.x);
-						$('#coord_y span').text(getReferenceById(item.AGObjectID).position.z);
-						
-					}
-					
-	  			   	item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);  
 				}
 			});	
 			room_buffer.renderAll();
