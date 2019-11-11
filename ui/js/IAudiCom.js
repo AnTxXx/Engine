@@ -1,24 +1,20 @@
 import { play } from '../../lib/AGEngine.js';
+import { AGEventHandler } from "../../lib/AGEventHandler.js";
 import { AGGameArea } from "../../lib/AGGameArea.js";
-import { AGObject } from "../../lib/AGObject.js";
-import { AGSoundSource } from "../../lib/AGSoundSource.js";
+import { AGItem } from "../../lib/AGItem.js";
 import { AGNavigation } from "../../lib/AGNavigation.js";
+import { AGObject } from "../../lib/AGObject.js";
 import { AGPlayer } from "../../lib/AGPlayer.js";
-import { Vector3 } from "../../lib/js/three/Vector3.js";
 import { AGPortal } from "../../lib/AGPortal.js";
 import { AGRoom } from "../../lib/AGRoom.js";
 import { AGRoomExit } from "../../lib/AGRoomExit.js";
-import { AGItem } from "../../lib/AGItem.js";
-import { AGEventHandler } from "../../lib/AGEventHandler.js";
+import { AGSoundSource } from "../../lib/AGSoundSource.js";
+import { Event } from "../../lib/Event.js";
+import { Vector3 } from "../../lib/js/three/Vector3.js";
 import { getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl } from "../../lib/AGEngine.js";
 
 
-import { Event } from "../../lib/Event.js";
-
-
 export class IAudiCom {
-	
-
     set position(value) {
         this._scale = value;
     }
@@ -32,20 +28,18 @@ export class IAudiCom {
     get room_canvas() {
         return this._room_canvas;
     }
-	
+
     /**
-     * Bla
+     * 
      */
     constructor() {
 		this._scale = 55;
 		this._vision_mode = 0;
-		
 		this._interval = '';
-		
 		this._room_canvas = new fabric.Canvas('c',{
 		    selection: false, 
 		});
-		
+		this._controlsID = 3;
 		this._colors = [
 		  	['#e2e2e2', '#000060'], //0 canvas
 		  	['#ebebeb', '#cccccc'],	//1 grid
@@ -57,69 +51,37 @@ export class IAudiCom {
 			['#000000', '#f02727'],	//7 colors for path-lines
 			['#7079d4', '#39adff'],	//8 colors for generic objects
 		];
-		
-		
-		this._controlsID = 3;
-		
-		
 		this.renderScene();
 		//this.renderPathDot();
     }
 	
     /**
-     * Returns the color value of an interface element for the vision mode
-     * @param index of interface element
+     * Clears all objects of the current room and sets up an empty canvas with a player-object
      */
-	toggleVisionMode(){
-		
-		this._vision_mode = +!this._vision_mode;
-
-		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
-		this._room_canvas.getObjects().forEach(object=>{
-			switch(object.type){
-			
-				case 'grid_line':
-					object.set("stroke", this._colors[1][this._vision_mode]);
-					break;
-
-				case 'player':
-					object.set("fill", this._colors[2][this._vision_mode]);
-					object.set("fill", this._colors[2][this._vision_mode]);
-					break;
-
-				case 'enemy':
-					object.set("fill", this._colors[3][this._vision_mode]);
-					break;
-				case 'portal':
-				case 'wall':
-				case 'exit':
-					object.set("fill", this._colors[4][this._vision_mode]);			
-					break;
-				case 'path_dot':
-					
-					object.set("fill", this._colors[6][this._vision_mode]);
-					break;
-				case 'path_line':
-					object.set("fill", this._colors[7][this._vision_mode]);
-					object.set("stroke", this._colors[7][this._vision_mode]);
-					break;
-				default:
-					object.set("fill", this._colors[8][this._vision_mode]);
-			}
-		});
-		
-		this._room_canvas.renderAll();
-
-		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help,#overlay_text_box" ).toggleClass("contrast");
-
+	newScene(){	
+		if(confirm("Clear all objects of current room?")){
+			let room_buffer = this._room_canvas;
+			let scale_buffer = this._scale;
+			let canvas_objects = room_buffer.getObjects();
+				
+			canvas_objects.forEach(function(item, i){
+				if(item.isObject && item.type != 'player'){
+					getReferenceById(item.AGObjectID).kill();
+		 		}
+				if(item.type !='grid_line' && item.type != 'player'){
+					room_buffer.remove(item);
+				}
+			});
+			room_buffer.renderAll();	
+		}	
 	}
 	
+    /**
+     * Starts the scene and enables the player to control the player-object
+     */
 	startArea(){
-		
 		this.disableKeyScrolling();
-		
-		
+
 		/*lower opacity and disable click for elements*/
 		$('#ui_part_right').addClass('no_click lower_opacity');
 		$('select').addClass('no_click lower_opacity');
@@ -133,7 +95,6 @@ export class IAudiCom {
 		$('.sb_object').prop('tabIndex', -1);
 		$('.btn').not('#btn_stop_scene').not('#btn_change_vision_mode').not('#btn_help').prop('tabIndex', -1);
 		
-		
 		let room_buffer = this._room_canvas;
 		let scale_buffer = this._scale;
 		let canvas_objects = room_buffer.getObjects();
@@ -143,10 +104,7 @@ export class IAudiCom {
 		this._interval = setInterval(function(){				
 			canvas_objects.forEach(function(item, i) {
 				if(item.isObject){
-					
-					
 					if(item.type == 'player'){
-						
 						if(item.left + 200 > $('#canvas_container').width() + $('#canvas_container').scrollLeft()){
 							$('#canvas_container').scrollLeft( $('#canvas_container').scrollLeft() + 1 );
 						}else if(item.left - 200 < $('#canvas_container').scrollLeft()){
@@ -181,16 +139,15 @@ export class IAudiCom {
 								$('#win_screen').fadeIn(100);
 							}
 						}
+						
 						item.left = getReferenceById(item.AGObjectID).position.x * scale_buffer;
 						item.top = getReferenceById(item.AGObjectID).position.z * scale_buffer;
-
-
+						
 						if (item == room_buffer.getActiveObject()) {
 							$('#coord_x span').text(getReferenceById(item.AGObjectID).position.x);
 							$('#coord_y span').text(getReferenceById(item.AGObjectID).position.z);
 
 						}
-
 						item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);
 					}
 				}
@@ -198,8 +155,11 @@ export class IAudiCom {
 			room_buffer.renderAll();
 		}, 33);	
 	}
+	
+    /**
+     * Stops and rebuilds the scene
+     */
 	stopArea(){
-		
 		this.disableKeyScrolling();
 	
 		/*make clickable again*/
@@ -222,111 +182,512 @@ export class IAudiCom {
 		this._room_canvas.clear();		
 		g_history.rebuild();
 		
-		
-		
  		this.renderScene();
-		
-		//let canvas_objects = canvas_buffer.getObjects();
-		//canvas_buffer.dispose();
-		//$('#c').empty();
-
-		//console.log(g_gamearea.AGRooms);
-		
-		//let rooms_buffer = g_gamearea.AGRooms;
-		
-		//TODO HIER GEHTS WEITER :)
-		// console.log(rooms_buffer[0].AGobjects);
-// 		this.renderAGRoom(rooms_buffer[0]);
-// 		if(rooms_buffer[0].AGobjects.length > 0){
-// 			rooms_buffer[0].AGobjects.forEach(function(element) {
-//  				this.renderAGObject(element);
-// 			});
-// 		}
-
-		
 	}
-  	
-	newScene(){	
-		if(confirm("Clear all objects of current room?")){
-			let room_buffer = this._room_canvas;
+
+    /**
+     * Renders the canvas
+     * @param ID of the AGRoom
+     */
+	renderAGRoom(ag_roomID){
+		this._room_canvas.setWidth(getReferenceById(ag_roomID).size.x * this._scale);
+		this._room_canvas.setHeight(getReferenceById(ag_roomID).size.z * this._scale);
+		let options = {
+		   distance: this._scale,
+		   width: this._room_canvas.width,
+		   height: this._room_canvas.height,
+		   param: {
+		   		stroke: this._colors[1][this._vision_mode],
+		   		strokeWidth: 1,
+		   		selectable: false,
+			  	type:'grid_line'
+		   }
+		};
+		
+		//grid for the canvas
+		let gridHeight = options.height / options.distance;
+		let gridLen = options.width / options.distance;
+		
+		for (var i = 0; i < gridLen; i++) {
+			var distance   = i * options.distance,
+			vertical = new fabric.Line([ distance, 0, distance, options.height], options.param);
+			this._room_canvas.add(vertical);
+		};
+		
+		for (var i = 0; i < gridHeight; i++) {
+		  	var distance   = i * options.distance,
+		 	horizontal   = new fabric.Line([ 0, distance, options.width, distance], options.param);
+		 	this._room_canvas.add(horizontal);
+		};
+		
+		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
+		this._room_canvas.renderAll();
+
+		//snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
+		this._room_canvas.on('object:moving', options => {
+			//Change wally to wall to reactivate scaling
+			//getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);	
+		});
+	}
+	
+    /**
+     * Changes the dimensions of the canvas
+     * @param Width of the new canvas
+	 * @param Height of the new canvas
+     */
+	setAGRoomDimensions(width, height){
+		let room_buffer = this._room_canvas;
+		let old_width = room_buffer.getWidth();
+		let old_height = room_buffer.getHeight();
+		let new_width = width * this._scale;
+		let new_height = height * this._scale;
+		let that = this;
+		
+		//delete objects which lie outside boundaries after resize
+		if(new_width < old_width || new_height < old_height){
+			//Check if objects lie outside
 			let scale_buffer = this._scale;
-			let canvas_objects = room_buffer.getObjects();
-				
+			let canvas_objects = room_buffer.getObjects();	
 			canvas_objects.forEach(function(item, i){
-				if(item.isObject && item.type != 'player'){
-					getReferenceById(item.AGObjectID).kill();
-		 		}
-				if(item.type !='grid_line' && item.type != 'player'){
-					room_buffer.remove(item);
+				if(item.type != 'grid_line'){	
+					let item_right_buffer = item.left + Math.round(item.width * item.scaleX)/2;
+					let item_top_buffer = item.top + Math.round(item.height * item.scaleY)/2;
+					if(item_right_buffer > new_width || item_top_buffer > new_height){	
+						if(item.type == 'player'){
+							item.left = 0.5*that._scale;
+							item.top = 0.5*that._scale;
+							item.setCoords();
+							getReferenceById(item.AGObjectID).position = new Vector3(0.5, 1, 0.5);
+						}else{
+							that.deleteItem(item);
+						}
+					}
 				}
 			});
+		}		
+		this._room_canvas.setWidth(width * this._scale);
+		this._room_canvas.setHeight(height * this._scale);
+		this._room_canvas.renderAll();
+		//set room size of AGRoom (what happens with objects, which "fall out")
+		getReferenceById(this._AGroomID).size = new Vector3(width, 2.5, height);
+	}
+
+    /**
+     * Creates an AGObject and calls renderAGObject with its ID
+     * @param The type of the AGObject
+	 * @param The x-position of the AGObject
+	 * @param The y-position of the AGObject
+     */
+	makeThenRenderAGObject(obj_type, obj_left, obj_top){
+		let obj_buffer;
+		let obj_buffer_ID;
+		switch(obj_type){
+			case 'enemy':
+				obj_buffer = new AGObject("AGgegner", new Vector3((obj_left/this._scale), 1, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				getReferenceById(obj_buffer_ID).tag = "ENEMY";
+				getReferenceById(obj_buffer_ID).setSpeedSkalar(0);
+				break;
+			case 'wall':				
+				obj_buffer = new AGObject("Structure", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				getReferenceById(obj_buffer_ID).tag = "WALL";		
+				break;
+			case 'portal':
+				obj_buffer = new AGPortal("Portal", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				break;
+			case 'exit':
+				obj_buffer = new AGRoomExit("Exit", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				break;
+			case 'generic':
+				obj_buffer = new AGObject("Generic", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				obj_buffer_ID = getIdByReference(obj_buffer);
+				getReferenceById(obj_buffer_ID).tag = "GENERIC";
+		}
+		getReferenceById(this._AGroomID).add(obj_buffer_ID);
+		this.renderAGObject(obj_buffer_ID);
+		return obj_buffer_ID;
+	}
+	
+    /**
+     * Creates a fabric-Object and renders it
+     * @param The ID of the AGOBject
+     */
+	renderAGObject(ag_objectID){
 		
-			room_buffer.renderAll();	
+		let _scalebuffer = this._scale
+		let colors_buffer = this._colors;
+		let vision_mode_buffer = this._vision_mode;
+		let room_canvas_buffer = this._room_canvas;
+		
+		//add details for tapping
+		$('<div tabindex = "0" id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'" class = "faboject_">test</div>').prependTo('#fabric_objects_container');
+		
+		if(getReferenceById(ag_objectID).tag){
+			switch(getReferenceById(ag_objectID).tag){
+				case 'ENEMY':
+					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[3][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+					 	obj.PathArray = [];
+						obj.LineArray = [];
+						obj.isObject = true;
+						obj.isRecording = false;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'enemy';
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						if(getReferenceById(ag_objectID).route.length > 0){
+							getReferenceById(ag_objectID).route.forEach(function (item, index) {
+								let dot = new fabric.Circle({
+								    left:   (item.x*_scalebuffer)-4,
+								    top:    (item.z*_scalebuffer)-4,
+								    radius: 4,
+								   	fill:   colors_buffer[6][vision_mode_buffer],
+								    objectCaching: false,
+									selectable: false,
+									opacity: 0,
+									type: 'path_dot'
+								});
+								if(obj.PathArray.length >= 1){
+									let last_dot_buffer = obj.PathArray[obj.PathArray.length-1];
+									let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
+										fill: colors_buffer[7][vision_mode_buffer],
+										stroke: colors_buffer[7][vision_mode_buffer],
+										strokeWidth: 2,
+										selectable: false,
+										evented: false,
+										opacity: 0,
+										type: 'path_line'
+									});
+									obj.LineArray.push(line);
+									room_canvas_buffer.add(line);
+								}
+								obj.PathArray.push(dot);
+								room_canvas_buffer.add(dot);
+							});
+						}
+					  	room_canvas_buffer.add(obj).renderAll();
+					});
+					break;
+			
+				case 'WALL':
+					var obj = new fabric.Rect({
+						width: getReferenceById(ag_objectID).size.x*_scalebuffer,
+						height: getReferenceById(ag_objectID).size.z*_scalebuffer,
+						fill: colors_buffer[4][vision_mode_buffer],
+						left: getReferenceById(ag_objectID).position.x*_scalebuffer,
+						top: getReferenceById(ag_objectID).position.z*_scalebuffer,
+						AGObjectID: ag_objectID,
+						isObject: true,	
+						name: getReferenceById(ag_objectID).name,
+						type: 'wall',
+						strokeWidth: 1,
+						originX: 'center',
+						originY: 'center',
+					});
+					obj.hasRotatingPoint = false; 
+					room_canvas_buffer.add(obj).renderAll();
+					break;
+					
+				default:
+					fabric.loadSVGFromURL('ui/img/generic.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[8][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+					 	obj.PathArray = [];
+						obj.LineArray = [];
+						obj.isObject = true;
+						obj.isRecording = false;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'generic';
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+					  	room_canvas_buffer.add(obj).renderAll();
+					});
+			}
+		
+		}else if(getReferenceById(ag_objectID).type){
+			switch(getReferenceById(ag_objectID).type){
+				case 'PORTAL':	
+					fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
+					  	obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[4][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;	
+						obj.isObject = true;
+						obj.isRecording = false;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'portal';
+						if(getReferenceById(ag_objectID).exit){
+							let secDoorAGObject =  getReferenceById(ag_objectID).exit
+							obj.secDoor = getIdByReference(secDoorAGObject);
+							let dot = new fabric.Circle({
+							    left:   obj.left-4,
+							    top:    obj.top-4,
+							    radius: 4,
+							    fill:   colors_buffer[6][vision_mode_buffer],
+							    objectCaching: false,
+								selectable: false,
+								type: 'portal_dot',
+								opacity:0,
+							});
+							//draw line between portals
+							let line = new fabric.Line([obj.left, obj.top, secDoorAGObject.position.x*_scalebuffer, secDoorAGObject.position.z*_scalebuffer],{
+								fill: colors_buffer[7][vision_mode_buffer],
+								stroke: colors_buffer[7][vision_mode_buffer],
+								strokeWidth: 2,
+								selectable: false,
+								evented: false,
+								type: 'portal_line',
+								dot: dot,
+								opacity:0,
+							});
+							obj.line = line;
+							obj.line.dot = dot;
+							room_canvas_buffer.add(dot);
+							room_canvas_buffer.add(line);
+						}else{
+							obj.secDoor = false;
+							obj.line = false;
+						}
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+					  	room_canvas_buffer.add(obj).renderAll();
+					});
+					break;
+					
+				case 'EXIT':	
+					fabric.loadSVGFromURL('ui/img/exit.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
+					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);			
+					  	obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[4][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+						obj.isObject = true;
+						obj.isRecording = false;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'exit';
+						obj.secDoor = false;
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						room_canvas_buffer.add(obj).renderAll();
+					});
+					break;
+					
+				case 'PLAYER':
+					//TODO change size of player
+					fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(1*_scalebuffer);
+					  	obj.scaleToHeight(1*_scalebuffer);	
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[2][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+						obj.isObject = true;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'player';
+					  	room_canvas_buffer.add(obj).renderAll();
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						room_canvas_buffer.add(obj).renderAll();
+					});
+					break;
+					
+				default:
+					fabric.loadSVGFromURL('ui/img/generic.svg', function(objects) {
+					  	var obj = fabric.util.groupSVGElements(objects);
+					 	obj.scaleToWidth(1*_scalebuffer);
+					  	obj.scaleToHeight(1*_scalebuffer); 		
+						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
+						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
+						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
+						obj.fill = colors_buffer[4][vision_mode_buffer];
+						obj.AGObjectID = ag_objectID;
+						obj.isObject = true;
+						obj.name = getReferenceById(ag_objectID).name;
+						obj.type = 'generic';
+					  	room_canvas_buffer.add(obj).renderAll();
+						obj.originX = 'center';
+						obj.originY = 'center';
+						obj.hasRotatingPoint = false; 
+						obj.lockScalingX = true;
+						obj.lockScalingY = true;
+						obj.setControlsVisibility({
+						    mt: false, // middle top disable
+						    mb: false, // midle bottom
+						    ml: false, // middle left
+						    mr: false, // I think you get it
+							tr: false,
+							tl: false,
+							br: false,
+							bl: false,
+						});
+						room_canvas_buffer.add(obj).renderAll();
+					});
+			}	
 		}	
 	}
 	
-	
-	
-	
-	zoomCanvas(zoom_factor){
-		//min : 0.5
-		//max : 1.5
-		
+    /**
+     * Removes a fabric-object from the canvas (in case of enemy deletes the path/in case of portal deletes the link)
+     * @param The fabric-object
+     */
+	deleteItem(_fabobject){
 		let room_buffer = this._room_canvas;
-		room_buffer.setZoom(room_buffer.getZoom()*zoom_factor);
-		//set stroke-width to 1 again
-		let canvas_objects = room_buffer.getObjects();
-		canvas_objects.forEach(function(item, i) {
-			if(item.type == 'grid_line'){
-				item.strokeWidth = (1/room_buffer.getZoom())*1;
+		getReferenceById(_fabobject.AGObjectID).kill();
+	
+		//check if removed element was linked to portal or has path points and remove that stuff
+		//TODO wait for portal remove function in AGPortal
+	
+		if(_fabobject.type == 'enemy'){
+			_fabobject.PathArray.forEach(function(ele) {
+				room_buffer.remove(ele);
+			});
+			_fabobject.LineArray.forEach(function(ele) {
+				room_buffer.remove(ele);
+			});
+		}
+	
+		if(_fabobject.type == 'portal'){
+			//_fabobject.secDoor
+			let fab_buffer = this.getFabricObject(_fabobject.secDoor);
+			if(fab_buffer){
+				fab_buffer.secDoor = false;
+				fab_buffer.set("fill", this._colors[4][this._vision_mode]);	
 			}
-		});
-		
-		//console.log(room_buffer.width*room_buffer.getZoom());
-		let width_buffer = room_buffer.width*room_buffer.getZoom();
-		let height_buffer = room_buffer.height*room_buffer.getZoom();
-		let middle_width_buffer = $('#ui_part_middle').width();
-		
-		
-		// $('.canvas-container').height(room_buffer.height*room_buffer.getZoom());
-		// $('.canvas_room').height(room_buffer.height*room_buffer.getZoom());
-		//
-		// $('.canvas-container').width(room_buffer.width*room_buffer.getZoom());
-		// $('.canvas_room').width(room_buffer.width*room_buffer.getZoom());
-		
-		if(width_buffer < middle_width_buffer){
-			$('#canvas_container').width(room_buffer.width*room_buffer.getZoom());
-			$('#canvas_container').addClass('canvas_no_overflow_x');
-		}else{
-			$('#canvas_container').removeClass('canvas_no_overflow_x');
+			if(_fabobject.line){
+				this._room_canvas.remove(this.getFabricObject(_fabobject.secDoor).line.dot);
+				this._room_canvas.remove(this.getFabricObject(_fabobject.secDoor).line);
+				this.getFabricObject(_fabobject.secDoor).line = false;
+				this._room_canvas.remove(_fabobject.line.dot);
+				this._room_canvas.remove(_fabobject.line);
+				_fabobject.line.line = false;
+			}
 		}
-		
-		if(height_buffer < 600){
-			
-			$('#canvas_container').addClass('canvas_no_overflow_y');
-			
-			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
-			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
-			
-		}else{
-			$('#canvas_container').height(600);
-			$('#canvas_container').removeClass('canvas_no_overflow_y');
-		}
-		room_buffer.renderAll();
+		this._room_canvas.remove(_fabobject);
+		this._room_canvas.renderAll();
 	}
 	
+    /**
+     * Calls renderAGObject for all AGObjects of a n AGRoom
+     */
+	renderScene(){
+		//console.log(getReferenceById(g_gamearea.ID));
+		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
+		this._AGroomID = rooms_buffer[0].ID;
+
+		//prefill the inputs with Room name and Dimensions
+		$('#input_room_name').val(getReferenceById(this._AGroomID).name);
+		$('#tb_canvas_dim_width').val(getReferenceById(this._AGroomID).size.x);
+		$('#tb_canvas_dim_height').val(getReferenceById(this._AGroomID).size.z);
+
+		this.renderAGRoom(this._AGroomID);
+
+		let this_buffer = this;
+		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
+			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
+ 				this_buffer.renderAGObject(element.ID);
+			});
+		}
+	}
 	
+    /**
+     * Adds a soundsource to an AGobject
+     * @param The ID of the AGOBject
+	 * @param The name of the soundsource
+     */
 	addSoundSource(ag_object_id, ss_name){
-		
+		ag_object_buffer.clearSoundSources();	
 		let ag_object_buffer = getReferenceById(ag_object_id)
-		
-		//console.log(getReferenceById(ag_object_id));
-		ag_object_buffer.clearSoundSources();
-		
-		//ICI
-		
 		let roomID_buffer = getReferenceById(g_gamearea.ID).AGRooms[0].ID;
-		
 		let ss_buffer;
 		
 		switch(ss_name){
@@ -360,8 +721,6 @@ export class IAudiCom {
 				ss_buffer.tag = "MONSTER"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
-				
-				
 			case 'truck':
 				ss_buffer = new AGSoundSource("Monster", "sounds/truck.wav", true, 1, roomID_buffer);
 				ss_buffer.tag = "TRUCK"; 
@@ -372,630 +731,17 @@ export class IAudiCom {
 				ss_buffer.tag = "MOTORCYCLE"; 
 				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
-				
-				
-				
-				
 			case 'none':
-				
-				
+				//
 				break;
 		}
-		
 	}
 	
-	
-	setAGRoomDimensions(width, height){
-		
-		let room_buffer = this._room_canvas;
-		let old_width = room_buffer.getWidth();
-		let old_height = room_buffer.getHeight();
-		
-		let new_width = width * this._scale;
-		let new_height = height * this._scale;
-		
-		let that = this;
-		
-		//delete objects which lie outside boundaries after resize
-		if(new_width < old_width || new_height < old_height){
-			//Check if objects lie outside
-			let scale_buffer = this._scale;
-			let canvas_objects = room_buffer.getObjects();	
-			canvas_objects.forEach(function(item, i){
-				if(item.type != 'grid_line'){	
-					let item_right_buffer = item.left + Math.round(item.width * item.scaleX)/2;
-					let item_top_buffer = item.top + Math.round(item.height * item.scaleY)/2;
-					if(item_right_buffer > new_width || item_top_buffer > new_height){	
-						if(item.type == 'player'){
-							item.left = 0.5*that._scale;
-							item.top = 0.5*that._scale;
-							item.setCoords();
-							getReferenceById(item.AGObjectID).position = new Vector3(0.5, 1, 0.5);
-						}else{
-							that.deleteItem(item);
-						}
-					}
-				}
-			});
-		}		
-		this._room_canvas.setWidth(width * this._scale);
-		this._room_canvas.setHeight(height * this._scale);
-		this._room_canvas.renderAll();
-
-		//set room size of AGRoom (what happens with objects, which "fall out")
-		getReferenceById(this._AGroomID).size = new Vector3(width, 2.5, height);
-	}
-
-	
-	deleteItem(_fabobject){
-		let room_buffer = this._room_canvas;
-		
-		getReferenceById(_fabobject.AGObjectID).kill();
-	
-		//check if removed element was linked to portal or has path points and remove that stuff
-		//TODO wait for portal remove function in AGPortal
-	
-		if(_fabobject.type == 'enemy'){
-			_fabobject.PathArray.forEach(function(ele) {
-				room_buffer.remove(ele);
-			});
-			_fabobject.LineArray.forEach(function(ele) {
-				room_buffer.remove(ele);
-			});
-		}
-	
-		if(_fabobject.type == 'portal'){
-			//_fabobject.secDoor
-			let fab_buffer = this.getFabricObject(_fabobject.secDoor);
-		
-			if(fab_buffer){
-				fab_buffer.secDoor = false;
-				fab_buffer.set("fill", this._colors[4][this._vision_mode]);	
-			}
-		
-			if(_fabobject.line){
-				this._room_canvas.remove(this.getFabricObject(_fabobject.secDoor).line.dot);
-				this._room_canvas.remove(this.getFabricObject(_fabobject.secDoor).line);
-				this.getFabricObject(_fabobject.secDoor).line = false;
-			
-				this._room_canvas.remove(_fabobject.line.dot);
-				this._room_canvas.remove(_fabobject.line);
-				_fabobject.line.line = false;
-			}
-		
-		}
-	
-		this._room_canvas.remove(_fabobject);
-		this._room_canvas.renderAll();
-	
-		
-	
-	}
-	
-	
-	renderAGRoom(ag_roomID){
-		
-	
-		
-		this._room_canvas.setWidth(getReferenceById(ag_roomID).size.x * this._scale);
-		this._room_canvas.setHeight(getReferenceById(ag_roomID).size.z * this._scale);
-
-		let options = {
-		   distance: this._scale,
-		   width: this._room_canvas.width,
-		   height: this._room_canvas.height,
-		   param: {
-		   		stroke: this._colors[1][this._vision_mode],
-		   		strokeWidth: 1,
-		   		selectable: false,
-			  	type:'grid_line'
-		   }
-		};
-
-		
-		
-		//grid for the canvas
-		let gridHeight = options.height / options.distance;
-		let gridLen = options.width / options.distance;
-		
-		for (var i = 0; i < gridLen; i++) {
-			var distance   = i * options.distance,
-			vertical = new fabric.Line([ distance, 0, distance, options.height], options.param);
-			 
-			this._room_canvas.add(vertical);
-		 
-		};
-		
-		for (var i = 0; i < gridHeight; i++) {
-		  	var distance   = i * options.distance,
-		 	horizontal   = new fabric.Line([ 0, distance, options.width, distance], options.param);
-		 	this._room_canvas.add(horizontal);
-		};
-		
-		
-		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
-		this._room_canvas.renderAll();
-
-		//snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
-		this._room_canvas.on('object:moving', options => {
-			//Change wally to wall to reactivate scaling
-			
-			
-			//getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);
-			
-		});
-		
-		
-		
-	}
-
-	//obj_focus -> setfocus after rendering it
-	makeThenRenderAGObject(obj_type, obj_left, obj_top, obj_focus){
-
-		let obj_buffer;
-		let obj_buffer_ID;
-		switch(obj_type){
-			
-			case 'enemy':
-				
-				obj_buffer = new AGObject("AGgegner", new Vector3((obj_left/this._scale), 1, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				
-				obj_buffer_ID = getIdByReference(obj_buffer);
-				
-				
-				getReferenceById(obj_buffer_ID).tag = "ENEMY";
-				
-				
-				getReferenceById(obj_buffer_ID).setSpeedSkalar(0);
-				
-				break;
-
-			case 'wall':
-				
-				//calculate snapping points for wall
-	  	    	// let snap_buffer = { // Closest snapping points
-// 	  	        	top: Math.round((obj_top) / this._scale) * this._scale,
-// 	  	        	left: Math.round((obj_left) / this._scale) * this._scale,
-// 	  	        	bottom: Math.round((obj_top + this._scale) / this._scale) * this._scale,
-// 	  	        	right: Math.round((obj_left+ this._scale) / this._scale) * this._scale
-// 	  	     	};
-//
-// 				let snap_top_buffer = snap_buffer.top < snap_buffer.bottom ? snap_buffer.top : snap_buffer.bottom;
-// 				let snap_left_buffer = snap_buffer.left < snap_buffer.right ? snap_buffer.left : snap_buffer.right;
-				
-				obj_buffer = new AGObject("Structure", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				obj_buffer_ID = getIdByReference(obj_buffer);
-				getReferenceById(obj_buffer_ID).tag = "WALL";
-				
-				break;
-			case 'portal':
-				obj_buffer = new AGPortal("Portal", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				obj_buffer_ID = getIdByReference(obj_buffer);
-				
-				break;
-			case 'exit':
-
-				obj_buffer = new AGRoomExit("Exit", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				obj_buffer_ID = getIdByReference(obj_buffer);
-				break;
-			case 'generic':
-				obj_buffer = new AGObject("Generic", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				obj_buffer_ID = getIdByReference(obj_buffer);
-				getReferenceById(obj_buffer_ID).tag = "GENERIC";
-			
-		}
-		
-		
-		
-		
-		getReferenceById(this._AGroomID).add(obj_buffer_ID);
-		this.renderAGObject(obj_buffer_ID, obj_focus);
-		
-		
-		
-		return obj_buffer_ID;
-	}
-	
-	
-	getFabricObject(ag_objectID){
-		let canvas_objects = this._room_canvas.getObjects();
-		let fab_buffer;
-		canvas_objects.forEach(function(item, i) {
-			if(item.isObject && item.AGObjectID == ag_objectID){
-				fab_buffer = item;
-			}
-		});	
-		return fab_buffer;
-	}
-	
-	
-	// renderPathDot(){
-//
-// 		let _scalebuffer = this._scale
-// 		let colors_buffer = this._colors;
-// 		let vision_mode_buffer = this._vision_mode;
-// 		let room_canvas_buffer = this._room_canvas;
-//
-//
-//
-//
-// 		let dot = new fabric.Circle({
-// 		    left:   4,
-// 		    top:   	4,
-// 		    radius: 4,
-// 		    fill:   this._colors[6][this._vision_mode],
-// 		    objectCaching: false,
-// 			selectable: false,
-// 			type: 'path_dot_'
-// 		});
-//
-// 		//i_audicom._room_canvas.setActiveObject(actFabObj);
-// 		this._room_canvas.add(dot).renderAll();
-//
-//
-//
-// 	}
-	
-	//AGObjects
-	renderAGObject(ag_objectID, obj_focus){
-		
-		let _scalebuffer = this._scale
-		let colors_buffer = this._colors;
-		let vision_mode_buffer = this._vision_mode;
-		let room_canvas_buffer = this._room_canvas;
-		
-		//add details for tapping
-
-		$('<div tabindex = "0" id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'" class = "faboject_">test</div>').prependTo('#fabric_objects_container');
-
-		$('.faboject_:first')
-		
-		if(getReferenceById(ag_objectID).tag){
-			
-			switch(getReferenceById(ag_objectID).tag){
-				case 'ENEMY':
-					
-					
-					
-					
-					fabric.loadSVGFromURL('ui/img/enemy.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
-					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
-					  	// obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer + getReferenceById(ag_objectID).size.x*_scalebuffer/2;
-// 					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer + getReferenceById(ag_objectID).size.z*_scalebuffer/2;
-
-						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
-						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
-						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
-						obj.fill = colors_buffer[3][vision_mode_buffer];
-						obj.AGObjectID = ag_objectID;
-					 	obj.PathArray = [];
-						obj.LineArray = [];
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = getReferenceById(ag_objectID).name;
-						obj.type = 'enemy';
-						obj.originX = 'center';
-						obj.originY = 'center';
-
-						obj.hasRotatingPoint = false; 
-						obj.lockScalingX = true;
-						obj.lockScalingY = true;
-						obj.setControlsVisibility({
-						    mt: false, // middle top disable
-						    mb: false, // midle bottom
-						    ml: false, // middle left
-						    mr: false, // I think you get it
-							tr: false,
-							tl: false,
-							br: false,
-							bl: false,
-						});
-						
-						if(getReferenceById(ag_objectID).route.length > 0){
-							
-							
-							
-							
-							
-							getReferenceById(ag_objectID).route.forEach(function (item, index) {
-								let dot = new fabric.Circle({
-								    left:   (item.x*_scalebuffer)-4,
-								    top:    (item.z*_scalebuffer)-4,
-								    radius: 4,
-								   	fill:   colors_buffer[6][vision_mode_buffer],
-								    objectCaching: false,
-									selectable: false,
-									opacity: 0,
-									type: 'path_dot'
-								});
-								
-								if(obj.PathArray.length >= 1){
-									
-									let last_dot_buffer = obj.PathArray[obj.PathArray.length-1];
-									let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
-										fill: colors_buffer[7][vision_mode_buffer],
-										stroke: colors_buffer[7][vision_mode_buffer],
-										strokeWidth: 2,
-										selectable: false,
-										evented: false,
-										opacity: 0,
-										type: 'path_line'
-									});
-									obj.LineArray.push(line);
-									room_canvas_buffer.add(line);
-								}
-
-								obj.PathArray.push(dot);
-								room_canvas_buffer.add(dot);
-								
-							});
-						}
-					  	room_canvas_buffer.add(obj).renderAll();
-					});
-					break;
-			
-				case 'WALL':
-					var obj = new fabric.Rect({
-						width: getReferenceById(ag_objectID).size.x*_scalebuffer,
-						height: getReferenceById(ag_objectID).size.z*_scalebuffer,
-						fill: colors_buffer[4][vision_mode_buffer],
-					
-						left: getReferenceById(ag_objectID).position.x*_scalebuffer,
-						top: getReferenceById(ag_objectID).position.z*_scalebuffer,
-						
-						AGObjectID: ag_objectID,
-						isObject: true,	
-						name: getReferenceById(ag_objectID).name,
-						type: 'wall',
-						strokeWidth: 1,
-						originX: 'center',
-						originY: 'center',
-					});
-					obj.hasRotatingPoint = false; 
-					room_canvas_buffer.add(obj).renderAll();
-					break;
-				default:
-					fabric.loadSVGFromURL('ui/img/generic.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
-					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
-					  	// obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer + getReferenceById(ag_objectID).size.x*_scalebuffer/2;
-// 					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer + getReferenceById(ag_objectID).size.z*_scalebuffer/2;
-
-						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
-						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
-						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
-						obj.fill = colors_buffer[8][vision_mode_buffer];
-						obj.AGObjectID = ag_objectID;
-					 	obj.PathArray = [];
-						obj.LineArray = [];
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = getReferenceById(ag_objectID).name;
-						obj.type = 'generic';
-						obj.originX = 'center';
-						obj.originY = 'center';
-
-						obj.hasRotatingPoint = false; 
-						obj.lockScalingX = true;
-						obj.lockScalingY = true;
-						obj.setControlsVisibility({
-						    mt: false, // middle top disable
-						    mb: false, // midle bottom
-						    ml: false, // middle left
-						    mr: false, // I think you get it
-							tr: false,
-							tl: false,
-							br: false,
-							bl: false,
-						});
-						
-						
-					  	room_canvas_buffer.add(obj).renderAll();
-					});
-			}
-		
-		}else if(getReferenceById(ag_objectID).type){
-			switch(getReferenceById(ag_objectID).type){
-				case 'PORTAL':	
-					fabric.loadSVGFromURL('ui/img/portal.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
-					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
-					
-					  	obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
-					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
-						
-						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
-						obj.fill = colors_buffer[4][vision_mode_buffer];
-						obj.AGObjectID = ag_objectID;
-					 	
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = getReferenceById(ag_objectID).name;
-						obj.type = 'portal';
-						if(getReferenceById(ag_objectID).exit){
-							let secDoorAGObject =  getReferenceById(ag_objectID).exit
-							
-							obj.secDoor = getIdByReference(secDoorAGObject);
-							
-							let dot = new fabric.Circle({
-							    left:   obj.left-4,
-							    top:    obj.top-4,
-							    radius: 4,
-							    fill:   colors_buffer[6][vision_mode_buffer],
-							    objectCaching: false,
-								selectable: false,
-								type: 'portal_dot',
-								opacity:0,
-							});
-							//draw line between portals
-							let line = new fabric.Line([obj.left, obj.top, secDoorAGObject.position.x*_scalebuffer, secDoorAGObject.position.z*_scalebuffer],{
-								fill: colors_buffer[7][vision_mode_buffer],
-								stroke: colors_buffer[7][vision_mode_buffer],
-								strokeWidth: 2,
-								selectable: false,
-								evented: false,
-								type: 'portal_line',
-								dot: dot,
-								opacity:0,
-							});
-							
-
-							obj.line = line;
-							obj.line.dot = dot;
-							room_canvas_buffer.add(dot);
-							room_canvas_buffer.add(line);
-	
-							
-						}else{
-							obj.secDoor = false;
-							obj.line = false;
-						}
-					
-						obj.originX = 'center';
-						obj.originY = 'center';
-						obj.hasRotatingPoint = false; 
-						obj.lockScalingX = true;
-						obj.lockScalingY = true;
-						obj.setControlsVisibility({
-						    mt: false, // middle top disable
-						    mb: false, // midle bottom
-						    ml: false, // middle left
-						    mr: false, // I think you get it
-							tr: false,
-							tl: false,
-							br: false,
-							bl: false,
-						});
-					  	room_canvas_buffer.add(obj).renderAll();
-					});
-					break;
-					
-				case 'EXIT':	
-					fabric.loadSVGFromURL('ui/img/exit.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(getReferenceById(ag_objectID).size.x*_scalebuffer);
-					  	obj.scaleToHeight(getReferenceById(ag_objectID).size.z*_scalebuffer);
-					  	// obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer + getReferenceById(ag_objectID).size.x*_scalebuffer/2;
-// 					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer + getReferenceById(ag_objectID).size.z*_scalebuffer/2;
-						
-					  	obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
-					    obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
-						
-						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
-						obj.fill = colors_buffer[4][vision_mode_buffer];
-						obj.AGObjectID = ag_objectID;
-						obj.isObject = true;
-						obj.isRecording = false;
-						obj.name = getReferenceById(ag_objectID).name;
-						obj.type = 'exit';
-						obj.secDoor = false;
-						obj.originX = 'center';
-						obj.originY = 'center';
-						obj.hasRotatingPoint = false; 
-						obj.lockScalingX = true;
-						obj.lockScalingY = true;
-						obj.setControlsVisibility({
-						    mt: false, // middle top disable
-						    mb: false, // midle bottom
-						    ml: false, // middle left
-						    mr: false, // I think you get it
-							tr: false,
-							tl: false,
-							br: false,
-							bl: false,
-						});
-						room_canvas_buffer.add(obj).renderAll();
-						
-					});
-					break;
-					
-				case 'PLAYER':
-					//TODO change size of player
-					fabric.loadSVGFromURL('ui/img/player.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(1*_scalebuffer);
-					  	obj.scaleToHeight(1*_scalebuffer);
-					  		
-						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
-						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
-
-						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
-						obj.fill = colors_buffer[2][vision_mode_buffer];
-						obj.AGObjectID = ag_objectID;
-						obj.isObject = true;
-						obj.name = getReferenceById(ag_objectID).name;
-						obj.type = 'player';
-					  	room_canvas_buffer.add(obj).renderAll();
-						obj.originX = 'center';
-						obj.originY = 'center';
-						obj.hasRotatingPoint = false; 
-						obj.lockScalingX = true;
-						obj.lockScalingY = true;
-						obj.setControlsVisibility({
-						    mt: false, // middle top disable
-						    mb: false, // midle bottom
-						    ml: false, // middle left
-						    mr: false, // I think you get it
-							tr: false,
-							tl: false,
-							br: false,
-							bl: false,
-						});
-						room_canvas_buffer.add(obj).renderAll();
-					
-					});
-					break;
-				default:
-					fabric.loadSVGFromURL('ui/img/generic.svg', function(objects) {
-					  	var obj = fabric.util.groupSVGElements(objects);
-					 	obj.scaleToWidth(1*_scalebuffer);
-					  	obj.scaleToHeight(1*_scalebuffer);
-					  		
-						obj.left = getReferenceById(ag_objectID).position.x*_scalebuffer;
-						obj.top = getReferenceById(ag_objectID).position.z*_scalebuffer;
-
-						obj.angle = Math.atan2(getReferenceById(ag_objectID).direction.z, getReferenceById(ag_objectID).direction.x) * 180 / Math.PI;
-						obj.fill = colors_buffer[4][vision_mode_buffer];
-						obj.AGObjectID = ag_objectID;
-						obj.isObject = true;
-						obj.name = getReferenceById(ag_objectID).name;
-						obj.type = 'generic';
-					  	room_canvas_buffer.add(obj).renderAll();
-						obj.originX = 'center';
-						obj.originY = 'center';
-						obj.hasRotatingPoint = false; 
-						obj.lockScalingX = true;
-						obj.lockScalingY = true;
-						obj.setControlsVisibility({
-						    mt: false, // middle top disable
-						    mb: false, // midle bottom
-						    ml: false, // middle left
-						    mr: false, // I think you get it
-							tr: false,
-							tl: false,
-							br: false,
-							bl: false,
-						});
-						room_canvas_buffer.add(obj).renderAll();
-					
-					});
-			}	
-		}
-		
-		// $('#fabobject_'+ag_objectID).focus();
-// 		console.log('#fabobject_'+ag_objectID);
-		// $('#input_obj_name').focus()
-//
-// 		$('#fabric_objects_container').append('<details id = "fabobject_"'+ ag_objectID + '" obj_id = "'+ ag_objectID +'"></details>');
-//
-		
-	}
-	
-	
+    /**
+     * Draws a small dot for debugging
+     * @param The x-position of the Dot
+	 * @param The y-position of the Dot
+     */
 	drawDot(x_, y_){
 		let dot = new fabric.Circle({
 			left:   x_*this._scale - 1,
@@ -1009,45 +755,122 @@ export class IAudiCom {
 		this._room_canvas.renderAll();
 	}
 	
+    /**
+     * Deletes all debugging dots
+     */
 	deleteDots(){
 		let room_buffer = this._room_canvas;
 		let canvas_objects = room_buffer.getObjects();
 		canvas_objects.forEach(function(item, i){
 			if(item.type == 'debug'){
-					room_buffer.remove(item);
+				room_buffer.remove(item);
 			}
 		});	
 		room_buffer.renderAll();
 	}
 	
-	
-	
-	renderScene(){
-		//console.log(getReferenceById(g_gamearea.ID));
-		
-		
-		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
-		this._AGroomID = rooms_buffer[0].ID;
-		
-		
-		//prefill the inputs with Room name and Dimensions
-		$('#input_room_name').val(getReferenceById(this._AGroomID).name);
-		$('#tb_canvas_dim_width').val(getReferenceById(this._AGroomID).size.x);
-		$('#tb_canvas_dim_height').val(getReferenceById(this._AGroomID).size.z);
-		
-		
-		this.renderAGRoom(this._AGroomID);
-
-		let this_buffer = this;
-		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
-			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
- 				this_buffer.renderAGObject(element.ID);
-				//console.log(element.tag + ": " + element.position.x)
-				//console.log(element.position.x);
-			});
-		}
+    /**
+     * Returns the fabric-object linked to an AGObject-ID
+     * @param The ID of the AGOBject
+	 * @return The fabric-object
+     */
+	getFabricObject(ag_objectID){
+		let canvas_objects = this._room_canvas.getObjects();
+		let fab_buffer;
+		canvas_objects.forEach(function(item, i) {
+			if(item.isObject && item.AGObjectID == ag_objectID){
+				fab_buffer = item;
+			}
+		});	
+		return fab_buffer;
 	}
 	
+    /**
+     * Toggles the visual representation of the editor for higher contrasts
+     */
+	toggleVisionMode(){
+		this._vision_mode = +!this._vision_mode;
+		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
+		this._room_canvas.getObjects().forEach(object=>{
+			switch(object.type){
+				case 'grid_line':
+					object.set("stroke", this._colors[1][this._vision_mode]);
+					break;
+
+				case 'player':
+					object.set("fill", this._colors[2][this._vision_mode]);
+					object.set("fill", this._colors[2][this._vision_mode]);
+					break;
+
+				case 'enemy':
+					object.set("fill", this._colors[3][this._vision_mode]);
+					break;
+				case 'portal':
+				case 'wall':
+				case 'exit':
+					object.set("fill", this._colors[4][this._vision_mode]);			
+					break;
+				case 'path_dot':
+					
+					object.set("fill", this._colors[6][this._vision_mode]);
+					break;
+				case 'path_line':
+					object.set("fill", this._colors[7][this._vision_mode]);
+					object.set("stroke", this._colors[7][this._vision_mode]);
+					break;
+				default:
+					object.set("fill", this._colors[8][this._vision_mode]);
+			}
+		});
+		this._room_canvas.renderAll();
+		//toggle contrast class for css
+		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help,#overlay_text_box" ).toggleClass("contrast");
+	}
+	
+    /**
+     * Zooms the scenes in or out
+     * @param the zoom factor
+     */
+	zoomCanvas(zoom_factor){
+		//min : 0.5
+		//max : 1.5
+		
+		let room_buffer = this._room_canvas;
+		room_buffer.setZoom(room_buffer.getZoom()*zoom_factor);
+		//set stroke-width to 1 again
+		let canvas_objects = room_buffer.getObjects();
+		canvas_objects.forEach(function(item, i) {
+			if(item.type == 'grid_line'){
+				item.strokeWidth = (1/room_buffer.getZoom())*1;
+			}
+		});
+		
+		//console.log(room_buffer.width*room_buffer.getZoom());
+		let width_buffer = room_buffer.width*room_buffer.getZoom();
+		let height_buffer = room_buffer.height*room_buffer.getZoom();
+		let middle_width_buffer = $('#ui_part_middle').width();
+		
+		if(width_buffer < middle_width_buffer){
+			$('#canvas_container').width(room_buffer.width*room_buffer.getZoom());
+			$('#canvas_container').addClass('canvas_no_overflow_x');
+		}else{
+			$('#canvas_container').removeClass('canvas_no_overflow_x');
+		}
+		
+		if(height_buffer < 600){
+			$('#canvas_container').addClass('canvas_no_overflow_y');
+			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
+			$('#canvas_container').height(room_buffer.height*room_buffer.getZoom());
+		}else{
+			$('#canvas_container').height(600);
+			$('#canvas_container').removeClass('canvas_no_overflow_y');
+		}
+		room_buffer.renderAll();
+	}
+	
+    /**
+     * Disables key scrolling
+     */
 	disableKeyScrolling(){
 		window.addEventListener("keydown", function(e) {
 		    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
@@ -1055,16 +878,20 @@ export class IAudiCom {
 		    }
 		}, false);
 	}
+	
+    /**
+     * Enables key scrolling
+     */
 	enableKeyScrolling(){
 		window.removeEventListener("keydown");
 	}
 	
-	
-	
-	
+    /**
+     * Loads a level
+     * @param the level ID
+     */
 	loadLevel(lvl_){
 		let that = this;
-		
 		//restore default view
 		$('#ui_part_right_inner').hide();
 		$('#input_room_name').val(getReferenceById(that._AGroomID).name);
@@ -1076,8 +903,6 @@ export class IAudiCom {
 		$('#ui_part_right_inner').show();	
 		$('#fabric_objects_container').empty();
 		
-		
-		
 		play(getReferenceById(g_gamearea.ID), false);
 		this._room_canvas.clear();		
 		g_references.clear();
@@ -1085,38 +910,26 @@ export class IAudiCom {
 		//stop level clear everything
 		
 		switch(lvl_){
-			
-			case 1:
-				
+			case 1:	
 				var controls = new AGNavigation(38, 40, 37, 39, 67);
 				var controlsID = getIdByReference(controls);
-				
 				that._controlsID = controlsID;
-				
 				setControl(getReferenceById(controlsID));
-				
-				
 				var room_1 = new AGRoom("First Room", new Vector3(17.0, 2.5, 7.0), new Vector3(10.0, 0.0, 10.0));
 				var room_1ID = getIdByReference(room_1);
 				g_gamearea.addRoom(room_1ID);
-
 				var player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var exit = new AGRoomExit("Exit", new Vector3(15.5, 1.0, 6.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var skeleton_1 = new AGObject("Skeleton", new Vector3(5.5, 1, 1.5), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 				var skeleton_2 = new AGObject("Skeleton", new Vector3(10, 1, 3), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 				var skeleton_3 = new AGObject("Skeleton", new Vector3(13.5, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
-
 				var wallHorizontal = new AGObject("WallHorizontal", new Vector3(7, 1.0, 4.5), new Vector3(1, 0, 0), new Vector3(14, 1, 1));
 				var wallVertical = new AGObject("WallVertical", new Vector3(13.5, 1.0, 6), new Vector3(1, 0, 0), new Vector3(1, 1, 2));
-
-
 				var waterfall = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
 				var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 				var monster_1 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 				var monster_2 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
 				var monster_3 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
-
-
 				var playerID = getIdByReference(player);
 				var exitID = getIdByReference(exit);
 				var skeleton_1ID = getIdByReference(skeleton_1);
@@ -1127,100 +940,76 @@ export class IAudiCom {
 				var monster_1ID = getIdByReference(monster_1);
 				var monster_2ID = getIdByReference(monster_2);
 				var monster_3ID = getIdByReference(monster_3);
-
 				var wallHorizontalID = getIdByReference(wallHorizontal);
 				var wallVerticalID = getIdByReference(wallVertical);
-
 				g_gamearea.listener = getIdByReference(player);
 				getReferenceById(room_1ID).listener = getIdByReference(player);
-
+				
 				//Add ObjectsToRoom
 				getReferenceById(room_1ID).add(playerID);
 				getReferenceById(room_1ID).add(exitID);
-
 				getReferenceById(room_1ID).add(skeleton_1ID);
 				getReferenceById(room_1ID).add(skeleton_2ID);
 				getReferenceById(room_1ID).add(skeleton_3ID);
-
 				getReferenceById(room_1ID).add(wallHorizontalID);
 				getReferenceById(room_1ID).add(wallVerticalID);
 				getReferenceById(wallHorizontalID).tag = "WALL";
 				getReferenceById(wallVerticalID).tag = "WALL";
-
+				
 				//Soundtags
 				getReferenceById(waterfallID).tag = "WATERFALL";
 				getReferenceById(ouchID).tag = "OUCH";
 				getReferenceById(monster_1ID).tag = "MONSTER";
 				getReferenceById(monster_2ID).tag = "MONSTER";
 				getReferenceById(monster_3ID).tag = "MONSTER";
-
+				
 				//Monster 1
 				getReferenceById(skeleton_1ID).setSpeedSkalar(0);
-
 				getReferenceById(skeleton_1ID).destructible = true;
 				getReferenceById(skeleton_1ID).health = 4;
-
 				getReferenceById(skeleton_1ID).addSoundSource(monster_1ID);
 				getReferenceById(skeleton_1ID).tag = "ENEMY";
-
+				
 				//Monster 2
 				getReferenceById(skeleton_2ID).setSpeedSkalar(0);
-
 				getReferenceById(skeleton_2ID).destructible = true;
 				getReferenceById(skeleton_2ID).health = 4;
-
 				getReferenceById(skeleton_2ID).addSoundSource(monster_2ID);
 				getReferenceById(skeleton_2ID).tag = "ENEMY";
-
-
+				
 				//Monster 3
 				getReferenceById(skeleton_3ID).setSpeedSkalar(0);
-
 				getReferenceById(skeleton_3ID).destructible = true;
 				getReferenceById(skeleton_3ID).health = 4;
-
 				getReferenceById(skeleton_3ID).addSoundSource(monster_3ID);
 				getReferenceById(skeleton_3ID).tag = "ENEMY";
-
-
+				
 				//Player Settings
 				getReferenceById(playerID).speed = new Vector3(0.1, 0.0, 0.1);
 				getReferenceById(playerID).hitSound = ouchID;
-
 				getReferenceById(playerID).dangerous = true;
 				getReferenceById(playerID).damage = 1;
 				getReferenceById(playerID).range = 2;
-
-
+				
 				//Exit Sound
 				getReferenceById(exitID).addSoundSource(waterfallID);
-				
-				
 				getReferenceById(room_1ID).live = true;
-				
-				
 				break;
 				
 			case 2:
 				var controls = new AGNavigation(38, 40, -1, -1, 67);
-				var controlsID = getIdByReference(controls);
-				
+				var controlsID = getIdByReference(controls);	
 				that._controlsID = controlsID;
-				
 				setControl(getReferenceById(controlsID));
-				
 				var room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
 				var room_1ID = getIdByReference(room_1);
 				g_gamearea.addRoom(room_1ID);
-
 				var player = new AGPlayer("Player", new Vector3(1, 1.0, 5), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var exit = new AGRoomExit("Exit", new Vector3(18.5, 1.0, 5.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-
 				var skeleton_1 = new AGObject("Skeleton", new Vector3(3.5, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 				var skeleton_2 = new AGObject("Skeleton", new Vector3(11, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 				var skeleton_3 = new AGObject("Skeleton", new Vector3(14.5, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
 				var skeleton_4 = new AGObject("Skeleton", new Vector3(16, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
-
 				var steps = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, room_1ID);
 				var car_1 = new AGSoundSource("Car", "sounds/car.wav", true, 1, room_1ID);
 				var car_2 = new AGSoundSource("Car", "sounds/truck.wav", true, 1, room_1ID);
@@ -1228,29 +1017,24 @@ export class IAudiCom {
 				var car_4 = new AGSoundSource("Car", "sounds/motorcycle.wav", true, 1, room_1ID);
 				var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 				var magic_exit = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, room_1ID);
-
 				var playerID = getIdByReference(player);
 				var exitID = getIdByReference(exit);
-
 				var skeleton_1ID = getIdByReference(skeleton_1);
 				var skeleton_2ID = getIdByReference(skeleton_2);
 				var skeleton_3ID = getIdByReference(skeleton_3);
 				var skeleton_4ID = getIdByReference(skeleton_4);
-
 				var ouchID = getIdByReference(ouch);
 				var car_1ID = getIdByReference(car_1);
 				var car_2ID = getIdByReference(car_2);
 				var car_3ID = getIdByReference(car_3);
 				var car_4ID = getIdByReference(car_4);
 				var magic_exit_ID = getIdByReference(magic_exit);
-
 				g_gamearea.listener = getIdByReference(player);
 				getReferenceById(room_1ID).listener = getIdByReference(player);
 
 				//Add ObjectsToRoom
 				getReferenceById(room_1ID).add(playerID);
 				getReferenceById(room_1ID).add(exitID);
-
 				getReferenceById(room_1ID).add(skeleton_1ID);
 				getReferenceById(room_1ID).add(skeleton_2ID);
 				getReferenceById(room_1ID).add(skeleton_3ID);
@@ -1270,7 +1054,6 @@ export class IAudiCom {
 				getReferenceById(skeleton_1ID).destructible = true;
 				getReferenceById(skeleton_1ID).health = 4;
 				getReferenceById(skeleton_1ID).addRoute(new Vector3(3.5, 1, 9), new Vector3(3.5, 1, 1));
-
 				getReferenceById(skeleton_1ID).addSoundSource(car_1ID);
 				getReferenceById(skeleton_1ID).tag = "ENEMY";
 
@@ -1286,7 +1069,6 @@ export class IAudiCom {
 														new Vector3(7, 1, 4), new Vector3(11, 1, 3), new Vector3(7, 1, 2), new Vector3(11, 1, 1),
 
 				);
-
 				getReferenceById(skeleton_2ID).addSoundSource(car_2ID);
 				getReferenceById(skeleton_2ID).tag = "ENEMY";
 
@@ -1321,23 +1103,16 @@ export class IAudiCom {
 				//Exit Sound
 				getReferenceById(exitID).addSoundSource(magic_exit_ID);
 				getReferenceById(room_1ID).live = true;
-				
-				
-				
 				break;
 				
 			case 3:
-				
 				var controls = new AGNavigation(38, 40, 37, 39, 67);
-				var controlsID = getIdByReference(controls);
-				
+				var controlsID = getIdByReference(controls);	
 				that._controlsID = controlsID;
 				setControl(getReferenceById(controlsID));
-				
 				var room_1 = new AGRoom("First Room", new Vector3(19.0, 2.5, 10.0), new Vector3(10.0, 0.0, 10.0));
 				var room_1ID = getIdByReference(room_1);
 				g_gamearea.addRoom(room_1ID);
-
 				var player = new AGPlayer("Player", new Vector3(18.2, 1.0, 8.5), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var exit = new AGRoomExit("Exit", new Vector3(18.0, 1.0, 5.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				var wallWestSmallRoom = new AGObject("WallSmallRoomWest", new Vector3(13.5, 1.0, 8.0), new Vector3(1, 0, 0), new Vector3(1, 1, 4));
@@ -1365,7 +1140,6 @@ export class IAudiCom {
 				var waterfall_2 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
 				var waterfall_3 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
 				var waterfall_4 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
-
 				var playerID = getIdByReference(player);
 				var exitID = getIdByReference(exit);
 				var wallWestSmallRoomID = getIdByReference(wallWestSmallRoom);
@@ -1389,12 +1163,10 @@ export class IAudiCom {
 				var waterfall_2ID = getIdByReference(waterfall_2);
 				var waterfall_3ID = getIdByReference(waterfall_3);
 				var waterfall_4ID = getIdByReference(waterfall_4);
-
 				var waterFall_1ID = getIdByReference(waterFall_1);
 				var waterFall_2ID = getIdByReference(waterFall_2);
 				var waterFall_3ID = getIdByReference(waterFall_3);
 				var waterFall_4ID = getIdByReference(waterFall_4);
-
 				g_gamearea.listener = getIdByReference(player);
 				getReferenceById(room_1ID).listener = getIdByReference(player);
 
@@ -1417,7 +1189,6 @@ export class IAudiCom {
 				getReferenceById(room_1ID).add(waterFall_2ID);
 				getReferenceById(room_1ID).add(waterFall_3ID);
 				getReferenceById(room_1ID).add(waterFall_4ID);
-
 				getReferenceById(wallWestSmallRoomID).tag = "WALL";
 				getReferenceById(wallNorthSmallRoomID).tag = "WALL";
 				getReferenceById(wallSouthCorridorID).tag = "WALL";
@@ -1475,27 +1246,13 @@ export class IAudiCom {
 				getReferenceById(waterFall_2ID).collidable = false;
 				getReferenceById(waterFall_3ID).collidable = false;
 				getReferenceById(waterFall_4ID).collidable = false;
-
 				getReferenceById(waterFall_1ID).addSoundSource(waterfall_1ID);
 				getReferenceById(waterFall_2ID).addSoundSource(waterfall_2ID);
 				getReferenceById(waterFall_3ID).addSoundSource(waterfall_3ID);
 				getReferenceById(waterFall_4ID).addSoundSource(waterfall_4ID);
-				getReferenceById(room_1ID).live = true;
-				
+				getReferenceById(room_1ID).live = true;	
 				break;
-			
-			
-			
 		}
-		
-		
  		this.renderScene();
-		
-		
-		
 	}
-	
-	
-
-   
 }
