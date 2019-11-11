@@ -4,6 +4,9 @@ import {AGObject} from "./AGObject.js";
 import type {ConditionType} from "./ConditionType.js";
 import {getReferenceById} from "./AGEngine.js";
 
+/**
+ * Class for Conditions that must be fulfilled before an action can take place. (Very WIP)
+ */
 export class AGCondition {
 
     _object:AGObject;

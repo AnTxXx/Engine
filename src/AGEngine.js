@@ -5,10 +5,6 @@ import {AGEventHandler} from "./AGEventHandler.js";
 import {AGNavigation} from "./AGNavigation.js";
 import {Vector3} from "./js/three/Vector3.js";
 import {IAudiCom} from "../ui/js/IAudiCom.js";
-//import * as ResonanceAudio from './js/resonance/resonance-audio.min.js';
-//import * as bla from './js/resonance/resonance-audio.js';
-
-let debug = 0;
 
 export let g_loading:boolean = false;
 export let g_references:Map<number, Object> = new Map();
@@ -30,19 +26,36 @@ export function setIAudiCom(IAC:IAudiCom){
 Game Area in which the audio game is played. It holds all audio game objects.
  */
 
+/**
+ * Creates a new EventHandler and GameArea, mainly for rebuilding the whole scene or creating a new one
+ */
 export function rebuildHandlerGameArea(){
     g_eventHandler = new AGEventHandler();
     g_gamearea = new AGGameArea("Area", new Vector3(30,2.5,10));
 }
 
+/**
+ * Sets the Navigation to be a global variable.
+ * @param controls The AGNavigation controls to be set as global variable.
+ */
 export function setControl(controls:AGNavigation){
     g_controls = controls;
 }
 
+/**
+ * Looks up the reference of the ID in the Reference-ID-Table and returns the object under the saved ID.
+ * @param id ID where you want to retrieve the respective object from.
+ * @returns {void|Object} Return the object or void.
+ */
 export function getReferenceById(id:number):Object{
     return g_references.get(id);
 }
 
+/**
+ * Looks up the ID of the reference in the Reference-ID-Table and returns the saved ID. Every object should have an ID as well which -- again-- should be the same as in the Reference-ID-Table
+ * @param obj Object where you want to retrieve the respective ID from.
+ * @returns {*} Returns the ID (number).
+ */
 export function getIdByReference(obj:Object):number{
     return [...g_references.entries()]
     // $FlowFixMe
@@ -51,6 +64,10 @@ export function getIdByReference(obj:Object):number{
     //return Object.keys(g_references).find(key => g_references[key] === obj);
 }
 
+/**
+ * Public flag that should be set to true if the system loads or rebuilds a level. Disables the automated saving during loading.
+ * @param bool True if the system is in loading state, false if not.
+ */
 export function setLoading(bool:boolean){
     g_loading = bool;
 }

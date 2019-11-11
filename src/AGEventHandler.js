@@ -1,13 +1,14 @@
 // @flow
 
-import {g_references} from "./AGEngine.js";
-import {AGRoom} from "./AGRoom.js";
 import {Event} from "./Event.js";
 import {AGObject} from "./AGObject.js";
-import type {Action, Trigger} from "./EventType.js";
+import type {Trigger} from "./EventType.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_loading} from "./AGEngine.js";
+import {g_history, g_loading, g_references} from "./AGEngine.js";
 
+/**
+ * Eventhandler Class (Very WIP)
+ */
 export class AGEventHandler{
     get ID() {
         return this._ID;
@@ -21,6 +22,10 @@ export class AGEventHandler{
         this._events = value;
     }
 
+    /**
+     * Adds a new event to the Eventlist.
+     * @param event The event to be added to the Eventlist.
+     */
     addEvent(event:Event){
         this._events.push(event);
         if(!g_loading) g_history.ike(this._ID, this.addEvent.name, this.constructor.name, arguments);
@@ -41,6 +46,11 @@ export class AGEventHandler{
         this._events = [];
     }
 
+    /**
+     * Returns the Index of the event.
+     * @param event Event to be queried.
+     * @returns {number} Returns the index of the event.
+     */
     findEventIndex(event:Event):number {
         for(let i = 0; i < this._events.length; i++){
             if(this._events[i].origin === event.origin &&
@@ -67,6 +77,12 @@ export class AGEventHandler{
     }
     */
 
+    /**
+     * Finds and returns events that are connected to a respective AGObject, triggered by a Trigger.
+     * @param object The object the Event is expected to be fired.
+     * @param trigger The trigger that fires the event.
+     * @returns {Array<Event>} Returns an Array of Events that fits the requested AGObject and Trigger.
+     */
     findEventsAfterCall(object:AGObject, trigger:Trigger):Array<Event>{
         let events:Array<Event> = [];
         for(let i = 0; i < this._events.length; i++){
@@ -79,6 +95,11 @@ export class AGEventHandler{
         return events;
     }
 
+    /**
+     * 
+     * @param object
+     * @param trigger
+     */
     call(object:AGObject, trigger:Trigger){
         //console.log("[AGEventHandler] Received Event-Call from " + object.name);
         let events:Array<Event> = this.findEventsAfterCall(object, trigger);
