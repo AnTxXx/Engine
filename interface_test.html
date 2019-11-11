@@ -3,7 +3,6 @@
 <head>
 	<meta charset="utf-8">
 	<title>AudiCom</title>
-	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="ui/css/bootstrap.min.css">
 	<link rel="stylesheet" href="ui/css/bootstrap_ms.css">
@@ -11,22 +10,16 @@
 	<link rel="stylesheet" href="ui/css/jquery-ui.css">
 	<link rel="stylesheet" href="ui/css/style.css?v=1.0">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-	
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-		
+	<![endif]-->	
 	<script src="ui/js/jquery.js"></script>
 	<script src="ui/js/jquery_ui_touch.js"></script>
 	<script src="ui/js/jquery-ui.js"></script>
 	<script src="ui/js/fabric.min.js"></script>	
-	
 	<!--audio-stuff-->
     <script src="lib/js/resonance/resonance-audio.js"></script>
-	
-	
-	
 </head>
 
 <body>
@@ -38,265 +31,197 @@
 			<div id = "mouse_coords_y">Y: <span></span></div>
 		</div><!--mouse_coords-->
 		
-		
 		<div id = "misc_ctrls_box" class = "misc_ctrls">
 			<select id = "level_dropdown">
 			  <option level="1">Level 1</option>
 			  <option level="2">Level 2</option>
 			  <option level="3">Level 3</option>
 			</select>
-			
 			<button id = "btn_help" class = "misc_ctrls"><i class="fas fa-question"></i></button>
 			<div id = "fabric_objects_container" class = "displace"></div><!--fabric_objects_container-->
-			
-			
-			
 		</div><!--misc_box-->
-		
 		
 		<div id = "win_screen">
 			<p><i class="fas fa-trophy"></i>&nbsp;You won the game!&nbsp;<i class="fas fa-trophy"></i></p>
 		</div><!--win_screen-->
 		
-			<div id = "r_cont">
-				<div id = "ui_part_left" class = "ui_part">
-					
-
-					<div id = "color_controls_box" class = "control_box">
-						<button id = "btn_change_vision_mode" class = "btn"><i class="fas fa-brush"></i></button>
-					</div><!--scene_controls_box-->
-					
-					<div id = "scene_controls_box" class = "control_box">
-						<button id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></button>
-						<button id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></button>	
-						
-					</div><!--scene_controls_box-->
-					
-					
-					<div class = "control_box">
-						<button id = "btn_new_scene" class = "btn"><i class="fas fa-star-of-life"></i></button>
-					</div><!--scene_controls_box-->
-		    	
-					<div id = "canvas_controls_box" class = "control_box">
-						<button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>		
-						<button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		
-					</div><!--scene_controls_box-->
-					
-					
-				</div><!--ui_left-->
+		<div id = "r_cont">
 			
-				<div id = "ui_part_middle" class = "ui_part">
-					
-					<div id = "ui_controls">
-						
-						<div tabindex="0" id = "sb_object_enemy" type = "enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
-							<i class="fas fa-skull"></i>
-						</div><!--sb_object-->
-					
-						<div tabindex="0" id = "sb_object_generic" type = "generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
-							<i class="fas fa-circle"></i>
-						</div><!--sb_object-->
-            	
-						<div tabindex="0" id = "sb_object_wall" type = "wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
-							<i class="fas fa-map"></i>
-						</div><!--sb_object-->
-					
-						<div tabindex="0" id = "sb_object_portal" type = "portal" class = "sb_object bg_portal sb_object_structure" obj_type = "portal">
-							<i class="fas fa-dungeon"></i>
-						</div><!--sb_object-->
-					
-						<div tabindex="0" id = "sb_object_exit" type = "exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
-							<i class="fas fa-sign-out-alt"></i>
-						</div><!--sb_object-->
-						
-					</div><!--ui_controls-->
-					
-					<div id = "canvas_container">
-						<canvas id = "c" class = "canvas_room" width="1800" height = "1600"></canvas>
-					</div><!--canvasContainer-->
-					
-					
-					
-					<div id = "ui_part_right" class = "ui_part ui_part_right_expanded">
+			<div id = "ui_part_left" class = "ui_part">
+				<div id = "color_controls_box" class = "control_box">
+					<button id = "btn_change_vision_mode" class = "btn"><i class="fas fa-brush"></i></button>
+				</div><!--scene_controls_box-->
+				<div id = "scene_controls_box" class = "control_box">
+					<button id = "btn_start_scene" class = "btn"><i class="fas fa-play"></i></button>
+					<button id = "btn_stop_scene" class = "btn"><i class="fas fa-stop"></i></button>		
+				</div><!--scene_controls_box-->	
+				<div class = "control_box">
+					<button id = "btn_new_scene" class = "btn"><i class="fas fa-star-of-life"></i></button>
+				</div><!--scene_controls_box-->
+		   	
+				<div id = "canvas_controls_box" class = "control_box">
+					<button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>		
+					<button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		
+				</div><!--scene_controls_box-->
+			</div><!--ui_left-->
+			
+			<div id = "ui_part_middle" class = "ui_part">	
+				<div id = "ui_controls">
+					<div tabindex="0" id = "sb_object_enemy" type = "enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
+						<i class="fas fa-skull"></i>
+					</div><!--sb_object-->
+					<div tabindex="0" id = "sb_object_generic" type = "generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
+						<i class="fas fa-circle"></i>
+					</div><!--sb_object-->
+					<div tabindex="0" id = "sb_object_wall" type = "wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
+						<i class="fas fa-map"></i>
+					</div><!--sb_object-->
+					<div tabindex="0" id = "sb_object_portal" type = "portal" class = "sb_object bg_portal sb_object_structure" obj_type = "portal">
+						<i class="fas fa-dungeon"></i>
+					</div><!--sb_object-->
+					<div tabindex="0" id = "sb_object_exit" type = "exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
+						<i class="fas fa-sign-out-alt"></i>
+					</div><!--sb_object-->	
+				</div><!--ui_controls-->
 				
-				
-				
-				
-						<!--<div id = "btn_collapse"><i class="fas fa-arrows-alt-h"></i></div>-->
-				
-						<div id = "ui_part_right_inner">
-							
-							
-							
-							<div class = "ui_box ui_box_room ui_box_special">
-								<input id = "input_room_name" placeholder="Room name" maxlength="100" type="text" name="input_room_name" value="">
-							</div><!--ui_box-->
-							<div id = "canvas_dim_box" class = "ui_box ui_box_room ui_box_special">
-								
-								
-									Room-Size (Work in Progress):<br>
-									<input id = "tb_canvas_dim_width" class = "tb_canvas_dim" placeholder="w (m)" maxlength="100" type="text" name="tb_canvas_dim_width" value="">
-									<span>X</span>
-									<input id = "tb_canvas_dim_height" class = "tb_canvas_dim" placeholder="h (m)" maxlength="100" type="text" name="tb_canvas_dim_height" value="">
-									<button id = "btn_set_dim" class = "btn"><i class="fas fa-check"></i></button>
-								
-								
-							</div><!--ui_box-->
-							
-							
-					
-							<div class = "ui_box ui_box_special ui_box_general" style = "margin-top:0">
-								
-								<span id = "id_" style = "margin-top:-5px">ID: <span></span> /</span>
-								
-								<span id = "coord_x">X: <span></span> /</span>
-								<span id = "coord_y">Y: <span></span></span>
-								<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
-								<br>
-								
-								X: <input id = "input_obj_x" class = "input_position" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:10px">
-								Y: <input id = "input_obj_y" class = "input_position" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
-								
-								
-							</div><!--ui_box-->
-							
-							<div class = "ui_box ui_box_special ui_box_player">
-								
-								
-								
-								<span class = "key_label">Forward:</span><button id = "btn_key_up" class = "btn btn_key_assign" keycode = "38">&uarr;</button><br>
-								<span class = "key_label">Backwards:</span><button id = "btn_key_down" class = "btn btn_key_assign" keycode = "40">&darr;</button><br>
-								<span class = "key_label">Turn left:</span><button id = "btn_key_left" class = "btn btn_key_assign" keycode = "37">&larr;</button><br>
-								<span class = "key_label">Turn right:</span><button id = "btn_key_right" class = "btn btn_key_assign" keycode = "39">&rarr;</button><br>
-								<span class = "key_label">Action:</span><button id = "btn_key_interact" class = "btn btn_key_assign">C</button>
-								
-							</div><!--ui_box-->
-							
-							
-							
-							<!-- <div class = "ui_box">
-								Größe:<br>
-								<input id = "input_obj_width" class = "" placeholder="Width" maxlength="100" type="text" name="" value="1">
-								<span>X</span>
-								<input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
-							</div> -->
-					
-							<div class = "ui_box">
-								<!--Position:<br>
-								<input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
-								<span>X</span>
-								<input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">-->
-							</div><!--ui-box-->
-					
-							<!-- <div class = "ui_box">
-								Obj-Rotation:<br>
-								<input id = "input_obj_rot" placeholder="0" maxlength="100" type="text" name="input_obj_name" value=""> &deg;
-							</div>-->
-								
-								
-							<div id = "ui_box_wall_size" class = "ui_box_special ui_box ui_box_wall" style="margin-top:-5px">
-								
-								W: <input id = "input_obj_w" placeholder="Width" maxlength="10" type="number" step = "0.1" min = "0.1" name="input_obj_w" value="" style ="margin-right:10px"><br>
-								H: <input id = "input_obj_h" placeholder="Height" maxlength="10" type="number" step = "0.1" min = "0.1" name="input_obj_h" value="">
-							</div><!--ui_box_wall-->
-					
-					
-							<div id = "ui_box_enemy_path" class = "ui_box_special ui_box ui_box_enemy">
-								Path:
-								<br>
-								
-								<button id = "btn_add_to_path" class = "btn"><i class="fas fa-thumbtack"></i></button>
-								
-								<button id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></button>
-								<button id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></button>
-							</div><!--ui_box-->
-							<div id = "ui_box_gegner_speed" class = "ui_box_special ui_box ui_box_enemy">
-								Speed:<br>
-								<button id = "btn_speed_0" class = "btn bnt_speed" speed = '0'>0</button>
-								<button id = "btn_speed_1" class = "btn bnt_speed" speed = '1'>1</button>
-								<button id = "btn_speed_2" class = "btn bnt_speed" speed = '2'>2</button>
-								<button id = "btn_speed_3" class = "btn bnt_speed" speed = '3'>3</button>
-								<button id = "btn_speed_4" class = "btn bnt_speed" speed = '4'>4</button>
-						
-						
-							</div><!--ui_box-->
-					
-							<div id = "ui_box_link_portals" class = "ui_box_special ui_box ui_box_portal">
-								Link Portals:<br>
-								
-								<select id = "portal_dropdown">
-								  <option value="">None</option>
-								</select>
-								
-								
-								
-								<br>
-								<button id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></button>
-								<button id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></button>
-							</div><!--ui_box-->
-					
-					
-							<div id = "ui_sound_box" class = "ui_box_special ui_box ui_box_general">
-								Sound Sources:
-								<br>
-								<button id = "btn_sound_none" class = "btn btn_ss" ss = 'none'><i class="fas fa-times"></i></button>
-								<button id = "btn_sound_steps" class = "btn btn_ss" ss = 'steps'><i class="fas fa-shoe-prints"></i></button>
-								<button id = "btn_sound_magic" class = "btn btn_ss" ss = 'magic'><i class="fas fa-magic"></i></button>
-								<button id = "btn_sound_waterfall" class = "btn btn_ss" ss = 'waterfall'><i class="fas fa-water"></i></button>
-								<button id = "btn_sound_ouch" class = "btn btn_ss" ss = 'ouch'><i class="fas fa-band-aid"></i></button>
-								<button id = "btn_sound_car" class = "btn btn_ss" ss = 'car'><i class="fas fa-truck-pickup"></i></button>
-								<button id = "btn_sound_truck" class = "btn btn_ss" ss = 'truck'><i class="fas fa-truck"></i></button>
-								<button id = "btn_sound_motorcycle" class = "btn btn_ss" ss = 'motorcycle'><i class="fas fa-motorcycle"></i></button>
-								<button id = "btn_sound_monster" class = "btn btn_ss" ss = 'monster'><i class="fas fa-dragon"></i></button>
-							</div><!--ui_box-->
-					
-					
-							<div id = "ui_colli_box" class = "ui_box_special ui_box ui_box_general">
-								<input id = "cb_colli" type="checkbox" name="collidable" value="collidable" checked> Collidable<br>
-							</div><!--ui_box-->
-					
-					
-							<div id = "ui_delete_box" class = "ui_box_special ui_box">
-						
-								<button id = "btn_delete_object" class = "btn">
-									<i class="fas fa-trash-alt"></i>
-								</button>
-								
-							</div>
-					
-							<div id = "path_coords">
-					
-							</div><!--path_coords-->
-					
-							<div id = "audio_src_box" class = "ui_box">
-								<!-- Audio-Source:<br>
-								<input id = "input_audio_src" placeholder="Dateipfad" maxlength="100" type="text" name="input_audio_src" value="">
-								<div id = "btn_set_file" class = "btn"><i class="fas fa-upload"></i></div>
-								<br>
-								for testing:<br>
-								/Users/michaelh/Desktop/audios/urbi.mp3 <br>
-								/Users/michaelh/Desktop/audios/steps.wav<br>
-								/Users/michaelh/Desktop/audios/ouch.mp3
+				<div id = "canvas_container">
+					<canvas id = "c" class = "canvas_room" width="1800" height = "1600"></canvas>
+				</div><!--canvasContainer-->
 
-								<br>
-								<input type="file" name="audio_src_input" id="file" accept="audio/*">
-								<label for="file"><i class="fas fa-volume-up"></i></label> : -->
-							</div><!--audio_src_box-->
-					
-						</div><!--ui_part_right_inner-->
+				<div id = "ui_part_right" class = "ui_part ui_part_right_expanded">
+					<!--<div id = "btn_collapse"><i class="fas fa-arrows-alt-h"></i></div>-->
+					<div id = "ui_part_right_inner">
+						<div class = "ui_box ui_box_room ui_box_special">
+							<input id = "input_room_name" placeholder="Room name" maxlength="100" type="text" name="input_room_name" value="">
+						</div><!--ui_box-->
+						<div id = "canvas_dim_box" class = "ui_box ui_box_room ui_box_special">
+								Room-Size (Work in Progress):<br>
+								<input id = "tb_canvas_dim_width" class = "tb_canvas_dim" placeholder="w (m)" maxlength="100" type="text" name="tb_canvas_dim_width" value="">
+								<span>X</span>
+								<input id = "tb_canvas_dim_height" class = "tb_canvas_dim" placeholder="h (m)" maxlength="100" type="text" name="tb_canvas_dim_height" value="">
+								<button id = "btn_set_dim" class = "btn"><i class="fas fa-check"></i></button>
+						</div><!--ui_box-->
+						
+						<div class = "ui_box ui_box_special ui_box_general" style = "margin-top:0">
+							<span id = "id_" style = "margin-top:-5px">ID: <span></span> /</span>
+							<span id = "coord_x">X: <span></span> /</span>
+							<span id = "coord_y">Y: <span></span></span>
+							<input id = "input_obj_name" placeholder="Name" maxlength="100" type="text" name="input_obj_name" value="">
+							<br>
+							X: <input id = "input_obj_x" class = "input_position" placeholder="X" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_X" value="" style ="margin-right:5px">
+							Y: <input id = "input_obj_y" class = "input_position" placeholder="Y" maxlength="10" type="number" step = "0.1" min = "0" name="input_obj_Y" value="">
+						</div><!--ui_box-->
+						
+						<div class = "ui_box ui_box_special ui_box_player">	
+							<span class = "key_label">Forward:</span><button id = "btn_key_up" class = "btn btn_key_assign" keycode = "38">&uarr;</button><br>
+							<span class = "key_label">Backwards:</span><button id = "btn_key_down" class = "btn btn_key_assign" keycode = "40">&darr;</button><br>
+							<span class = "key_label">Turn left:</span><button id = "btn_key_left" class = "btn btn_key_assign" keycode = "37">&larr;</button><br>
+							<span class = "key_label">Turn right:</span><button id = "btn_key_right" class = "btn btn_key_assign" keycode = "39">&rarr;</button><br>
+							<span class = "key_label">Action:</span><button id = "btn_key_interact" class = "btn btn_key_assign">C</button>
+						</div><!--ui_box-->
+
+						<!-- <div class = "ui_box">
+							Größe:<br>
+							<input id = "input_obj_width" class = "" placeholder="Width" maxlength="100" type="text" name="" value="1">
+							<span>X</span>
+							<input id = "input_obj_height" class = "" placeholder="Height" maxlength="100" type="text" name="" value="1">
+						</div> -->
 				
-					</div><!--col-->
-					
-					
+						<div class = "ui_box">
+							<!--Position:<br>
+							<input id = "input_obj_pos_x" class = "" placeholder="X" maxlength="100" type="text" name="" value="">
+							<span>X</span>
+							<input id = "input_obj_pos_y" class = "" placeholder="Y" maxlength="100" type="text" name="" value="">-->
+						</div><!--ui-box-->
+				
+						<!-- <div class = "ui_box">
+							Obj-Rotation:<br>
+							<input id = "input_obj_rot" placeholder="0" maxlength="100" type="text" name="input_obj_name" value=""> &deg;
+						</div>-->
+	
+						<div id = "ui_box_wall_size" class = "ui_box_special ui_box ui_box_wall" style="margin-top:-5px">	
+							W: <input id = "input_obj_w" placeholder="Width" maxlength="10" type="number" step = "0.1" min = "0.1" name="input_obj_w" value="" style ="margin-right:10px"><br>
+							H: <input id = "input_obj_h" placeholder="Height" maxlength="10" type="number" step = "0.1" min = "0.1" name="input_obj_h" value="">
+						</div><!--ui_box_wall-->
+
+						<div id = "ui_box_enemy_path" class = "ui_box_special ui_box ui_box_enemy">
+							Path:
+							<br>
+							<button id = "btn_add_to_path" class = "btn"><i class="fas fa-thumbtack"></i></button>	
+							<button id = "btn_path_rec" class = "btn"><i class="fas fa-circle"></i></button>
+							<button id = "btn_path_delete" class = "btn"><i class="fas fa-times"></i></i></button>
+						</div><!--ui_box-->
+						<div id = "ui_box_gegner_speed" class = "ui_box_special ui_box ui_box_enemy">
+							Speed:<br>
+							<button id = "btn_speed_0" class = "btn bnt_speed" speed = '0'>0</button>
+							<button id = "btn_speed_1" class = "btn bnt_speed" speed = '1'>1</button>
+							<button id = "btn_speed_2" class = "btn bnt_speed" speed = '2'>2</button>
+							<button id = "btn_speed_3" class = "btn bnt_speed" speed = '3'>3</button>
+							<button id = "btn_speed_4" class = "btn bnt_speed" speed = '4'>4</button>
+						</div><!--ui_box-->
+				
+						<div id = "ui_box_link_portals" class = "ui_box_special ui_box ui_box_portal">
+							Link Portals:<br>
+							<select id = "portal_dropdown">
+							  <option value="">None</option>
+							</select>
+							<br>
+							<button id = "btn_path_linkdoors" class = "btn"><i class="fas fa-link"></i></button>
+							<button id = "btn_path_deletedoors" class = "btn"><i class="fas fa-times"></i></i></button>
+						</div><!--ui_box-->
+
+						<div id = "ui_sound_box" class = "ui_box_special ui_box ui_box_general">
+							Sound Sources:
+							<br>
+							<button id = "btn_sound_none" class = "btn btn_ss" ss = 'none'><i class="fas fa-times"></i></button>
+							<button id = "btn_sound_steps" class = "btn btn_ss" ss = 'steps'><i class="fas fa-shoe-prints"></i></button>
+							<button id = "btn_sound_magic" class = "btn btn_ss" ss = 'magic'><i class="fas fa-magic"></i></button>
+							<button id = "btn_sound_waterfall" class = "btn btn_ss" ss = 'waterfall'><i class="fas fa-water"></i></button>
+							<button id = "btn_sound_ouch" class = "btn btn_ss" ss = 'ouch'><i class="fas fa-band-aid"></i></button>
+							<button id = "btn_sound_car" class = "btn btn_ss" ss = 'car'><i class="fas fa-truck-pickup"></i></button>
+							<button id = "btn_sound_truck" class = "btn btn_ss" ss = 'truck'><i class="fas fa-truck"></i></button>
+							<button id = "btn_sound_motorcycle" class = "btn btn_ss" ss = 'motorcycle'><i class="fas fa-motorcycle"></i></button>
+							<button id = "btn_sound_monster" class = "btn btn_ss" ss = 'monster'><i class="fas fa-dragon"></i></button>
+						</div><!--ui_box-->
+
+						<div id = "ui_colli_box" class = "ui_box_special ui_box ui_box_general">
+							<input id = "cb_colli" type="checkbox" name="collidable" value="collidable" checked> Collidable<br>
+						</div><!--ui_box-->
+				
+						<div id = "ui_delete_box" class = "ui_box_special ui_box">
+							<button id = "btn_delete_object" class = "btn">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						</div>
+				
+						<div id = "path_coords">
+				
+						</div><!--path_coords-->
+				
+						<div id = "audio_src_box" class = "ui_box">
+							<!-- Audio-Source:<br>
+							<input id = "input_audio_src" placeholder="Dateipfad" maxlength="100" type="text" name="input_audio_src" value="">
+							<div id = "btn_set_file" class = "btn"><i class="fas fa-upload"></i></div>
+							<br>
+							for testing:<br>
+							/Users/michaelh/Desktop/audios/urbi.mp3 <br>
+							/Users/michaelh/Desktop/audios/steps.wav<br>
+							/Users/michaelh/Desktop/audios/ouch.mp3
+							<br>
+							<input type="file" name="audio_src_input" id="file" accept="audio/*">
+							<label for="file"><i class="fas fa-volume-up"></i></label> : -->
+						</div><!--audio_src_box-->
+				
+					</div><!--ui_part_right_inner-->
+			
 				</div><!--col-->
+			</div><!--col-->
 		</div><!--r_cont-->
 		
 		
 		<div id = "overlay">
-			
 			<div id = "overlay_text_box">
 				<div id = "overlay_close_btn"><i class="fas fa-times"></i></div>
-				
 				<p class = "centered bigger">Hallo und willkommen zu unserem Audio Game Editor.</p>
 					<p>Wir haben hier f&uuml;r Dich schon mal ein erstes Testszenario als Demo vorbereitet. Folgende Dinge m&ouml;chten wir Dir auf deinem Abenteuer mitgeben:</p>
 				<ol>
@@ -308,24 +233,14 @@
 					<li>Du kannst (fast) alle Elemente mit der Tab-Taste fokussieren und mit der Enter-Taste auswählen.</li>
 					<li>Falls Dir etwas auff&auml;llt oder du Ideen hast, die Du uns gerne mitteilen m&ouml;chtest; oder auch einfach nur so &uuml;ber Audio Games quatschen magst, kannst Du uns unter <a href = "mailto:hallo@audicom.at">hallo@audicom.at</a> erreichen!</li>
 					<li>Um diese Anleitung zu schließen, drücke die ESC-Taste.</li>
-			
 				</ol>
 				<p class = "centered bigger">Viel Spaß!</p>
-				
-				
 			</div><!--overlay_text_box-->
-			
-			
 		</div><!--overlay-->
-		
 	</div><!--wrapper-->
-	
-	
 	
 	<script type = "module" src="lib/main.js"></script>
 	<script type = "module" src="ui/js/interaction.js"></script>
-	
-	
-	
+
 </body>
 </html>
