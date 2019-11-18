@@ -63,6 +63,7 @@ export class AGSaLo {
     //only works outside of the little firefox world
     async loadFromClipboard(){
         const items = await navigator.clipboard.read();
+        // $FlowFixMe
         const textBlob = await items[0].getType("text/plain");
         const text = await (new Response(textBlob)).text();
         this.rebuild(text);
