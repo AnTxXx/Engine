@@ -972,6 +972,16 @@ jQuery(function($){
 		$('#overlay').fadeIn(200);
 	});
 	
+	//copy level
+	$('#btn_save').click(function(){
+		i_audicom.saveLevelSALO();
+	});
+	
+	//paste level
+	$('#btn_load').click(function(){
+		i_audicom.loadLevelSALO();
+	});
+	
 	//select level
 	$("#level_dropdown").change(function() {		
 		switch(this.value){

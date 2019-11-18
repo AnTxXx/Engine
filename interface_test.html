@@ -60,8 +60,10 @@
 				</div><!--scene_controls_box-->
 		   	
 				<div id = "canvas_controls_box" class = "control_box">
-					<button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>		
-					<button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		
+					<button id = "btn_save" class = "btn"><i class="fas fa-copy"></i></button>
+					<button id = "btn_load" class = "btn"><i class="fas fa-paste"></i></button>
+					<!-- <button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>
+					<button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		 -->
 				</div><!--scene_controls_box-->
 			</div><!--ui_left-->
 			
@@ -70,9 +72,7 @@
 					<div tabindex="0" id = "sb_object_enemy" type = "enemy" class = "sb_object bg_enemy sb_object_creature" obj_type = "enemy">
 						<i class="fas fa-skull"></i>
 					</div><!--sb_object-->
-					<div tabindex="0" id = "sb_object_generic" type = "generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
-						<i class="fas fa-circle"></i>
-					</div><!--sb_object-->
+					
 					<div tabindex="0" id = "sb_object_wall" type = "wall" class = "sb_object bg_wall sb_object_structure" obj_type = "wall">
 						<i class="fas fa-map"></i>
 					</div><!--sb_object-->
@@ -82,6 +82,9 @@
 					<div tabindex="0" id = "sb_object_exit" type = "exit" class = "sb_object bg_exit sb_object_structure" obj_type = "exit">
 						<i class="fas fa-sign-out-alt"></i>
 					</div><!--sb_object-->	
+					<div tabindex="0" id = "sb_object_generic" type = "generic" class = "sb_object bg_generic sb_object_generic" obj_type = "generic">
+						<i class="fas fa-circle"></i>
+					</div><!--sb_object-->
 				</div><!--ui_controls-->
 				
 				<div id = "canvas_container">
@@ -171,7 +174,7 @@
 						</div><!--ui_box-->
 
 						<div id = "ui_sound_box" class = "ui_box_special ui_box ui_box_general">
-							Sound Sources:
+							Sounds:
 							<br>
 							<button id = "btn_sound_none" class = "btn btn_ss" ss = 'none'><i class="fas fa-times"></i></button>
 							<button id = "btn_sound_steps" class = "btn btn_ss" ss = 'steps'><i class="fas fa-shoe-prints"></i></button>

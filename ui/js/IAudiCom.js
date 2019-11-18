@@ -304,6 +304,7 @@ export class IAudiCom {
 			case 'generic':
 				obj_buffer = new AGObject("Generic", new Vector3((obj_left/this._scale), 1.0, (obj_top/this._scale)), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 				obj_buffer_ID = getIdByReference(obj_buffer);
+				getReferenceById(obj_buffer_ID).collidable = false;
 				getReferenceById(obj_buffer_ID).tag = "GENERIC";
 		}
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
@@ -885,6 +886,16 @@ export class IAudiCom {
 	enableKeyScrolling(){
 		window.removeEventListener("keydown");
 	}
+	
+	
+	loadLevelSALO(){
+		g_history.loadLevel();
+		this.renderScene();
+	}
+	saveLevelSALO(){
+		g_history.saveLevel();
+	}
+	
 	
     /**
      * Loads a level
