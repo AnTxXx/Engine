@@ -369,6 +369,12 @@ jQuery(function($){
 				}	
 			}
 		}
+		
+		if(event.keyCode == '8'){ //46 for entf/del
+			if($(document.activeElement).hasClass('faboject_')){
+				alert('delete this!');
+			}else if()
+		}
 	});
 	
 	$(document).on("focusout", ".faboject_", function(){	

@@ -686,10 +686,10 @@ export class IAudiCom {
 	 * @param The name of the soundsource
      */
 	addSoundSource(ag_object_id, ss_name){
-		ag_object_buffer.clearSoundSources();	
-		let ag_object_buffer = getReferenceById(ag_object_id)
+		let ag_object_buffer = getReferenceById(ag_object_id);	
 		let roomID_buffer = getReferenceById(g_gamearea.ID).AGRooms[0].ID;
 		let ss_buffer;
+		ag_object_buffer.clearSoundSources();	
 		
 		switch(ss_name){
 			case 'steps':
