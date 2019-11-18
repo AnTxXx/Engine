@@ -60,15 +60,41 @@ export class AGSaLo {
         if(document.body) document.body.removeChild(dummy);
     }
 
-    rebuild(){
+    //only works outside of the little firefox world
+    async loadFromClipboard(){
+        const items = await navigator.clipboard.read();
+        const textBlob = await items[0].getType("text/plain");
+        const text = await (new Response(textBlob)).text();
+        this.rebuild(text);
+    }
+
+    loadLevel(){
+        this.loadFromClipboard().then();
+    }
+
+    saveLevel(){
+        this.saveValueToClipboard(JSON.stringify(this._savedObjects));
+    }
+
+    rebuild(lvl?:string){
         console.log(g_history);
         g_references.clear();
         Counter.reset();
 
-        //TODO JSON HIN UND HER
-        const serialized = JSON.stringify(this._savedObjects);
 
-        const parsedObject = JSON.parse(serialized);
+        //TODO JSON HIN UND HER
+
+        let serialized:string;
+        let parsedObject:Object;
+
+        if(!lvl){
+            serialized = JSON.stringify(this._savedObjects);
+            parsedObject = JSON.parse(serialized);
+        } else {
+            parsedObject = JSON.parse(lvl);
+        }
+
+
 
         this.printLevel();
         //console.log(parsedObject);
@@ -111,7 +137,7 @@ export class AGSaLo {
         }
         setLoading(false);
         //console.log(g_history);
-        this.saveValueToClipboard(JSON.stringify(this._savedObjects));
+        this.saveLevel();
     }
 }
 

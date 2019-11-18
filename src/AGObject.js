@@ -7,12 +7,19 @@ import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
 import type {Trigger} from "./EventType.js";
-import {g_history, g_eventHandler, g_references, g_loading} from "./AGEngine.js";
+import {g_history, g_eventHandler, g_references, g_loading, g_gamearea} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 
 let debug = 0;
 
 export class AGObject {
+    get auditoryPointer(): boolean {
+        return this._auditoryPointer;
+    }
+
+    set auditoryPointer(value: boolean) {
+        this._auditoryPointer = value;
+    }
     get route():Array<Vector3> {
         return this._route;
     }
@@ -228,6 +235,8 @@ export class AGObject {
     _damage:number;
     _dangerous:boolean;
 
+    _auditoryPointer:boolean;
+
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
      * @param routes The routes as rest parameter.
@@ -264,7 +273,6 @@ export class AGObject {
      * @param position Position (Vector3) of the object.
      * @param direction Direction (Vector3) of the object.
      * @param size Size (Vector3) of the object.
-     * @param room (optional but recommended) THe room the AGObject is in.
      */
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
         this._ID = Counter.next();
@@ -288,6 +296,7 @@ export class AGObject {
         this._inventory = new AGInventory(this);
         this._destructible = false;
         this._health = 1;
+        this._auditoryPointer = false;
     }
 
     _AGSoundSources:Array<AGSoundSource>;
@@ -325,10 +334,23 @@ export class AGObject {
             this._AGSoundSources[i].play();
         }
 
+        if(this._auditoryPointer){
+            if((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)){
+                //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
+                this._currentRoute = ++this._currentRoute % this._route.length;
+                //console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
+            } else {
+                //console.log(this._route[this._currentRoute].clone().sub(this.position.clone()).normalize());
+                if(g_gamearea.listener.position.distanceTo(this._position) < 2.0) move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
+            }
+        }
+
         //moves the object depending on speed and direction if the object is movable and a route is given.
         if(this._movable){
+            //this._auditoryPointer && (this.position.distanceTo(g_gamearea.listener.position) < 0.2)
+
             //TODO: 0.2 suboptimal ... should be speed * deltaTime or something like that
-            if(this.position.distanceTo(this._route[this._currentRoute]) < 0.2){
+            if((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)){
                 //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
                 this._currentRoute = ++this._currentRoute % this._route.length;
                 //console.log("Object " + this.name + " takes now route to: " + this._route[this._currentRoute]);
