@@ -70,10 +70,12 @@ export class AGSaLo {
     }
 
     loadLevel(){
+        console.log("[AGSaLo] Loading Level from Clipboard.");
         this.loadFromClipboard().then();
     }
 
     saveLevel(){
+        console.log("[AGSaLo] Saving Level to Clipboard.");
         this.saveValueToClipboard(JSON.stringify(this._savedObjects));
     }
 
@@ -92,14 +94,16 @@ export class AGSaLo {
             serialized = JSON.stringify(this._savedObjects);
             parsedObject = JSON.parse(serialized);
         } else {
+            console.log("[AGSaLo] Reading ...");
             parsedObject = JSON.parse(lvl);
+            console.log("[AGSaLo] Parsing complete!");
         }
 
 
 
-        this.printLevel();
+        //this.printLevel();
         //console.log(parsedObject);
-
+        console.log("[AGSaLo] Start rebuilding. Loading Toggle has been ENABLED.");
         setLoading(true);
         for(let i = 0; i < parsedObject.length; i++){
             let obj = parsedObject[i];
@@ -112,6 +116,7 @@ export class AGSaLo {
             //prepare args (e.g., x,y,z -> Vector3)
             for(let i = 0; i < args.length; i++){
                 let type = typeof args[i];
+                console.log("[AGSaLo] Conversion from Object to Vector3. Type: " + type.toString() + " arg " + args[i].toString());
                 if(type === "object" && args[i].x != null && args[i].y != null && args[i].z != null){
                     args[i] = new Vector3(args[i].x, args[i].y, args[i].z);
                 }
@@ -137,8 +142,10 @@ export class AGSaLo {
             }*/
         }
         setLoading(false);
+        console.log("[AGSaLo] Rebuilding finished! Loading Toggle has been DISABLED.");
+
         //console.log(g_history);
-        this.saveLevel();
+        //this.saveLevel();
     }
 }
 
