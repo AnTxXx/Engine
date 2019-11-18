@@ -80,7 +80,7 @@ export class AGSaLo {
     }
 
     rebuild(lvl?:string){
-        console.log(g_history);
+        //console.log(g_history);
         g_references.clear();
         Counter.reset();
 
@@ -88,14 +88,14 @@ export class AGSaLo {
         //TODO JSON HIN UND HER
 
         let serialized:string;
-        let parsedObject:Object;
+        //let parsedObject:Object;
 
         if(!lvl){
             serialized = JSON.stringify(this._savedObjects);
-            parsedObject = JSON.parse(serialized);
+            this._savedObjects = JSON.parse(serialized);
         } else {
             console.log("[AGSaLo] Reading ...");
-            parsedObject = JSON.parse(lvl);
+            this._savedObjects = JSON.parse(lvl);
             console.log("[AGSaLo] Parsing complete!");
         }
 
@@ -105,8 +105,8 @@ export class AGSaLo {
         //console.log(parsedObject);
         console.log("[AGSaLo] Start rebuilding. Loading Toggle has been ENABLED.");
         setLoading(true);
-        for(let i = 0; i < parsedObject.length; i++){
-            let obj = parsedObject[i];
+        for(let i = 0; i < this._savedObjects.length; i++){
+            let obj = this._savedObjects[i];
             //this._savedObjects
 
             //console.log(prepareForStringify(this._savedObjects));
@@ -116,7 +116,7 @@ export class AGSaLo {
             //prepare args (e.g., x,y,z -> Vector3)
             for(let i = 0; i < args.length; i++){
                 let type = typeof args[i];
-                console.log("[AGSaLo] Conversion from Object to Vector3. Type: " + type.toString() + " arg " + args[i].toString());
+                //console.log("[AGSaLo] Conversion from Object to Vector3. Type: " + type.toString() + " arg " + args[i].toString());
                 if(type === "object" && args[i].x != null && args[i].y != null && args[i].z != null){
                     args[i] = new Vector3(args[i].x, args[i].y, args[i].z);
                 }
@@ -143,7 +143,7 @@ export class AGSaLo {
         }
         setLoading(false);
         console.log("[AGSaLo] Rebuilding finished! Loading Toggle has been DISABLED.");
-
+        console.log(this._savedObjects);
         //console.log(g_history);
         //this.saveLevel();
     }
