@@ -11,7 +11,11 @@ const actionVals = Object.freeze({
     MOVE: 'MOVE',
     ACTIVATE: 'ACTIVATE',
     DEACTIVATE: 'DEACTIVATE',
+    WINGAME: 'WINGAME',
 })
+
+//TODO Create Trigger for WINGAME
+//TODO Create "Trigger" for Amount of Items reached
 
 export type Trigger = $Values<typeof triggerVals>;
 export type Action = $Values<typeof actionVals>;

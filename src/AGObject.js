@@ -18,9 +18,11 @@ export class AGObject {
     }
 
     set auditoryPointer(value: boolean) {
+        // $FlowFixMe
         if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'auditoryPointer').set.name, this.constructor.name, arguments);
         this._auditoryPointer = value;
     }
+
     get route():Array<Vector3> {
         return this._route;
     }

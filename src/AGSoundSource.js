@@ -77,20 +77,40 @@ export class AGSoundSource
         this._tag = value;
     }
 
-    /*constructor(name, pos:Vector3, dir:Vector3) {
-        super(name, pos, dir);
-    }*/
-
-    _name:string;
-    file:Object;
-
     get name(): string {
         return this._name;
     }
 
     set name(value: string) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'name').set.name, this.constructor.name, arguments);
         this._name = value;
     }
+
+    get maxDistance(): number {
+        return this._maxDistance;
+    }
+
+    set maxDistance(value: number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'maxDistance').set.name, this.constructor.name, arguments);
+        this._maxDistance = value;
+        if(this.source) this.source.setMaxDistance(this._maxDistance);
+    }
+
+    get volume(): number {
+        return this._volume;
+    }
+
+    set volume(value: number) {
+        // $FlowFixMe
+        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
+        this._volume = value;
+        if(this.source) this.source.volume(this._volume);
+    }
+
+    _name:string;
+    file:Object;
 
     _looping:boolean;
     interval:number;
@@ -106,6 +126,9 @@ export class AGSoundSource
     _object:AGObject;
 
     _room:AGRoom;
+
+    _maxDistance:number;
+    _volume:number;
 
     // $FlowFixMe
     audioContext;

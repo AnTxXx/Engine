@@ -20,40 +20,50 @@ import {g_IAudiCom} from "./AGEngine.js";
 import {setIAudiCom} from "./AGEngine.js";
 
 
-let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 67);
+let controls:AGNavigation = new AGNavigation(-1, -1, 37, 39, 67);
 let controlsID:number = getIdByReference(controls);
 setControl(getReferenceById(controlsID));
 
 //let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
 //let areaID:number = getIdByReference(g_gamearea);
 
-let room_1 = new AGRoom("First Room", new Vector3(17.0, 2.5, 7.0), new Vector3(10.0, 0.0, 10.0));
+let room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 
 let player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
 
-let wall1 = new AGObject("Wand oben 1", new Vector3(6.3, 1.0, 0.6), new Vector3(1, 0, 0), new Vector3(4.8, 1, 1.3));
-let wall2 = new AGObject("Wand oben 2", new Vector3(8.2, 1.0, 2.5), new Vector3(1, 0, 0), new Vector3(1, 1, 2.6));
-let wall3 = new AGPortal("Wand oben 3", new Vector3(12.8, 1.0, 0.2), new Vector3(1, 0, 0), new Vector3(8.2, 1, 0.5));
-let wall4 = new AGObject("Wand seitlich rechts", new Vector3(16.4, 1.0, 3.6), new Vector3(1, 0, 0), new Vector3(1, 1, 6.2));
-let wall5 = new AGObject("Wand unten 3", new Vector3(14.4, 1.0, 6.5), new Vector3(1, 0, 0), new Vector3(3, 1, 0.5));
-let wall6 = new AGObject("Wand unten 2", new Vector3(12.5, 1.0, 3.7), new Vector3(1, 0, 0), new Vector3(1, 1, 4.1));
-let wall7 = new AGObject("Wand unten 1", new Vector3(8.5, 1.0, 6.2), new Vector3(1, 0, 0), new Vector3(8.9, 1, 1.0));
+let wall1 = new AGObject("Wand unten", new Vector3(14, 1.0, 6.7), new Vector3(1, 0, 0), new Vector3(12, 1, 0.5));
+let wall2 = new AGObject("Wand links", new Vector3(4.5, 1.0, 6.4), new Vector3(1, 0, 0), new Vector3(0.5, 1, 5));
+let wall3 = new AGObject("Wand oben", new Vector3(10.66, 1.0, 3.7), new Vector3(1, 0, 0), new Vector3(12.8, 1, 0.5));
 let waterfall_1 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
-let fee = new AGObject("Fee", new Vector3(5.0, 1, 3.0), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
+let waterfall_2 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
+let enemy1 = new AGObject("Gegner 1", new Vector3(6.3, 1.0, 2.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
+let enemy2 = new AGObject("Gegner 2", new Vector3(12.9, 1.0, 0.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
+let enemy3 = new AGObject("Gegner 3", new Vector3(12.3, 1.0, 4.6), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
+let enemy4 = new AGObject("Gegner 4", new Vector3(12.9, 1.0, 8.9), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
+let enemy1_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
+let enemy2_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
+let enemy3_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
+let enemy4_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
+
 
 
 let wall1_ID = wall1.ID;
 let wall2_ID = wall2.ID;
 let wall3_ID = wall3.ID;
-let wall4_ID = wall4.ID;
-let wall5_ID = wall5.ID;
-let wall6_ID = wall6.ID;
-let wall7_ID = wall7.ID;
 let waterfall1_ID = waterfall_1.ID;
-let fee_ID = fee.ID;
+let waterfall2_ID = waterfall_2.ID;
+let enemy1_ID = enemy1.ID;
+let enemy2_ID = enemy2.ID;
+let enemy3_ID = enemy3.ID;
+let enemy4_ID = enemy4.ID;
+
+let enemy1_ss_ID = enemy1_ss.ID;
+let enemy2_ss_ID = enemy2_ss.ID;
+let enemy3_ss_ID = enemy3_ss.ID;
+let enemy4_ss_ID = enemy4_ss.ID;
 
 let ouchID = getIdByReference(ouch);
 let playerID = getIdByReference(player);
@@ -66,47 +76,89 @@ getReferenceById(room_1ID).add(playerID);
 getReferenceById(room_1ID).add(wall1_ID);
 getReferenceById(room_1ID).add(wall2_ID);
 getReferenceById(room_1ID).add(wall3_ID);
-getReferenceById(room_1ID).add(wall4_ID);
-getReferenceById(room_1ID).add(wall5_ID);
-getReferenceById(room_1ID).add(wall6_ID);
-getReferenceById(room_1ID).add(wall7_ID);
-getReferenceById(room_1ID).add(fee_ID);
+
+getReferenceById(room_1ID).add(enemy1_ID);
+getReferenceById(room_1ID).add(enemy2_ID);
+getReferenceById(room_1ID).add(enemy3_ID);
+getReferenceById(room_1ID).add(enemy4_ID);
 
 getReferenceById(waterfall1_ID).tag = "WATERFALL";
 getReferenceById(wall1_ID).tag = "WALL";
 getReferenceById(wall2_ID).tag = "WALL";
 getReferenceById(wall3_ID).tag = "WALL";
-getReferenceById(wall4_ID).tag = "WALL";
-getReferenceById(wall5_ID).tag = "WALL";
-getReferenceById(wall6_ID).tag = "WALL";
-getReferenceById(wall7_ID).tag = "WALL";
-getReferenceById(fee_ID).tag = "ENEMY";
 
+getReferenceById(enemy1_ID).tag = "ENEMY";
+getReferenceById(enemy2_ID).tag = "ENEMY";
+getReferenceById(enemy3_ID).tag = "ENEMY";
+getReferenceById(enemy4_ID).tag = "ENEMY";
+
+//getReferenceById(playerID).tag = "ENEMY";
 
 //Player Settings
-getReferenceById(playerID).speed = new Vector3(0.1, 0.0, 0.1);
+getReferenceById(playerID).setSpeedSkalar(1);
 getReferenceById(playerID).hitSound = ouchID;
+getReferenceById(playerID).movable = true;
 
 getReferenceById(playerID).dangerous = true;
 getReferenceById(playerID).damage = 1;
-getReferenceById(playerID).range = 2;
+getReferenceById(playerID).range = 4;
 
+getReferenceById(playerID).addRoute(
+    new Vector3(2.16, 1, 6.07), new Vector3(2.22, 1, 1.28),
+    new Vector3(6.33, 1, 0.73), new Vector3(12.89, 1, 2.82),
+    new Vector3(17.67, 1, 0.84), new Vector3(18.38, 1, 4.8),
+    new Vector3(13.02, 1, 5.93), new Vector3(7.29, 1, 5.15),
+    new Vector3(5.87, 1, 6.78), new Vector3(8.89, 1, 8.53),
+    new Vector3(12.42, 1, 7.42), new Vector3(18.8, 1, 8.49),
+    new Vector3(18.84, 1, 10.02), new Vector3(1.96, 1, 9.95));
 
-//Fee
-getReferenceById(fee_ID).setSpeedSkalar(3);
-getReferenceById(fee_ID).movable = true;
-getReferenceById(fee_ID).auditoryPointer = true;
-getReferenceById(fee_ID).destructible = false;
-getReferenceById(fee_ID).collidable = false;
-getReferenceById(fee_ID).health = 4;
-getReferenceById(fee_ID).addRoute(new Vector3(5, 1, 3), new Vector3(6.7, 1, 4.8),
-    new Vector3(11.42, 1, 4.84), new Vector3(9.33, 1, 2.71),
-    new Vector3(11.17, 1, 0.95), new Vector3(15.4, 1, 0.93),
-    new Vector3(13.55, 1, 3.11), new Vector3(15.27, 1, 4.78),
-    new Vector3(14.38, 1, 5.51));
+//Enemy Settings
+getReferenceById(enemy1_ID).destructible = true;
+getReferenceById(enemy1_ID).health = 1;
+getReferenceById(enemy1_ID).movable = false;
+getReferenceById(enemy1_ID).collidable = true;
+getReferenceById(enemy1_ID).addSoundSource(enemy1_ss_ID);
 
-getReferenceById(fee_ID).addSoundSource(waterfall1_ID);
-getReferenceById(fee_ID).tag = "ENEMY";
+//Enemy Settings
+getReferenceById(enemy2_ID).destructible = true;
+getReferenceById(enemy2_ID).health = 1;
+getReferenceById(enemy2_ID).movable = false;
+getReferenceById(enemy2_ID).collidable = true;
+getReferenceById(enemy2_ID).addSoundSource(enemy2_ss_ID);
+
+//Enemy Settings
+getReferenceById(enemy3_ID).destructible = true;
+getReferenceById(enemy3_ID).health = 1;
+getReferenceById(enemy3_ID).movable = false;
+getReferenceById(enemy3_ID).collidable = true;
+getReferenceById(enemy3_ID).addSoundSource(enemy3_ss_ID);
+
+//Enemy Settings
+getReferenceById(enemy4_ID).destructible = true;
+getReferenceById(enemy4_ID).health = 1;
+getReferenceById(enemy4_ID).movable = false;
+getReferenceById(enemy4_ID).collidable = true;
+getReferenceById(enemy4_ID).addSoundSource(enemy4_ss_ID);
+
+let coin_1:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin1_ID:number = coin_1.ID;
+getReferenceById(enemy1_ID).inventory.addItem(coin1_ID);
+g_eventHandler.addEvent(new Event(enemy1_ID, "ONDEATH", "MOVE", playerID, coin_1, 1));
+
+let coin_2:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin2_ID:number = coin_2.ID;
+getReferenceById(enemy2_ID).inventory.addItem(coin2_ID);
+g_eventHandler.addEvent(new Event(enemy2_ID, "ONDEATH", "MOVE", playerID, coin_2, 1));
+
+let coin_3:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin3_ID:number = coin_3.ID;
+getReferenceById(enemy3_ID).inventory.addItem(coin3_ID);
+g_eventHandler.addEvent(new Event(enemy3_ID, "ONDEATH", "MOVE", playerID, coin_3, 1));
+
+let coin_4:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin4_ID:number = coin_4.ID;
+getReferenceById(enemy4_ID).inventory.addItem(coin4_ID);
+g_eventHandler.addEvent(new Event(enemy4_ID, "ONDEATH", "MOVE", playerID, coin_4, 1));
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);

@@ -989,13 +989,15 @@ jQuery(function($){
 		switch(this.value){
 			case 'Level 1':
 				i_audicom.loadLevel(1);
-				
 				break;
-			case 'Level 2':
+			case 'Frogger Demo':
 				i_audicom.loadLevel(2);
 				break;
 			case 'Level 3':
 				i_audicom.loadLevel(3);
+				break;
+			case 'Auditory Pointer Demo':
+				i_audicom.loadLevel(4);
 				break;
 		}
 	});

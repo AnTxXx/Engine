@@ -38,6 +38,7 @@ export class AGPlayer extends AGObject {
      */
 
     draw(timeStamp:Date){
+        super.draw(timeStamp);
         if(g_controls !== undefined) g_controls.draw(this);
     }
 

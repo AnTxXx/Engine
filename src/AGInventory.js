@@ -47,6 +47,16 @@ export class AGInventory{
         console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
     }
 
+    countByname(name:string):number {
+        let count:number = 0;
+        for(let i = 0; i < this._inventory.length; i++){
+            if(this._inventory[i].name.localeCompare(name) === 0){
+                count++;
+            }
+        }
+        return count;
+    }
+
     removeItem(item:AGItem){
         let indexToDelete:number = -1;
         for(let i = 0; i < this._inventory.length; i++){
