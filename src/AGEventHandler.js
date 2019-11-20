@@ -2,9 +2,10 @@
 
 import {Event} from "./Event.js";
 import {AGObject} from "./AGObject.js";
-import type {Trigger} from "./EventType.js";
+import type {Trigger, ConditionObject, Action} from "./EventType.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_loading, g_references} from "./AGEngine.js";
+import {GlobalEvent} from "./GlobalEvent.js";
 
 /**
  * Eventhandler Class (Very WIP)
@@ -37,6 +38,7 @@ export class AGEventHandler{
 
     _ID:number;
     _events:Array<Event>;
+    _globalEvents:Array<GlobalEvent>;
 
     constructor(){
         this._ID = Counter.next();
@@ -44,6 +46,36 @@ export class AGEventHandler{
         if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[AGEventHandler] Creating AGEventHandler object [ID: " + this._ID + "].");
         this._events = [];
+    }
+
+    evaluateGlobalEvents(){
+        for(let i = 0; i < this._globalEvents.length; i++){
+            this.evaluateGlobalEvent(this._globalEvents[i]);
+        }
+    }
+
+    addGlobalEvent(object:number, conditionObject:ConditionObject, funcName:string, funcArgs:Array<any>, value:Object, action:Action){
+        if(!g_loading) g_history.ike(this._ID, this.addGlobalEvent.name, this.constructor.name, arguments);
+        let f:Function;
+        switch(conditionObject){
+            case "INVENTORY":
+                f = g_history.getFunction("AGInventory", funcName);
+                break;
+        }
+        this._globalEvents.push(new GlobalEvent(object, conditionObject, f, funcArgs, value, action));
+    }
+
+    evaluateGlobalEvent(event:GlobalEvent):boolean{
+        switch(event.conditionObject){
+            case "INVENTORY":
+                if(event.object.inventory){
+                    if(event.funcOfConditionObject.apply(event.object, event.funcArgs) === value){
+                        console.log("HERE WE ARE");
+                    }
+                }
+                break;
+        }
+
     }
 
     /**

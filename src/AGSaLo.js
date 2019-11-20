@@ -14,6 +14,8 @@ import {AGRoomExit} from "./AGRoomExit.js";
 import {AGObject} from "./AGObject.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {AGPortal} from "./AGPortal.js";
+import {GlobalEvent} from "./GlobalEvent.js";
+import {Event} from "./Event.js";
 
 
 //import {clone} from "./js/Lodash/core.js"
@@ -33,7 +35,7 @@ export class AGSaLo {
     constructor(){
         this._savedObjects = [];
         this._classes = [];
-        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype);
+        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype, Event.prototype, GlobalEvent.prototype);
     }
 
     ike(objID:number, func:string, fclass:string, args:Array<Object>){
@@ -128,7 +130,7 @@ export class AGSaLo {
                 //console.log(constructor);
                 let newObject = Reflect.construct(constructor, args);
             } else {
-                let applyFunc:Function = getFunction(obj._fclass, obj._func, this._classes);
+                let applyFunc:Function = this.getFunction(obj._fclass, obj._func);
                 
                 if(applyFunc) applyFunc.apply(getReferenceById(obj._objID), args)
             }
@@ -147,37 +149,39 @@ export class AGSaLo {
         //console.log(g_history);
         //this.saveLevel();
     }
-}
 
-function getFunction(classname:string, funct:string, obj:Array<Function>):?Function{
-    let returnFunc:Function = null;
-    obj.forEach(function (item) {
-        if(item.constructor.name === classname){
-            //console.log(classname + " " + item.constructor.name);
-            if(funct.indexOf('set ') === 0){
-                if(Object.getOwnPropertyDescriptor(item, funct.substring(4))){
-                    // $FlowFixMe
-                    returnFunc = Object.getOwnPropertyDescriptor(item, funct.substring(4)).set;
+    getFunction(classname:string, funct:string):?Function{
+        let returnFunc:Function = null;
+        this._classes.forEach(function (item) {
+            if(item.constructor.name === classname){
+                //console.log(classname + " " + item.constructor.name);
+                if(funct.indexOf('set ') === 0){
+                    if(Object.getOwnPropertyDescriptor(item, funct.substring(4))){
+                        // $FlowFixMe
+                        returnFunc = Object.getOwnPropertyDescriptor(item, funct.substring(4)).set;
+                    } else {
+                        // $FlowFixMe
+                        returnFunc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(item), funct.substring(4)).set;
+                    }
                 } else {
-                    // $FlowFixMe
-                    returnFunc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(item), funct.substring(4)).set;
+                    if(Object.getOwnPropertyDescriptor(item, funct)){
+                        // $FlowFixMe
+                        returnFunc = Object.getOwnPropertyDescriptor(item, funct).value;
+                    } else {
+                        // $FlowFixMe
+                        returnFunc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(item), funct).value;
+                    }
                 }
-            } else {
-                if(Object.getOwnPropertyDescriptor(item, funct)){
-                    // $FlowFixMe
-                    returnFunc = Object.getOwnPropertyDescriptor(item, funct).value;
-                } else {
-                    // $FlowFixMe
-                    returnFunc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(item), funct).value;
-                }
+
+                //console.log(returnFunc);
             }
-
-            //console.log(returnFunc);
-        }
-    })
-    return returnFunc;
-    //Object.getOwnPropertyDescriptor(((class) classname).prototype, funct)
+        })
+        return returnFunc;
+        //Object.getOwnPropertyDescriptor(((class) classname).prototype, funct)
+    }
 }
+
+
 
 function getConstructor(classname:string, obj:Array<Function>):?Function{
     let returnFunc = null;

@@ -9,6 +9,7 @@ export class AGItem {
     _description:string;
     _charges:number;
     _ID:number;
+    _type:string;
 
 
     set name(value: string) {
@@ -47,14 +48,24 @@ export class AGItem {
         return this._ID;
     }
 
-    constructor(name: string, description: string, charges: number) {
+    get type(): string {
+        return this._type;
+    }
+
+    set type(value: string) {
+        this._type = value;
+    }
+
+    constructor(name: string, description: string, type: string, charges: number) {
         this._ID = Counter.next();
         g_references.set(this._ID, this);
         console.log("[AGItem] Creating AGItem object [ID: " + this._ID + "]: " + name + ".");
         this._name = name;
         this._description = description;
         this._charges = charges;
+        this._type = type;
 
         if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        this._type = type;
     }
 }

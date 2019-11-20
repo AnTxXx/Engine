@@ -18,6 +18,7 @@ import {AGRoomExit} from "./AGRoomExit.js";
 import {getIdByReference, getReferenceById} from "./AGEngine.js";
 import {g_IAudiCom} from "./AGEngine.js";
 import {setIAudiCom} from "./AGEngine.js";
+import {AGInventory} from "./AGInventory.js";
 
 
 let controls:AGNavigation = new AGNavigation(-1, -1, 37, 39, 67);
@@ -140,25 +141,27 @@ getReferenceById(enemy4_ID).movable = false;
 getReferenceById(enemy4_ID).collidable = true;
 getReferenceById(enemy4_ID).addSoundSource(enemy4_ss_ID);
 
-let coin_1:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin_1:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin",1);
 let coin1_ID:number = coin_1.ID;
 getReferenceById(enemy1_ID).inventory.addItem(coin1_ID);
 g_eventHandler.addEvent(new Event(enemy1_ID, "ONDEATH", "MOVE", playerID, coin_1, 1));
 
-let coin_2:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin_2:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin",1);
 let coin2_ID:number = coin_2.ID;
 getReferenceById(enemy2_ID).inventory.addItem(coin2_ID);
 g_eventHandler.addEvent(new Event(enemy2_ID, "ONDEATH", "MOVE", playerID, coin_2, 1));
 
-let coin_3:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin_3:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze","coin", 1);
 let coin3_ID:number = coin_3.ID;
 getReferenceById(enemy3_ID).inventory.addItem(coin3_ID);
 g_eventHandler.addEvent(new Event(enemy3_ID, "ONDEATH", "MOVE", playerID, coin_3, 1));
 
-let coin_4:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", 1);
+let coin_4:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin", 1);
 let coin4_ID:number = coin_4.ID;
 getReferenceById(enemy4_ID).inventory.addItem(coin4_ID);
 g_eventHandler.addEvent(new Event(enemy4_ID, "ONDEATH", "MOVE", playerID, coin_4, 1));
+
+g_eventHandler.addGlobalEvent(playerID, "INVENTORY", "countByType", "coin", 4, "WINGAME");
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);

@@ -90,6 +90,7 @@ function animate(gameArea:AGGameArea) {
 
 //Calling the gameArea for draw (update loop tick)
 function draw(gameArea:AGGameArea) {
+    g_eventHandler.evaluateGlobalEvents();
     gameArea.draw();
 }
 
