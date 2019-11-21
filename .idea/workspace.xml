@@ -2,14 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
-      <change afterPath="$PROJECT_DIR$/src/GlobalEvent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEngine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGEventHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEventHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGGameArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGGameArea.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGInventory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGNavigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPortal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGRoomExit.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoomExit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGSaLo.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSaLo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/EventType.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/EventType.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGEngine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGEventHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGEventHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGGameArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGGameArea.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGInventory.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGNavigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGObject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPortal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGRoomExit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGRoomExit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGSaLo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSaLo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EventType.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventType.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GlobalEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/GlobalEvent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -90,6 +112,8 @@
       <workItem from="1573484757939" duration="3873000" />
       <workItem from="1574075767700" duration="6078000" />
       <workItem from="1574240238774" duration="5942000" />
+      <workItem from="1574332750099" duration="921000" />
+      <workItem from="1574334793830" duration="15236000" />
     </task>
     <servers />
   </component>

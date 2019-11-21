@@ -3,7 +3,7 @@ import {Vector3} from "./js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading, g_gamearea} from "./AGEngine.js";
+import {g_history, g_references, g_loading, g_gamearea, g_playing} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 import {hitBoundingBox} from "./AGPhysics.js";
 import {AGObject} from "./AGObject.js";
@@ -73,7 +73,7 @@ export class AGSoundSource
 
     set tag(value: string) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set.name, this.constructor.name, arguments);
         this._tag = value;
     }
 
@@ -83,7 +83,7 @@ export class AGSoundSource
 
     set name(value: string) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'name').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'name').set.name, this.constructor.name, arguments);
         this._name = value;
     }
 
@@ -93,7 +93,7 @@ export class AGSoundSource
 
     set maxDistance(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'maxDistance').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'maxDistance').set.name, this.constructor.name, arguments);
         this._maxDistance = value;
         if(this.source) this.source.setMaxDistance(this._maxDistance);
     }
@@ -104,7 +104,7 @@ export class AGSoundSource
 
     set volume(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
         this._volume = value;
         if(this.source) this.source.volume(this._volume);
     }
@@ -190,7 +190,7 @@ export class AGSoundSource
         this._type = "SOUNDSOURCE";
         this._looping = looping;
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     /**

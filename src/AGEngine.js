@@ -7,19 +7,29 @@ import {Vector3} from "./js/three/Vector3.js";
 import {IAudiCom} from "../ui/js/IAudiCom.js";
 
 export let g_loading:boolean = false;
+export let g_playing:boolean = false;
 export let g_references:Map<number, Object> = new Map();
 export let g_history:AGSaLo = new AGSaLo();
 export let g_eventHandler:AGEventHandler = new AGEventHandler();
 export let g_gamearea:AGGameArea = new AGGameArea("Area", new Vector3(30,2.5,10));
 export let g_controls:AGNavigation;
 
+
 export let g_IAudiCom:IAudiCom;
+
+
 
 export function setIAudiCom(IAC:IAudiCom){
     g_IAudiCom = IAC;
 }
 
+export function setGameArea(gameArea:AGGameArea){
+    if(g_gamearea) g_gamearea = gameArea;
+}
 
+export function setEventHandler(eventHandler:AGEventHandler){
+    if(g_eventHandler) g_eventHandler = eventHandler;
+}
 //let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
 //let AGGameArea = new AGGameArea("main", new Vector3(20,20,0)); //simulate something "static", probably (quite sure :p) not state of the art
 /*
@@ -96,16 +106,23 @@ function draw(gameArea:AGGameArea) {
 
 //Start or Stop the game
 export function play(gameArea:AGGameArea, state:boolean){
-    if(state){
+    g_playing = state;
+    if(g_playing){
+        console.log("[AGEngine] Playing...");
         animate(gameArea);
-        console.debug("[AGEngine] Playing...");
     } else {
-        cancelAnimationFrame(request)
+        console.log("[AGEngine] Stop Playing...");
+        cancelAnimationFrame(request);
         stop(gameArea);
+        unsolveRooms(gameArea);
     }
 }
 
 //Stop game
 function stop(gameArea:AGGameArea){
     gameArea.stop();
+}
+
+function unsolveRooms(gameArea:AGGameArea){
+    gameArea.unsolveRooms();
 }

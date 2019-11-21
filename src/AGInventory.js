@@ -3,7 +3,7 @@
 import {AGItem} from "./AGItem.js";
 import {AGObject} from "./AGObject.js";
 import {g_history} from "./AGEngine.js";
-import {g_references, g_loading} from "./AGEngine.js";
+import {g_references, g_loading, g_playing} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 import {getReferenceById} from "./AGEngine.js";
 
@@ -34,11 +34,11 @@ export class AGInventory{
         this._inventory = value;
     }
 
-    addItem(itemID:number){
+    addItemById(itemID:number){
         let item = getReferenceById(itemID);
         this._inventory.push(item);
-        console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
-        if(!g_loading) g_history.ike(this._ID, this.addItem.name, this.constructor.name, arguments);
+        console.log("[AGInventory] Adding Item [" + item.ID + "] " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addItemById.name, this.constructor.name, arguments);
     }
 
     //can only be triggered through events

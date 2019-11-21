@@ -6,7 +6,7 @@ import type {Type} from "./AGType.js";
 import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading} from "./AGEngine.js";
+import {g_history, g_references, g_loading, g_playing} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 import {g_gamearea} from "./AGEngine.js";
 
@@ -34,7 +34,7 @@ export class AGRoom {
 
     set live(value:boolean) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set.name, this.constructor.name, arguments);
         this._live = value;
     }
     get positionOnGameArea(): Vector3 {
@@ -70,10 +70,20 @@ export class AGRoom {
         return this._listener;
     }
 
+
+    get solved(): boolean {
+        return this._solved;
+    }
+
+    set solved(value: boolean) {
+        console.log("[AGRoom] Room " + this._name + (value ? " solved." : " unsolved."));
+        this._solved = value;
+    }
+
     set listener(valueID: number) {
         this._listener = getReferenceById(valueID);
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set.name, this.constructor.name, arguments);
     }
 
     get resonanceAudioScene() {
@@ -113,6 +123,8 @@ export class AGRoom {
     _live:boolean;
 
     _lastTime:Date;
+
+    _solved:boolean;
 
     /**
      *
@@ -167,7 +179,9 @@ export class AGRoom {
 
         this._AGobjects = [];
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        this._solved = false;
+
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     _AGobjects:Array<AGObject>;
@@ -183,7 +197,7 @@ export class AGRoom {
         }
         let gameObject = getReferenceById(gameObjectID);
         this._AGobjects.push(gameObject);
-        if(!g_loading) g_history.ike(this._ID, this.add.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.add.name, this.constructor.name, arguments);
         gameObject.room = this;
     }
 

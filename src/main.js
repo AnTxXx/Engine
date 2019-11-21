@@ -19,14 +19,12 @@ import {getIdByReference, getReferenceById} from "./AGEngine.js";
 import {g_IAudiCom} from "./AGEngine.js";
 import {setIAudiCom} from "./AGEngine.js";
 import {AGInventory} from "./AGInventory.js";
+import {GlobalEvent} from "./GlobalEvent.js";
 
 
 let controls:AGNavigation = new AGNavigation(-1, -1, 37, 39, 67);
 let controlsID:number = getIdByReference(controls);
 setControl(getReferenceById(controlsID));
-
-//let area:AGGameArea = new AGGameArea("ebene", new Vector3(30,2.5,10));
-//let areaID:number = getIdByReference(g_gamearea);
 
 let room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
 let room_1ID = getIdByReference(room_1);
@@ -48,8 +46,6 @@ let enemy1_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room
 let enemy2_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
 let enemy3_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
 let enemy4_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
-
-
 
 let wall1_ID = wall1.ID;
 let wall2_ID = wall2.ID;
@@ -83,7 +79,6 @@ getReferenceById(room_1ID).add(enemy2_ID);
 getReferenceById(room_1ID).add(enemy3_ID);
 getReferenceById(room_1ID).add(enemy4_ID);
 
-getReferenceById(waterfall1_ID).tag = "WATERFALL";
 getReferenceById(wall1_ID).tag = "WALL";
 getReferenceById(wall2_ID).tag = "WALL";
 getReferenceById(wall3_ID).tag = "WALL";
@@ -96,7 +91,7 @@ getReferenceById(enemy4_ID).tag = "ENEMY";
 //getReferenceById(playerID).tag = "ENEMY";
 
 //Player Settings
-getReferenceById(playerID).setSpeedSkalar(1);
+getReferenceById(playerID).setSpeedSkalar(4);
 getReferenceById(playerID).hitSound = ouchID;
 getReferenceById(playerID).movable = true;
 
@@ -141,27 +136,39 @@ getReferenceById(enemy4_ID).movable = false;
 getReferenceById(enemy4_ID).collidable = true;
 getReferenceById(enemy4_ID).addSoundSource(enemy4_ss_ID);
 
+//Coins
 let coin_1:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin",1);
-let coin1_ID:number = coin_1.ID;
-getReferenceById(enemy1_ID).inventory.addItem(coin1_ID);
-g_eventHandler.addEvent(new Event(enemy1_ID, "ONDEATH", "MOVE", playerID, coin_1, 1));
-
 let coin_2:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin",1);
-let coin2_ID:number = coin_2.ID;
-getReferenceById(enemy2_ID).inventory.addItem(coin2_ID);
-g_eventHandler.addEvent(new Event(enemy2_ID, "ONDEATH", "MOVE", playerID, coin_2, 1));
-
 let coin_3:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze","coin", 1);
-let coin3_ID:number = coin_3.ID;
-getReferenceById(enemy3_ID).inventory.addItem(coin3_ID);
-g_eventHandler.addEvent(new Event(enemy3_ID, "ONDEATH", "MOVE", playerID, coin_3, 1));
-
 let coin_4:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin", 1);
-let coin4_ID:number = coin_4.ID;
-getReferenceById(enemy4_ID).inventory.addItem(coin4_ID);
-g_eventHandler.addEvent(new Event(enemy4_ID, "ONDEATH", "MOVE", playerID, coin_4, 1));
 
-g_eventHandler.addGlobalEvent(playerID, "INVENTORY", "countByType", "coin", 4, "WINGAME");
+let coin1_ID:number = coin_1.ID;
+let coin2_ID:number = coin_2.ID;
+let coin3_ID:number = coin_3.ID;
+let coin4_ID:number = coin_4.ID;
+
+//Events
+let eventEnemy1:Event = new Event(enemy1_ID, "ONDEATH", "MOVE", playerID, coin1_ID, 1);
+let eventEnemy2:Event = new Event(enemy2_ID, "ONDEATH", "MOVE", playerID, coin2_ID, 1);
+let eventEnemy3:Event = new Event(enemy3_ID, "ONDEATH", "MOVE", playerID, coin3_ID, 1);
+let eventEnemy4:Event = new Event(enemy4_ID, "ONDEATH", "MOVE", playerID, coin4_ID, 1);
+
+let eventEnemy1_ID = eventEnemy1.ID;
+let eventEnemy2_ID = eventEnemy2.ID;
+let eventEnemy3_ID = eventEnemy3.ID;
+let eventEnemy4_ID = eventEnemy4.ID;
+
+getReferenceById(enemy1_ID).inventory.addItemById(coin1_ID);
+g_eventHandler.addEvent(eventEnemy1_ID);
+getReferenceById(enemy2_ID).inventory.addItemById(coin2_ID);
+g_eventHandler.addEvent(eventEnemy2_ID);
+getReferenceById(enemy3_ID).inventory.addItemById(coin3_ID);
+g_eventHandler.addEvent(eventEnemy3_ID);
+getReferenceById(enemy4_ID).inventory.addItemById(coin4_ID);
+g_eventHandler.addEvent(eventEnemy4_ID);
+
+let globalEventFinish = new GlobalEvent(playerID, "INVENTORY", "countByType", ["coin"], 4, "WINGAME", 1);
+g_eventHandler.addGlobalEvent(globalEventFinish.ID);
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);

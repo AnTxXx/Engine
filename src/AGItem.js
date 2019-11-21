@@ -2,7 +2,7 @@
 
 import {Counter} from "./IDGenerator.js";
 import {g_history} from "./AGEngine.js";
-import {g_references, g_loading} from "./AGEngine.js";
+import {g_references, g_loading, g_playing} from "./AGEngine.js";
 
 export class AGItem {
     _name:string;
@@ -65,7 +65,7 @@ export class AGItem {
         this._charges = charges;
         this._type = type;
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         this._type = type;
     }
 }

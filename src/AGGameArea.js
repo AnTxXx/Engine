@@ -6,8 +6,8 @@ import {AGRoom} from "./AGRoom.js";
 
 import {AGSaLo} from "./AGSaLo.js";
 import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading} from "./AGEngine.js";
-import {getReferenceById} from "./AGEngine.js";
+import {g_history, g_references, g_loading, g_playing} from "./AGEngine.js";
+import {getReferenceById, setGameArea} from "./AGEngine.js";
 
 let debug:number = 0;
 
@@ -38,7 +38,7 @@ export class AGGameArea {
 
     set listener(value:number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set.name, this.constructor.name, arguments);
         this._listener = getReferenceById(value);
     }
     get AGRooms(): Array<AGRoom> {
@@ -98,12 +98,19 @@ export class AGGameArea {
         // Connect the scene’s binaural output to stereo out.
         this._resonanceAudioScene.output.connect(this._audioContext.destination);
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     addRoom(room:number){
         this.AGRooms.push(getReferenceById(room));
-        if(!g_loading) g_history.ike(this._ID, this.addRoom.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addRoom.name, this.constructor.name, arguments);
+    }
+
+    unsolveRooms(){
+        this._AGRooms.forEach(function(element) {
+            console.log("[AGGameArea] Unsolving Room [ID: " + element.ID + "].");
+            element.solved = false;
+        });
     }
 
     clearRooms(){

@@ -14,8 +14,11 @@ import {AGRoomExit} from "./AGRoomExit.js";
 import {AGObject} from "./AGObject.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {AGPortal} from "./AGPortal.js";
+import {AGInventory} from "./AGInventory.js";
 import {GlobalEvent} from "./GlobalEvent.js";
 import {Event} from "./Event.js";
+import {AGItem} from "./AGItem.js";
+import {setEventHandler, setGameArea} from "./AGEngine.js";
 
 
 //import {clone} from "./js/Lodash/core.js"
@@ -35,7 +38,7 @@ export class AGSaLo {
     constructor(){
         this._savedObjects = [];
         this._classes = [];
-        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype, Event.prototype, GlobalEvent.prototype);
+        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype, Event.prototype, GlobalEvent.prototype, AGInventory.prototype, AGItem.prototype);
     }
 
     ike(objID:number, func:string, fclass:string, args:Array<Object>){
@@ -93,15 +96,13 @@ export class AGSaLo {
         //let parsedObject:Object;
 
         if(!lvl){
-            serialized = JSON.stringify(this._savedObjects);
-            this._savedObjects = JSON.parse(serialized);
+            //serialized = JSON.stringify(this._savedObjects);
+            //this._savedObjects = JSON.parse(serialized);
         } else {
             console.log("[AGSaLo] Reading ...");
             this._savedObjects = JSON.parse(lvl);
             console.log("[AGSaLo] Parsing complete!");
         }
-
-
 
         //this.printLevel();
         //console.log(parsedObject);
@@ -129,11 +130,16 @@ export class AGSaLo {
                 let constructor:Function = getConstructor(obj._func, this._classes);
                 //console.log(constructor);
                 let newObject = Reflect.construct(constructor, args);
+                //TODO: TEMPORARY SOLUTION FOR EVENTHANDLER FIRST (NEEDED TO REFRESH global variables)
+                if(i === 0) setEventHandler(newObject);
+                if(i === 1) setGameArea(newObject);
             } else {
                 let applyFunc:Function = this.getFunction(obj._fclass, obj._func);
                 
                 if(applyFunc) applyFunc.apply(getReferenceById(obj._objID), args)
             }
+
+
 
             //obj.func
             /*if(obj._func.toString().startsWith('class')) {

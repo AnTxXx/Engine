@@ -4,7 +4,7 @@ import {AGObject} from "./AGObject.js";
 import {Counter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
 import {g_references} from "./AGEngine.js";
-import {g_history, g_loading, g_IAudiCom} from "./AGEngine.js";
+import {g_history, g_loading, g_playing, g_IAudiCom} from "./AGEngine.js";
 import {isPointInsideAABB, frbIntersectionPoint} from "./AGPhysics.js";
 import {Plane} from "./js/three/Plane.js";
 
@@ -324,7 +324,7 @@ export class AGNavigation {
 
     set forward(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'forward').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'forward').set.name, this.constructor.name, arguments);
         gForward = value;
     }
 
@@ -334,7 +334,7 @@ export class AGNavigation {
 
     set backward(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'backward').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'backward').set.name, this.constructor.name, arguments);
         gBackward = value;
     }
 
@@ -344,7 +344,7 @@ export class AGNavigation {
 
     set left(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'left').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'left').set.name, this.constructor.name, arguments);
         gLeft = value;
     }
 
@@ -354,7 +354,7 @@ export class AGNavigation {
 
     set right(value: number) {
         // $FlowFixMe
-        if(!g_loading) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'right').set.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'right').set.name, this.constructor.name, arguments);
         gRight = value;
     }
 
@@ -383,7 +383,7 @@ export class AGNavigation {
         gRight = right;
         gInteract = interact;
 
-        if(!g_loading) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         //moveTimestamp = new Date(0);
     }
 

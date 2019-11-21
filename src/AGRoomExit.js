@@ -25,6 +25,7 @@ export class AGRoomExit extends AGObject {
         if(obj.type === "PLAYER"){
             console.log("[AGRoomExit] " + obj.name + " reached exit.");
             this._reached = true;
+            obj.room.solved = true;
             //TODO: Logic to shift player into new room, change audiocontext, etc.
         }
 
