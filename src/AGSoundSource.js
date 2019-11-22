@@ -215,9 +215,14 @@ export class AGSoundSource
      * Starts the sound source. Doesn't care if it's already playing.
      */
     play(){
-        if(!this.playing){
-            this.playing = true;
-            this.audioElement.loop = this.looping;
+        if(!this._playing && this._looping){
+            this._playing = true;
+            this.audioElement.loop = this._looping;
+            this.audioElement.play();
+        }
+
+        if(!this._looping){
+            this.audioElement.currentTime = 0;
             this.audioElement.play();
         }
 
@@ -240,6 +245,10 @@ export class AGSoundSource
        this.playing = false;
        this.audioElement.pause();
        this.audioElement.currentTime = 0;
+    }
+
+    pause(){
+        this.audioElement.pause();
     }
 
     /**

@@ -75,7 +75,7 @@ export class GlobalEvent {
         return this._ID;
     }
 
-    set ID(value) {
+    set ID(value:number) {
         this._ID = value;
     }
 

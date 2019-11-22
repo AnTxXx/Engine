@@ -61,7 +61,7 @@ export class AGEventHandler{
     }
 
     evaluateGlobalEvent(event:GlobalEvent):boolean {
-        console.log(event.funcOfConditionObject.apply(event.object.inventory, event.funcArgs));
+        //console.log(event.funcOfConditionObject.apply(event.object.inventory, event.funcArgs));
         if((event.repeat >= 1 || event.repeat === -1)){
             switch(event.conditionObject){
                 case "INVENTORY":

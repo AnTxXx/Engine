@@ -13,6 +13,40 @@ import {getReferenceById} from "./AGEngine.js";
 let debug = 0;
 
 export class AGObject {
+    get deathSound(): AGSoundSource {
+        return this._deathSound;
+    }
+
+    set deathSound(soundID:number) {
+        let deathSound = getReferenceById(soundID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'deathSound').set.name, this.constructor.name, arguments);
+        if(this._AGSoundSources.indexOf(deathSound) === -1) this._AGSoundSources.push(deathSound);
+        this._deathSound = deathSound;
+    }
+    get interactionSound() {
+        return this._interactionSound;
+    }
+
+    set interactionSound(soundID:number) {
+        let interactionSound = getReferenceById(soundID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'interactionSound').set.name, this.constructor.name, arguments);
+        if(this._AGSoundSources.indexOf(interactionSound) === -1) this._AGSoundSources.push(interactionSound);
+        this._interactionSound = interactionSound;
+    }
+
+    get movementSound() {
+        return this._movementSound;
+    }
+
+    set movementSound(soundID:number) {
+        let movementSound = getReferenceById(soundID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movementSound').set.name, this.constructor.name, arguments);
+        //if(this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
+        this._movementSound = movementSound;
+    }
     get auditoryPointer(): boolean {
         return this._auditoryPointer;
     }
@@ -240,6 +274,10 @@ export class AGObject {
 
     _auditoryPointer:boolean;
 
+    _interactionSound:AGSoundSource;
+    _movementSound:AGSoundSource;
+    _deathSound:AGSoundSource;
+
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
      * @param routes The routes as rest parameter.
@@ -301,6 +339,8 @@ export class AGObject {
         this._health = 1;
         this._auditoryPointer = false;
         this._moveableSign = 1;
+
+        this._movementSoundLastPosition = this.position.clone();
     }
 
     _AGSoundSources:Array<AGSoundSource>;
@@ -328,16 +368,18 @@ export class AGObject {
 
 
     _moveableSign:number;
+    _movementSoundLastPosition:Vector3;
 
     /**
      * the draw-loop
      */
+
     draw(timeStamp:Date){
         //as long as the draw loop is called, the sound should be played.
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
             //console.log(this.position);
             if(this._AGSoundSources[i].update) this._AGSoundSources[i].setPosition(this.position);
-            this._AGSoundSources[i].play();
+            if(this._AGSoundSources[i].looping) this._AGSoundSources[i].play();
         }
 
         if(this._auditoryPointer){
@@ -373,8 +415,20 @@ export class AGObject {
             }
         }
 
+        /*
+        if(this._movementSound){
+            if(this.position.clone().distanceTo(this._movementSoundLastPosition) === 0.0) {
+                this._movementSound.pause();
+            }
+            else if(!this._movementSound.playing) this._movementSound.play();
+
+            this._movementSound.setPosition(this.position.clone());
+        }*/
+
         //What happens if the object dies
         if(this._destructible && this._health <= 0) this.onDeath();
+
+       //this._movementSoundLastPosition = this.position.clone();
     }
 
     /**
@@ -382,7 +436,9 @@ export class AGObject {
      */
     stop(){
         for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
-            this._AGSoundSources[i].stop();
+            if(this._AGSoundSources[i].looping) {
+                this._AGSoundSources[i].stop();
+            }
         }
     }
 
@@ -416,6 +472,7 @@ export class AGObject {
 
     onDeath(){
         g_eventHandler.call(this, "ONDEATH");
+        if(this._deathSound) this._deathSound.play();
         console.log("[AGObject] " + this.name + " got destroyed. Triggering death routines.");
         this.kill();
     }
@@ -428,7 +485,7 @@ export class AGObject {
     }
 
     interact(){
-
+        if(this._interactionSound) this._interactionSound.play();
     }
 
     doDamage(obj:AGObject){

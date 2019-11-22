@@ -38,14 +38,22 @@ let wall2 = new AGObject("Wand links", new Vector3(4.5, 1.0, 6.4), new Vector3(1
 let wall3 = new AGObject("Wand oben", new Vector3(10.66, 1.0, 3.7), new Vector3(1, 0, 0), new Vector3(12.8, 1, 0.5));
 let waterfall_1 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
 let waterfall_2 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
-let enemy1 = new AGObject("Gegner 1", new Vector3(6.3, 1.0, 2.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
-let enemy2 = new AGObject("Gegner 2", new Vector3(12.9, 1.0, 0.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
-let enemy3 = new AGObject("Gegner 3", new Vector3(12.3, 1.0, 4.6), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
-let enemy4 = new AGObject("Gegner 4", new Vector3(12.9, 1.0, 8.9), new Vector3(1, 0, 0), new Vector3(1, 1, 1))
-let enemy1_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
-let enemy2_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
-let enemy3_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
-let enemy4_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID)
+let enemy1 = new AGObject("Gegner 1", new Vector3(6.3, 1.0, 2.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+let enemy2 = new AGObject("Gegner 2", new Vector3(12.9, 1.0, 0.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+let enemy3 = new AGObject("Gegner 3", new Vector3(12.3, 1.0, 4.6), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+let enemy4 = new AGObject("Gegner 4", new Vector3(12.9, 1.0, 8.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+let enemy1_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+let enemy2_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+let enemy3_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+let enemy4_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+
+let arrow = new AGSoundSource("Pfeil", "sounds/arrow.wav", false, 1, room_1ID);
+let monsterDeath_enemy1 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+let monsterDeath_enemy2 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+let monsterDeath_enemy3 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+let monsterDeath_enemy4 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+
+let steps = new AGSoundSource("Schritte", "sounds/steps.wav", true, 1, room_1ID);
 
 let wall1_ID = wall1.ID;
 let wall2_ID = wall2.ID;
@@ -61,6 +69,15 @@ let enemy1_ss_ID = enemy1_ss.ID;
 let enemy2_ss_ID = enemy2_ss.ID;
 let enemy3_ss_ID = enemy3_ss.ID;
 let enemy4_ss_ID = enemy4_ss.ID;
+
+let monsterDeathEnemy1SS_ID = monsterDeath_enemy1.ID;
+let monsterDeathEnemy2SS_ID = monsterDeath_enemy2.ID;
+let monsterDeathEnemy3SS_ID = monsterDeath_enemy3.ID;
+let monsterDeathEnemy4SS_ID = monsterDeath_enemy4.ID;
+
+let stepsID = steps.ID;
+
+let arrow_ID = arrow.ID;
 
 let ouchID = getIdByReference(ouch);
 let playerID = getIdByReference(player);
@@ -99,6 +116,11 @@ getReferenceById(playerID).dangerous = true;
 getReferenceById(playerID).damage = 1;
 getReferenceById(playerID).range = 4;
 
+//getReferenceById(playerID).addSoundSource(stepsID);
+getReferenceById(playerID).interactionSound = arrow_ID;
+//getReferenceById(playerID).movementSound = stepsID;
+
+
 getReferenceById(playerID).addRoute(
     new Vector3(2.16, 1, 6.07), new Vector3(2.22, 1, 1.28),
     new Vector3(6.33, 1, 0.73), new Vector3(12.89, 1, 2.82),
@@ -114,6 +136,7 @@ getReferenceById(enemy1_ID).health = 1;
 getReferenceById(enemy1_ID).movable = false;
 getReferenceById(enemy1_ID).collidable = true;
 getReferenceById(enemy1_ID).addSoundSource(enemy1_ss_ID);
+getReferenceById(enemy1_ID).deathSound = monsterDeathEnemy1SS_ID;
 
 //Enemy Settings
 getReferenceById(enemy2_ID).destructible = true;
@@ -121,6 +144,7 @@ getReferenceById(enemy2_ID).health = 1;
 getReferenceById(enemy2_ID).movable = false;
 getReferenceById(enemy2_ID).collidable = true;
 getReferenceById(enemy2_ID).addSoundSource(enemy2_ss_ID);
+getReferenceById(enemy2_ID).deathSound = monsterDeathEnemy2SS_ID;
 
 //Enemy Settings
 getReferenceById(enemy3_ID).destructible = true;
@@ -128,6 +152,7 @@ getReferenceById(enemy3_ID).health = 1;
 getReferenceById(enemy3_ID).movable = false;
 getReferenceById(enemy3_ID).collidable = true;
 getReferenceById(enemy3_ID).addSoundSource(enemy3_ss_ID);
+getReferenceById(enemy3_ID).deathSound = monsterDeathEnemy3SS_ID;
 
 //Enemy Settings
 getReferenceById(enemy4_ID).destructible = true;
@@ -135,6 +160,7 @@ getReferenceById(enemy4_ID).health = 1;
 getReferenceById(enemy4_ID).movable = false;
 getReferenceById(enemy4_ID).collidable = true;
 getReferenceById(enemy4_ID).addSoundSource(enemy4_ss_ID);
+getReferenceById(enemy4_ID).deathSound = monsterDeathEnemy4SS_ID;
 
 //Coins
 let coin_1:AGItem = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin",1);
