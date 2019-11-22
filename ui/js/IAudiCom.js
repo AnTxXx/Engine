@@ -65,6 +65,15 @@ export class IAudiCom {
 			let canvas_objects = room_buffer.getObjects();
 				
 			canvas_objects.forEach(function(item, i){
+				
+				if(item.type == 'player'){
+					
+					item.LineArray = [];	
+					item.PathArray = [];
+					getReferenceById(item.AGObjectID).clearRoute();
+					getReferenceById(item.AGObjectID).movable = false;	
+					
+				}
 				if(item.isObject && item.type != 'player'){
 					getReferenceById(item.AGObjectID).kill();
 		 		}
@@ -81,7 +90,7 @@ export class IAudiCom {
      */
 	startArea(){
 		this.disableKeyScrolling();
-
+		let that = this;
 		/*lower opacity and disable click for elements*/
 		$('#ui_part_right').addClass('no_click lower_opacity');
 		$('select').addClass('no_click lower_opacity');
@@ -101,7 +110,13 @@ export class IAudiCom {
 		
 		play(getReferenceById(g_gamearea.ID), true);
 		
-		this._interval = setInterval(function(){				
+		this._interval = setInterval(function(){	
+			
+			
+			if(getReferenceById(that._AGroomID).solved){
+				$('#win_screen').fadeIn(100);
+			}
+						
 			canvas_objects.forEach(function(item, i) {
 				if(item.isObject){
 					if(item.type == 'player'){
@@ -127,6 +142,9 @@ export class IAudiCom {
 						//remove "dead" objects [URB WZ HERE]
 						if (getReferenceById(item.AGObjectID).destructible && getReferenceById(item.AGObjectID).health <= 0) {
 							//remove path of dead enemies
+							
+							
+							
 							if (item.type == 'enemy') {
 								item.PathArray.forEach(function (ele) {
 									room_buffer.remove(ele);
@@ -134,11 +152,11 @@ export class IAudiCom {
 							}
 							room_buffer.remove(item);
 						}
-						if (item.type == 'exit') {
-							if (getReferenceById(item.AGObjectID).reached) {
-								$('#win_screen').fadeIn(100);
-							}
-						}
+						// if (item.type == 'exit') {
+// 							if (getReferenceById(item.AGObjectID).reached) {
+// 								$('#win_screen').fadeIn(100);
+// 							}
+// 						}
 						
 						item.left = getReferenceById(item.AGObjectID).position.x * scale_buffer;
 						item.top = getReferenceById(item.AGObjectID).position.z * scale_buffer;
@@ -249,10 +267,28 @@ export class IAudiCom {
 			let scale_buffer = this._scale;
 			let canvas_objects = room_buffer.getObjects();	
 			canvas_objects.forEach(function(item, i){
-				if(item.type != 'grid_line'){	
+				
+				
+				
+				if(item.type != 'grid_line'){
 					let item_right_buffer = item.left + Math.round(item.width * item.scaleX)/2;
 					let item_top_buffer = item.top + Math.round(item.height * item.scaleY)/2;
-					if(item_right_buffer > new_width || item_top_buffer > new_height){	
+					if(item_right_buffer > new_width || item_top_buffer > new_height){
+						if(item.type == 'path_line' || 'path_point'){
+							//Hierher
+							// console.log(item.parentFab);
+//
+//
+//
+// 							item.parentFab.PathArray.forEach(function(ele) {
+// 								room_canvas.remove(ele);
+// 							});
+//
+// 							item.parentFab.PathArray = [];
+// 							item.parentFab.AGObject.clearRoute();
+// 							item.parentFab.AGObject.movable = false;
+						}
+						
 						if(item.type == 'player'){
 							item.left = 0.5*that._scale;
 							item.top = 0.5*that._scale;
@@ -369,7 +405,8 @@ export class IAudiCom {
 								    objectCaching: false,
 									selectable: false,
 									opacity: 0,
-									type: 'path_dot'
+									type: 'path_dot',
+									parentFab: obj
 								});
 								if(obj.PathArray.length >= 1){
 									let last_dot_buffer = obj.PathArray[obj.PathArray.length-1];
@@ -380,7 +417,8 @@ export class IAudiCom {
 										selectable: false,
 										evented: false,
 										opacity: 0,
-										type: 'path_line'
+										type: 'path_line',
+										parentFab: obj
 									});
 									obj.LineArray.push(line);
 									room_canvas_buffer.add(line);
@@ -560,6 +598,8 @@ export class IAudiCom {
 						obj.fill = colors_buffer[2][vision_mode_buffer];
 						obj.AGObjectID = ag_objectID;
 						obj.isObject = true;
+						obj.PathArray = [];
+						obj.LineArray = [];
 						obj.name = getReferenceById(ag_objectID).name;
 						obj.type = 'player';
 					  	room_canvas_buffer.add(obj).renderAll();
@@ -578,6 +618,38 @@ export class IAudiCom {
 							br: false,
 							bl: false,
 						});
+						if(getReferenceById(ag_objectID).route.length > 0){
+							getReferenceById(ag_objectID).route.forEach(function (item, index) {
+								let dot = new fabric.Circle({
+								    left:   (item.x*_scalebuffer)-4,
+								    top:    (item.z*_scalebuffer)-4,
+								    radius: 4,
+								   	fill:   colors_buffer[6][vision_mode_buffer],
+								    objectCaching: false,
+									selectable: false,
+									opacity: 0,
+									type: 'path_dot',
+									parentFab: obj
+								});
+								if(obj.PathArray.length >= 1){
+									let last_dot_buffer = obj.PathArray[obj.PathArray.length-1];
+									let line = new fabric.Line([dot.left + 4, dot.top + 4,last_dot_buffer.left + 4, last_dot_buffer.top + 4],{
+										fill: colors_buffer[7][vision_mode_buffer],
+										stroke: colors_buffer[7][vision_mode_buffer],
+										strokeWidth: 2,
+										selectable: false,
+										evented: false,
+										opacity: 0,
+										type: 'path_line',
+										parentFab: obj
+									});
+									obj.LineArray.push(line);
+									room_canvas_buffer.add(line);
+								}
+								obj.PathArray.push(dot);
+								room_canvas_buffer.add(dot);
+							});
+						}
 						room_canvas_buffer.add(obj).renderAll();
 					});
 					break;
@@ -623,6 +695,9 @@ export class IAudiCom {
      */
 	deleteItem(_fabobject){
 		let room_buffer = this._room_canvas;
+		
+		
+		
 		getReferenceById(_fabobject.AGObjectID).kill();
 	
 		//check if removed element was linked to portal or has path points and remove that stuff

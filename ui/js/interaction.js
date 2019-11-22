@@ -92,6 +92,16 @@ jQuery(function($){
 					loadNavigationForUI($('#btn_key_left'), nav_buffer.left);
 					loadNavigationForUI($('#btn_key_right'), nav_buffer.right);
 					loadNavigationForUI($('#btn_key_interact'), nav_buffer.interact);
+					
+					if(getReferenceById(actFabObj.AGObjectID).movable){
+						$('.show_on_railed').show();
+						$('.hide_on_railed').hide();
+						$("#rb_ctrl_railed").prop("checked", true);
+					}else{
+						$('.show_on_railed').hide();
+						$('.hide_on_railed').show();
+						$("#rb_ctrl_classic").prop("checked", true);
+					}
 				}
 			
 				if(getReferenceById(actFabObj.AGObjectID).collidable){
@@ -384,7 +394,7 @@ jQuery(function($){
 	
 	i_audicom._room_canvas.on('mouse:down', function(e){
 		//add path-point if an enemy is selected and it is recording
-		if(actFabObj.type=='enemy' && actFabObj.isRecording){
+		if(actFabObj.type=='enemy' && actFabObj.isRecording || actFabObj.type=='player' && actFabObj.isRecording){
 			addPathPoint(getMouseCoords(e)[0], getMouseCoords(e)[1]);	
 		}else if(actFabObj.type=='portal' && actFabObj.isRecording){	
 			linkPortalsUI(i_audicom._room_canvas.getActiveObject());
@@ -417,7 +427,7 @@ jQuery(function($){
 	    'selection:created': function(e){
 			outputFabPos();
 			actFabObj = i_audicom._room_canvas.getActiveObject();
-			if(actFabObj.type=='portal' || actFabObj.type=='enemy'){
+			if(actFabObj.type=='portal' || actFabObj.type=='enemy' || actFabObj.type=='player'){
 				if(!actFabObj.isRecording){
 					loadObject(actFabObj.type);
 					if(i_audicom._room_canvas.getActiveObject().PathArray){
@@ -856,12 +866,14 @@ jQuery(function($){
 	});
 	
 	//add position of object to path
-	$('#btn_add_to_path').click(function(){
+	$('.btn_add_to_path').click(function(){
+		
+		console.log(actFabObj);
 		addPathPoint(actFabObj.left, actFabObj.top);
 	});
 	
 	//record path for object
-	$('#btn_path_rec').click(function(){
+	$('.btn_path_rec').click(function(){
 		if(actFabObj.isRecording){
 			let first_dot_buffer = actFabObj.PathArray[0];
 			let last_dot_buffer = actFabObj.PathArray[actFabObj.PathArray.length-1];
@@ -886,7 +898,9 @@ jQuery(function($){
 			$('#ui_controls').removeClass('no_click lower_opacity');
 			$('.misc_ctrls').removeClass('no_click lower_opacity');
 			$('#ui_part_left').removeClass('no_click lower_opacity');
-			$('#btn_add_to_path').removeClass('no_click lower_opacity');
+			$('.btn_add_to_path').removeClass('no_click lower_opacity');
+			$('.rb_ctrls').removeClass('no_click lower_opacity');
+			$('.btn_path_delete').removeClass('no_click lower_opacity');
 			$('.ui_box_special:visible').removeClass('no_click').not('#ui_box_enemy_path').removeClass('lower_opacity');
 		}else{
 			actFabObj.isRecording = true;
@@ -894,13 +908,23 @@ jQuery(function($){
 			$('#ui_controls').addClass('no_click lower_opacity');
 			$('.misc_ctrls').addClass('no_click lower_opacity');
 			$('#ui_part_left').addClass('no_click lower_opacity');
-			$('#btn_add_to_path').addClass('no_click lower_opacity');
-			$('.ui_box_special:visible').not('#ui_box_enemy_path').addClass('no_click').addClass('lower_opacity');	
+			$('.btn_add_to_path').addClass('no_click lower_opacity');
+			$('.rb_ctrls').addClass('no_click lower_opacity');
+			$('.btn_path_delete').addClass('no_click lower_opacity');
+			$('.ui_box_special:visible').not('#ui_box_enemy_path').not('#ui_box_player_railed').addClass('no_click').addClass('lower_opacity');	
+			
+			
+			
+
+			
+			
+			
+			
 		}
 	});
 	
 	//delete path of object
-	$('#btn_path_delete').click(function(){
+	$('.btn_path_delete').click(function(){
 		actFabObj.PathArray.forEach(function(ele) {
 			i_audicom._room_canvas.remove(ele);
 		});
@@ -947,7 +971,7 @@ jQuery(function($){
 	});
 	
 	//delete link to portal of object
-	$('#btn_path_deletedoors').click(function(){
+	$('.btn_path_deletedoors').click(function(){
 		deletePortal();
 	});
 	
@@ -1018,6 +1042,72 @@ jQuery(function($){
 			linkPortalsUI(portal_buffer);
 		}		
 	});
+	
+	
+	
+	$( "input[name='controls']").change(function(){	
+		let controls_value = $("input[name='controls']:checked"). val();
+				
+		switch(controls_value){
+			case 'classic':
+				
+				//hier controls aktivieren wieder
+				console.log(actFabObj);
+				getReferenceById(actFabObj.AGObjectID).movable = false;
+				$('.show_on_railed').fadeOut(100, function(){
+					$('.hide_on_railed').fadeIn(100);
+				});
+				
+				break;
+			case 'railed':
+				
+				
+				//hier controls deaktivieren
+				//check if route
+				//mit moveable
+				getReferenceById(actFabObj.AGObjectID).movable = true;	
+				getReferenceById(i_audicom._controlsID).forward = -1;
+				getReferenceById(i_audicom._controlsID).backward = -1;
+				
+				
+				
+				$('.hide_on_railed').fadeOut(100, function(){
+					$('.show_on_railed').fadeIn(100);
+				});
+
+				break;
+		}	
+	});
+	
+	$( "input[name='atk_range']").change(function(){	
+		let range_rb_value = $("input[name='atk_range']:checked"). val();
+		let range = 0;
+		switch(range_rb_value){			
+		case 'none':
+			range = 0;
+			getReferenceById(i_audicom._AGroomID).dangerous = false;
+			break;	
+		case 'melee':
+			range = 1;
+			getReferenceById(i_audicom._AGroomID).dangerous = true;
+			break;
+		case 'ranged':
+			getReferenceById(i_audicom._AGroomID).dangerous = true;
+			range = 7;
+			break;
+		case 'laser':
+			getReferenceById(i_audicom._AGroomID).dangerous = true;
+			let room_x = getReferenceById(i_audicom._AGroomID).size.x;
+			let room_y = getReferenceById(i_audicom._AGroomID).size.y;
+			range = (room_x > room_y) ? room_x: room_y;
+			break;
+		}
+		getReferenceById(actFabObj.AGObjectID).range = range;
+	});
+	
+	
+	
+
 	
 	/***********************/
 	/***jQuery Events End***/

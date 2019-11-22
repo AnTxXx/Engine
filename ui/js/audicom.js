@@ -121,7 +121,7 @@ jQuery(function($){
 	});
 
 
-	$('#btn_path_delete').click(function(){
+	$('.btn_path_delete').click(function(){
 		actObj.PathArray.forEach(function(ele) {
 			room_canvas.remove(ele);
 		});

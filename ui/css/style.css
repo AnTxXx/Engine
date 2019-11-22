@@ -218,7 +218,9 @@ button:focus{
 }
 
 /*path controls*/
-
+.show_on_railed{
+	display:none;
+}
 #btn_path_rec{
 	
 }
