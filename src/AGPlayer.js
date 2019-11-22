@@ -53,9 +53,20 @@ export class AGPlayer extends AGObject {
     }
 
     interact() {
-        super.interact();
+
         //damage others
+
         if(!this.dangerous) return;
+
+        let timeDiff = new Date() - this._interactionCDTimestamp;
+        //console.log(timeDiff);
+        if(timeDiff < this._interactionCooldown) {
+            console.log("[AGPlayer] " + this.name + "still on Cooldown for " + (this._interactionCooldown - timeDiff) + "ms.");
+            return;
+        }
+
+        super.interact();
+
         let hits:Array<AGObject> = this.room.objectsRayIntersect(this);
         for(let i = 0; i < hits.length; i++){
             //if the object is in hit range
@@ -66,5 +77,6 @@ export class AGPlayer extends AGObject {
             }
         }
 
+        this._interactionCDTimestamp = new Date();
     }
 }

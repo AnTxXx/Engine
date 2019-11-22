@@ -238,6 +238,14 @@ export class AGObject {
     }
 
 
+    get interactionCooldown(): number {
+        return this._interactionCooldown;
+    }
+
+    set interactionCooldown(value: number) {
+        this._interactionCooldown = value;
+    }
+
     _type:Type;
 
     _room:AGRoom;
@@ -248,8 +256,6 @@ export class AGObject {
     _position:Vector3;
     _direction:Vector3;
     _size:Vector3;
-
-    //TODO: deep copy for reset on stop Lodash deepclone??
 
     _speed:Vector3;
     _movable:boolean;
@@ -277,6 +283,9 @@ export class AGObject {
     _interactionSound:AGSoundSource;
     _movementSound:AGSoundSource;
     _deathSound:AGSoundSource;
+
+    _interactionCooldown:number;
+    _interactionCDTimestamp:Date;
 
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
@@ -341,6 +350,7 @@ export class AGObject {
         this._moveableSign = 1;
 
         this._movementSoundLastPosition = this.position.clone();
+        this._interactionCDTimestamp = new Date(0);
     }
 
     _AGSoundSources:Array<AGSoundSource>;
@@ -365,7 +375,6 @@ export class AGObject {
     getSoundSources(){
         return this._AGSoundSources;
     }
-
 
     _moveableSign:number;
     _movementSoundLastPosition:Vector3;

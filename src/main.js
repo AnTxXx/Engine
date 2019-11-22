@@ -118,6 +118,8 @@ getReferenceById(playerID).range = 4;
 
 //getReferenceById(playerID).addSoundSource(stepsID);
 getReferenceById(playerID).interactionSound = arrow_ID;
+getReferenceById(playerID).interactionCooldown = 500;
+
 //getReferenceById(playerID).movementSound = stepsID;
 
 
