@@ -13,7 +13,7 @@ import {getReferenceById} from "./AGEngine.js";
 let debug = 0;
 
 export class AGObject {
-    get deathSound(): AGSoundSource {
+    get deathSound(): ?AGSoundSource {
         return this._deathSound;
     }
 
@@ -24,7 +24,18 @@ export class AGObject {
         if(this._AGSoundSources.indexOf(deathSound) === -1) this._AGSoundSources.push(deathSound);
         this._deathSound = deathSound;
     }
-    get interactionSound() {
+
+    clearDeathSound(){
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearDeathSound.name, this.constructor.name, arguments);
+        let index:number = (this._AGSoundSources.indexOf(this._deathSound));
+        if(this._deathSound && (index !== -1)) {
+            this._AGSoundSources.splice(index, 1);
+            this._deathSound = null;
+        }
+    }
+
+    get interactionSound():?AGSoundSource {
         return this._interactionSound;
     }
 
@@ -34,6 +45,16 @@ export class AGObject {
         if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'interactionSound').set.name, this.constructor.name, arguments);
         if(this._AGSoundSources.indexOf(interactionSound) === -1) this._AGSoundSources.push(interactionSound);
         this._interactionSound = interactionSound;
+    }
+
+    clearInteractionSound(){
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearInteractionSound.name, this.constructor.name, arguments);
+        let index:number = (this._AGSoundSources.indexOf(this._interactionSound));
+        if(this._interactionSound && (index !== -1)) {
+            this._AGSoundSources.splice(index, 1);
+            this._interactionSound = null;
+        }
     }
 
     get movementSound() {
@@ -280,9 +301,9 @@ export class AGObject {
 
     _auditoryPointer:boolean;
 
-    _interactionSound:AGSoundSource;
+    _interactionSound:?AGSoundSource;
     _movementSound:AGSoundSource;
-    _deathSound:AGSoundSource;
+    _deathSound: ?AGSoundSource;
 
     _interactionCooldown:number;
     _interactionCDTimestamp:Date;
