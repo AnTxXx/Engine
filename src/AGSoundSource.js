@@ -105,6 +105,7 @@ export class AGSoundSource
     set volume(value: number) {
         // $FlowFixMe
         if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
+        console.log("[AGSoundSource] Changing volume of AGSoundSource object [ID: " + this._ID + "] to " + value + ".");
         this._volume = value;
         if(this.source) this._gainNode.gain.value = value;
     }
@@ -235,11 +236,11 @@ export class AGSoundSource
         //if(this._object.name.localeCompare("Waterfall3")==0) console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
         if(this._room.betweenPlayerObjectRayIntersect(this._object).length>0){
             this.audioElementSource.disconnect();
-            this.audioElementSource.connect(this. _obstructionFilter);
+            this.audioElementSource.connect(this._gainNode).connect(this. _obstructionFilter);
             this. _obstructionFilter.connect(this.source.input);
         } else {
             this.audioElementSource.disconnect();
-            this.audioElementSource.connect(this.source.input);
+            this.audioElementSource.connect(this._gainNode).connect(this.source.input);
         }
     }
 
