@@ -1410,7 +1410,8 @@ export class IAudiCom {
 				//Fee
 				getReferenceById(fee_ID).setSpeedSkalar(3);
 				getReferenceById(fee_ID).movable = true;
-				getReferenceById(fee_ID).auditoryPointer = true;
+				getReferenceById(fee_ID).runaway = true;
+				getReferenceById(fee_ID).circle = false;
 				getReferenceById(fee_ID).destructible = false;
 				getReferenceById(fee_ID).collidable = false;
 				getReferenceById(fee_ID).health = 4;

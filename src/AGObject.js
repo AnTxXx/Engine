@@ -90,15 +90,6 @@ export class AGObject {
         if(this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
         this._movementSound = movementSound;
     }
-    get auditoryPointer(): boolean {
-        return this._auditoryPointer;
-    }
-
-    set auditoryPointer(value: boolean) {
-        // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'auditoryPointer').set.name, this.constructor.name, arguments);
-        this._auditoryPointer = value;
-    }
 
     get route():Array<Vector3> {
         return this._route;
@@ -259,6 +250,26 @@ export class AGObject {
     }
 
 
+    get runaway() {
+        return this._runaway;
+    }
+
+    set runaway(value:boolean) {
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'runaway').set.name, this.constructor.name, arguments);
+        this._runaway = value;
+    }
+
+    get circle() {
+        return this._circle;
+    }
+
+    set circle(value:boolean) {
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'circle').set.name, this.constructor.name, arguments);
+        this._circle = value;
+    }
+
     get tag(): string {
         return this._tag;
     }
@@ -321,8 +332,6 @@ export class AGObject {
     _damage:number;
     _dangerous:boolean;
 
-    _auditoryPointer:boolean;
-
     _interactionSound:?AGSoundSource;
     _movementSound:AGSoundSource;
     _deathSound: ?AGSoundSource;
@@ -330,6 +339,9 @@ export class AGObject {
 
     _interactionCooldown:number;
     _interactionCDTimestamp:Date;
+
+    _runaway:boolean;
+    _circle:boolean;
 
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
@@ -390,7 +402,6 @@ export class AGObject {
         this._inventory = new AGInventory(this);
         this._destructible = false;
         this._health = 1;
-        this._auditoryPointer = false;
         this._moveableSign = 1;
 
         this._movementSoundLastPosition = this.position.clone();
@@ -399,6 +410,8 @@ export class AGObject {
         this._aliveSound = null;
         this._interactionSound = null;
         this._deathSound = null;
+        this._runaway = false;
+        this._circle = true;
     }
 
     _AGSoundSources:Array<AGSoundSource>;
@@ -427,6 +440,8 @@ export class AGObject {
     _moveableSign:number;
     _movementSoundLastPosition:Vector3;
 
+
+
     /**
      * the draw-loop
      */
@@ -439,6 +454,7 @@ export class AGObject {
             if(this._AGSoundSources[i].looping) this._AGSoundSources[i].play();
         }
 
+        /*
         if(this._auditoryPointer){
             if((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)){
                 //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
@@ -460,7 +476,7 @@ export class AGObject {
             if(this._movable){
                 //this._auditoryPointer && (this.position.distanceTo(g_gamearea.listener.position) < 0.2)
 
-                //TODO: 0.2 suboptimal ... should be speed * deltaTime or something like that
+
                 if((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)){
                     //console.log("Object " + this.name + " has reached target: " + this._route[this._currentRoute]);
                     this._currentRoute = ++this._currentRoute % this._route.length;
@@ -470,7 +486,33 @@ export class AGObject {
                     move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
                 }
             }
+        }*/
+
+        if(this._movable) {
+            //TODO: 0.2 suboptimal ... should be speed * deltaTime or something like that
+            if ((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)) {
+                if (this._circle) {
+                    this._currentRoute = ++this._currentRoute % this._route.length;
+                }
+                else {
+                    this._currentRoute = this._currentRoute + this._moveableSign;
+                    if (this._currentRoute == this._route.length || this._currentRoute < 0) {
+                        this._moveableSign *= (-1);
+                        this._currentRoute += this._moveableSign;
+                    }
+                }
+            } else {
+                if(this._runaway){
+                    if(g_gamearea.listener.position.distanceTo(this._position) < 2.0) {
+                        move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
+                    }
+                } else {
+                    move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
+                }
+            }
         }
+
+
 
         /*
         if(this._movementSound){
