@@ -155,7 +155,7 @@ getReferenceById(enemy1_ID).destructible = true;
 getReferenceById(enemy1_ID).health = 1;
 getReferenceById(enemy1_ID).movable = false;
 getReferenceById(enemy1_ID).collidable = true;
-getReferenceById(enemy1_ID).addSoundSource(enemy1_ss_ID);
+getReferenceById(enemy1_ID).setAliveSound = enemy1_ss_ID;
 getReferenceById(enemy1_ID).deathSound = monsterDeathEnemy1SS_ID;
 
 //Enemy Settings
@@ -163,7 +163,7 @@ getReferenceById(enemy2_ID).destructible = true;
 getReferenceById(enemy2_ID).health = 1;
 getReferenceById(enemy2_ID).movable = false;
 getReferenceById(enemy2_ID).collidable = true;
-getReferenceById(enemy2_ID).addSoundSource(enemy2_ss_ID);
+getReferenceById(enemy2_ID).setAliveSound = enemy2_ss_ID;
 getReferenceById(enemy2_ID).deathSound = monsterDeathEnemy2SS_ID;
 
 //Enemy Settings
@@ -171,7 +171,7 @@ getReferenceById(enemy3_ID).destructible = true;
 getReferenceById(enemy3_ID).health = 1;
 getReferenceById(enemy3_ID).movable = false;
 getReferenceById(enemy3_ID).collidable = true;
-getReferenceById(enemy3_ID).addSoundSource(enemy3_ss_ID);
+getReferenceById(enemy3_ID).setAliveSound = enemy3_ss_ID;
 getReferenceById(enemy3_ID).deathSound = monsterDeathEnemy3SS_ID;
 
 //Enemy Settings
@@ -179,7 +179,7 @@ getReferenceById(enemy4_ID).destructible = true;
 getReferenceById(enemy4_ID).health = 1;
 getReferenceById(enemy4_ID).movable = false;
 getReferenceById(enemy4_ID).collidable = true;
-getReferenceById(enemy4_ID).addSoundSource(enemy4_ss_ID);
+getReferenceById(enemy4_ID).setAliveSound = enemy4_ss_ID;
 getReferenceById(enemy4_ID).deathSound = monsterDeathEnemy4SS_ID;
 
 //Environmental Settings
