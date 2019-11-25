@@ -106,7 +106,7 @@ export class AGSoundSource
         // $FlowFixMe
         if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
         this._volume = value;
-        if(this.source) this.source.gain.value = value;
+        if(this.source) this._gainNode.gain.value = value;
     }
 
     _name:string;
@@ -134,6 +134,8 @@ export class AGSoundSource
     audioContext;
     // $FlowFixMe
     resonanceAudioScene;
+
+    _gainNode:GainNode;
 
     _obstructionFilter:BiquadFilterNode;
 
@@ -172,6 +174,9 @@ export class AGSoundSource
 
         this.audioElementSource = this.audioContext.createMediaElementSource(this.audioElement);
 
+        this._gainNode = this.audioContext.createGain();
+        this._gainNode.gain.value = 1;
+
         this.source = this.resonanceAudioScene.createSource();
         //TODO: activate filter when obstruction between listener and soundsource
         this._obstructionFilter = this.audioContext.createBiquadFilter();
@@ -185,7 +190,7 @@ export class AGSoundSource
         this.source.setRolloff('logarithmic');
         this.source.setMaxDistance(8);
 
-        this.audioElementSource.connect(this.source.input);
+        this.audioElementSource.connect(this._gainNode).connect(this.source.input);
         this._name = name;
         this._type = "SOUNDSOURCE";
         this._looping = looping;
