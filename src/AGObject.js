@@ -35,6 +35,28 @@ export class AGObject {
         }
     }
 
+    get aliveSound(): ?AGSoundSource {
+        return this._aliveSound;
+    }
+
+    set aliveSound(soundID:number) {
+        let aliveSound = getReferenceById(soundID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'aliveSound').set.name, this.constructor.name, arguments);
+        if(this._AGSoundSources.indexOf(aliveSound) === -1) this._AGSoundSources.push(aliveSound);
+        this._aliveSound = aliveSound;
+    }
+
+    clearAliveSound(){
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearAliveSound.name, this.constructor.name, arguments);
+        let index:number = (this._AGSoundSources.indexOf(this._aliveSound));
+        if(this._aliveSound && (index !== -1)) {
+            this._AGSoundSources.splice(index, 1);
+            this._aliveSound = null;
+        }
+    }
+
     get interactionSound():?AGSoundSource {
         return this._interactionSound;
     }
@@ -65,7 +87,7 @@ export class AGObject {
         let movementSound = getReferenceById(soundID);
         // $FlowFixMe
         if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movementSound').set.name, this.constructor.name, arguments);
-        //if(this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
+        if(this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
         this._movementSound = movementSound;
     }
     get auditoryPointer(): boolean {
@@ -304,6 +326,7 @@ export class AGObject {
     _interactionSound:?AGSoundSource;
     _movementSound:AGSoundSource;
     _deathSound: ?AGSoundSource;
+    _aliveSound: ?AGSoundSource;
 
     _interactionCooldown:number;
     _interactionCDTimestamp:Date;
@@ -372,6 +395,10 @@ export class AGObject {
 
         this._movementSoundLastPosition = this.position.clone();
         this._interactionCDTimestamp = new Date(0);
+
+        this._aliveSound = null;
+        this._interactionSound = null;
+        this._deathSound = null;
     }
 
     _AGSoundSources:Array<AGSoundSource>;
