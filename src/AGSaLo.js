@@ -66,7 +66,8 @@ export class AGSaLo {
     }
 
     //only works outside of the little firefox world
-    async loadFromClipboard(){
+    async loadLevelFromClipboard(){
+        console.log("[AGSaLo] Loading Level from Clipboard.");
         const items = await navigator.clipboard.read();
         // $FlowFixMe
         const textBlob = await items[0].getType("text/plain");
@@ -74,12 +75,7 @@ export class AGSaLo {
         this.rebuild(text);
     }
 
-    loadLevel(){
-        console.log("[AGSaLo] Loading Level from Clipboard.");
-        this.loadFromClipboard().then();
-    }
-
-    saveLevel(){
+    saveLevelToClipboard(){
         console.log("[AGSaLo] Saving Level to Clipboard.");
         this.saveValueToClipboard(JSON.stringify(this._savedObjects));
     }
