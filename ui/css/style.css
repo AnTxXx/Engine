@@ -307,12 +307,15 @@ input[type=text], textarea, input[type=number]{
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 }
+input[type=number]{
+	padding:10px 5px 10px 10px;
+}
 
 #input_obj_w, #input_obj_h{
 	width:80px;
 }
-#input_obj_x, #input_obj_y{
-	width:80px;
+#input_obj_x, #input_obj_y, #input_enemy_health{
+	width:60px !important;
 }
 
 input[type=text]:focus, textarea:focus, select:focus, input[type=number]:focus{
@@ -537,9 +540,14 @@ select {
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	max-width:100%;
+	
 	
 }
+
+#ui_part_right select{
+	width:100%;
+}
+
 select::-ms-expand {
     display: none;
 }
@@ -690,4 +698,63 @@ body.contrast{
 	position: absolute !important;
 	top: -9999px !important;
 	left: -9999px !important;
+}
+
+#debug_stuff{
+	position:fixed;
+	left:20px;
+	bottom:20px;
+}
+.label_span{
+	width:25px;
+	display:inline-block;
+}
+.ui_header{
+	font-weight:600;
+	font-size:15px;
+
+}
+
+/*slider*/
+input[type="range"]{
+	
+}
+.slider_box{
+	margin-top:10px;
+}
+.slider_box_label{
+    display: block;
+    margin-top: -2px;
+    float: right;
+	width:25%;
+	text-align:right;
+}
+.slider_{
+	width:75% !important;
+	display:inline-block !important;
+}
+
+
+/*items*/
+#item_container{
+	margin-top:15px;
+	margin-bottom:140px;
+}
+#item_container input{
+	width:150px;
+	margin-right:15px;
+}
+#item_container th{
+	width:200px;
+	text-align:left;
+	padding: 10px 10px;
+}
+#item_container table{ 
+
+}
+#item_container td input, #event_container td input{
+	border:0 !important;
+}
+#item_container tbody tr, #event_container td tr{
+	border-top:1px solid #BFBFBF;
 }

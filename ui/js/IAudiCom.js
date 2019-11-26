@@ -11,7 +11,7 @@ import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGSoundSource } from "../../lib/AGSoundSource.js";
 import { Event } from "../../lib/Event.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
-import { getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl } from "../../lib/AGEngine.js";
+import { getReferencesOfType, getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl } from "../../lib/AGEngine.js";
 
 
 export class IAudiCom {
@@ -53,6 +53,12 @@ export class IAudiCom {
 		];
 		this.renderScene();
 		//this.renderPathDot();
+		
+		
+		
+		
+		
+		
     }
 	
     /**
@@ -114,6 +120,7 @@ export class IAudiCom {
 			
 			
 			if(getReferenceById(that._AGroomID).solved){
+				that.stopArea();
 				$('#win_screen').fadeIn(100);
 			}
 						
@@ -274,28 +281,25 @@ export class IAudiCom {
 					let item_right_buffer = item.left + Math.round(item.width * item.scaleX)/2;
 					let item_top_buffer = item.top + Math.round(item.height * item.scaleY)/2;
 					if(item_right_buffer > new_width || item_top_buffer > new_height){
-						if(item.type == 'path_line' || 'path_point'){
+						if(item.type == 'path_line' || item.type == 'path_dot'){
 							//Hierher
-							// console.log(item.parentFab);
-//
-//
-//
-// 							item.parentFab.PathArray.forEach(function(ele) {
-// 								room_canvas.remove(ele);
-// 							});
-//
-// 							item.parentFab.PathArray = [];
-// 							item.parentFab.AGObject.clearRoute();
-// 							item.parentFab.AGObject.movable = false;
-						}
-						
-						if(item.type == 'player'){
+							item.parentFab.PathArray.forEach(function(ele) {
+								room_buffer.remove(ele);
+							});
+							item.parentFab.LineArray.forEach(function(ele) {
+								room_buffer.remove(ele);
+							});
+							room_buffer.remove(item);
+							item.parentFab.PathArray = [];
+							getReferenceById(item.parentFab.AGObjectID).clearRoute();
+							getReferenceById(item.parentFab.AGObjectID).movable = false;
+						}else if(item.type == 'player'){
 							item.left = 0.5*that._scale;
 							item.top = 0.5*that._scale;
 							item.setCoords();
 							getReferenceById(item.AGObjectID).position = new Vector3(0.5, 1, 0.5);
-						}else{
-							that.deleteItem(item);
+						}else{	
+							that.deleteObject(item);
 						}
 					}
 				}
@@ -345,6 +349,7 @@ export class IAudiCom {
 		}
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
 		this.renderAGObject(obj_buffer_ID);
+		this.refreshObjectSelect();
 		return obj_buffer_ID;
 	}
 	
@@ -358,6 +363,12 @@ export class IAudiCom {
 		let colors_buffer = this._colors;
 		let vision_mode_buffer = this._vision_mode;
 		let room_canvas_buffer = this._room_canvas;
+		
+		
+		// console.log("-------------");
+// 		console.log(getReferenceById(ag_objectID).tag);
+// 		console.log("-------------");
+		
 		
 		//add details for tapping
 		$('<div tabindex = "0" id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'" class = "faboject_">test</div>').prependTo('#fabric_objects_container');
@@ -689,15 +700,144 @@ export class IAudiCom {
 		}	
 	}
 	
+	
+	
+	
+    /**
+     * Lists all items
+     */
+	listItems(){
+		let items_buffer = getReferencesOfType('AGItem');	
+		let that = this;
+		if(items_buffer.length > 0){
+			items_buffer.forEach(function(element) {
+				let item_buffer = getReferenceById(element);			
+				$('#item_table tbody').append('<tr item_id = "'+ element + '"><td><input class = "input_item_name" placeholder="New Item" maxlength="100" type="text" name="item_name" value="' + item_buffer.name + '"></td><td><input class = "input_item_desc" placeholder="This item..." maxlength="100" type="text" name="item_description" value="'+ item_buffer.description +'"></td><td><input class = "input_item_type" placeholder="Generic" maxlength="100" type="text" name="item_type" value="'+ item_buffer.type +'"></td><td><input class = "input_item_charges" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges" value="'+ item_buffer.charges +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
+			});
+		}
+	}
+	//quelle: https://mdbootstrap.com/docs/jquery/tables/editable/#!
+	generateItem(){		
+		
+		let item_buffer = new AGItem("", "", "", 1);
+		let id_buffer = getIdByReference(item_buffer);
+		$('#item_table tbody').append('<tr item_id = "'+ id_buffer + '"><td><input class = "input_item_name" placeholder="New Item" maxlength="100" type="text" name="item_name" value="' + item_buffer.name + '"></td><td><input class = "input_item_desc" placeholder="This item..." maxlength="100" type="text" name="item_description" value="'+ item_buffer.description +'"></td><td><input class = "input_item_type" placeholder="Generic" maxlength="100" type="text" name="item_type" value="'+ item_buffer.type +'"></td><td><input class = "input_item_charges" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges" value="'+ item_buffer.charges +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
+		
+		this.refreshItemSelect();
+	}
+	deleteItem(_item_id){
+		console.log('To delete: ' + _item_id);
+	}
+	
+	
+	refreshItemSelect(){
+		$('.select_event_item').empty().append(this.prepareSelectItems());	
+		$('.select_event_item').each(function( index ) {
+			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
+			let event_buffer = getReferenceById(id_buffer);
+			$('#event_' + id_buffer + ' .select_event_item').val(event_buffer.addObject.ID);	
+		});	
+	}
+	
+	
+	refreshObjectSelect(){
+		$('.select_event_primary').empty().append(this.prepareSelectObjects());	
+		$('.select_event_primary').each(function( index ) {
+			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
+			let event_buffer = getReferenceById(id_buffer);
+			$('#event_' + id_buffer + ' .select_event_primary').val(event_buffer.origin.ID);
+		});	
+		
+		$('.select_event_secondary').empty().append(this.prepareSelectObjects());	
+		$('.select_event_secondary').each(function( index ) {
+			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
+			let event_buffer = getReferenceById(id_buffer);
+			$('#event_' + id_buffer + ' .select_event_primary').val(event_buffer.origin.ID);
+		});	
+		
+	}
+	
+	
+	listEvents(){
+		let events_buffer = getReferencesOfType('Event');	
+		let that = this;
+			
+		let select_obj_buffer = this.prepareSelectObjects();
+		let select_item_buffer = this.prepareSelectItems();
+		
+		
+		if(events_buffer.length > 0){
+			events_buffer.forEach(function(element) {
+				let event_buffer = getReferenceById(element);	
+				console.log(event_buffer);
+				console.log(event_buffer.repeat);
+				$('#event_table tbody').append('<tr id = "event_'+ element +'" event_id = "'+ element +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
+				
+				$('#event_' + element + ' .select_event_primary').val(event_buffer.origin.ID);
+				$('#event_' + element + ' .select_event_trigger').val(event_buffer.trigger);
+				$('#event_' + element + ' .select_event_action').val(event_buffer.action);
+				$('#event_' + element + ' .select_event_item').val(event_buffer.addObject.ID);
+				$('#event_' + element + ' .select_event_secondary').val(event_buffer.object.ID);
+				
+			});
+		}
+	}
+	generateEvent(){	
+		let event_buffer = new Event(null, null, null, null, null, 1);
+		let id_buffer = getIdByReference(event_buffer);
+		
+		
+		let select_obj_buffer = this.prepareSelectObjects();
+		let select_item_buffer = this.prepareSelectItems();
+		
+		$('#event_table tbody').append('<tr id = "event_'+ id_buffer +'" event_id = "'+ id_buffer +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
+		
+		$('#event_' + id_buffer + ' .select_event_primary').val('null');
+		$('#event_' + id_buffer + ' .select_event_trigger').val('null');
+		$('#event_' + id_buffer + ' .select_event_action').val('null');
+		$('#event_' + id_buffer + ' .select_event_item').val('null');
+		$('#event_' + id_buffer + ' .select_event_secondary').val('null');
+	}
+	deleteEvent(_event_id){
+		console.log('To delete: ' + _event_id);
+	}
+	
+	
+	prepareSelectItems(){
+		let that = this;
+		let items_buffer = getReferencesOfType('AGItem');	
+		let select_item_buffer = '<option value = "null">None</option>';
+		
+		if(items_buffer.length > 0){
+			items_buffer.forEach(function(element) {
+				select_item_buffer = select_item_buffer + '<option value = "'+ getReferenceById(element).ID + '">' + getReferenceById(element).name + '</option>';
+			});
+		}
+		return select_item_buffer;
+	}
+	
+	
+	prepareSelectObjects(){
+		let that = this;
+		let select_obj_buffer = '<option value = "null">None</option>';
+		//prepare the select for the objects
+		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
+		this._AGroomID = rooms_buffer[0].ID;
+		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
+			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
+				select_obj_buffer = select_obj_buffer + '<option value = "'+ element.ID + '">' + element.name + '</option>';
+			});
+		}
+		return select_obj_buffer;
+	}
+	
+	
     /**
      * Removes a fabric-object from the canvas (in case of enemy deletes the path/in case of portal deletes the link)
      * @param The fabric-object
      */
-	deleteItem(_fabobject){
+	deleteObject(_fabobject){
 		let room_buffer = this._room_canvas;
-		
-		
-		
 		getReferenceById(_fabobject.AGObjectID).kill();
 	
 		//check if removed element was linked to portal or has path points and remove that stuff
@@ -747,12 +887,16 @@ export class IAudiCom {
 
 		this.renderAGRoom(this._AGroomID);
 
-		let this_buffer = this;
+		console.log(this._AGroomID);
+		
+		let that = this;
 		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
 			getReferenceById(this._AGroomID).AGobjects.forEach(function(element) {
- 				this_buffer.renderAGObject(element.ID);
+ 				that.renderAGObject(element.ID);
 			});
 		}
+		this.listItems();
+		this.listEvents();
 	}
 	
     /**
@@ -760,57 +904,87 @@ export class IAudiCom {
      * @param The ID of the AGOBject
 	 * @param The name of the soundsource
      */
-	addSoundSource(ag_object_id, ss_name){
+	addSoundSource(ag_object_id, ss_name, state_){
 		let ag_object_buffer = getReferenceById(ag_object_id);	
 		let roomID_buffer = getReferenceById(g_gamearea.ID).AGRooms[0].ID;
-		let ss_buffer;
-		ag_object_buffer.clearSoundSources();	
+		let ss_buffer;	
+		let loop = true;
+	
+		if(state_ == 'on_death'){
+			loop = false;
+			ag_object_buffer.clearDeathSound();
+		}else if(state_ == 'on_action'){
+			loop = false;
+			ag_object_buffer.clearInteractionSound();
+		}else if(state_ == 'on_alive'){
+			ag_object_buffer.clearAliveSound();
+		}
 		
 		switch(ss_name){
 			case 'steps':
-				ss_buffer = new AGSoundSource("Steps", "sounds/steps.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Steps", "sounds/steps.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "STEPS"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
 				break;
 			case 'waterfall':
-				ss_buffer = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, roomID_buffer);
-				ss_buffer.tag = "WATERFALL"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				ss_buffer = new AGSoundSource("Waterfall", "sounds/waterfall.wav", loop, 1, roomID_buffer);
+				ss_buffer.tag = "WATERFALL"; 	
 				break;
 			case 'magic':
-				ss_buffer = new AGSoundSource("Magic", "sounds/magic.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Magic", "sounds/magic.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "MAGIC"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				
 				break;
 			case 'ouch':
-				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "OUCH"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				
 				break;
 			case 'car':
-				ss_buffer = new AGSoundSource("Car", "sounds/car.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Car", "sounds/car.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "CAR"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				
 				break;
 			case 'monster':
-				ss_buffer = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Monster", "sounds/monster.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "MONSTER"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				
 				break;
 			case 'truck':
-				ss_buffer = new AGSoundSource("Monster", "sounds/truck.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Truck", "sounds/truck.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "TRUCK"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				
 				break;	
 			case 'motorcycle':
-				ss_buffer = new AGSoundSource("Monster", "sounds/motorcycle.wav", true, 1, roomID_buffer);
+				ss_buffer = new AGSoundSource("Motorcycle", "sounds/motorcycle.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "MOTORCYCLE"; 
-				ag_object_buffer.addSoundSource(getIdByReference(ss_buffer));
+				
+				break;	
+			case 'fainting':
+				ss_buffer = new AGSoundSource("Fainting", "sounds/monsterpain.wav", loop, 1, roomID_buffer);
+				ss_buffer.tag = "FAINTING"; 
 				break;
+			case 'arrow':
+				ss_buffer = new AGSoundSource("Arrow", "sounds/arrow.wav", loop, 1, roomID_buffer);
+				ss_buffer.tag = "ARROW"; 
+				break;	
+				
+				
+			
 			case 'none':
 				//
 				break;
 		}
+		
+		if(ss_name != 'none'){
+			if(state_ == 'on_death'){
+				ag_object_buffer.deathSound = getIdByReference(ss_buffer);
+			}else if(state_ == 'on_action'){
+				ag_object_buffer.interactionSound = getIdByReference(ss_buffer);
+			}else if (state_ == 'on_alive'){
+				ag_object_buffer.aliveSound = getIdByReference(ss_buffer);
+			}
+		}		
+			
 	}
 	
     /**
@@ -963,14 +1137,23 @@ export class IAudiCom {
 	}
 	
 	
+	/**
+	* load Level from Clipboard
+	*/
 	loadLevelSALO(){
-		g_history.loadLevel();
-		this.renderScene();
+		let that = this;
+		this._room_canvas.clear();	
+		$('#item_table tbody').empty();
+		g_history.loadLevelFromClipboard().then(function(){
+			that.renderScene();
+		});
 	}
+	/**
+	* save Level from Clipboard
+	*/
 	saveLevelSALO(){
-		g_history.saveLevel();
+		g_history.saveLevelToClipboard();
 	}
-	
 	
     /**
      * Loads a level
