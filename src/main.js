@@ -15,7 +15,7 @@ import {AGCondition} from "./AGCondition.js";
 import { IAudiCom } from "../ui/js/IAudiCom.js";
 
 import {AGRoomExit} from "./AGRoomExit.js";
-import {getIdByReference, getReferenceById} from "./AGEngine.js";
+import {getIdByReference, getReferenceById, getReferencesOfType} from "./AGEngine.js";
 import {g_IAudiCom} from "./AGEngine.js";
 import {setIAudiCom} from "./AGEngine.js";
 import {AGInventory} from "./AGInventory.js";

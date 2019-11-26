@@ -75,7 +75,7 @@ export function getIdByReference(obj:Object):number{
 export function getReferencesOfType(type:string):Array<number> {
     let returnArr = [];
     for (let [k, v] of g_references) {
-        if (v instanceof type) returnArr.push(k);
+        if (v.constructor.name === type) returnArr.push(k);
     }
     return returnArr;
 }
