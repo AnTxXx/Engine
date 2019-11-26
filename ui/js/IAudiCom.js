@@ -839,7 +839,9 @@ export class IAudiCom {
 	deleteObject(_fabobject){
 		let room_buffer = this._room_canvas;
 		getReferenceById(_fabobject.AGObjectID).kill();
-	
+		
+		this.refreshObjectSelect();
+		
 		//check if removed element was linked to portal or has path points and remove that stuff
 		//TODO wait for portal remove function in AGPortal
 	
