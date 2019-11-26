@@ -17,8 +17,6 @@ export let g_controls:AGNavigation;
 
 export let g_IAudiCom:IAudiCom;
 
-
-
 export function setIAudiCom(IAC:IAudiCom){
     g_IAudiCom = IAC;
 }
@@ -72,6 +70,14 @@ export function getIdByReference(obj:Object):number{
         .filter(({ 1: v }) => v === obj)
         .map(([k]) => k)[0];
     //return Object.keys(g_references).find(key => g_references[key] === obj);
+}
+
+export function getReferencesOfType(type:string):Array<number> {
+    let returnArr = [];
+    for (let [k, v] of g_references) {
+        if (v instanceof type) returnArr.push(k);
+    }
+    return returnArr;
 }
 
 /**
