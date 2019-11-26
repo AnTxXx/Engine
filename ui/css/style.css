@@ -740,7 +740,11 @@ input[type="range"]{
 	margin-top:15px;
 	margin-bottom:140px;
 }
-#item_container input{
+#event_table input{
+	width:150px;
+	margin-right:15px;
+}
+#item_table input{
 	width:150px;
 	margin-right:15px;
 }

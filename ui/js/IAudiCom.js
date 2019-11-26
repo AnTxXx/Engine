@@ -87,6 +87,8 @@ export class IAudiCom {
 					room_buffer.remove(item);
 				}
 			});
+			$('#item_table tbody').empty();
+			$('#event_table tbody').empty();
 			room_buffer.renderAll();	
 		}	
 	}
