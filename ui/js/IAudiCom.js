@@ -771,8 +771,7 @@ export class IAudiCom {
 		if(events_buffer.length > 0){
 			events_buffer.forEach(function(element) {
 				let event_buffer = getReferenceById(element);	
-				console.log(event_buffer);
-				console.log(event_buffer.repeat);
+				
 				$('#event_table tbody').append('<tr id = "event_'+ element +'" event_id = "'+ element +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
 				
 				$('#event_' + element + ' .select_event_primary').val(event_buffer.origin.ID);
