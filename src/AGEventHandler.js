@@ -6,6 +6,7 @@ import type {Trigger, ConditionObject, Action} from "./EventType.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_loading, g_references, g_gamearea, g_playing, getReferenceById, setEventHandler} from "./AGEngine.js";
 import {GlobalEvent} from "./GlobalEvent.js";
+import {AGItem} from "./AGItem.js";
 
 /**
  * Eventhandler Class (Very WIP)
@@ -32,7 +33,13 @@ export class AGEventHandler{
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.addEvent.name, this.constructor.name, arguments);
     }
 
+    removeEventByID(eventID:number){
+        this.removeEvent(getReferenceById(eventID));
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeEventByID.name, this.constructor.name, arguments);
+    }
+
     removeEvent(event:Event){
+        console.log("[AGEventHandler] Removing Event [ID: " + event.ID + "].");
         this._events.splice(this.findEventIndex(event), 1);
     }
 
@@ -103,6 +110,16 @@ export class AGEventHandler{
             ) return i;
         }
         return -1;
+    }
+
+    findEventsContainingItemById(itemID:number){
+        let agitem:AGItem = getReferenceById(itemID);
+        let that = this;
+        this._events.forEach(function(item){
+            if(item.addObject === agitem){
+                that.removeEvent(item);
+            }
+        })
     }
 
     /*

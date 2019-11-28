@@ -889,8 +889,6 @@ export class IAudiCom {
 		$('#tb_canvas_dim_height').val(getReferenceById(this._AGroomID).size.z);
 
 		this.renderAGRoom(this._AGroomID);
-
-		console.log(this._AGroomID);
 		
 		let that = this;
 		if(getReferenceById(this._AGroomID).AGobjects.length > 0){

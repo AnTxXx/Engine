@@ -75,8 +75,17 @@ export class AGInventory{
                 break;
             }
         }
-        if(indexToDelete > -1) this._inventory.splice(indexToDelete, 1);
-        console.log("[AGInventory] Removing Item " + item.name + " from Object " + this._attachedTo.name + "'s inventory.");
+        if(indexToDelete > -1) {
+            this._inventory.splice(indexToDelete, 1);
+            console.log("[AGInventory] Removing Item " + item.name + " from Object " + this._attachedTo.name + "'s inventory.");
+        } else console.log("[AGInventory] Item " + item.name + " not found in Object " + this._attachedTo.name + "'s inventory. Cannot remove.");
+
+    }
+
+
+    removeItemById(itemID:number){
+        this.removeItem(getReferenceById(itemID));
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeItemById.name, this.constructor.name, arguments);
     }
 
     searchItemByName(name:string):?AGItem{
@@ -95,6 +104,10 @@ export class AGInventory{
             }
         }
         return null;
+    }
+
+    searchItemById(itemID:number):?AGItem{
+        return(this.searchItem(getReferenceById(itemID)));
     }
 
     changeItemCharge(item:AGItem, changeBy:number){
