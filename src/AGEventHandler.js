@@ -113,12 +113,14 @@ export class AGEventHandler{
         return -1;
     }
 
-    findEventsContainingItemById(itemID:number){
+    deleteEventsContainingItemById(itemID:number){
         let agitem:AGItem = getReferenceById(itemID);
         let that = this;
         this._events.forEach(function(item){
             if(item.addObject === agitem){
                 that.removeEvent(item);
+                g_references.delete(itemID);
+                console.log("[AGEventHandler] Deleted Event [ID: " + itemID + "] from References Table.");
             }
         })
     }
