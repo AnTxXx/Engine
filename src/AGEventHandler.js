@@ -120,7 +120,7 @@ export class AGEventHandler{
             if(item.addObject === agitem){
                 that.removeEvent(item);
                 g_references.delete(item.ID);
-                console.log("[AGEventHandler] Deleted Event [ID: " + itemID + "] from References Table.");
+                console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
             }
         })
     }
@@ -133,6 +133,8 @@ export class AGEventHandler{
                 item.origin === agobject ||
                 item.object === agobject){
                 that.removeEvent(item);
+                g_references.delete(item.ID);
+                console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
             }
         })
     }
