@@ -123,6 +123,18 @@ export class AGEventHandler{
         })
     }
 
+    findEventsContainingObjectById(objectID:number){
+        let agobject:AGObject = getReferenceById(objectID);
+        let that = this;
+        this._events.forEach(function(item){
+            if(item.addObject === agobject ||
+                item.origin === agobject ||
+                item.object === agobject){
+                that.removeEvent(item);
+            }
+        })
+    }
+
     /*
     findEvent(event:Event):?Event {
         for(let i = 0; i < this._events.length; i++){

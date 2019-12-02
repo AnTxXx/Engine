@@ -6,9 +6,9 @@ import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {Counter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
-import type {Trigger} from "./EventType.js";
 import {g_history, g_eventHandler, g_references, g_loading, g_gamearea, g_playing} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
+
 
 let debug = 0;
 
@@ -580,6 +580,7 @@ export class AGObject {
         console.log("[AGObject] " + this.name + ": killed.");
         this.stop();
         this.room.removeAGObject(this);
+        g_eventHandler.findEventsContainingObjectById(this._ID);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.kill.name, this.constructor.name, arguments);
     }
 
