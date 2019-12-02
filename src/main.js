@@ -233,7 +233,7 @@ g_eventHandler.addEvent(eventEnemy4_ID);
 let globalEventFinish = new GlobalEvent(playerID, "INVENTORY", "countByType", ["coin"], 4, "WINGAME", 1);
 g_eventHandler.addGlobalEvent(globalEventFinish.ID);
 
-g_eventHandler.removeEventByID(eventEnemy1_ID);
+//g_eventHandler.removeEventByID(eventEnemy1_ID);
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);
