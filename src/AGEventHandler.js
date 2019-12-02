@@ -36,6 +36,7 @@ export class AGEventHandler{
     removeEventByID(eventID:number){
         this.removeEvent(getReferenceById(eventID));
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeEventByID.name, this.constructor.name, arguments);
+        g_references.delete(eventID);
     }
 
     removeEvent(event:Event){
