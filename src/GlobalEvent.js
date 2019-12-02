@@ -19,8 +19,11 @@ export class GlobalEvent {
         return this._object;
     }
 
-    set object(value: AGObject) {
-        this._object = value;
+    set object(objectID: number) {
+        let go = getReferenceById(objectID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(GlobalEvent.prototype, 'object').set.name, this.constructor.name, arguments);
+        this._object = go;
     }
 
     get conditionObject(): any {

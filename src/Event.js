@@ -11,8 +11,11 @@ export class Event {
         return this._origin;
     }
 
-    set origin(value: AGObject) {
-        this._origin = value;
+    set origin(originID:number) {
+        let go = getReferenceById(originID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(Event.prototype, 'origin').set.name, this.constructor.name, arguments);
+        this._origin = go;
     }
 
     get repeat(): number {
@@ -22,6 +25,7 @@ export class Event {
     set repeat(value: number) {
         this._repeat = value;
     }
+
     get trigger(): Trigger {
         return this._trigger;
     }
@@ -42,16 +46,22 @@ export class Event {
         return this._addObject;
     }
 
-    set addObject(value: Object) {
-        this._addObject = value;
+    set addObject(addObjectID: number) {
+        let go = getReferenceById(addObjectID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(Event.prototype, 'addObject').set.name, this.constructor.name, arguments);
+        this._addObject = go;
     }
 
     get object(): AGObject {
         return this._object;
     }
 
-    set object(value: AGObject) {
-        this._object = value;
+    set object(objectID: number) {
+        let go = getReferenceById(objectID);
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(Event.prototype, 'object').set.name, this.constructor.name, arguments);
+        this._object = go;
     }
 
     get ID() {
