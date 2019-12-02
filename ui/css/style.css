@@ -756,9 +756,40 @@ input[type="range"]{
 #item_container table{ 
 
 }
-#item_container td input, #event_container td input{
+#item_container td input:not(.input_row), #event_container td input:not(.input_row), #event_container td select:not(.input_row){
 	border:0 !important;
+	font-weight:400;
 }
-#item_container tbody tr, #event_container td tr{
+.input_row{
+	font-weight:600;
+}
+#item_input_row, #event_input_row{
 	border-top:1px solid #BFBFBF;
+	border-bottom:1px solid #BFBFBF;
+	margin-bottom:15px;
+	
+}
+
+.table-add_item, .table-add_event{
+	margin-bottom:10px;
+	margin-top:10px;
+}
+
+td button{
+	display:block !important;
+	margin-left:auto !important;
+	margin-right:auto !important;
+}
+#header_events, #header_items, #header_glevents{
+	text-align:center;
+	margin-top:50px;
+	margin-bottom:10px;
+	font-size:30px;
+}
+
+
+
+table{
+	margin-left:auto;
+	margin-right:auto;
 }

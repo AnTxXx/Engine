@@ -1,5 +1,6 @@
 import { i_audicom } from "../../lib/main.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
+import { Event } from "../../lib/Event.js";
 import { getIdByReference, getReferenceById, g_gamearea } from "../../lib/AGEngine.js";
 
 jQuery(function($){
@@ -1255,11 +1256,14 @@ jQuery(function($){
 	
 	const $tableID_items = $('#item_table');
 	$('.table-add_item').click(function(e){
-		i_audicom.generateItem();	
-	  	//make new item
+		let item_name = $('#item_name').val() ? $('#item_name').val(): "New Item";
+		let item_desc = $('#item_desc').val() ? $('#item_desc').val(): "This…";
+		let item_type = $('#item_type').val() ? $('#item_type').val(): "generic";
+		let item_charges = $('#item_charges').val() ? $('#item_charges').val(): 1;
+		i_audicom.generateItem(item_name, item_desc, item_type, item_charges);	
 	});
 	$tableID_items.on('click', '.btn_delete_row', function () {	
-		i_audicom.deleteItem($(this).parents('tr').attr('item_id'));
+		i_audicom.deleteItemfromList($(this).parents('tr').attr('item_id'));
 		$(this).parents('tr').detach();
 		i_audicom.refreshItemSelect();
 	}); 	
@@ -1271,61 +1275,68 @@ jQuery(function($){
 	$tableID_items.on('input', '.input_item_desc', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).description = buffer;
-		//delete item
+		
 	});
 	$tableID_items.on('input', '.input_item_type', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).type = buffer;
-		//delete item
+		
 	});
 	$tableID_items.on('input', '.input_item_charges', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).charges = buffer;
-		//delete item
+		
 	});
 	
 	/*EVENT-Table*/
 	const $tableID_events = $('#event_table');
 	
 	$('.table-add_event').click(function(e){
-		i_audicom.generateEvent();	
-	  	//make new item
+		
+		let event_primary = $('#event_primary').val();
+		let event_trigger = $('#event_trigger').val();
+		let event_action = $('#event_action').val();
+		let event_item = $('#event_item').val();
+		let event_secondary = $('#event_secondary').val();
+		let event_repeat = $('#events_repeat').val() ? $('#events_repeat').val(): 1;
+		i_audicom.generateEvent(parseInt(event_primary), event_trigger, event_action, parseInt(event_item), parseInt(event_secondary), parseInt(event_repeat));	
+	
+		
 	});
 	$tableID_events.on('click', '.btn_delete_row', function () {	
 		i_audicom.deleteEvent($(this).parents('tr').attr('event_id'));
 		$(this).parents('tr').detach();
-		//delete item
 	}); 
 
 	$tableID_events.on('change', '.select_event_primary', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).origin = buffer;
-		//delete item
+		
 	});
 	$tableID_events.on('change', '.select_event_trigger', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).trigger = buffer;
-		//delete item
+		
 	});
 	$tableID_events.on('change', '.select_event_action', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).action = buffer;
-		//delete item
+		
 	});
 	$tableID_events.on('change', '.select_event_item', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).addObject = buffer;
-		//delete item
+		
 	});
 	$tableID_events.on('change', '.select_event_secondary', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).object = buffer;
-		//delete item
+		
 	});
 	$tableID_events.on('input', '.input_events_repeat', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).repeat = buffer;
-		//delete item
+		
 	});
 	
 	

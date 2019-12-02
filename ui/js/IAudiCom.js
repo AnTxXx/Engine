@@ -11,7 +11,7 @@ import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGSoundSource } from "../../lib/AGSoundSource.js";
 import { Event } from "../../lib/Event.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
-import { getReferencesOfType, getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl } from "../../lib/AGEngine.js";
+import { g_eventHandler, deleteItem, getReferencesOfType, getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl } from "../../lib/AGEngine.js";
 
 
 export class IAudiCom {
@@ -709,6 +709,8 @@ export class IAudiCom {
      * Lists all items
      */
 	listItems(){
+		
+		$('#item_table tbody tr').not('#item_input_row').empty();
 		let items_buffer = getReferencesOfType('AGItem');	
 		let that = this;
 		if(items_buffer.length > 0){
@@ -719,21 +721,20 @@ export class IAudiCom {
 		}
 	}
 	//quelle: https://mdbootstrap.com/docs/jquery/tables/editable/#!
-	generateItem(){		
-		
-		let item_buffer = new AGItem("", "", "", 1);
+	generateItem(_item_name, _item_desc, _item_type, _item_charges){
+		let item_buffer = new AGItem(_item_name, _item_desc, _item_type, _item_charges);
 		let id_buffer = getIdByReference(item_buffer);
-		$('#item_table tbody').append('<tr item_id = "'+ id_buffer + '"><td><input class = "input_item_name" placeholder="New Item" maxlength="100" type="text" name="item_name" value="' + item_buffer.name + '"></td><td><input class = "input_item_desc" placeholder="This item..." maxlength="100" type="text" name="item_description" value="'+ item_buffer.description +'"></td><td><input class = "input_item_type" placeholder="Generic" maxlength="100" type="text" name="item_type" value="'+ item_buffer.type +'"></td><td><input class = "input_item_charges" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges" value="'+ item_buffer.charges +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
-		
+		$('#item_table tbody').append('<tr item_id = "'+ id_buffer + '"><td><input class = "input_item_name" placeholder="New Item" maxlength="100" type="text" name="item_name" value="' + item_buffer.name + '"></td><td><input class = "input_item_desc" placeholder="This item..." maxlength="100" type="text" name="item_description" value="'+ item_buffer.description +'"></td><td><input class = "input_item_type" placeholder="Generic" maxlength="100" type="text" name="item_type" value="'+ item_buffer.type +'"></td><td><input class = "input_item_charges" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges" value="'+ item_buffer.charges +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
 		this.refreshItemSelect();
 	}
-	deleteItem(_item_id){
-		console.log('To delete: ' + _item_id);
-	}
+	
 	
 	
 	refreshItemSelect(){
-		$('.select_event_item').empty().append(this.prepareSelectItems());	
+		let select_item_buffer = this.prepareSelectItems();
+		$('.select_event_item').empty().append(select_item_buffer);	
+		$('#event_item').empty().append(select_item_buffer);
+		
 		$('.select_event_item').each(function( index ) {
 			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
 			let event_buffer = getReferenceById(id_buffer);
@@ -741,39 +742,72 @@ export class IAudiCom {
 		});	
 	}
 	
-	
 	refreshObjectSelect(){
-		$('.select_event_primary').empty().append(this.prepareSelectObjects());	
+		let select_obj_buffer = this.prepareSelectObjects();
+		$('.select_event_primary').empty().append(select_obj_buffer);	
+		$('#event_primary').empty().append(select_obj_buffer);
+		
 		$('.select_event_primary').each(function( index ) {
 			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
 			let event_buffer = getReferenceById(id_buffer);
+			
 			$('#event_' + id_buffer + ' .select_event_primary').val(event_buffer.origin.ID);
 		});	
 		
-		$('.select_event_secondary').empty().append(this.prepareSelectObjects());	
+		$('.select_event_secondary').empty().append(select_obj_buffer);	
+		$('#event_secondary').append(select_obj_buffer);
+		
 		$('.select_event_secondary').each(function( index ) {
 			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
 			let event_buffer = getReferenceById(id_buffer);
+			
 			$('#event_' + id_buffer + ' .select_event_primary').val(event_buffer.origin.ID);
 		});	
-		
 	}
 	
 	
-	listEvents(){
-		let events_buffer = getReferencesOfType('Event');	
-		let that = this;
-			
+	generateEvent(_event_primary, _event_trigger, _event_action, _event_item, _event_secondary, _event_repeat){	
+		
+		let event_buffer = new Event(_event_primary, _event_trigger, _event_action, _event_secondary, _event_item, _event_repeat);
+		let id_buffer = getIdByReference(event_buffer);	
+		
 		let select_obj_buffer = this.prepareSelectObjects();
 		let select_item_buffer = this.prepareSelectItems();
 		
+		$('#event_table tbody').append('<tr id = "event_'+ id_buffer +'" event_id = "'+ id_buffer +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
+		$('#event_' + id_buffer + ' .select_event_trigger').val(_event_trigger);
+		$('#event_' + id_buffer + ' .select_event_action').val(_event_action);
+		$('#event_' + id_buffer + ' .input_events_repeat').val(_event_repeat);
 		
+		this.refreshObjectSelect();
+		this.refreshItemSelect();
+		
+	}
+	
+	deleteItemfromList(_item_id){	
+		deleteItem(parseInt(_item_id));
+		this.listEvents();
+	}
+	listEvents(){
+		
+		$('#event_table tbody tr').not('#event_input_row').empty();
+		let events_buffer = getReferencesOfType('Event');	
+		let that = this;		
+		let select_obj_buffer = this.prepareSelectObjects();
+		let select_item_buffer = this.prepareSelectItems();
+		
+		console.log(events_buffer);
+		
+		//fill the generation-inputs	
+		$('#event_primary').empty().append(select_obj_buffer);
+		$('#event_item').empty().append(select_item_buffer);
+		$('#event_secondary').empty().append(select_obj_buffer);
+
 		if(events_buffer.length > 0){
 			events_buffer.forEach(function(element) {
 				let event_buffer = getReferenceById(element);	
 				
-				$('#event_table tbody').append('<tr id = "event_'+ element +'" event_id = "'+ element +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
-				
+				$('#event_table tbody').append('<tr id = "event_'+ element +'" event_id = "'+ element +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
 				$('#event_' + element + ' .select_event_primary').val(event_buffer.origin.ID);
 				$('#event_' + element + ' .select_event_trigger').val(event_buffer.trigger);
 				$('#event_' + element + ' .select_event_action').val(event_buffer.action);
@@ -783,31 +817,16 @@ export class IAudiCom {
 			});
 		}
 	}
-	generateEvent(){	
-		let event_buffer = new Event(null, null, null, null, null, 1);
-		let id_buffer = getIdByReference(event_buffer);
-		
-		
-		let select_obj_buffer = this.prepareSelectObjects();
-		let select_item_buffer = this.prepareSelectItems();
-		
-		$('#event_table tbody').append('<tr id = "event_'+ id_buffer +'" event_id = "'+ id_buffer +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
-		
-		$('#event_' + id_buffer + ' .select_event_primary').val('null');
-		$('#event_' + id_buffer + ' .select_event_trigger').val('null');
-		$('#event_' + id_buffer + ' .select_event_action').val('null');
-		$('#event_' + id_buffer + ' .select_event_item').val('null');
-		$('#event_' + id_buffer + ' .select_event_secondary').val('null');
-	}
+	
 	deleteEvent(_event_id){
-		console.log('To delete: ' + _event_id);
+		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeEventByID(parseInt(_event_id));	
 	}
 	
 	
 	prepareSelectItems(){
 		let that = this;
 		let items_buffer = getReferencesOfType('AGItem');	
-		let select_item_buffer = '<option value = "null">None</option>';
+		let select_item_buffer = '';
 		
 		if(items_buffer.length > 0){
 			items_buffer.forEach(function(element) {
@@ -820,7 +839,7 @@ export class IAudiCom {
 	
 	prepareSelectObjects(){
 		let that = this;
-		let select_obj_buffer = '<option value = "null">None</option>';
+		let select_obj_buffer = '';
 		//prepare the select for the objects
 		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
 		this._AGroomID = rooms_buffer[0].ID;
@@ -841,7 +860,7 @@ export class IAudiCom {
 		let room_buffer = this._room_canvas;
 		getReferenceById(_fabobject.AGObjectID).kill();
 		
-		this.refreshObjectSelect();
+		
 		
 		//check if removed element was linked to portal or has path points and remove that stuff
 		//TODO wait for portal remove function in AGPortal
@@ -873,6 +892,7 @@ export class IAudiCom {
 		}
 		this._room_canvas.remove(_fabobject);
 		this._room_canvas.renderAll();
+		this.listEvents();
 	}
 	
     /**
