@@ -10,6 +10,7 @@ import { AGRoom } from "../../lib/AGRoom.js";
 import { AGRoomExit } from "../../lib/AGRoomExit.js";
 import { AGSoundSource } from "../../lib/AGSoundSource.js";
 import { Event } from "../../lib/Event.js";
+import { GlobalEvent } from "../../lib/GlobalEvent.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
 import { g_eventHandler, deleteItem, getReferencesOfType, getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl } from "../../lib/AGEngine.js";
 
@@ -726,6 +727,7 @@ export class IAudiCom {
 		let id_buffer = getIdByReference(item_buffer);
 		$('#item_table tbody').append('<tr item_id = "'+ id_buffer + '"><td><input class = "input_item_name" placeholder="New Item" maxlength="100" type="text" name="item_name" value="' + item_buffer.name + '"></td><td><input class = "input_item_desc" placeholder="This item..." maxlength="100" type="text" name="item_description" value="'+ item_buffer.description +'"></td><td><input class = "input_item_type" placeholder="Generic" maxlength="100" type="text" name="item_type" value="'+ item_buffer.type +'"></td><td><input class = "input_item_charges" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges" value="'+ item_buffer.charges +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
 		this.refreshItemSelect();
+		this.listGlobalEvents();
 	}
 	
 	
@@ -746,7 +748,20 @@ export class IAudiCom {
 		let select_obj_buffer = this.prepareSelectObjects();
 		$('.select_event_primary').empty().append(select_obj_buffer);	
 		$('#event_primary').empty().append(select_obj_buffer);
+		$('#glevent_primary').empty().append(select_obj_buffer);	
 		
+		
+		//globalevent
+		
+		$('.select_glevent_primary').each(function(index){
+			let id_buffer = parseInt($(this).parents('tr').attr('glevent_id'));
+			let event_buffer = getReferenceById(id_buffer);
+			$('#glevent_' + id_buffer + ' .select_glevent_primary').val(event_buffer.object.ID);
+		});
+		
+		
+		
+		//event
 		$('.select_event_primary').each(function( index ) {
 			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
 			let event_buffer = getReferenceById(id_buffer);
@@ -788,6 +803,70 @@ export class IAudiCom {
 		deleteItem(parseInt(_item_id));
 		this.listEvents();
 	}
+	
+	generateGlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, _glevent_type, _glevent_count, _glevent_action, _glevent_repeat){
+		
+		let glevent_buffer = new GlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, [_glevent_type], _glevent_count, _glevent_action, _glevent_repeat);
+		this.refreshObjectSelect();
+		this.listGlobalEvents();
+	}
+	
+	listGlobalEvents(){
+		//fill the global events
+		
+		$('#glevent_table tbody tr').not('#glevent_input_row').remove();
+		let glevents_buffer = getReferencesOfType('GlobalEvent');	
+
+		let select_obj_buffer = this.prepareSelectObjects();
+		$('#glevent_primary').empty().append(select_obj_buffer);
+		$('#glevent_type').empty();
+		$('.select_glevent_type').empty();
+		//get all types from items
+		
+		if(glevents_buffer.length > 0){
+			glevents_buffer.forEach(function(element) {
+				let event_buffer = getReferenceById(element);					
+				$('#glevent_table tbody').append('<tr id="glevent_'+ element +'" glevent_id = "'+ element +'"><td><select class = "select_glevent_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_glevent_conobject"><option value="INVENTORY">Inventory</option></select></td><td><select class = "select_glevent_func"><option value="countByType">Count by Type</option></select></td><td><select class = "select_glevent_type"></select></td><td><input class = " input_glevent_count" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_count" style = "width:auto;" value = "'+ event_buffer.value +'"></td><td><select class = "select_glevent_action"><option value="WINGAME">Win Game</option></select></td><td><input class = "input_glevent_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_repeat" style = "width:auto;" value = "'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
+				$('#glevent_' + element + ' .select_glevent_primary').val(event_buffer.object.ID);
+				$('#glevent_' + element + ' .select_glevent_conobject').val(event_buffer.conditionObject);
+				//$('#glevent_' + element + ' .select_glevent_func').val(event_buffer.funcOfConditionObject);
+				$('#glevent_' + element + ' .select_glevent_type').val(event_buffer.funcArgs[0]);
+				$('#glevent_' + element + ' .input_glevent_count').val(event_buffer.value);
+				$('#glevent_' + element + ' .select_glevent_action').val(event_buffer.action);
+				$('#glevent_' + element + ' .input_glevent_repeat').val(event_buffer.repeat);
+			});
+		}
+		
+		let items_buffer = getReferencesOfType('AGItem');	
+		let that = this;
+		if(items_buffer.length > 0){
+			items_buffer.forEach(function(element) {
+				let type_buffer = getReferenceById(element).type;
+				let bool_buffer = false;
+				
+				//console.log(type_buffer);
+				//check if already there				
+				$('#glevent_type option').each(function(ele){
+					if(!bool_buffer){
+						bool_buffer = $(this).attr('item_type') == type_buffer;
+					}
+					
+				});
+				if(!bool_buffer){
+					let append_buffer = "<option item_type = " + type_buffer + ">"+type_buffer+"</option>";
+					$('#glevent_type').append(append_buffer);
+					$('.select_glevent_type').append(append_buffer);
+				}
+			});
+		}
+		
+		$('.select_glevent_type').each(function(ele){
+			let id_buffer = parseInt($(this).parents('tr').attr('glevent_id'));
+			let event_buffer = getReferenceById(id_buffer);
+			$(this).val(event_buffer.funcArgs[0]);	
+		});
+	}
+	
 	listEvents(){
 		
 		$('#event_table tbody tr').not('#event_input_row').empty();
@@ -802,6 +881,9 @@ export class IAudiCom {
 		$('#event_primary').empty().append(select_obj_buffer);
 		$('#event_item').empty().append(select_item_buffer);
 		$('#event_secondary').empty().append(select_obj_buffer);
+		
+		
+		
 
 		if(events_buffer.length > 0){
 			events_buffer.forEach(function(element) {
@@ -821,6 +903,8 @@ export class IAudiCom {
 	deleteEvent(_event_id){
 		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeEventByID(parseInt(_event_id));	
 	}
+	
+	
 	
 	
 	prepareSelectItems(){
@@ -918,6 +1002,7 @@ export class IAudiCom {
 		}
 		this.listItems();
 		this.listEvents();
+		this.listGlobalEvents();
 	}
 	
     /**
