@@ -138,7 +138,6 @@ export class AGEventHandler{
         this._events.forEach(function(item){
             if(item.addObject === agitem){
                 that.removeEventByID(item.ID);
-                g_references.delete(item.ID);
                 console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
             }
         })
@@ -152,7 +151,6 @@ export class AGEventHandler{
                 item.origin === agobject ||
                 item.object === agobject){
                 that.removeEventByID(item.ID);
-                g_references.delete(item.ID);
                 console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
             }
         })
@@ -164,7 +162,6 @@ export class AGEventHandler{
         this._globalEvents.forEach(function(item){
             if(item.object === agobject){
                 that.removeGlobalEventByID(item.ID);
-                g_references.delete(item.ID);
                 console.log("[AGEventHandler] Deleted Global Event [ID: " + item.ID + "] from References Table.");
             }
         })
