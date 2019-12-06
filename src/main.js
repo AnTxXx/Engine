@@ -1,5 +1,5 @@
 // @flow
-import {g_controls, g_eventHandler, g_history, g_gamearea, setControl, deleteItem} from "./AGEngine.js";
+import {g_controls, g_references, g_eventHandler, g_history, g_gamearea, setControl, deleteItem} from "./AGEngine.js";
 import { AGGameArea} from "./AGGameArea.js";
 import { AGObject} from "./AGObject.js";
 import { AGSoundSource} from "./AGSoundSource.js";
@@ -234,7 +234,10 @@ let globalEventFinish = new GlobalEvent(playerID, "INVENTORY", "countByType", ["
 g_eventHandler.addGlobalEvent(globalEventFinish.ID);
 
 //g_eventHandler.removeEventByID(eventEnemy1_ID);
-//getReferenceById(playerID).kill();
+
+//getReferenceById(globalEventFinish.ID).object = enemy1_ID;
+//getReferenceById(enemy1_ID).kill();
+//console.log(g_references);
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);

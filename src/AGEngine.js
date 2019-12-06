@@ -41,6 +41,17 @@ export function deleteItem(itemID:number){
     g_references.delete(itemID);
     console.log("[AGEngine] Deleted Item ID " + itemID + " from Inventories and References Table.");
 }
+
+export function getInventoryOfItemById(itemID:number){
+    for (let [k, v] of g_references) {
+        if (v.constructor.name === "AGInventory") {
+            let item:AGItem = v.searchItemById(itemID);
+            if(item){
+                return v.attachedTo();
+            }
+        }
+    }
+}
 //let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
 //let AGGameArea = new AGGameArea("main", new Vector3(20,20,0)); //simulate something "static", probably (quite sure :p) not state of the art
 /*

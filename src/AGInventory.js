@@ -17,6 +17,15 @@ export class AGInventory{
         return this._ID;
     }
 
+
+    get attachedTo(): AGObject {
+        return this._attachedTo;
+    }
+
+    set attachedTo(value: AGObject) {
+        this._attachedTo = value;
+    }
+
     constructor(object:AGObject) {
         this._ID = Counter.next();
         g_references.set(this._ID, this);
