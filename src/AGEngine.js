@@ -47,7 +47,7 @@ export function getOwnerOfItemById(itemID:number){
         if (v.constructor.name === "AGInventory") {
             let item:AGItem = v.searchItemById(itemID);
             if(item){
-                return v.attachedTo();
+                return v.attachedTo;
             }
         }
     }
