@@ -1266,6 +1266,7 @@ jQuery(function($){
 		i_audicom.deleteItemfromList($(this).parents('tr').attr('item_id'));
 		$(this).parents('tr').detach();
 		i_audicom.refreshItemSelect();
+		i_audicom.listGlobalEvents();
 	}); 	
 	$tableID_items.on('input', '.input_item_name', function () {	
 	    let buffer = $(this).val();
@@ -1280,7 +1281,7 @@ jQuery(function($){
 	$tableID_items.on('input', '.input_item_type', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).type = buffer;
-		
+		i_audicom.listGlobalEvents();
 	});
 	$tableID_items.on('input', '.input_item_charges', function () {	
 	    let buffer = $(this).val();
@@ -1300,9 +1301,8 @@ jQuery(function($){
 		let event_secondary = $('#event_secondary').val();
 		let event_repeat = $('#events_repeat').val() ? $('#events_repeat').val(): 1;
 		i_audicom.generateEvent(parseInt(event_primary), event_trigger, event_action, parseInt(event_item), parseInt(event_secondary), parseInt(event_repeat));	
-	
-		
 	});
+	
 	$tableID_events.on('click', '.btn_delete_row', function () {	
 		i_audicom.deleteEvent($(this).parents('tr').attr('event_id'));
 		$(this).parents('tr').detach();
@@ -1338,6 +1338,49 @@ jQuery(function($){
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).repeat = buffer;
 		
 	});
+	
+	/*Global Event Table*/
+	const $tableID_glevents = $('#glevent_table');
+	
+	$('.table-add_glevent').click(function(e){
+		let glevent_primary = $('#glevent_primary').val();
+		let glevent_conobject = $('#glevent_conobject').val();
+		let glevent_func = $('#glevent_func').val();
+		let glevent_type = $('#glevent_type').val();
+		let glevent_count = $('#glevent_count').val() ? $('#glevent_count').val(): 1;
+		let glevent_action = $('#glevent_action').val();
+		let glevent_repeat = $('#glevent_repeat').val() ? $('#glevent_repeat').val(): 1;
+	
+		i_audicom.generateGlobalEvent(parseInt(glevent_primary), glevent_conobject, glevent_func, glevent_type, glevent_count, glevent_action, glevent_repeat);
+	});
+	
+	
+	$tableID_glevents.on('click', '.btn_delete_row', function () {	
+		$(this).parents('tr').detach();
+	}); 	
+	
+	$tableID_glevents.on('change', '.select_glevent_primary', function () {	
+	    let buffer = $(this).val();
+		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).object = buffer;
+		
+	});
+	$tableID_glevents.on('change', '.select_glevent_type', function () {	
+	    let buffer = $(this).val();
+		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).funcArgs = [buffer];
+		
+	});
+	
+	$tableID_glevents.on('input', '.input_glevent_repeat', function () {	
+	    let buffer = $(this).val();
+		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).repeat = buffer;
+		
+	});
+	$tableID_glevents.on('input', '.input_glevent_count', function () {	
+	    let buffer = $(this).val();
+		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).value = buffer;
+		
+	});
+	
 	
 	
 	/***********************/
