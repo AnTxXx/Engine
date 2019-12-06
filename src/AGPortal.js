@@ -77,9 +77,16 @@ export class AGPortal extends AGObject{
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.unlink.name, this.constructor.name, arguments);
     }
 
-    addCondition(condition:AGCondition){
-        this._conditions.push(condition);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addCondition.name, this.constructor.name, arguments);
+    addConditionById(condition:number){
+        let cond:AGCondition = getReferenceById(condition);
+        this._conditions.push(cond);
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addConditionById.name, this.constructor.name, arguments);
+    }
+
+    deleteConditionById(condition:number){
+        let cond:AGCondition = getReferenceById(condition);
+        this._conditions.splice(this._conditions.indexOf(cond),1 );
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.deleteConditionById.name, this.constructor.name, arguments);
     }
 
     /**
