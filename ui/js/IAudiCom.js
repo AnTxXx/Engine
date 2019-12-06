@@ -823,6 +823,8 @@ export class IAudiCom {
 		$('.select_glevent_type').empty();
 		//get all types from items
 		
+		console.log(getReferenceById(glevents_buffer[0]));
+		
 		if(glevents_buffer.length > 0){
 			glevents_buffer.forEach(function(element) {
 				let event_buffer = getReferenceById(element);					
@@ -900,6 +902,9 @@ export class IAudiCom {
 	deleteEvent(_event_id){
 		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeEventByID(parseInt(_event_id));	
 	}
+	deleteGlobalEvent(_event_id){
+		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeGlobalEventByID(parseInt(_event_id));	
+	}
 	
 	
 	
@@ -939,10 +944,9 @@ export class IAudiCom {
      */
 	deleteObject(_fabobject){
 		let room_buffer = this._room_canvas;
+		console.log("hallo");
 		getReferenceById(_fabobject.AGObjectID).kill();
-		
-		
-		
+	
 		//check if removed element was linked to portal or has path points and remove that stuff
 		//TODO wait for portal remove function in AGPortal
 	
@@ -974,6 +978,7 @@ export class IAudiCom {
 		this._room_canvas.remove(_fabobject);
 		this._room_canvas.renderAll();
 		this.listEvents();
+		this.listGlobalEvents();
 	}
 	
     /**
@@ -1177,7 +1182,9 @@ export class IAudiCom {
 		});
 		this._room_canvas.renderAll();
 		//toggle contrast class for css
-		$( "h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help,#overlay_text_box" ).toggleClass("contrast");
+		$( ".item_event_tab_active,.item_event_tab,h1,h2,h3,h4,h5,h6,body,#sb_object_enemy,.sb_object_structure,#sb_object_generic,.btn,#canvas_container,label,.gegner_speed_active,.ss_active,#btn_help,#overlay_text_box" ).toggleClass("contrast");
+	
+		
 	}
 	
     /**

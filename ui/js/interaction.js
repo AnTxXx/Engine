@@ -1355,13 +1355,16 @@ jQuery(function($){
 	});
 	
 	
-	$tableID_glevents.on('click', '.btn_delete_row', function () {	
+	$tableID_glevents.on('click', '.btn_delete_row', function () {
+		i_audicom.deleteGlobalEvent($(this).parents('tr').attr('glevent_id'));
 		$(this).parents('tr').detach();
 	}); 	
 	
 	$tableID_glevents.on('change', '.select_glevent_primary', function () {	
 	    let buffer = $(this).val();
-		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).object = buffer;
+		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).object = parseInt(buffer);
+	
+		
 		
 	});
 	$tableID_glevents.on('change', '.select_glevent_type', function () {	
@@ -1381,6 +1384,22 @@ jQuery(function($){
 		
 	});
 	
+	
+	
+	$('.item_event_tab').click(function(){
+		
+		let table_buffer = $(this).attr('table_');
+		
+		$('.item_event_tab').removeClass('item_event_tab_active');
+		$(this).addClass('item_event_tab_active');
+		
+		if('.event_item_table')
+		
+		$('.event_item_table:visible').fadeOut(200, function(){
+			$('#' + table_buffer + '_container').fadeIn(200);
+		});
+
+	});
 	
 	
 	/***********************/

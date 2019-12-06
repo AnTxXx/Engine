@@ -634,6 +634,15 @@ body.contrast{
 	background-color:#202020;
 }
 
+.item_event_tab.contrast{	
+	color:white;
+}
+.item_event_tab_active.contrast{
+	color:#7FFFD4;
+}
+
+
+
 /*contrast end*/
 
 
@@ -736,10 +745,17 @@ input[type="range"]{
 
 
 /*items*/
-#item_container{
+#item_container, #event_container, #glevent_container{
 	margin-top:15px;
-	margin-bottom:140px;
 }
+
+#event_container{
+	display:none;
+}
+#glevent_container{
+	display:none;
+}
+
 #event_table input{
 	width:150px;
 	margin-right:15px;
@@ -748,7 +764,7 @@ input[type="range"]{
 	width:150px;
 	margin-right:15px;
 }
-#item_container th{
+#item_container th, #event_container th, #glevent_container th{
 	width:200px;
 	text-align:left;
 	padding: 10px 10px;
@@ -756,7 +772,7 @@ input[type="range"]{
 #item_container table{ 
 
 }
-#item_container td input:not(.input_row), #event_container td input:not(.input_row), #event_container td select:not(.input_row){
+#item_container td input:not(.input_row), #event_container td input:not(.input_row), #glevent_container td select:not(.input_row), #glevent_container td input:not(.input_row), #event_container td select:not(.input_row){
 	border:0 !important;
 	font-weight:400;
 }
@@ -769,8 +785,7 @@ input[type="range"]{
 	margin-bottom:15px;
 	
 }
-
-.table-add_item, .table-add_event{
+.table-add_item, .table-add_event, .table-add_glevent{
 	margin-bottom:10px;
 	margin-top:10px;
 }
@@ -780,16 +795,43 @@ td button{
 	margin-left:auto !important;
 	margin-right:auto !important;
 }
-#header_events, #header_items, #header_glevents{
+/*#header_events, #header_items, #header_glevents{
 	text-align:center;
 	margin-top:50px;
 	margin-bottom:10px;
 	font-size:30px;
-}
-
-
+}*/
 
 table{
 	margin-left:auto;
 	margin-right:auto;
+}
+tr input[type='number']{
+	width:80px !important;
+}
+.item_event_tab{
+	
+	font-size: 20px;
+	display:inline-block;
+	border-right:1px solid black;
+	padding:5px 15px;
+	color:#999;
+	border-bottom:1px solid black;
+}
+#item_event_container{
+	margin-bottom:60px;
+}
+.item_event_tab:last-child{
+	border-right:0;
+}
+.item_event_tab_active{
+	color:black;
+	border-bottom:0px solid black;
+}
+#item_event_tab_container{
+	margin-top:40px;
+	text-align:center;
+}
+.item_event_tab{
+	cursor:pointer;
 }
