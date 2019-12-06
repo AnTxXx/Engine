@@ -1266,6 +1266,7 @@ jQuery(function($){
 		i_audicom.deleteItemfromList($(this).parents('tr').attr('item_id'));
 		$(this).parents('tr').detach();
 		i_audicom.refreshItemSelect();
+		i_audicom.listGlobalEvents();
 	}); 	
 	$tableID_items.on('input', '.input_item_name', function () {	
 	    let buffer = $(this).val();

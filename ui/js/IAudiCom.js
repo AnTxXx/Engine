@@ -839,6 +839,9 @@ export class IAudiCom {
 		
 		let items_buffer = getReferencesOfType('AGItem');	
 		let that = this;
+		let append_buffer = "<option item_type = ''><i></i></option>";
+		$('#glevent_type').append(append_buffer);
+		$('.select_glevent_type').append(append_buffer);
 		if(items_buffer.length > 0){
 			items_buffer.forEach(function(element) {
 				let type_buffer = getReferenceById(element).type;
@@ -853,13 +856,12 @@ export class IAudiCom {
 					
 				});
 				if(!bool_buffer){
-					let append_buffer = "<option item_type = " + type_buffer + ">"+type_buffer+"</option>";
+					append_buffer = "<option item_type = " + type_buffer + ">"+type_buffer+"</option>";
 					$('#glevent_type').append(append_buffer);
 					$('.select_glevent_type').append(append_buffer);
 				}
 			});
-		}
-		
+		}	
 		$('.select_glevent_type').each(function(ele){
 			let id_buffer = parseInt($(this).parents('tr').attr('glevent_id'));
 			let event_buffer = getReferenceById(id_buffer);
@@ -874,16 +876,11 @@ export class IAudiCom {
 		let that = this;		
 		let select_obj_buffer = this.prepareSelectObjects();
 		let select_item_buffer = this.prepareSelectItems();
-		
-		console.log(events_buffer);
-		
+				
 		//fill the generation-inputs	
 		$('#event_primary').empty().append(select_obj_buffer);
 		$('#event_item').empty().append(select_item_buffer);
 		$('#event_secondary').empty().append(select_obj_buffer);
-		
-		
-		
 
 		if(events_buffer.length > 0){
 			events_buffer.forEach(function(element) {

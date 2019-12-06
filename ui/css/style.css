@@ -763,7 +763,7 @@ input[type="range"]{
 .input_row{
 	font-weight:600;
 }
-#item_input_row, #event_input_row{
+#item_input_row, #event_input_row, #glevent_input_row{
 	border-top:1px solid #BFBFBF;
 	border-bottom:1px solid #BFBFBF;
 	margin-bottom:15px;
