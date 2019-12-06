@@ -44,6 +44,17 @@ export class AGEventHandler{
         this._events.splice(this.findEventIndex(event), 1);
     }
 
+    removeGlobalEventByID(eventID:number){
+        this.removeEvent(getReferenceById(eventID));
+        if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeGlobalEventByID.name, this.constructor.name, arguments);
+        g_references.delete(eventID);
+    }
+
+    removeGlobalEvent(event:GlobalEvent){
+        console.log("[AGEventHandler] Removing Global Event [ID: " + event.ID + "].");
+        this._globalEvents.splice(this.findGlobalEventIndex(event), 1);
+    }
+
     _ID:number;
     _events:Array<Event>;
     _globalEvents:Array<GlobalEvent>;
@@ -113,6 +124,14 @@ export class AGEventHandler{
         return -1;
     }
 
+    findGlobalEventIndex(event:GlobalEvent):number {
+        for(let i = 0; i < this._globalEvents.length; i++){
+            if(this._globalEvents[i].ID === event.ID)
+            return i;
+        }
+        return -1;
+    }
+
     deleteEventsContainingItemById(itemID:number){
         let agitem:AGItem = getReferenceById(itemID);
         let that = this;
@@ -125,7 +144,7 @@ export class AGEventHandler{
         })
     }
 
-    findEventsContainingObjectById(objectID:number){
+    deleteEventsContainingObjectById(objectID:number){
         let agobject:AGObject = getReferenceById(objectID);
         let that = this;
         this._events.forEach(function(item){
@@ -135,6 +154,18 @@ export class AGEventHandler{
                 that.removeEvent(item);
                 g_references.delete(item.ID);
                 console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
+            }
+        })
+    }
+
+    deleteGlobalEventsContainingObjectById(objectID:number){
+        let agobject:AGObject = getReferenceById(objectID);
+        let that = this;
+        this._globalEvents.forEach(function(item){
+            if(item.object === agobject){
+                that.removeGlobalEvent(item);
+                g_references.delete(item.ID);
+                console.log("[AGEventHandler] Deleted Global Event [ID: " + item.ID + "] from References Table.");
             }
         })
     }

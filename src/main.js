@@ -234,6 +234,7 @@ let globalEventFinish = new GlobalEvent(playerID, "INVENTORY", "countByType", ["
 g_eventHandler.addGlobalEvent(globalEventFinish.ID);
 
 //g_eventHandler.removeEventByID(eventEnemy1_ID);
+//getReferenceById(playerID).kill();
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);
