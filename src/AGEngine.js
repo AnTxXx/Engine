@@ -42,7 +42,7 @@ export function deleteItem(itemID:number){
     console.log("[AGEngine] Deleted Item ID " + itemID + " from Inventories and References Table.");
 }
 
-export function getInventoryOfItemById(itemID:number){
+export function getOwnerOfItemById(itemID:number){
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGInventory") {
             let item:AGItem = v.searchItemById(itemID);
