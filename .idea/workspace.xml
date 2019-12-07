@@ -4,13 +4,29 @@
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGCondition.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEngine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGEventHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEventHandler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGGameArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGGameArea.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGInventory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGNavigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPortal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGRoomExit.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoomExit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGSaLo.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSaLo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/EventType.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/EventType.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/GlobalEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/GlobalEvent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/js/three/Matrix4.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Matrix4.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/js/three/Quaternion.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Quaternion.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/js/three/Vector3.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Vector3.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGCondition.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPortal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,26 +50,31 @@
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="interface_test.html" type="JavascriptDebugType" nameIsGenerated="true" engineId="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" uri="http://localhost:63342/Engine/interface_test.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -95,6 +116,9 @@
       <workItem from="1574776182409" duration="2428000" />
       <workItem from="1575282896233" duration="10586000" />
       <workItem from="1575623988621" duration="10370000" />
+      <workItem from="1575715162794" duration="50000" />
+      <workItem from="1575715263261" duration="157000" />
+      <workItem from="1575715431971" duration="1153000" />
     </task>
     <servers />
   </component>
@@ -122,5 +146,15 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1575715801633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575715801633" />
+    <state x="640" y="247" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1575715415746">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="640" y="247" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575715415745" />
   </component>
 </project>

@@ -10,6 +10,9 @@ import {getReferenceById} from "./AGEngine.js";
 import {setLoading} from "./AGEngine.js";
 
 export class AGPortal extends AGObject{
+    get conditions() {
+        return this._conditions;
+    }
 
     get exit(): ?AGPortal {
         return this._exit;
@@ -87,6 +90,11 @@ export class AGPortal extends AGObject{
         let cond:AGCondition = getReferenceById(condition);
         this._conditions.splice(this._conditions.indexOf(cond),1 );
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.deleteConditionById.name, this.constructor.name, arguments);
+    }
+
+    getConditionById(condition:number){
+        let cond:AGCondition = getReferenceById(condition);
+        return this._conditions[this._conditions.indexOf(cond)];
     }
 
     /**

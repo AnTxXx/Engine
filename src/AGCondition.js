@@ -14,6 +14,7 @@ export class AGCondition {
     _object:AGObject;
     _conditionType:ConditionType;
     _object2:Object;
+    //_amount:number;
     _ID:number;
 
     get ID() {
@@ -52,7 +53,7 @@ export class AGCondition {
         this._object2 = obj;
     }
 
-    constructor(objectID: number, conditionType:ConditionType, object2ID: number) {
+    constructor(objectID: number, conditionType:ConditionType, object2ID: number/*, amount: number*/) {
         this._ID = Counter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
@@ -60,11 +61,9 @@ export class AGCondition {
         this._object = getReferenceById(objectID);
         this._conditionType = conditionType;
         this._object2 = getReferenceById(object2ID);
+        //this._amount = amount;
 
         console.log("[AGCondition] Creating AGCondition object [ID: " + this._ID + "], requiring object [ID: " + this._object.ID + "] to have object [ID: " + this._object2.ID + "] in " + conditionType.toString() + ".");
-
-
-
     }
 
     evaluate():boolean{
