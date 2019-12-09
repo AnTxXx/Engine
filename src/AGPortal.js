@@ -88,7 +88,14 @@ export class AGPortal extends AGObject{
 
     deleteConditionById(condition:number){
         let cond:AGCondition = getReferenceById(condition);
-        this._conditions.splice(this._conditions.indexOf(cond),1 );
+        let index:number = -1;
+        index = this._conditions.indexOf(cond);
+
+        if(index > -1) {
+            this._conditions.splice(index,1 );
+            console.log("[AGPortal] Removing Condition ID: [" + cond.ID + "] from Object " + this._name + "'s list of conditions.");
+        } else console.log("[AGPortal] Condition ID: [" + cond.ID + "] not found in Object " + this._name + "'s list of conditions. Cannot remove.");
+
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.deleteConditionById.name, this.constructor.name, arguments);
     }
 

@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGCondition.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGEngine.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPortal.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

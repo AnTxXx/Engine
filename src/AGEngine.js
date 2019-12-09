@@ -42,6 +42,17 @@ export function deleteItem(itemID:number){
     console.log("[AGEngine] Deleted Item ID " + itemID + " from Inventories and References Table.");
 }
 
+export function deleteCondition(conditionID:number){
+    for (let [k, v] of g_references) {
+        if (v.constructor.name === "AGPortal") {
+            v.deleteConditionById(conditionID);
+        }
+    }
+
+    g_references.delete(conditionID);
+    console.log("[AGEngine] Deleted Condition ID " + conditionID + " from Objects and References Table.");
+}
+
 export function getOwnerIdOfItemById(itemID:number){
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGInventory") {
