@@ -38,7 +38,6 @@ export function deleteItem(itemID:number){
     }
     g_eventHandler.deleteEventsContainingItemById(itemID);
 
-    g_references.delete(itemID);
     console.log("[AGEngine] Deleted Item ID " + itemID + " from Inventories and References Table.");
 }
 
