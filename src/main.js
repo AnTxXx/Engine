@@ -117,6 +117,7 @@ getReferenceById(wall2_ID).tag = "WALL";
 getReferenceById(wall3_ID).tag = "WALL";
 
 getReferenceById(environmental1_ID).tag = "WATERFALL";
+getReferenceById(environmental2_ID).tag = "FLEDERMAUS";
 
 getReferenceById(enemy1_ID).tag = "ENEMY";
 getReferenceById(enemy2_ID).tag = "ENEMY";
@@ -251,9 +252,9 @@ getReferenceById(portal1.ID).linkPortals(portal2.ID);
 let cond = new AGCondition(playerID, "INVENTORY", "hasItemById", [coin1_ID], true);
 getReferenceById(portal2.ID).addConditionById(cond.ID);
 
-console.log(g_references);
-portal2.kill();
-console.log(g_references);
+//console.log(g_references);
+//portal2.kill();
+//console.log(g_references);
 
 
 

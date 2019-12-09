@@ -124,7 +124,7 @@ export class AGSaLo {
             //------------------------------------
 
             if(obj._func === obj._fclass){
-                console.log(obj._func);
+                //console.log(obj._func);
                 let constructor:Function = getConstructor(obj._func, this._classes);
                 //console.log(constructor);
                 let newObject = Reflect.construct(constructor, args);
