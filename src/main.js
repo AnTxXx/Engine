@@ -22,7 +22,7 @@ import {AGInventory} from "./AGInventory.js";
 import {GlobalEvent} from "./GlobalEvent.js";
 
 
-let controls:AGNavigation = new AGNavigation(-1, -1, 37, 39, 67);
+let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 67);
 let controlsID:number = getIdByReference(controls);
 setControl(getReferenceById(controlsID));
 
@@ -30,23 +30,22 @@ let room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(
 let room_1ID = getIdByReference(room_1);
 g_gamearea.addRoom(room_1ID);
 let player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-
 let playerID = getIdByReference(player);
+
+getReferenceById(room_1ID).add(playerID);
 
 g_gamearea.listener = playerID;
 getReferenceById(room_1ID).listener = playerID;
 
 
 //Player Settings
-getReferenceById(playerID).setSpeedSkalar(1);
+getReferenceById(playerID).setSpeedSkalar(0.1);
 
-getReferenceById(playerID).movable = true;
+//getReferenceById(playerID).movable = true;
 getReferenceById(playerID).dangerous = true;
 getReferenceById(playerID).damage = 1;
 getReferenceById(playerID).range = 1;
 getReferenceById(playerID).interactionCooldown = 500;
-
-getReferenceById(room_1ID).add(playerID);
 
 getReferenceById(room_1ID).live = true;
 //play(area, true);
