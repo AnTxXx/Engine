@@ -34,12 +34,20 @@ export class AGCondition {
         this._conditionObject = value;
     }
 
-    get funcOfConditionObject(): string {
+    get funcOfConditionObject(): Function {
         return this._funcOfConditionObject;
     }
 
     set funcOfConditionObject(value: string) {
-        this._funcOfConditionObject = value;
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'funcOfConditionObject').set.name, this.constructor.name, arguments);
+        let f:Function;
+        switch(this._conditionObject){
+            case "INVENTORY":
+                f = g_history.getFunction("AGInventory", value);
+                break;
+        }
+        this._funcOfConditionObject = f;
     }
 
     get funcArgs(): Array<*> {
