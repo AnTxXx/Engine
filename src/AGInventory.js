@@ -88,7 +88,6 @@ export class AGInventory{
             this._inventory.splice(indexToDelete, 1);
             console.log("[AGInventory] Removing Item " + item.name + " from Object " + this._attachedTo.name + "'s inventory.");
         } else console.log("[AGInventory] Item " + item.name + " not found in Object " + this._attachedTo.name + "'s inventory. Cannot remove.");
-        g_references.delete(item.ID);
     }
 
 
