@@ -55,6 +55,8 @@ export class AGCondition {
     }
 
     set funcArgs(value: Array<*>) {
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'funcArgs').set.name, this.constructor.name, arguments);
         this._funcArgs = value;
     }
 
@@ -63,6 +65,8 @@ export class AGCondition {
     }
 
     set value(value: Object) {
+        // $FlowFixMe
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'value').set.name, this.constructor.name, arguments);
         this._value = value;
     }
 
