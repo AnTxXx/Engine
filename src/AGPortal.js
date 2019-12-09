@@ -5,7 +5,7 @@ import type {Type} from "./AGType.js";
 import {AGCondition} from "./AGCondition.js";
 import {evaluateAll} from "./AGCondition.js";
 import {AGRoom} from "./AGRoom.js";
-import {g_history, g_loading, g_playing} from "./AGEngine.js";
+import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 import {setLoading} from "./AGEngine.js";
 
@@ -97,11 +97,19 @@ export class AGPortal extends AGObject{
         } else console.log("[AGPortal] Condition ID: [" + condition + "] not found in Object " + this._name + "'s list of conditions. Cannot remove.");
 
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.deleteConditionById.name, this.constructor.name, arguments);
+        g_references.delete(condition)
     }
 
     getConditionById(condition:number){
         let cond:AGCondition = getReferenceById(condition);
         return this._conditions[this._conditions.indexOf(cond)];
+    }
+
+    kill() {
+        let that = this;
+        this._conditions.forEach(element => that.deleteConditionById(element.ID));
+        this._conditions = [];
+        super.kill();
     }
 
     /**

@@ -5,7 +5,7 @@ import type {ConditionType} from "./ConditionType.js";
 import {getReferenceById} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
-import type {ConditionObject} from "./EventType";
+import type {ConditionObject} from "./EventType.js";
 
 /**
  * Class for Conditions that must be fulfilled before an action can take place. (Very WIP)

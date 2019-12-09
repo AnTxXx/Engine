@@ -49,7 +49,7 @@ export function deleteCondition(conditionID:number){
         }
     }
 
-    g_references.delete(conditionID);
+   // g_references.delete(conditionID);
     console.log("[AGEngine] Deleted Condition ID " + conditionID + " from Objects and References Table.");
 }
 

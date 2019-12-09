@@ -19,6 +19,7 @@ import {GlobalEvent} from "./GlobalEvent.js";
 import {Event} from "./Event.js";
 import {AGItem} from "./AGItem.js";
 import {setEventHandler, setGameArea} from "./AGEngine.js";
+import {AGCondition} from "./AGCondition.js";
 
 
 //import {clone} from "./js/Lodash/core.js"
@@ -38,7 +39,7 @@ export class AGSaLo {
     constructor(){
         this._savedObjects = [];
         this._classes = [];
-        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype, Event.prototype, GlobalEvent.prototype, AGInventory.prototype, AGItem.prototype);
+        this._classes.push(AGEventHandler.prototype, AGGameArea.prototype, AGNavigation.prototype, AGRoom.prototype, AGPlayer.prototype, AGRoomExit.prototype, AGObject.prototype, AGSoundSource.prototype, AGPortal.prototype, Event.prototype, GlobalEvent.prototype, AGInventory.prototype, AGItem.prototype, AGCondition.prototype);
     }
 
     ike(objID:number, func:string, fclass:string, args:Array<Object>){
@@ -123,6 +124,7 @@ export class AGSaLo {
             //------------------------------------
 
             if(obj._func === obj._fclass){
+                console.log(obj._func);
                 let constructor:Function = getConstructor(obj._func, this._classes);
                 //console.log(constructor);
                 let newObject = Reflect.construct(constructor, args);
