@@ -5,6 +5,7 @@ import type {ConditionType} from "./ConditionType.js";
 import {getReferenceById} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
+import type {ConditionObject} from "./EventType";
 
 /**
  * Class for Conditions that must be fulfilled before an action can take place. (Very WIP)
@@ -12,8 +13,10 @@ import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
 export class AGCondition {
 
     _object:AGObject;
-    _conditionType:ConditionType;
-    _object2:Object;
+    _conditionObject:ConditionObject;
+    _funcOfConditionObject:Function;
+    _funcArgs:Array<any>;
+    _value:Object;
     //_amount:number;
     _ID:number;
 
@@ -21,14 +24,38 @@ export class AGCondition {
         return this._ID;
     }
 
-    get conditionType(): any {
-        return this._conditionType;
+    get conditionObject(): any {
+        return this._conditionObject;
     }
 
-    set conditionType(value: any) {
+    set conditionObject(value: any) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'conditionType').set.name, this.constructor.name, arguments);
-        this._conditionType = value;
+        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'conditionObject').set.name, this.constructor.name, arguments);
+        this._conditionObject = value;
+    }
+
+    get funcOfConditionObject(): string {
+        return this._funcOfConditionObject;
+    }
+
+    set funcOfConditionObject(value: string) {
+        this._funcOfConditionObject = value;
+    }
+
+    get funcArgs(): Array<*> {
+        return this._funcArgs;
+    }
+
+    set funcArgs(value: Array<*>) {
+        this._funcArgs = value;
+    }
+
+    get value(): Object {
+        return this._value;
+    }
+
+    set value(value: Object) {
+        this._value = value;
     }
 
     get object():AGObject {
@@ -42,35 +69,36 @@ export class AGCondition {
         this._object = obj;
     }
 
-    get object2() {
-        return this._object2;
-    }
-
-    set object2(objectID:number) {
-        let obj:Object = getReferenceById(objectID);
-        // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'object2').set.name, this.constructor.name, arguments);
-        this._object2 = obj;
-    }
-
-    constructor(objectID: number, conditionType:ConditionType, object2ID: number/*, amount: number*/) {
+    constructor(objectID: number, conditionObject:ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object) {
         this._ID = Counter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
 
         this._object = getReferenceById(objectID);
-        this._conditionType = conditionType;
-        this._object2 = getReferenceById(object2ID);
+        this._conditionObject = conditionObject;
         //this._amount = amount;
 
-        console.log("[AGCondition] Creating AGCondition object [ID: " + this._ID + "], requiring object [ID: " + this._object.ID + "] to have object [ID: " + this._object2.ID + "] in " + conditionType.toString() + ".");
+        let f:Function;
+        switch(conditionObject){
+            case "INVENTORY":
+                f = g_history.getFunction("AGInventory", funcOfConditionObject);
+                break;
+        }
+
+        this._funcOfConditionObject = f;
+        this._funcArgs = funcArgs;
+        this._value = value;
     }
 
-    evaluate():boolean{
-        switch(this._conditionType){
-            case("INVENTORY"):
-                if(this._object.inventory.searchItem(this._object2)) return true;
-                break;
+    evaluate():boolean {
+        switch(this._conditionObject) {
+            case "INVENTORY":
+                if (this._object.inventory) {
+                    if (this._funcOfConditionObject.apply(this._object.inventory, this._funcArgs) === this._value) {
+                        //console.log("[AGCondition] Condition [ID: " + this._ID + "] with Object [ID: " + this._object.ID + "] fulfilled.");
+                        return true;
+                    }
+                }
         }
         return false;
     }

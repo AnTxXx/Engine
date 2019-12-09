@@ -239,8 +239,8 @@ g_eventHandler.addGlobalEvent(globalEventFinish.ID);
 //getReferenceById(enemy1_ID).kill();
 //console.log(g_references);
 
-let portal1 = new AGPortal("Portal im Weg", new Vector3(4.22, 1, 1.28), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-let portal2 = new AGPortal("Portal nicht im Weg", new Vector3(5.3, 1, 4.5), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+let portal1 = new AGPortal("Portal im Weg", new Vector3(2.1, 1, 7.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+let portal2 = new AGPortal("Portal nicht im Weg", new Vector3(8.9, 1, 5.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 let portal3 = new AGPortal("Portal mit Condition", new Vector3(19.2, 1, 7.5), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
 
 getReferenceById(room_1ID).add(portal1.ID);
@@ -248,8 +248,8 @@ getReferenceById(room_1ID).add(portal2.ID);
 getReferenceById(room_1ID).add(portal3.ID);
 
 getReferenceById(portal1.ID).linkPortals(portal2.ID);
-let cond = new AGCondition(playerID, "INVENTORY", coin1_ID);
-getReferenceById(portal3.ID).addConditionById(cond.ID);
+let cond = new AGCondition(playerID, "INVENTORY", "hasItemById", [coin1_ID], true);
+getReferenceById(portal2.ID).addConditionById(cond.ID);
 
 
 

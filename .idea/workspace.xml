@@ -4,28 +4,15 @@
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGCondition.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEngine.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGEventHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEventHandler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGGameArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGGameArea.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGInventory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGNavigation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPortal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGRoomExit.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoomExit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGSaLo.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSaLo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Event.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/EventType.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/EventType.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/GlobalEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/GlobalEvent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/js/three/Matrix4.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Matrix4.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/js/three/Quaternion.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Quaternion.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/js/three/Vector3.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/js/three/Vector3.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGCondition.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPortal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGInventory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,13 +135,30 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1575715801633">
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1575882359382">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575715801633" />
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1575882359382" />
     <state x="640" y="247" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1575715415746">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="640" y="247" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575715415745" />
+    <state width="1878" height="395" key="GridCell.Tab.0.bottom" timestamp="1575884105663">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1878" height="395" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1575884105663" />
+    <state width="1878" height="395" key="GridCell.Tab.0.center" timestamp="1575884105662">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1878" height="395" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1575884105662" />
+    <state width="1878" height="395" key="GridCell.Tab.0.left" timestamp="1575884105662">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1878" height="395" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1575884105662" />
+    <state width="1878" height="395" key="GridCell.Tab.0.right" timestamp="1575884105663">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1878" height="395" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1575884105663" />
   </component>
 </project>

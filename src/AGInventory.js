@@ -115,6 +115,11 @@ export class AGInventory{
         return null;
     }
 
+    hasItemById(itemID:number):boolean{
+        if(this.searchItemById(itemID)) return true;
+        return false;
+    }
+
     searchItemById(itemID:number):?AGItem{
         return(this.searchItem(getReferenceById(itemID)));
     }
