@@ -83,6 +83,9 @@ export class IAudiCom {
 					
 				}
 				if(item.isObject && item.type != 'player'){
+					
+					
+					
 					getReferenceById(item.AGObjectID).kill();
 		 		}
 				if(item.type !='grid_line' && item.type != 'player'){
@@ -93,11 +96,6 @@ export class IAudiCom {
 			
 			
 			this.deleteItemsEventsEtc();
-			
-			
-			
-			
-			
 			room_buffer.renderAll();	
 		}	
 	}
@@ -715,21 +713,34 @@ export class IAudiCom {
 	
 	
 	
-	deleteItemsEventsEtc(){
-		let items_buffer = getReferencesOfType('AGItem');
-		let conditions_buffer = getReferencesOfType('AGCondition');	
-		let glevents_buffer = getReferencesOfType('GlobalEvent');
-		let events_buffer = getReferencesOfType('Event');
 	
+	/**
+	* load Level from Clipboard
+	*/
+	loadLevelSALO(){
+		this.deleteItemsEventsEtc();
+		let that = this;
+		
+		this._room_canvas.clear();	
+		g_history.loadLevelFromClipboard().then(function(){
+			that.renderScene();
+		});
+	}
+	
+	deleteItemsEventsEtc(){	
+		let items_buffer = getReferencesOfType('AGItem');
 		items_buffer.forEach(function(buffer){
 			deleteItem(buffer);
 		});
+		let conditions_buffer = getReferencesOfType('AGCondition');	
 		conditions_buffer.forEach(function(buffer){
 			deleteCondition(buffer);	
 		});
+		let glevents_buffer = getReferencesOfType('GlobalEvent');
 		glevents_buffer.forEach(function(buffer){
 			getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeGlobalEventByID(parseInt(buffer));	
 		});	
+		let events_buffer = getReferencesOfType('Event');
 		events_buffer.forEach(function(buffer){
 			getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeEventByID(parseInt(buffer));	
 		});
@@ -750,6 +761,9 @@ export class IAudiCom {
 		$('#item_carrier').empty().append(select_obj_buffer);
 		$('#item_table tbody tr').not('#item_input_row').empty();
 		let items_buffer = getReferencesOfType('AGItem');	
+		
+		
+		
 		let that = this;
 		if(items_buffer.length > 0){
 			items_buffer.forEach(function(element) {
@@ -1092,6 +1106,7 @@ export class IAudiCom {
 	}
 	
 	deleteEvent(_event_id){
+		//console.log(getReferenceById(getReferencesOfType("AGEventHandler")[0]))
 		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeEventByID(parseInt(_event_id));	
 	}
 	deleteGlobalEvent(_event_id){
@@ -1136,7 +1151,7 @@ export class IAudiCom {
      */
 	deleteObject(_fabobject){
 		let room_buffer = this._room_canvas;
-		console.log("hallo");
+		//console.log("hallo");
 		getReferenceById(_fabobject.AGObjectID).kill();
 	
 		//check if removed element was linked to portal or has path points and remove that stuff
@@ -1443,17 +1458,6 @@ export class IAudiCom {
 	
 	
 	/**
-	* load Level from Clipboard
-	*/
-	loadLevelSALO(){
-		let that = this;
-		this._room_canvas.clear();	
-		$('#item_table tbody').empty();
-		g_history.loadLevelFromClipboard().then(function(){
-			that.renderScene();
-		});
-	}
-	/**
 	* save Level from Clipboard
 	*/
 	saveLevelSALO(){
@@ -1483,90 +1487,211 @@ export class IAudiCom {
 		rebuildHandlerGameArea();
 		//stop level clear everything
 		
+		console.log(lvl_);
+		
 		switch(lvl_){
 			case 1:	
-				var controls = new AGNavigation(38, 40, 37, 39, 67);
+				var controls = new AGNavigation(-1, -1, 37, 39, 67);
 				var controlsID = getIdByReference(controls);
-				that._controlsID = controlsID;
 				setControl(getReferenceById(controlsID));
-				var room_1 = new AGRoom("First Room", new Vector3(17.0, 2.5, 7.0), new Vector3(10.0, 0.0, 10.0));
+
+				var room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
 				var room_1ID = getIdByReference(room_1);
 				g_gamearea.addRoom(room_1ID);
+
 				var player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				var exit = new AGRoomExit("Exit", new Vector3(15.5, 1.0, 6.0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-				var skeleton_1 = new AGObject("Skeleton", new Vector3(5.5, 1, 1.5), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
-				var skeleton_2 = new AGObject("Skeleton", new Vector3(10, 1, 3), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
-				var skeleton_3 = new AGObject("Skeleton", new Vector3(13.5, 1, 1), new Vector3(1.0, 0.0, 0.0), new Vector3(1.0, 1.0, 1.0));
-				var wallHorizontal = new AGObject("WallHorizontal", new Vector3(7, 1.0, 4.5), new Vector3(1, 0, 0), new Vector3(14, 1, 1));
-				var wallVertical = new AGObject("WallVertical", new Vector3(13.5, 1.0, 6), new Vector3(1, 0, 0), new Vector3(1, 1, 2));
-				var waterfall = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
 				var ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
-				var monster_1 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
-				var monster_2 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
-				var monster_3 = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
-				var playerID = getIdByReference(player);
-				var exitID = getIdByReference(exit);
-				var skeleton_1ID = getIdByReference(skeleton_1);
-				var skeleton_2ID = getIdByReference(skeleton_2);
-				var skeleton_3ID = getIdByReference(skeleton_3);
-				var waterfallID = getIdByReference(waterfall);
+
+				var wall1 = new AGObject("Wand unten", new Vector3(14, 1.0, 6.7), new Vector3(1, 0, 0), new Vector3(12, 1, 0.5));
+				var wall2 = new AGObject("Wand links", new Vector3(4.5, 1.0, 6.4), new Vector3(1, 0, 0), new Vector3(0.5, 1, 5));
+				var wall3 = new AGObject("Wand oben", new Vector3(10.66, 1.0, 3.7), new Vector3(1, 0, 0), new Vector3(12.8, 1, 0.5));
+				var waterfall_1 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
+				var waterfall_2 = new AGSoundSource("Waterfall", "sounds/waterfall.wav", true, 1, room_1ID);
+				var enemy1 = new AGObject("Gegner 1", new Vector3(6.3, 1.0, 2.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				var enemy2 = new AGObject("Gegner 2", new Vector3(12.9, 1.0, 0.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				var enemy3 = new AGObject("Gegner 3", new Vector3(12.3, 1.0, 4.6), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				var enemy4 = new AGObject("Gegner 4", new Vector3(12.9, 1.0, 8.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				var enemy1_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+				var enemy2_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+				var enemy3_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+				var enemy4_ss = new AGSoundSource("Monster", "sounds/monster.wav", true, 1, room_1ID);
+
+				var arrow = new AGSoundSource("Pfeil", "sounds/arrow.wav", false, 1, room_1ID);
+				var monsterDeath_enemy1 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+				var monsterDeath_enemy2 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+				var monsterDeath_enemy3 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+				var monsterDeath_enemy4 = new AGSoundSource("Todesgeraeusch", "sounds/monsterpain.wav", false, 1, room_1ID);
+
+				var steps = new AGSoundSource("Schritte", "sounds/steps.wav", true, 1, room_1ID);
+
+				var environmental1 = new AGObject("Wasserfall", new Vector3(19.3, 1.0, 2.1), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				var environmental1SS = new AGSoundSource("Wasserfall Sound", "sounds/waterfall.wav", true, 1, room_1ID);
+
+				var environmental2 = new AGObject("Fledermaus", new Vector3(7.9, 1.0, 8.8), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
+				var environmental2SS = new AGSoundSource("Fledermaus Sound", "sounds/bats.wav", true, 1, room_1ID);
+
+				var wall1_ID = wall1.ID;
+				var wall2_ID = wall2.ID;
+				var wall3_ID = wall3.ID;
+				var waterfall1_ID = waterfall_1.ID;
+				var waterfall2_ID = waterfall_2.ID;
+				var enemy1_ID = enemy1.ID;
+				var enemy2_ID = enemy2.ID;
+				var enemy3_ID = enemy3.ID;
+				var enemy4_ID = enemy4.ID;
+
+				var enemy1_ss_ID = enemy1_ss.ID;
+				var enemy2_ss_ID = enemy2_ss.ID;
+				var enemy3_ss_ID = enemy3_ss.ID;
+				var enemy4_ss_ID = enemy4_ss.ID;
+
+				var monsterDeathEnemy1SS_ID = monsterDeath_enemy1.ID;
+				var monsterDeathEnemy2SS_ID = monsterDeath_enemy2.ID;
+				var monsterDeathEnemy3SS_ID = monsterDeath_enemy3.ID;
+				var monsterDeathEnemy4SS_ID = monsterDeath_enemy4.ID;
+
+				var stepsID = steps.ID;
+
+				var arrow_ID = arrow.ID;
+
+				var environmental1_ID = environmental1.ID;
+				var environmental1SS_ID = environmental1SS.ID;
+				var environmental2_ID = environmental2.ID;
+				var environmental2SS_ID = environmental2SS.ID;
+
 				var ouchID = getIdByReference(ouch);
-				var monster_1ID = getIdByReference(monster_1);
-				var monster_2ID = getIdByReference(monster_2);
-				var monster_3ID = getIdByReference(monster_3);
-				var wallHorizontalID = getIdByReference(wallHorizontal);
-				var wallVerticalID = getIdByReference(wallVertical);
-				g_gamearea.listener = getIdByReference(player);
-				getReferenceById(room_1ID).listener = getIdByReference(player);
-				
+				var playerID = getIdByReference(player);
+
+				g_gamearea.listener = playerID;
+				getReferenceById(room_1ID).listener = playerID;
+
 				//Add ObjectsToRoom
 				getReferenceById(room_1ID).add(playerID);
-				getReferenceById(room_1ID).add(exitID);
-				getReferenceById(room_1ID).add(skeleton_1ID);
-				getReferenceById(room_1ID).add(skeleton_2ID);
-				getReferenceById(room_1ID).add(skeleton_3ID);
-				getReferenceById(room_1ID).add(wallHorizontalID);
-				getReferenceById(room_1ID).add(wallVerticalID);
-				getReferenceById(wallHorizontalID).tag = "WALL";
-				getReferenceById(wallVerticalID).tag = "WALL";
-				
-				//Soundtags
-				getReferenceById(waterfallID).tag = "WATERFALL";
-				getReferenceById(ouchID).tag = "OUCH";
-				getReferenceById(monster_1ID).tag = "MONSTER";
-				getReferenceById(monster_2ID).tag = "MONSTER";
-				getReferenceById(monster_3ID).tag = "MONSTER";
-				
-				//Monster 1
-				getReferenceById(skeleton_1ID).setSpeedSkalar(0);
-				getReferenceById(skeleton_1ID).destructible = true;
-				getReferenceById(skeleton_1ID).health = 4;
-				getReferenceById(skeleton_1ID).addSoundSource(monster_1ID);
-				getReferenceById(skeleton_1ID).tag = "ENEMY";
-				
-				//Monster 2
-				getReferenceById(skeleton_2ID).setSpeedSkalar(0);
-				getReferenceById(skeleton_2ID).destructible = true;
-				getReferenceById(skeleton_2ID).health = 4;
-				getReferenceById(skeleton_2ID).addSoundSource(monster_2ID);
-				getReferenceById(skeleton_2ID).tag = "ENEMY";
-				
-				//Monster 3
-				getReferenceById(skeleton_3ID).setSpeedSkalar(0);
-				getReferenceById(skeleton_3ID).destructible = true;
-				getReferenceById(skeleton_3ID).health = 4;
-				getReferenceById(skeleton_3ID).addSoundSource(monster_3ID);
-				getReferenceById(skeleton_3ID).tag = "ENEMY";
-				
+				getReferenceById(room_1ID).add(wall1_ID);
+				getReferenceById(room_1ID).add(wall2_ID);
+				getReferenceById(room_1ID).add(wall3_ID);
+
+				getReferenceById(room_1ID).add(enemy1_ID);
+				getReferenceById(room_1ID).add(enemy2_ID);
+				getReferenceById(room_1ID).add(enemy3_ID);
+				getReferenceById(room_1ID).add(enemy4_ID);
+
+				getReferenceById(room_1ID).add(environmental1_ID);
+				getReferenceById(room_1ID).add(environmental2_ID);
+
+				getReferenceById(wall1_ID).tag = "WALL";
+				getReferenceById(wall2_ID).tag = "WALL";
+				getReferenceById(wall3_ID).tag = "WALL";
+
+				getReferenceById(environmental1_ID).tag = "WATERFALL";
+				getReferenceById(environmental2_ID).tag = "FLEDERMAUS";
+
+				getReferenceById(enemy1_ID).tag = "ENEMY";
+				getReferenceById(enemy2_ID).tag = "ENEMY";
+				getReferenceById(enemy3_ID).tag = "ENEMY";
+				getReferenceById(enemy4_ID).tag = "ENEMY";
+
+				getReferenceById(monsterDeathEnemy1SS_ID).tag = 'FAINTING';
+				getReferenceById(monsterDeathEnemy2SS_ID).tag = 'FAINTING';
+				getReferenceById(monsterDeathEnemy3SS_ID).tag = 'FAINTING';
+				getReferenceById(monsterDeathEnemy4SS_ID).tag = 'FAINTING';
+
+				getReferenceById(stepsID).tag = 'STEPS';
+				getReferenceById(arrow_ID).tag = 'FAINTING';
+
+				//getReferenceById(playerID).tag = "ENEMY";
+
 				//Player Settings
-				getReferenceById(playerID).speed = new Vector3(0.1, 0.0, 0.1);
+				getReferenceById(playerID).setSpeedSkalar(2);
 				getReferenceById(playerID).hitSound = ouchID;
+				getReferenceById(playerID).movable = true;
+
 				getReferenceById(playerID).dangerous = true;
 				getReferenceById(playerID).damage = 1;
-				getReferenceById(playerID).range = 2;
-				
-				//Exit Sound
-				getReferenceById(exitID).addSoundSource(waterfallID);
+				getReferenceById(playerID).range = 4;
+
+				//getReferenceById(playerID).addSoundSource(stepsID);
+				getReferenceById(playerID).interactionSound = arrow_ID;
+				getReferenceById(playerID).interactionCooldown = 500;
+
+				//getReferenceById(playerID).movementSound = stepsID;
+
+
+				getReferenceById(playerID).addRoute(new Vector3(2.16, 1, 6.07), new Vector3(2.22, 1, 1.28), new Vector3(6.33, 1, 0.73), new Vector3(12.89, 1, 2.82), new Vector3(17.67, 1, 0.84), new Vector3(18.38, 1, 4.8), new Vector3(13.02, 1, 5.93), new Vector3(7.29, 1, 5.15), new Vector3(5.87, 1, 6.78), new Vector3(8.89, 1, 8.53), new Vector3(12.42, 1, 7.42), new Vector3(18.8, 1, 8.49), new Vector3(18.84, 1, 10.02), new Vector3(1.96, 1, 9.95));
+
+				//Enemy Settings
+				getReferenceById(enemy1_ID).destructible = true;
+				getReferenceById(enemy1_ID).health = 1;
+				getReferenceById(enemy1_ID).movable = false;
+				getReferenceById(enemy1_ID).collidable = true;
+				getReferenceById(enemy1_ID).setAliveSound = enemy1_ss_ID;
+				getReferenceById(enemy1_ID).deathSound = monsterDeathEnemy1SS_ID;
+
+				//Enemy Settings
+				getReferenceById(enemy2_ID).destructible = true;
+				getReferenceById(enemy2_ID).health = 1;
+				getReferenceById(enemy2_ID).movable = false;
+				getReferenceById(enemy2_ID).collidable = true;
+				getReferenceById(enemy2_ID).setAliveSound = enemy2_ss_ID;
+				getReferenceById(enemy2_ID).deathSound = monsterDeathEnemy2SS_ID;
+
+				//Enemy Settings
+				getReferenceById(enemy3_ID).destructible = true;
+				getReferenceById(enemy3_ID).health = 1;
+				getReferenceById(enemy3_ID).movable = false;
+				getReferenceById(enemy3_ID).collidable = true;
+				getReferenceById(enemy3_ID).setAliveSound = enemy3_ss_ID;
+				getReferenceById(enemy3_ID).deathSound = monsterDeathEnemy3SS_ID;
+
+				//Enemy Settings
+				getReferenceById(enemy4_ID).destructible = true;
+				getReferenceById(enemy4_ID).health = 1;
+				getReferenceById(enemy4_ID).movable = false;
+				getReferenceById(enemy4_ID).collidable = true;
+				getReferenceById(enemy4_ID).setAliveSound = enemy4_ss_ID;
+				getReferenceById(enemy4_ID).deathSound = monsterDeathEnemy4SS_ID;
+
+				//Environmental Settings
+				getReferenceById(environmental1_ID).addSoundSource(environmental1SS_ID);
+				getReferenceById(environmental1_ID).collidable = false;
+
+				getReferenceById(environmental2SS_ID).maxDistance = 4;
+				getReferenceById(environmental2_ID).addSoundSource(environmental2SS_ID);
+				getReferenceById(environmental2_ID).collidable = false;
+
+				//Coins
+				let coin_1 = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin", 1);
+				let coin_2 = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin", 1);
+				let coin_3 = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin", 1);
+				let coin_4 = new AGItem("Muenze", "Eine goldene, glitzernde Muenze", "coin", 1);
+
+				let coin1_ID = coin_1.ID;
+				let coin2_ID = coin_2.ID;
+				let coin3_ID = coin_3.ID;
+				let coin4_ID = coin_4.ID;
+
+				//Events
+				let eventEnemy1 = new Event(enemy1_ID, "ONDEATH", "MOVE", playerID, coin1_ID, 1);
+				let eventEnemy2 = new Event(enemy2_ID, "ONDEATH", "MOVE", playerID, coin2_ID, 1);
+				let eventEnemy3 = new Event(enemy3_ID, "ONDEATH", "MOVE", playerID, coin3_ID, 1);
+				let eventEnemy4 = new Event(enemy4_ID, "ONDEATH", "MOVE", playerID, coin4_ID, 1);
+
+				let eventEnemy1_ID = eventEnemy1.ID;
+				let eventEnemy2_ID = eventEnemy2.ID;
+				let eventEnemy3_ID = eventEnemy3.ID;
+				let eventEnemy4_ID = eventEnemy4.ID;
+
+				getReferenceById(enemy1_ID).inventory.addItemById(coin1_ID);
+				g_eventHandler.addEvent(eventEnemy1_ID);
+				getReferenceById(enemy2_ID).inventory.addItemById(coin2_ID);
+				g_eventHandler.addEvent(eventEnemy2_ID);
+				getReferenceById(enemy3_ID).inventory.addItemById(coin3_ID);
+				g_eventHandler.addEvent(eventEnemy3_ID);
+				getReferenceById(enemy4_ID).inventory.addItemById(coin4_ID);
+				g_eventHandler.addEvent(eventEnemy4_ID);
+
+				let globalEventFinish = new GlobalEvent(playerID, "INVENTORY", "countByType", ["coin"], 4, "WINGAME", 1);
+				g_eventHandler.addGlobalEvent(globalEventFinish.ID);
 				getReferenceById(room_1ID).live = true;
 				break;
 				

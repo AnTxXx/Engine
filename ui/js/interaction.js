@@ -124,7 +124,7 @@ jQuery(function($){
 					$('#atk_range_dropdown').val(getReferenceById(actFabObj.AGObjectID).range);
 					
 					let ss_action_buffer = getReferenceById(actFabObj.AGObjectID).interactionSound;
-					console.log(ss_action_buffer);
+					//console.log(ss_action_buffer);
 					$("#sound_action_dropdown").val(ss_action_buffer.tag.toLowerCase());
 					$('#slider_action_volume').val(ss_action_buffer.volume);
 					$('#slider_value_action').text(Math.floor(ss_action_buffer.volume * 100));
@@ -1169,13 +1169,13 @@ jQuery(function($){
 	//select level
 	$("#level_dropdown").change(function() {		
 		switch(this.value){
-			case 'Level 1':
+			case 'Railed Shooter':
 				i_audicom.loadLevel(1);
 				break;
 			case 'Frogger Demo':
 				i_audicom.loadLevel(2);
 				break;
-			case 'Level 3':
+			case 'Labyrinth':
 				i_audicom.loadLevel(3);
 				break;
 			case 'Auditory Pointer Demo':
@@ -1210,7 +1210,7 @@ jQuery(function($){
 			case 'classic':
 				
 				//hier controls aktivieren wieder
-				console.log(actFabObj);
+				//console.log(actFabObj);
 				getReferenceById(actFabObj.AGObjectID).movable = false;
 				$('.show_on_railed').fadeOut(100, function(){
 					$('.hide_on_railed').fadeIn(100);
@@ -1480,7 +1480,7 @@ jQuery(function($){
 	
 	$tableID_conditions.on('input', '.input_condition_type', function () {	
 	    let buffer = $(this).val();
-		console.log(getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs);
+		//console.log(getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs);
 		
 		
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs = [buffer];
