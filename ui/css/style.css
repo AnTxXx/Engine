@@ -745,10 +745,15 @@ input[type="range"]{
 
 
 /*items*/
-#item_container, #event_container, #glevent_container{
+#item_container, #event_container, #glevent_container, #condition_container{
 	margin-top:15px;
 }
-
+#condition_container{
+	display:none;
+}
+#item_container{
+	/*display:none;*/
+}
 #event_container{
 	display:none;
 }
@@ -756,15 +761,12 @@ input[type="range"]{
 	display:none;
 }
 
-#event_table input{
+#event_table input, #condition_table input, #item_table input{
 	width:150px;
 	margin-right:15px;
 }
-#item_table input{
-	width:150px;
-	margin-right:15px;
-}
-#item_container th, #event_container th, #glevent_container th{
+
+#item_container th, #event_container th, #glevent_container th, #condition_container th{
 	width:200px;
 	text-align:left;
 	padding: 10px 10px;
@@ -772,20 +774,20 @@ input[type="range"]{
 #item_container table{ 
 
 }
-#item_container td input:not(.input_row), #event_container td input:not(.input_row), #glevent_container td select:not(.input_row), #glevent_container td input:not(.input_row), #event_container td select:not(.input_row){
+#condition_container td select:not(.input_row), #condition_container td input:not(.input_row), #item_container td input:not(.input_row), #event_container td input:not(.input_row), #glevent_container td select:not(.input_row), #glevent_container td input:not(.input_row), #event_container td select:not(.input_row){
 	border:0 !important;
 	font-weight:400;
 }
 .input_row{
 	font-weight:600;
 }
-#item_input_row, #event_input_row, #glevent_input_row{
+#item_input_row, #event_input_row, #glevent_input_row, #condition_input_row{
 	border-top:1px solid #BFBFBF;
 	border-bottom:1px solid #BFBFBF;
 	margin-bottom:15px;
 	
 }
-.table-add_item, .table-add_event, .table-add_glevent{
+.table-add_item, .table-add_event, .table-add_glevent, .table-add_condition{
 	margin-bottom:10px;
 	margin-top:10px;
 }
@@ -834,4 +836,8 @@ tr input[type='number']{
 }
 .item_event_tab{
 	cursor:pointer;
+}
+
+.condition_has{
+	display:none;
 }

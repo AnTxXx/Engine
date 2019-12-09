@@ -96,19 +96,75 @@
 					<canvas id = "c" class = "canvas_room" width="1800" height = "1600"></canvas>
 				</div><!--canvasContainer-->
 				
-				
-				<div id = "item_event_tab_container">
-					
+				<div id = "item_event_tab_container">	
 					<div id = "tab_items" class = "item_event_tab item_event_tab_active" table_='item'>
 						Items
 					</div><div id = "tab_events" class = "item_event_tab" table_='event'>
 						Events
 					</div><div id = "tab_glevents" class = "item_event_tab" table_='glevent'>
 						Global Events
-					</div>					
-					
+					</div><div id = "tab_condition" class = "item_event_tab" table_='condition'>
+						Conditions
+					</div>			
 				</div>
 				<div id = "item_event_container">
+					<div id = "condition_container" class = "event_item_table">
+						<table id = "condition_table">
+							<thead>
+								<tr id = "condition_head">
+								  <th>Portal</th>
+								  <th>Primary Object</th>
+								  <th>Trigger</th>
+								  <th class = "condition_cnt">Item Type</th>
+								  <th class = "condition_cnt">Count</th>
+								  <th class = "condition_has">Item</th>
+								  <th class = "condition_has">True/False</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id = "condition_input_row">
+									<td>
+								 		<select id = "condition_portal"  class = "input_row">
+								 			 
+								 		</select>
+									</td><td>
+								 		<select id = "condition_primary"  class = "input_row">	 
+								 		</select>
+									</td>
+									<td>
+								 		<select id = "condition_trigger"  class = "input_row select_condition_trigger">
+								 			 <option value="countByType">Count by Type</option>
+								 			 <option value="hasItemById">Has Item</option>
+								 		</select>
+									</td>
+									
+									<td class = "condition_cnt">	
+								 		<select id = "condition_type"  class = "input_row"></select>
+									</td>
+									<td class = "condition_cnt">
+										<input id = "condition_count" class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="condition_count">
+									</td>
+									
+									
+									<td class = "condition_has">
+										<select id = "condition_item"  class = "input_row"></select>
+									</td>
+									<td class = "condition_has">
+										<select id = "condition_tf"  class = "input_row"><option value = "true">True</option><option value ="false">False</option></select>
+									</td>
+									
+									
+									<td>
+									  	<button class="table-add_condition btn">
+										  <i class="fas fa-plus fa-2x" aria-hidden="true"></i></span>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div><!--item_container-->
+					
+					
 					<div id = "item_container" class = "event_item_table">
 						<table id = "item_table">
 							<thead>
@@ -117,6 +173,7 @@
 								  <th>Item Description</th>
 								  <th>Item Type</th>
 								  <th>Charges</th>
+								  <th>Carried by</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -129,7 +186,13 @@
 										<input id = "item_type" class = "input_row" placeholder="Generic" maxlength="100" type="text" name="item_type">
 									</td><td>
 										<input id = "item_charges" class = "input_row" placeholder="1" maxlength="10" type="number" step="1" min="1" name="item_charges">
-									</td><td>
+									</td>
+									<td>
+								 		<select id = "item_carrier"  class = "input_row">
+								 			 
+								 		</select>
+									</td>
+									<td>
 									  	<button class="table-add_item btn">
 										  <i class="fas fa-plus fa-2x" aria-hidden="true"></i></span>
 										</button>
