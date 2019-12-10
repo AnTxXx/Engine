@@ -124,10 +124,12 @@ jQuery(function($){
 					$('#atk_range_dropdown').val(getReferenceById(actFabObj.AGObjectID).range);
 					
 					let ss_action_buffer = getReferenceById(actFabObj.AGObjectID).interactionSound;
-					//console.log(ss_action_buffer);
-					$("#sound_action_dropdown").val(ss_action_buffer.tag.toLowerCase());
-					$('#slider_action_volume').val(ss_action_buffer.volume);
-					$('#slider_value_action').text(Math.floor(ss_action_buffer.volume * 100));
+					if(ss_action_buffer){
+						//console.log(ss_action_buffer);
+						$("#sound_action_dropdown").val(ss_action_buffer.tag.toLowerCase());
+						$('#slider_action_volume').val(ss_action_buffer.volume);
+						$('#slider_value_action').text(Math.floor(ss_action_buffer.volume * 100));
+					}
 					
 				}
 			

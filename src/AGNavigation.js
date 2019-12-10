@@ -156,7 +156,7 @@ function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
             if(g_IAudiCom && smallest != null) {
                 //console.log(intersectPoints[i].distanceTo(object.position));
                 g_IAudiCom.drawDot(smallest.x, smallest.z);
-                if(object.type === "PLAYER") object.hitSound.playOnceAtPosition(smallest);
+                if(object.type === "PLAYER" && object.hitSound) object.hitSound.playOnceAtPosition(smallest);
 
                 for(let i = 0; i < 4; i++){
                     //g_IAudiCom.drawDot(points[i].x, points[i].z);

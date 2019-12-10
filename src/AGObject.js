@@ -280,7 +280,7 @@ export class AGObject {
         this._tag = value;
     }
 
-    get hitSound(): AGSoundSource {
+    get hitSound(): ?AGSoundSource {
         return this._hitSound;
     }
 
@@ -316,7 +316,7 @@ export class AGObject {
     _route:Array<Vector3>;
     _currentRoute:number;
 
-    _hitSound:AGSoundSource;
+    _hitSound:?AGSoundSource;
 
     _collidable:boolean;
     _blockedObjects:Array<AGObject>;
