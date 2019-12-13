@@ -448,7 +448,7 @@
 							<span class = "ui_header">General Sound:</span>
 								<br>
 								
-								<select id = "sound_dropdown">
+								<select id = "sound_dropdown" class = "sound_dropdown">
 								  	<option id = "select_none" value = 'none'>None</option>
 									<option id = "select_steps" value = 'steps'>Footsteps</option>
 									<option id = "select_magic" value = 'magic'>Magic Aura</option>
@@ -460,6 +460,7 @@
 									<option id = "select_truck" value = 'truck'>Truck</option>
 									<option id = "select_motorcycle" value = 'motorcycle'>Motorcycle</option>
 									<option id = "select_monster" value = 'monster' >Monster Snore</option>	
+									<option id = "select_bats" value = 'bats' >Bat Swarm</option>	
 								</select>	<br>	
 								<div id = "slider_box_general" class = "slider_box">
 									<input class = "slider_" id="slider_general_volume" type="range" min="0" max="2" value="1" step="0.01"><div class = "slider_box_label"><span id = "slider_value_general" class = "slider_value">100</span>%</div>
@@ -467,10 +468,10 @@
 								
 								
 							</div>
-							<div class = "ui_mini_box" style = "margin-top:10px">
+							<div class = "ui_mini_box ui_box_enemy ui_box_player ui_box_special" style = "margin-top:10px">
 								<span class = "ui_header">Death sound:</span>
 								<br>
-								<select id = "sound_destruction_dropdown">
+								<select id = "sound_destruction_dropdown" class = "sound_dropdown">
 								  	<option id = "select_none" value = 'none'>None</option>
 									<option id = "select_steps" value = 'steps'>Footsteps</option>
 									<option id = "select_magic" value = 'magic'>Magic Aura</option>
@@ -481,7 +482,8 @@
 									<option id = "select_car" value = 'car'>Car</option>
 									<option id = "select_truck" value = 'truck'>Truck</option>
 									<option id = "select_motorcycle" value = 'motorcycle'>Motorcycle</option>
-									<option id = "select_monster" value = 'monster' >Monster Snore</option>	  	
+									<option id = "select_monster" value = 'monster' >Monster Snore</option>	
+									<option id = "select_bats" value = 'bats' >Bat Swarm</option>	  	
 								</select>
 								<div id = "slider_box_death" class = "slider_box">
 									<input class = "slider_" id="slider_death_volume" type="range" min="0" max="2" value="1" step="0.01"><div class = "slider_box_label"><span id = "slider_value_death" class = "slider_value">100</span>%</div>				
@@ -493,7 +495,7 @@
 							
 							<span class = "ui_header">Action sound</span>
 							<br>
-							<select id = "sound_action_dropdown">
+							<select id = "sound_action_dropdown" class = "sound_dropdown">
 							  	<option id = "select_none" value = 'none'>None</option>
 								<option id = "select_steps" value = 'steps'>Footsteps</option>
 								<option id = "select_magic" value = 'magic'>Magic Aura</option>
@@ -504,7 +506,8 @@
 								<option id = "select_car" value = 'car'>Car</option>
 								<option id = "select_truck" value = 'truck'>Truck</option>
 								<option id = "select_motorcycle" value = 'motorcycle'>Motorcycle</option>
-								<option id = "select_monster" value = 'monster' >Monster Snore</option>  	
+								<option id = "select_monster" value = 'monster' >Monster Snore</option>  
+								<option id = "select_bats" value = 'bats' >Bat Swarm</option>		
 							</select>
 							<div id = "slider_box_action" class = "slider_box">
 								<input class = "slider_" id="slider_action_volume" type="range" min="0" max="2" value="1" step="0.01"><div class = "slider_box_label"><span id = "slider_value_action" class = "slider_value">100</span>%</div>

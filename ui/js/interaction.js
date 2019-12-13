@@ -6,7 +6,6 @@ import { getIdByReference, getReferenceById, g_gamearea, getOwnerIdOfItemById } 
 jQuery(function($){
 
 	let interval;
-	
 	//the active fabric-object
 	let actFabObj = '';
 	
@@ -80,10 +79,8 @@ jQuery(function($){
 				$('#id_ span').text(actFabObj.AGObjectID);
 			
 				if(type=='enemy'){
-					
 					$('#btn_speed_' + getReferenceById(actFabObj.AGObjectID).getSpeedSkalar()).addClass('gegner_speed_active');
 					$("#object_speed_dropdown").val(getReferenceById(actFabObj.AGObjectID).getSpeedSkalar());
-					
 					
 					$('#input_enemy_health').val(getReferenceById(actFabObj.AGObjectID).health);
 					if(getReferenceById(actFabObj.AGObjectID).runaway){
@@ -95,17 +92,13 @@ jQuery(function($){
 						$('#cb_circle').prop('checked', true);
 					}else{
 						$('#cb_circle').prop('checked', false);
-					}
-					
-					
+					}		
 				}
 				if(type!='player'){
 					$('#ui_delete_box').show();
 				}
 				if(type =='player'){
-					
-					
-					
+
 					let nav_buffer = getReferenceById(i_audicom._controlsID);
 					loadNavigationForUI($('#btn_key_up'), nav_buffer.forward);
 					loadNavigationForUI($('#btn_key_down'), nav_buffer.backward);
@@ -143,7 +136,7 @@ jQuery(function($){
 				}
 				
 				//$('.btn_ss').removeClass('ss_active');
-				//ICI
+	
 				let ss_death_buffer = getReferenceById(actFabObj.AGObjectID).deathSound;
 				if(ss_death_buffer){
 					$("#sound_destruction_dropdown").val(ss_death_buffer.tag.toLowerCase());
@@ -422,9 +415,6 @@ jQuery(function($){
 	/*************************/
 	
 	$(document).on('keydown',function(e) {
-		
-		
-		
 		if (event.keyCode == 13 && event.shiftKey) {
 			if($(document.activeElement).hasClass('faboject_')){
 				$('#ui_controls div').first().focus();
@@ -455,11 +445,15 @@ jQuery(function($){
 				$('#win_screen').fadeOut(200);
 			}
 		}
-		
-		
+		if(e.keyCode == 46){
+			if(i_audicom._room_canvas.getActiveObject().type != 'player'){
+				$('#fabobject_' + i_audicom._room_canvas.getActiveObject().AGObjectID).remove();
+				i_audicom.deleteObject(i_audicom._room_canvas.getActiveObject());
+			}
+		}	
 	});
 	
-	$(document).on("focusout", ".faboject_", function(){	
+	$(document).on("focusout", ".faboject_", function(e){	
 		setTimeout(function(){
 			if(!$(document.activeElement).hasClass('faboject_') && !$(document.activeElement).attr('id') == 'input_obj_name'){
 				loadObject('room');
@@ -468,12 +462,27 @@ jQuery(function($){
 		}, 10);	
 	});
 	
+	
+	$("#fabric_objects_container").on( "focus",'.faboject_',function(e){
+		let that = $(e.target);
+		i_audicom._room_canvas.getObjects().forEach(function(e){
+			if(e.AGObjectID == that.attr('obj_id')){
+				i_audicom._room_canvas.setActiveObject(e);
+				i_audicom._room_canvas.trigger('selection:created', {target: e});
+				i_audicom._room_canvas.renderAll();
+			}
+		});
+	});
+	
 	i_audicom._room_canvas.on('mouse:down', function(e){
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording || actFabObj.type=='player' && actFabObj.isRecording){
 			addPathPoint(getMouseCoords(e)[0], getMouseCoords(e)[1], true);	
-		}else if(actFabObj.type=='portal' && actFabObj.isRecording){	
-			linkPortalsUI(i_audicom._room_canvas.getActiveObject());
+		}else if(actFabObj.type=='portal' && actFabObj.isRecording){
+			if(!(i_audicom._room_canvas.getActiveObject() == actFabObj)){
+				linkPortalsUI(i_audicom._room_canvas.getActiveObject());
+			};
+			
 		//deselect Object and hide Path-Points	
 		}else if(!i_audicom._room_canvas.getActiveObject()){
 			//TODO stop recording
@@ -503,6 +512,14 @@ jQuery(function($){
 	    'selection:created': function(e){
 			outputFabPos();
 			actFabObj = i_audicom._room_canvas.getActiveObject();
+			
+			//ICI
+			// if(!(document.activeElement === document.getElementById('fabobject_'+actFabObj.AGObjectID))){
+//
+// 				$('#fabobject_' + actFabObj.AGObjectID).focus();
+// 				console.log((document.activeElement === document.getElementById('fabobject_'+actFabObj.AGObjectID)));
+// 			}
+			
 			if(actFabObj.type=='portal' || actFabObj.type=='enemy' || actFabObj.type=='player'){
 				if(!actFabObj.isRecording){
 					loadObject(actFabObj.type);
@@ -532,6 +549,7 @@ jQuery(function($){
 			}
 	    },
 	    'selection:updated': function(e){
+			
 			portalSelect();
 			outputFabPos();
 			//TODO when direkt ein anderes objekt angeklickt wird, ebenfalls die pfade verstecken
@@ -586,6 +604,11 @@ jQuery(function($){
 					}
 				}
 				actFabObj = i_audicom._room_canvas.getActiveObject();
+				
+				if(!(document.activeElement === document.getElementById('fabobject_'+actFabObj.AGObjectID))){
+					$('#fabobject_' + actFabObj.AGObjectID).focus();
+				}
+				
 				loadObject(actFabObj.type);
 			}
 	    },
@@ -786,16 +809,7 @@ jQuery(function($){
 	});
 	
 	//select fabric-objects on focus
-	$("#fabric_objects_container").on( "focus",'.faboject_',function(e){
-		let that = $(e.target);
-		i_audicom._room_canvas.getObjects().forEach(function(e){
-			if(e.AGObjectID == that.attr('obj_id')){
-				i_audicom._room_canvas.setActiveObject(e);
-				i_audicom._room_canvas.trigger('selection:created', {target: e});
-				i_audicom._room_canvas.renderAll();
-			}
-		});
-	});
+	
 	
 	//assign key to movement
 	$('.btn_key_assign').bind("keyup",function(e){
@@ -1005,7 +1019,7 @@ jQuery(function($){
 			$('#slider_box_action').fadeIn(100);
 		}
 	});
-	
+		
 	
 	//add position of object to path
 	$('.btn_add_to_path').click(function(){
@@ -1413,7 +1427,6 @@ jQuery(function($){
 		let condition_func = $('#condition_trigger').val();
 		let condition_func_arg1 = '';
 		let condition_func_arg2 = '';
-		
 		if(condition_func == 'countByType'){
 			condition_func_arg1 = $('#condition_type').val();
 			condition_func_arg2 = $('#condition_count').val() ? $('#condition_count').val(): 1;
@@ -1423,10 +1436,6 @@ jQuery(function($){
 		}
 		i_audicom.generateCondition(parseInt(condition_portal), parseInt(condition_primary), condition_func, condition_func_arg1, condition_func_arg2);	
 	});
-	
-	
-	
-	
 	$tableID_conditions.on('change', '.select_condition_portal', function (){		
 		let condition_id_buffer = parseInt($(this).parents('tr').attr('condition_id'));		
 		let old_portal = i_audicom.getIdOfPortal(condition_id_buffer);
@@ -1436,12 +1445,10 @@ jQuery(function($){
 		//getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs = [buffer];	
 		//getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).funcArgs = [buffer];	
 	});
-	
 	$tableID_conditions.on('change', '.select_condition_primary', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).object = parseInt(buffer);
 	});
-	
 	$tableID_conditions.on('change', '.select_condition_trigger', function () {	
 	    let buffer = $(this).val();
 		let that = $(this);		
@@ -1470,8 +1477,6 @@ jQuery(function($){
 		}
 		//getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).funcArgs = [buffer];	
 	});
-	
-	
 	$tableID_conditions.on('input', '.select_condition_item', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs = [buffer];
@@ -1480,47 +1485,22 @@ jQuery(function($){
 		var buffer = ($(this).val() =="true");
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).value = buffer;
 	});
-	
-	
-	
 	$tableID_conditions.on('input', '.input_condition_type', function () {	
 	    let buffer = $(this).val();
 		//console.log(getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs);
-		
-		
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).funcArgs = [buffer];
 	});	
 	$tableID_conditions.on('input', '.input_condition_count', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).value = buffer;
 	});
-	
-	
-	
 	$tableID_conditions.on('click', '.btn_delete_row', function () {	
 		i_audicom.deleteConditionFromList(parseInt($(this).parents('tr').attr('condition_id')));
 		$(this).parents('tr').detach();
 
 	}); 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	$('.item_event_tab').click(function(){
 		

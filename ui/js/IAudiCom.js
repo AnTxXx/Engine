@@ -104,6 +104,7 @@ export class IAudiCom {
      * Starts the scene and enables the player to control the player-object
      */
 	startArea(){
+		
 		this.disableKeyScrolling();
 		let that = this;
 		/*lower opacity and disable click for elements*/
@@ -125,13 +126,14 @@ export class IAudiCom {
 		
 		play(getReferenceById(g_gamearea.ID), true);
 		this._interval = setInterval(function(){	
-			canvas_objects = room_buffer.getObjects();
 			
+			//console.log(g_gamearea.listener.position);
+			
+			canvas_objects = room_buffer.getObjects();
 			if(getReferenceById(that._AGroomID).solved){
 				that.stopArea();
 				$('#win_screen').fadeIn(100);
-			}
-						
+			}			
 			canvas_objects.forEach(function(item, i) {
 				if(item.isObject){
 					if(item.type == 'player'){
@@ -153,18 +155,10 @@ export class IAudiCom {
 					// item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
 					
 					// check if not null or undefined
-					
-					
-					
 					if(getReferenceById(item.AGObjectID)){
-						
-
 						//remove "dead" objects [URB WZ HERE]
 						if (getReferenceById(item.AGObjectID).destructible && getReferenceById(item.AGObjectID).health <= 0) {
 							//remove path of dead enemies
-							
-							
-							
 							if (item.type == 'enemy') {
 								item.PathArray.forEach(function (ele) {
 									room_buffer.remove(ele);
@@ -179,7 +173,6 @@ export class IAudiCom {
 						if (item == room_buffer.getActiveObject()) {
 							$('#coord_x span').text(getReferenceById(item.AGObjectID).position.x);
 							$('#coord_y span').text(getReferenceById(item.AGObjectID).position.z);
-
 						}
 						item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);
 					}else{
@@ -195,8 +188,9 @@ export class IAudiCom {
      * Stops and rebuilds the scene
      */
 	stopArea(){
-		this.disableKeyScrolling();
-	
+
+		//this.enableKeyScrolling();
+		
 		/*make clickable again*/
 		$('#ui_part_right').removeClass('no_click lower_opacity');
 		$('select').removeClass('no_click lower_opacity');
@@ -210,13 +204,11 @@ export class IAudiCom {
 		$('select').prop('tabIndex', 0);
 		$('.sb_object').prop('tabIndex', 0);
 		$('.btn').not('#btn_stop_scene').not('#btn_change_vision_mode').not('#btn_help').prop('tabIndex', 0);
-		
+	
 		play(getReferenceById(g_gamearea.ID), false);
-		this._interval = false;	
-		
+		clearInterval(this._interval);
 		this._room_canvas.clear();		
 		g_history.rebuild();
-		
  		this.renderScene();
 	}
 
@@ -284,8 +276,6 @@ export class IAudiCom {
 			let scale_buffer = this._scale;
 			let canvas_objects = room_buffer.getObjects();	
 			canvas_objects.forEach(function(item, i){
-				
-				
 				
 				if(item.type != 'grid_line'){
 					let item_right_buffer = item.left + Math.round(item.width * item.scaleX)/2;
@@ -359,9 +349,14 @@ export class IAudiCom {
 		}
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
 		this.renderAGObject(obj_buffer_ID);
+		
+		
+		
 		this.refreshObjectSelect();
 		this.listItems();
 		this.listConditions();
+		
+		
 		return obj_buffer_ID;
 	}
 	
@@ -375,12 +370,6 @@ export class IAudiCom {
 		let colors_buffer = this._colors;
 		let vision_mode_buffer = this._vision_mode;
 		let room_canvas_buffer = this._room_canvas;
-		
-		
-		// console.log("-------------");
-// 		console.log(getReferenceById(ag_objectID).tag);
-// 		console.log("-------------");
-		
 		
 		//add details for tapping
 		$('<div tabindex = "0" id = "fabobject_'+ ag_objectID + '" obj_id = "'+ ag_objectID +'" class = "faboject_">test</div>').prependTo('#fabric_objects_container');
@@ -713,8 +702,6 @@ export class IAudiCom {
 	}
 	
 	
-	
-	
 	/**
 	* load Level from Clipboard
 	*/
@@ -762,9 +749,6 @@ export class IAudiCom {
 		$('#item_carrier').empty().append(select_obj_buffer);
 		$('#item_table tbody tr').not('#item_input_row').empty();
 		let items_buffer = getReferencesOfType('AGItem');	
-		
-		
-		
 		let that = this;
 		if(items_buffer.length > 0){
 			items_buffer.forEach(function(element) {
@@ -774,8 +758,63 @@ export class IAudiCom {
 			});
 		}
 	}
+
+	refreshItemSelect(){
+		let select_item_buffer = this.prepareSelectItems();
+		$('.select_event_item').empty().append(select_item_buffer);	
+		$('#event_item').empty().append(select_item_buffer);
+		
+		$('.select_event_item').each(function( index ) {
+			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
+			let event_buffer = getReferenceById(id_buffer);
+			$('#event_' + id_buffer + ' .select_event_item').val(event_buffer.addObject.ID);	
+		});	
+	}
 	
-	//quelle: https://mdbootstrap.com/docs/jquery/tables/editable/#!
+	
+	listConditions(){
+		$('#condition_table tbody tr').not('#condition_input_row').remove();	
+		let select_obj_buffer = this.prepareSelectObjects();
+		let select_item_buffer = this.prepareSelectItems();
+		let select_portals_buffer = this.prepareSelectPortals();
+		let select_type_buffer = this.prepareSelectTypes();		
+		let conditions_buffer = getReferencesOfType('AGCondition');	
+		$('#condition_primary').empty().append(select_obj_buffer);
+		$('#condition_item').empty().append(select_item_buffer);
+		$('#condition_portal').empty().append(select_portals_buffer);
+		$('#condition_type').empty().append(select_type_buffer);
+		let that = this;
+		if(conditions_buffer.length > 0){
+			conditions_buffer.forEach(function(element) {
+				let condition_buffer = getReferenceById(element);
+				$('#condition_table tbody').append('<tr id="condition_'+ element +'" condition_id = "'+ element +'"><td><select class = "select_condition_portal">'+ select_portals_buffer +'</select></td><td><select class = "select_condition_primary">'+ select_obj_buffer +'</select></td><td><select class="select_condition_trigger"><option value="countByType">Count By Type</option><option value="hasItemById">Has Item</option></select></td><td class = "condition_cnt"><select class = "input_condition_type"  class = "input_row">'+ select_type_buffer +'</select></td><td class = "condition_cnt"><input class = " input_condition_count" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_count" style = "width:auto;" value = "'+ 4 +'"></td><td class = "condition_has"><select class = "select_condition_item">'+ select_item_buffer +'</select></td><td class = "condition_has"><select class = "select_condition_tf"  class = "input_row"><option value = "true">True</option><option value = "false">False</option></select></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
+				let portal_id_buffer = that.getIdOfPortal(element);
+				if(portal_id_buffer){
+					$('#condition_' + element + ' .select_condition_portal').val(portal_id_buffer);
+				}
+				$('#condition_' + element + ' .select_condition_primary').val(condition_buffer.object.ID);
+				$('#condition_' + element + ' .select_condition_trigger').val(condition_buffer.funcOfConditionObject.name);
+				let condition_func_buffer = condition_buffer.funcOfConditionObject.name;
+				if(condition_func_buffer == 'countByType'){
+					$('#condition_' + element).find(".condition_has").hide();
+					$('#condition_' + element).find('.condition_cnt').show();
+					$('#condition_' + element + ' .input_condition_type').val(condition_buffer.funcArgs[0]);
+					$('#condition_' + element + ' .input_condition_count').val(condition_buffer.value);
+					
+				}else if(condition_func_buffer == 'hasItemById'){
+					$('#condition_' + element).find('.condition_cnt').hide();
+					$('#condition_' + element).find(".condition_has").show();	
+					$('#condition_' + element + ' .select_condition_item').val(condition_buffer.funcArgs[0]);
+					if(condition_buffer.value){
+						$('#condition_' + element + ' .select_condition_tf').val("true");
+					}else{
+						$('#condition_' + element + ' .select_condition_tf').val("false");
+					}
+				}
+			});
+		}		
+	}
+	
 	generateItem(_item_name, _item_desc, _item_type, _item_charges, _item_carriedby){
 		let item_buffer = new AGItem(_item_name, _item_desc, _item_type, _item_charges);
 		let id_buffer = getIdByReference(item_buffer);
@@ -794,18 +833,6 @@ export class IAudiCom {
 		let cond_buffer = new AGCondition(_cond_primary, "INVENTORY", _cond_func, [_cond_arg1], _cond_arg2);
  		getReferenceById(_cond_portal).addConditionById(getIdByReference(cond_buffer));
 		this.listConditions();
-	}
-	
-	refreshItemSelect(){
-		let select_item_buffer = this.prepareSelectItems();
-		$('.select_event_item').empty().append(select_item_buffer);	
-		$('#event_item').empty().append(select_item_buffer);
-		
-		$('.select_event_item').each(function( index ) {
-			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
-			let event_buffer = getReferenceById(id_buffer);
-			$('#event_' + id_buffer + ' .select_event_item').val(event_buffer.addObject.ID);	
-		});	
 	}
 	
 	prepareSelectPortals(){
@@ -876,50 +903,39 @@ export class IAudiCom {
 		deleteCondition(_cond_id);
 		this.listConditions();
 	}
+
 	
-	listConditions(){
-		$('#condition_table tbody tr').not('#condition_input_row').remove();	
+	
+	generateEvent(_event_primary, _event_trigger, _event_action, _event_item, _event_secondary, _event_repeat){	
+		let event_buffer = new Event(_event_primary, _event_trigger, _event_action, _event_secondary, _event_item, _event_repeat);
+		let id_buffer = getIdByReference(event_buffer);	
 		let select_obj_buffer = this.prepareSelectObjects();
 		let select_item_buffer = this.prepareSelectItems();
-		let select_portals_buffer = this.prepareSelectPortals();
-		let select_type_buffer = this.prepareSelectTypes();		
-		let conditions_buffer = getReferencesOfType('AGCondition');	
-		$('#condition_primary').empty().append(select_obj_buffer);
-		$('#condition_item').empty().append(select_item_buffer);
-		$('#condition_portal').empty().append(select_portals_buffer);
-		$('#condition_type').empty().append(select_type_buffer);
-		let that = this;
-		if(conditions_buffer.length > 0){
-			conditions_buffer.forEach(function(element) {
-				let condition_buffer = getReferenceById(element);
-				$('#condition_table tbody').append('<tr id="condition_'+ element +'" condition_id = "'+ element +'"><td><select class = "select_condition_portal">'+ select_portals_buffer +'</select></td><td><select class = "select_condition_primary">'+ select_obj_buffer +'</select></td><td><select class="select_condition_trigger"><option value="countByType">Count By Type</option><option value="hasItemById">Has Item</option></select></td><td class = "condition_cnt"><select class = "input_condition_type"  class = "input_row">'+ select_type_buffer +'</select></td><td class = "condition_cnt"><input class = " input_condition_count" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_count" style = "width:auto;" value = "'+ 4 +'"></td><td class = "condition_has"><select class = "select_condition_item">'+ select_item_buffer +'</select></td><td class = "condition_has"><select class = "select_condition_tf"  class = "input_row"><option value = "true">True</option><option value = "false">False</option></select></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
-				let portal_id_buffer = that.getIdOfPortal(element);
-				if(portal_id_buffer){
-					$('#condition_' + element + ' .select_condition_portal').val(portal_id_buffer);
-				}
-				$('#condition_' + element + ' .select_condition_primary').val(condition_buffer.object.ID);
-				$('#condition_' + element + ' .select_condition_trigger').val(condition_buffer.funcOfConditionObject.name);
-				let condition_func_buffer = condition_buffer.funcOfConditionObject.name;
-				if(condition_func_buffer == 'countByType'){
-					$('#condition_' + element).find(".condition_has").hide();
-					$('#condition_' + element).find('.condition_cnt').show();
-					$('#condition_' + element + ' .input_condition_type').val(condition_buffer.funcArgs[0]);
-					$('#condition_' + element + ' .input_condition_count').val(condition_buffer.value);
-					
-				}else if(condition_func_buffer == 'hasItemById'){
-					$('#condition_' + element).find('.condition_cnt').hide();
-					$('#condition_' + element).find(".condition_has").show();	
-					$('#condition_' + element + ' .select_condition_item').val(condition_buffer.funcArgs[0]);
-					if(condition_buffer.value){
-						$('#condition_' + element + ' .select_condition_tf').val("true");
-					}else{
-						$('#condition_' + element + ' .select_condition_tf').val("false");
-					}
-				}
-			});
-		}		
+		
+		$('#event_table tbody').append('<tr id = "event_'+ id_buffer +'" event_id = "'+ id_buffer +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
+		$('#event_' + id_buffer + ' .select_event_trigger').val(_event_trigger);
+		$('#event_' + id_buffer + ' .select_event_action').val(_event_action);
+		$('#event_' + id_buffer + ' .input_events_repeat').val(_event_repeat);
+		
+		this.refreshObjectSelect();
+		this.refreshItemSelect();
 	}
-
+	
+	deleteItemfromList(_item_id){	
+		deleteItem(parseInt(_item_id));
+		this.listEvents();
+		this.refreshItemSelect();
+		this.listGlobalEvents();
+		this.listConditions();
+	}
+	
+	generateGlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, _glevent_type, _glevent_count, _glevent_action, _glevent_repeat){
+		let glevent_buffer = new GlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, [_glevent_type], _glevent_count, _glevent_action, _glevent_repeat);
+		this.refreshObjectSelect();
+		this.listGlobalEvents();
+	}
+	
+	
 	refreshObjectSelect(){
 		let select_obj_buffer = this.prepareSelectObjects();
 		$('.select_event_primary').empty().append(select_obj_buffer);	
@@ -936,51 +952,17 @@ export class IAudiCom {
 		$('.select_event_primary').each(function( index ) {
 			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
 			let event_buffer = getReferenceById(id_buffer);
-			
 			$('#event_' + id_buffer + ' .select_event_primary').val(event_buffer.origin.ID);
 		});	
 		
 		$('.select_event_secondary').empty().append(select_obj_buffer);	
 		$('#event_secondary').append(select_obj_buffer);
-		
 		$('.select_event_secondary').each(function( index ) {
 			let id_buffer = parseInt($(this).parents('tr').attr('event_id'));
 			let event_buffer = getReferenceById(id_buffer);
 			
 			$('#event_' + id_buffer + ' .select_event_primary').val(event_buffer.origin.ID);
 		});	
-	}
-	
-	generateEvent(_event_primary, _event_trigger, _event_action, _event_item, _event_secondary, _event_repeat){	
-		
-		let event_buffer = new Event(_event_primary, _event_trigger, _event_action, _event_secondary, _event_item, _event_repeat);
-		let id_buffer = getIdByReference(event_buffer);	
-		
-		let select_obj_buffer = this.prepareSelectObjects();
-		let select_item_buffer = this.prepareSelectItems();
-		
-		$('#event_table tbody').append('<tr id = "event_'+ id_buffer +'" event_id = "'+ id_buffer +'"><td><select class = "select_event_primary">'+ select_obj_buffer +'</select></td><td><select class = "select_event_trigger"><option value = "null">None</option><option value = "ONDEATH">ONDEATH</option><option value = "ONCONTACT">ONCONTACT</option><option value = "ONSIGHT">ONSIGHT</option></select></td><td><select class = "select_event_action"><option value = "null">None</option><option value = "ADD">ADD</option><option value = "REMOVE">REMOVE</option><option value = "MOVE">MOVE</option><option value = "ACTIVATE">ACTIVATE</option><option value = "DEACTIVATE">DEACTIVATE</option><option value = "WINGAME">WINGAME</option></select></td><td><select class = "select_event_item">'+ select_item_buffer +'</select></td><td><select class = "select_event_secondary">'+ select_obj_buffer +'</select></td><td><input class = "input_events_repeat" placeholder="1" maxlength="10" type="number" step="1" min="1" name="events_repeat" value="'+ event_buffer.repeat +'"></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');
-		$('#event_' + id_buffer + ' .select_event_trigger').val(_event_trigger);
-		$('#event_' + id_buffer + ' .select_event_action').val(_event_action);
-		$('#event_' + id_buffer + ' .input_events_repeat').val(_event_repeat);
-		
-		this.refreshObjectSelect();
-		this.refreshItemSelect();
-		
-	}
-	
-	deleteItemfromList(_item_id){	
-		deleteItem(parseInt(_item_id));
-		this.listEvents();
-		this.refreshItemSelect();
-		this.listGlobalEvents();
-		this.listConditions();
-	}
-	
-	generateGlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, _glevent_type, _glevent_count, _glevent_action, _glevent_repeat){
-		let glevent_buffer = new GlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, [_glevent_type], _glevent_count, _glevent_action, _glevent_repeat);
-		this.refreshObjectSelect();
-		this.listGlobalEvents();
 	}
 	
 	listGlobalEvents(){
@@ -1016,7 +998,6 @@ export class IAudiCom {
 			items_buffer.forEach(function(element) {
 				let type_buffer = getReferenceById(element).type;
 				let bool_buffer = false;
-				
 				//console.log(type_buffer);
 				//check if already there				
 				$('#glevent_type option').each(function(ele){
@@ -1185,7 +1166,7 @@ export class IAudiCom {
 		let ag_object_buffer = getReferenceById(ag_object_id);	
 		let roomID_buffer = getReferenceById(g_gamearea.ID).AGRooms[0].ID;
 		let ss_buffer;	
-		let loop = true;
+		let loop = false;
 	
 		if(state_ == 'on_death'){
 			loop = false;
@@ -1200,6 +1181,7 @@ export class IAudiCom {
 		switch(ss_name){
 			case 'steps':
 				ss_buffer = new AGSoundSource("Steps", "sounds/steps.wav", loop, 1, roomID_buffer);
+				
 				ss_buffer.tag = "STEPS"; 
 				break;
 			case 'waterfall':
@@ -1238,11 +1220,18 @@ export class IAudiCom {
 			case 'arrow':
 				ss_buffer = new AGSoundSource("Arrow", "sounds/arrow.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "ARROW"; 
+				break;
+			case 'bats':
+				ss_buffer = new AGSoundSource("Bats", "sounds/bats.wav", loop, 1, roomID_buffer);
+				ss_buffer.tag = "BATS"; 
 				break;	
 			case 'none':
 				//
 				break;
 		}
+		
+		ss_buffer.playOnceAtPosition(g_gamearea.listener.position);
+		ss_buffer.looping = true;
 		
 		if(ss_name != 'none'){
 			if(state_ == 'on_death'){
@@ -1403,7 +1392,7 @@ export class IAudiCom {
      * Enables key scrolling
      */
 	enableKeyScrolling(){
-		window.removeEventListener("keydown");
+		//window.removeEventListener("keydown");
 	}
 	
 	
@@ -1559,7 +1548,7 @@ export class IAudiCom {
 
 				getReferenceById(playerID).dangerous = true;
 				getReferenceById(playerID).damage = 1;
-				getReferenceById(playerID).range = 4;
+				getReferenceById(playerID).range = 7;
 
 				//getReferenceById(playerID).addSoundSource(stepsID);
 				getReferenceById(playerID).interactionSound = arrow_ID;
