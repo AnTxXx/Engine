@@ -103,6 +103,9 @@ jQuery(function($){
 					$('#ui_delete_box').show();
 				}
 				if(type =='player'){
+					
+					
+					
 					let nav_buffer = getReferenceById(i_audicom._controlsID);
 					loadNavigationForUI($('#btn_key_up'), nav_buffer.forward);
 					loadNavigationForUI($('#btn_key_down'), nav_buffer.backward);

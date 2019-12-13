@@ -124,9 +124,8 @@ export class IAudiCom {
 		let canvas_objects = room_buffer.getObjects();
 		
 		play(getReferenceById(g_gamearea.ID), true);
-		
 		this._interval = setInterval(function(){	
-			
+			canvas_objects = room_buffer.getObjects();
 			
 			if(getReferenceById(that._AGroomID).solved){
 				that.stopArea();
@@ -154,7 +153,12 @@ export class IAudiCom {
 					// item.set('angle', Math.atan2(item.AGObject.direction.z, item.AGObject.direction.x) * 180 / Math.PI);
 					
 					// check if not null or undefined
+					
+					
+					
 					if(getReferenceById(item.AGObjectID)){
+						
+
 						//remove "dead" objects [URB WZ HERE]
 						if (getReferenceById(item.AGObjectID).destructible && getReferenceById(item.AGObjectID).health <= 0) {
 							//remove path of dead enemies
@@ -168,11 +172,6 @@ export class IAudiCom {
 							}
 							room_buffer.remove(item);
 						}
-						// if (item.type == 'exit') {
-// 							if (getReferenceById(item.AGObjectID).reached) {
-// 								$('#win_screen').fadeIn(100);
-// 							}
-// 						}
 						
 						item.left = getReferenceById(item.AGObjectID).position.x * scale_buffer;
 						item.top = getReferenceById(item.AGObjectID).position.z * scale_buffer;
@@ -183,6 +182,8 @@ export class IAudiCom {
 
 						}
 						item.set('angle', Math.atan2(getReferenceById(item.AGObjectID).direction.z, getReferenceById(item.AGObjectID).direction.x) * 180 / Math.PI);
+					}else{
+						room_buffer.remove(item);
 					}
 				}
 			});	
@@ -789,14 +790,12 @@ export class IAudiCom {
 		this.listConditions();
 	}
 	
-	
 	generateCondition(_cond_portal, _cond_primary, _cond_func, _cond_arg1, _cond_arg2){	
 		let cond_buffer = new AGCondition(_cond_primary, "INVENTORY", _cond_func, [_cond_arg1], _cond_arg2);
  		getReferenceById(_cond_portal).addConditionById(getIdByReference(cond_buffer));
 		this.listConditions();
 	}
 	
-
 	refreshItemSelect(){
 		let select_item_buffer = this.prepareSelectItems();
 		$('.select_event_item').empty().append(select_item_buffer);	
@@ -825,7 +824,6 @@ export class IAudiCom {
 		return select_obj_buffer;
 	}
 	
-	
 	getPortals(){
 		let portals_buffer = [];
 		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
@@ -833,20 +831,15 @@ export class IAudiCom {
 		if(getReferenceById(this._AGroomID).AGobjects.length > 0){
 			getReferenceById(this._AGroomID).AGobjects.forEach(function(element){	
 				if(element.type == 'PORTAL'){
-					
 					portals_buffer.push(element);
 					//select_obj_buffer = select_obj_buffer + '<option value = "'+ element.ID + '">' + element.name + '</option>';
 				}
 			});
 		}
-		
 		return portals_buffer;
 	}
 	
 	getIdOfPortal(_condition_id){
-		
-		
-		
 		let portals_buffer = this.getPortals();
 		let portal_id_buffer = null;
 		portals_buffer.forEach(function(portal_buffer){	
@@ -859,12 +852,9 @@ export class IAudiCom {
 				}	
 			});
 		});
-		
 		return portal_id_buffer;
 	}
-	
-	
-	
+
 	prepareSelectTypes(){
 		let items_buffer = getReferencesOfType('AGItem');	
 		let that = this;
@@ -882,10 +872,7 @@ export class IAudiCom {
 		return append_buffer;
 	}
 	
-	
 	deleteConditionFromList(_cond_id){
-		//console.log(_cond_id);
-		
 		deleteCondition(_cond_id);
 		this.listConditions();
 	}
@@ -907,16 +894,11 @@ export class IAudiCom {
 				let condition_buffer = getReferenceById(element);
 				$('#condition_table tbody').append('<tr id="condition_'+ element +'" condition_id = "'+ element +'"><td><select class = "select_condition_portal">'+ select_portals_buffer +'</select></td><td><select class = "select_condition_primary">'+ select_obj_buffer +'</select></td><td><select class="select_condition_trigger"><option value="countByType">Count By Type</option><option value="hasItemById">Has Item</option></select></td><td class = "condition_cnt"><select class = "input_condition_type"  class = "input_row">'+ select_type_buffer +'</select></td><td class = "condition_cnt"><input class = " input_condition_count" placeholder="1" maxlength="10" type="number" step="1" min="1" name="glevent_count" style = "width:auto;" value = "'+ 4 +'"></td><td class = "condition_has"><select class = "select_condition_item">'+ select_item_buffer +'</select></td><td class = "condition_has"><select class = "select_condition_tf"  class = "input_row"><option value = "true">True</option><option value = "false">False</option></select></td><td><button type="button" class="btn btn_delete_row"><i class="fas fa-trash-alt"></i></button></td></tr>');	
 				let portal_id_buffer = that.getIdOfPortal(element);
-			
 				if(portal_id_buffer){
 					$('#condition_' + element + ' .select_condition_portal').val(portal_id_buffer);
 				}
 				$('#condition_' + element + ' .select_condition_primary').val(condition_buffer.object.ID);
-
-				
 				$('#condition_' + element + ' .select_condition_trigger').val(condition_buffer.funcOfConditionObject.name);
-				
-
 				let condition_func_buffer = condition_buffer.funcOfConditionObject.name;
 				if(condition_func_buffer == 'countByType'){
 					$('#condition_' + element).find(".condition_has").hide();
@@ -937,20 +919,7 @@ export class IAudiCom {
 			});
 		}		
 	}
-	
-	
-	
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
 	refreshObjectSelect(){
 		let select_obj_buffer = this.prepareSelectObjects();
 		$('.select_event_primary').empty().append(select_obj_buffer);	
@@ -982,7 +951,6 @@ export class IAudiCom {
 		});	
 	}
 	
-	
 	generateEvent(_event_primary, _event_trigger, _event_action, _event_item, _event_secondary, _event_repeat){	
 		
 		let event_buffer = new Event(_event_primary, _event_trigger, _event_action, _event_secondary, _event_item, _event_repeat);
@@ -1009,10 +977,7 @@ export class IAudiCom {
 		this.listConditions();
 	}
 	
-	
-	
 	generateGlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, _glevent_type, _glevent_count, _glevent_action, _glevent_repeat){
-		
 		let glevent_buffer = new GlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, [_glevent_type], _glevent_count, _glevent_action, _glevent_repeat);
 		this.refreshObjectSelect();
 		this.listGlobalEvents();
@@ -1020,10 +985,8 @@ export class IAudiCom {
 	
 	listGlobalEvents(){
 		//fill the global events
-		
 		$('#glevent_table tbody tr').not('#glevent_input_row').remove();
 		let glevents_buffer = getReferencesOfType('GlobalEvent');	
-
 		let select_obj_buffer = this.prepareSelectObjects();
 		$('#glevent_primary').empty().append(select_obj_buffer);
 		$('#glevent_type').empty();
@@ -1077,10 +1040,8 @@ export class IAudiCom {
 	}
 	
 	listEvents(){
-		
 		$('#event_table tbody tr').not('#event_input_row').empty();
-		let events_buffer = getReferencesOfType('Event');	
-		
+		let events_buffer = getReferencesOfType('Event');		
 		let that = this;		
 		let select_obj_buffer = this.prepareSelectObjects();
 		let select_item_buffer = this.prepareSelectItems();
@@ -1112,8 +1073,6 @@ export class IAudiCom {
 	deleteGlobalEvent(_event_id){
 		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeGlobalEventByID(parseInt(_event_id));	
 	}
-	
-	
 	
 	
 	prepareSelectItems(){
@@ -1249,28 +1208,23 @@ export class IAudiCom {
 				break;
 			case 'magic':
 				ss_buffer = new AGSoundSource("Magic", "sounds/magic.wav", loop, 1, roomID_buffer);
-				ss_buffer.tag = "MAGIC"; 
-				
+				ss_buffer.tag = "MAGIC"; 		
 				break;
 			case 'ouch':
 				ss_buffer = new AGSoundSource("Ouch", "sounds/ouch.wav", loop, 1, roomID_buffer);
-				ss_buffer.tag = "OUCH"; 
-				
+				ss_buffer.tag = "OUCH"; 	
 				break;
 			case 'car':
 				ss_buffer = new AGSoundSource("Car", "sounds/car.wav", loop, 1, roomID_buffer);
-				ss_buffer.tag = "CAR"; 
-				
+				ss_buffer.tag = "CAR"; 	
 				break;
 			case 'monster':
 				ss_buffer = new AGSoundSource("Monster", "sounds/monster.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "MONSTER"; 
-				
 				break;
 			case 'truck':
 				ss_buffer = new AGSoundSource("Truck", "sounds/truck.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "TRUCK"; 
-				
 				break;	
 			case 'motorcycle':
 				ss_buffer = new AGSoundSource("Motorcycle", "sounds/motorcycle.wav", loop, 1, roomID_buffer);
@@ -1285,9 +1239,6 @@ export class IAudiCom {
 				ss_buffer = new AGSoundSource("Arrow", "sounds/arrow.wav", loop, 1, roomID_buffer);
 				ss_buffer.tag = "ARROW"; 
 				break;	
-				
-				
-			
 			case 'none':
 				//
 				break;
@@ -1302,7 +1253,6 @@ export class IAudiCom {
 				ag_object_buffer.aliveSound = getIdByReference(ss_buffer);
 			}
 		}		
-			
 	}
 	
     /**
@@ -1493,6 +1443,7 @@ export class IAudiCom {
 			case 1:	
 				var controls = new AGNavigation(-1, -1, 37, 39, 67);
 				var controlsID = getIdByReference(controls);
+				that._controlsID = controlsID;
 				setControl(getReferenceById(controlsID));
 
 				var room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
