@@ -1179,10 +1179,6 @@ jQuery(function($){
 	//paste level
 	$('#btn_load').click(function(){
 		i_audicom.loadLevelSALO();
-		
-		
-		
-		
 	});
 	
 	//select level
@@ -1220,14 +1216,11 @@ jQuery(function($){
 		}		
 	});
 	
-	
-	
 	$( "input[name='controls']").change(function(){	
 		let controls_value = $("input[name='controls']:checked"). val();
 				
 		switch(controls_value){
 			case 'classic':
-				
 				//hier controls aktivieren wieder
 				//console.log(actFabObj);
 				getReferenceById(actFabObj.AGObjectID).movable = false;
@@ -1237,17 +1230,9 @@ jQuery(function($){
 				
 				break;
 			case 'railed':
-				
-				
-				//hier controls deaktivieren
-				//check if route
-				//mit moveable
 				getReferenceById(actFabObj.AGObjectID).movable = true;	
 				getReferenceById(i_audicom._controlsID).forward = -1;
 				getReferenceById(i_audicom._controlsID).backward = -1;
-				
-				
-				
 				$('.hide_on_railed').fadeOut(100, function(){
 					$('.show_on_railed').fadeIn(100);
 				});
@@ -1257,14 +1242,12 @@ jQuery(function($){
 	});
 	
 	$( "#sound_action_dropdown").change(function(){	
-		let range_buffer = $("#sound_action_dropdown").val();
-		
+		let range_buffer = $("#sound_action_dropdown").val();	
 		if(range_buffer == 0){
 			getReferenceById(i_audicom._AGroomID).dangerous = false;
 		}else{
 			getReferenceById(i_audicom._AGroomID).dangerous = true;
 		}
-		
 		// if(range_buffer == 3){
 	// 		getReferenceById(i_audicom._AGroomID).dangerous = true;
 	// 		let room_x = getReferenceById(i_audicom._AGroomID).size.x;
@@ -1274,25 +1257,92 @@ jQuery(function($){
 		getReferenceById(actFabObj.AGObjectID).range = range_buffer;
 	});
 	
+	
+	$('table').on('click', '.table_add', function () {
+		//console.log($(this).parents("table").attr('id'));
+		let table_id = $(this).parents("table").attr('id');
+		
+		switch(table_id){
+			case 'item_table':
+				let item_name = $('#item_name').val() ? $('#item_name').val(): "New Item";
+				let item_desc = $('#item_desc').val() ? $('#item_desc').val(): "This…";
+				let item_type = $('#item_type').val() ? $('#item_type').val(): "generic";
+				let item_charges = $('#item_charges').val() ? $('#item_charges').val(): 1;
+				let item_carriedby = $('#item_carrier').val() ? $('#item_carrier').val(): null;
+				i_audicom.generateItem(item_name, item_desc, item_type, item_charges, item_carriedby);	
+				break;
+			
+			case 'condition_table':
+				let condition_portal = $('#condition_portal').val();
+				let condition_primary = $('#condition_primary').val();
+				let condition_func = $('#condition_trigger').val();
+				let condition_func_arg1 = '';
+				let condition_func_arg2 = '';
+				if(condition_func == 'countByType'){
+					condition_func_arg1 = $('#condition_type').val();
+					condition_func_arg2 = $('#condition_count').val() ? $('#condition_count').val(): 1;
+				}else if(condition_func == 'hasItemById'){
+					condition_func_arg1 = $('#condition_item').val();
+					condition_func_arg2 = $('#condition_tf').val();
+				}
+				i_audicom.generateCondition(parseInt(condition_portal), parseInt(condition_primary), condition_func, condition_func_arg1, condition_func_arg2);	
+				break;
+				
+			case 'event_table':
+				let event_primary = $('#event_primary').val();
+				let event_trigger = $('#event_trigger').val();
+				let event_action = $('#event_action').val();
+				let event_item = $('#event_item').val();
+				let event_secondary = $('#event_secondary').val();
+				let event_repeat = $('#events_repeat').val() ? $('#events_repeat').val(): 1;
+				i_audicom.generateEvent(parseInt(event_primary), event_trigger, event_action, parseInt(event_item), parseInt(event_secondary), parseInt(event_repeat));
+				break;
+				
+			case 'glevent_table':
+				let glevent_primary = $('#glevent_primary').val();
+				let glevent_conobject = $('#glevent_conobject').val();
+				let glevent_func = $('#glevent_func').val();
+				let glevent_type = $('#glevent_type').val();
+				let glevent_count = $('#glevent_count').val() ? $('#glevent_count').val(): 1;
+				let glevent_action = $('#glevent_action').val();
+				let glevent_repeat = $('#glevent_repeat').val() ? $('#glevent_repeat').val(): 1;
+	
+				i_audicom.generateGlobalEvent(parseInt(glevent_primary), glevent_conobject, glevent_func, glevent_type, glevent_count, glevent_action, glevent_repeat);
+	
+				break;
+		}
+	}); 
+	
+	$('table').on('click', '.btn_delete_row', function () {
+		//console.log($(this).parents("table").attr('id'));
+		let table_id = $(this).parents("table").attr('id');	
+		switch(table_id){
+			case 'item_table':
+				i_audicom.deleteItemfromList($(this).parents('tr').attr('item_id'));
+				$(this).parents('tr').detach();
+				i_audicom.refreshItemSelect();
+				i_audicom.listGlobalEvents();
+				break;
+			
+			case 'condition_table':
+				i_audicom.deleteConditionFromList(parseInt($(this).parents('tr').attr('condition_id')));
+				$(this).parents('tr').detach();
+				break;
+				
+			case 'event_table':
+				i_audicom.deleteEvent($(this).parents('tr').attr('event_id'));
+				$(this).parents('tr').detach();
+				break;
+				
+			case 'glevent_table':
+				i_audicom.deleteGlobalEvent($(this).parents('tr').attr('glevent_id'));
+				$(this).parents('tr').detach();
+				break;
+		}
+	}); 
+	
 	//quelle: https://mdbootstrap.com/docs/jquery/tables/editable/#!
-	/*ITEM-Table*/
-	
-	
 	const $tableID_items = $('#item_table');
-	$('.table-add_item').click(function(e){
-		let item_name = $('#item_name').val() ? $('#item_name').val(): "New Item";
-		let item_desc = $('#item_desc').val() ? $('#item_desc').val(): "This…";
-		let item_type = $('#item_type').val() ? $('#item_type').val(): "generic";
-		let item_charges = $('#item_charges').val() ? $('#item_charges').val(): 1;
-		let item_carriedby = $('#item_carrier').val() ? $('#item_carrier').val(): null;
-		i_audicom.generateItem(item_name, item_desc, item_type, item_charges, item_carriedby);	
-	});
-	$tableID_items.on('click', '.btn_delete_row', function () {	
-		i_audicom.deleteItemfromList($(this).parents('tr').attr('item_id'));
-		$(this).parents('tr').detach();
-		i_audicom.refreshItemSelect();
-		i_audicom.listGlobalEvents();
-	}); 	
 	$tableID_items.on('input', '.input_item_name', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).name = buffer;
@@ -1310,7 +1360,6 @@ jQuery(function($){
 		i_audicom.listGlobalEvents();
 		i_audicom.listConditions();
 	});
-	
 	$tableID_items.on('change', '.select_item_carrier', function () {	
 	    let object_id_buffer = parseInt($(this).val());
 		let item_id_buffer = parseInt($(this).parents('tr').attr('item_id'))
@@ -1318,32 +1367,13 @@ jQuery(function($){
 		getReferenceById(prev_owner_id).inventory.removeItemById(item_id_buffer);	
 		getReferenceById(object_id_buffer).inventory.addItemById(item_id_buffer);
 	});
-	
 	$tableID_items.on('input', '.input_item_charges', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).charges = buffer;
-		
 	});
-	
+
 	/*EVENT-Table*/
 	const $tableID_events = $('#event_table');
-	
-	$('.table-add_event').click(function(e){
-		
-		let event_primary = $('#event_primary').val();
-		let event_trigger = $('#event_trigger').val();
-		let event_action = $('#event_action').val();
-		let event_item = $('#event_item').val();
-		let event_secondary = $('#event_secondary').val();
-		let event_repeat = $('#events_repeat').val() ? $('#events_repeat').val(): 1;
-		i_audicom.generateEvent(parseInt(event_primary), event_trigger, event_action, parseInt(event_item), parseInt(event_secondary), parseInt(event_repeat));	
-	});
-	
-	$tableID_events.on('click', '.btn_delete_row', function () {	
-		i_audicom.deleteEvent($(this).parents('tr').attr('event_id'));
-		$(this).parents('tr').detach();
-	}); 
-
 	$tableID_events.on('change', '.select_event_primary', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('event_id'))).origin = buffer;
@@ -1376,26 +1406,7 @@ jQuery(function($){
 	});
 	
 	/*Global Event Table*/
-	const $tableID_glevents = $('#glevent_table');
-	
-	$('.table-add_glevent').click(function(e){
-		let glevent_primary = $('#glevent_primary').val();
-		let glevent_conobject = $('#glevent_conobject').val();
-		let glevent_func = $('#glevent_func').val();
-		let glevent_type = $('#glevent_type').val();
-		let glevent_count = $('#glevent_count').val() ? $('#glevent_count').val(): 1;
-		let glevent_action = $('#glevent_action').val();
-		let glevent_repeat = $('#glevent_repeat').val() ? $('#glevent_repeat').val(): 1;
-	
-		i_audicom.generateGlobalEvent(parseInt(glevent_primary), glevent_conobject, glevent_func, glevent_type, glevent_count, glevent_action, glevent_repeat);
-	});
-	
-	
-	$tableID_glevents.on('click', '.btn_delete_row', function () {
-		i_audicom.deleteGlobalEvent($(this).parents('tr').attr('glevent_id'));
-		$(this).parents('tr').detach();
-	}); 	
-	
+	const $tableID_glevents = $('#glevent_table');	
 	$tableID_glevents.on('change', '.select_glevent_primary', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).object = parseInt(buffer);
@@ -1404,8 +1415,7 @@ jQuery(function($){
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).funcArgs = [buffer];
 		
-	});
-	
+	});	
 	$tableID_glevents.on('input', '.input_glevent_repeat', function () {	
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).repeat = buffer;
@@ -1416,26 +1426,9 @@ jQuery(function($){
 		getReferenceById(parseInt($(this).parents('tr').attr('glevent_id'))).value = buffer;
 		
 	});
-	
-	
-	
+
 	/*Global Event Table*/
 	const $tableID_conditions = $('#condition_table');
-	$('.table-add_condition').click(function(e){
-		let condition_portal = $('#condition_portal').val();
-		let condition_primary = $('#condition_primary').val();
-		let condition_func = $('#condition_trigger').val();
-		let condition_func_arg1 = '';
-		let condition_func_arg2 = '';
-		if(condition_func == 'countByType'){
-			condition_func_arg1 = $('#condition_type').val();
-			condition_func_arg2 = $('#condition_count').val() ? $('#condition_count').val(): 1;
-		}else if(condition_func == 'hasItemById'){
-			condition_func_arg1 = $('#condition_item').val();
-			condition_func_arg2 = $('#condition_tf').val();
-		}
-		i_audicom.generateCondition(parseInt(condition_portal), parseInt(condition_primary), condition_func, condition_func_arg1, condition_func_arg2);	
-	});
 	$tableID_conditions.on('change', '.select_condition_portal', function (){		
 		let condition_id_buffer = parseInt($(this).parents('tr').attr('condition_id'));		
 		let old_portal = i_audicom.getIdOfPortal(condition_id_buffer);
@@ -1494,24 +1487,14 @@ jQuery(function($){
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).value = buffer;
 	});
-	$tableID_conditions.on('click', '.btn_delete_row', function () {	
-		i_audicom.deleteConditionFromList(parseInt($(this).parents('tr').attr('condition_id')));
-		$(this).parents('tr').detach();
 
-	}); 
-	
-
-	
 	$('.item_event_tab').click(function(){
-		
 		let table_buffer = $(this).attr('table_');
-		
 		$('.item_event_tab').removeClass('item_event_tab_active');
 		$(this).addClass('item_event_tab_active');
 		$('.event_item_table:visible').fadeOut(200, function(){
 			$('#' + table_buffer + '_container').fadeIn(200);
 		});
-
 	});
 	
 	

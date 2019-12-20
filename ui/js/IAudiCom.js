@@ -127,7 +127,7 @@ export class IAudiCom {
 		play(getReferenceById(g_gamearea.ID), true);
 		this._interval = setInterval(function(){	
 			
-			//console.log(g_gamearea.listener.position);
+			
 			
 			canvas_objects = room_buffer.getObjects();
 			if(getReferenceById(that._AGroomID).solved){
@@ -249,12 +249,6 @@ export class IAudiCom {
 		
 		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
 		this._room_canvas.renderAll();
-
-		//snapping-Stuff (Quelle: https://stackoverflow.com/questions/44147762/fabricjs-snap-to-grid-on-resize)
-		this._room_canvas.on('object:moving', options => {
-			//Change wally to wall to reactivate scaling
-			//getReferenceById(options.target.AGObjectID).position = new Vector3(options.target.left/this._scale, 1, options.target.top/this._scale);	
-		});
 	}
 	
     /**
@@ -350,12 +344,9 @@ export class IAudiCom {
 		getReferenceById(this._AGroomID).add(obj_buffer_ID);
 		this.renderAGObject(obj_buffer_ID);
 		
-		
-		
 		this.refreshObjectSelect();
 		this.listItems();
 		this.listConditions();
-		
 		
 		return obj_buffer_ID;
 	}
@@ -871,7 +862,6 @@ export class IAudiCom {
 		let portal_id_buffer = null;
 		portals_buffer.forEach(function(portal_buffer){	
 			let conditions_buffer = portal_buffer.conditions;
-			
 			conditions_buffer.forEach(function(condition_buffer){
 				if(condition_buffer.ID == _condition_id){
 					
@@ -904,8 +894,6 @@ export class IAudiCom {
 		this.listConditions();
 	}
 
-	
-	
 	generateEvent(_event_primary, _event_trigger, _event_action, _event_item, _event_secondary, _event_repeat){	
 		let event_buffer = new Event(_event_primary, _event_trigger, _event_action, _event_secondary, _event_item, _event_repeat);
 		let id_buffer = getIdByReference(event_buffer);	
@@ -1003,8 +991,7 @@ export class IAudiCom {
 				$('#glevent_type option').each(function(ele){
 					if(!bool_buffer){
 						bool_buffer = $(this).attr('item_type') == type_buffer;
-					}
-					
+					}	
 				});
 				if(!bool_buffer){
 					append_buffer = "<option item_type = " + type_buffer + ">"+type_buffer+"</option>";
@@ -1060,7 +1047,6 @@ export class IAudiCom {
 		let that = this;
 		let items_buffer = getReferencesOfType('AGItem');	
 		let select_item_buffer = '';
-		
 		if(items_buffer.length > 0){
 			items_buffer.forEach(function(element) {
 				select_item_buffer = select_item_buffer + '<option value = "'+ getReferenceById(element).ID + '">' + getReferenceById(element).name + '</option>';
@@ -1395,7 +1381,6 @@ export class IAudiCom {
 		//window.removeEventListener("keydown");
 	}
 	
-	
 	/**
 	* save Level from Clipboard
 	*/
@@ -1425,9 +1410,7 @@ export class IAudiCom {
 		g_references.clear();
 		rebuildHandlerGameArea();
 		//stop level clear everything
-		
-		console.log(lvl_);
-		
+				
 		switch(lvl_){
 			case 1:	
 				var controls = new AGNavigation(-1, -1, 37, 39, 67);
