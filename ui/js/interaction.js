@@ -27,7 +27,7 @@ jQuery(function($){
 	}
 	
     /**
-     * Removes a portal link
+     * Removes a portal link of active Fabric Object
      */
 	function deletePortal(){
 		//actFabObj.secDoor.set("fill", i_audicom._colors[4][i_audicom._vision_mode]);
@@ -50,7 +50,7 @@ jQuery(function($){
 	}
 	
     /**
-     * Prepares UI for a selected fabric-object
+     * Prepares UI for active Fabric Object
      */
 	function loadObject(type){
 		//all: position, SoSo, Namen, Löschenbutton
@@ -411,69 +411,8 @@ jQuery(function($){
 	}
 	
 	/*************************/
-	/***jQuery Events Start***/
+	/***Fabric Events***/
 	/*************************/
-	
-	$(document).on('keydown',function(e) {
-		if (event.keyCode == 13 && event.shiftKey) {
-			if($(document.activeElement).hasClass('faboject_')){
-				$('#ui_controls div').first().focus();
-				loadObject('room');
-			}else{
-				
-				$('.faboject_:first').focus();
-			} 	
-		}else if(e.which == 13) {
-			if($(document.activeElement).hasClass('faboject_')){
-				$('#input_obj_name').focus();
-			}
-			if($(document.activeElement).hasClass('sb_object')){
-				var type_buffer = $(document.activeElement).attr('type');
-				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2, true);	
-			}	
-			if($(document.activeElement).hasClass('input_position')){
-				addPathPoint(actFabObj.left, actFabObj.top);
-			}
-	    }
-		if(event.key == "Escape"){
-			if($('#overlay').is(":visible")){
-				if(!$(e.target).is('a')){
-					$('#overlay').fadeOut(200);
-				}	
-			}
-			if($('#win_screen').is(":visible")){
-				$('#win_screen').fadeOut(200);
-			}
-		}
-		if(e.keyCode == 46){
-			if(i_audicom._room_canvas.getActiveObject().type != 'player'){
-				$('#fabobject_' + i_audicom._room_canvas.getActiveObject().AGObjectID).remove();
-				i_audicom.deleteObject(i_audicom._room_canvas.getActiveObject());
-			}
-		}	
-	});
-	
-	$(document).on("focusout", ".faboject_", function(e){	
-		setTimeout(function(){
-			if(!$(document.activeElement).hasClass('faboject_') && !$(document.activeElement).attr('id') == 'input_obj_name'){
-				loadObject('room');
-				i_audicom._room_canvas.discardActiveObject().renderAll();
-			}
-		}, 10);	
-	});
-	
-	
-	$("#fabric_objects_container").on( "focus",'.faboject_',function(e){
-		let that = $(e.target);
-		i_audicom._room_canvas.getObjects().forEach(function(e){
-			if(e.AGObjectID == that.attr('obj_id')){
-				i_audicom._room_canvas.setActiveObject(e);
-				i_audicom._room_canvas.trigger('selection:created', {target: e});
-				i_audicom._room_canvas.renderAll();
-			}
-		});
-	});
-	
 	i_audicom._room_canvas.on('mouse:down', function(e){
 		//add path-point if an enemy is selected and it is recording
 		if(actFabObj.type=='enemy' && actFabObj.isRecording || actFabObj.type=='player' && actFabObj.isRecording){
@@ -652,6 +591,74 @@ jQuery(function($){
 		},
 	});
 	
+	/*************************/
+	/***jQuery Events***/
+	/*************************/
+	
+	//key-detection
+	$(document).on('keydown',function(e) {
+		if (event.keyCode == 13 && event.shiftKey) {
+			if($(document.activeElement).hasClass('faboject_')){
+				$('#ui_controls div').first().focus();
+				loadObject('room');
+			}else{
+				
+				$('.faboject_:first').focus();
+			} 	
+		}else if(e.which == 13) {
+			if($(document.activeElement).hasClass('faboject_')){
+				$('#input_obj_name').focus();
+			}
+			if($(document.activeElement).hasClass('sb_object')){
+				var type_buffer = $(document.activeElement).attr('type');
+				i_audicom.makeThenRenderAGObject(type_buffer, i_audicom._scale/2, i_audicom._scale/2, true);	
+			}	
+			if($(document.activeElement).hasClass('input_position')){
+				addPathPoint(actFabObj.left, actFabObj.top);
+			}
+	    }
+		if(event.key == "Escape"){
+			if($('#overlay').is(":visible")){
+				if(!$(e.target).is('a')){
+					$('#overlay').fadeOut(200);
+				}	
+			}
+			if($('#win_screen').is(":visible")){
+				$('#win_screen').fadeOut(200);
+			}
+			if($('#ff_popup').is(":visible")){
+				$('#ff_popup').fadeOut(200);
+				$('#ff_ta').val('');
+			}
+		}
+		if(e.keyCode == 46){
+			if(i_audicom._room_canvas.getActiveObject().type != 'player'){
+				$('#fabobject_' + i_audicom._room_canvas.getActiveObject().AGObjectID).remove();
+				i_audicom.deleteObject(i_audicom._room_canvas.getActiveObject());
+			}
+		}	
+	});
+	
+	//focus
+	$(document).on("focusout", ".faboject_", function(e){	
+		setTimeout(function(){
+			if(!$(document.activeElement).hasClass('faboject_') && !$(document.activeElement).attr('id') == 'input_obj_name'){
+				loadObject('room');
+				i_audicom._room_canvas.discardActiveObject().renderAll();
+			}
+		}, 10);	
+	});
+	$("#fabric_objects_container").on( "focus",'.faboject_',function(e){
+		let that = $(e.target);
+		i_audicom._room_canvas.getObjects().forEach(function(e){
+			if(e.AGObjectID == that.attr('obj_id')){
+				i_audicom._room_canvas.setActiveObject(e);
+				i_audicom._room_canvas.trigger('selection:created', {target: e});
+				i_audicom._room_canvas.renderAll();
+			}
+		});
+	});
+	
 	//Drag&Drop
 	$('.sb_object').draggable({
 		appendTo: 'body',
@@ -808,7 +815,7 @@ jQuery(function($){
 		getReferenceById(i_audicom._AGroomID).name = buffer;
 	});
 	
-	//select fabric-objects on focus
+	
 	
 	
 	//assign key to movement
@@ -958,8 +965,12 @@ jQuery(function($){
 		getReferenceById(actFabObj.AGObjectID).setSpeedSkalar($(this).attr('speed'));
 	});
 	
-
+	//speed Select
+	$('#object_speed_dropdown').change(function(){
+		getReferenceById(actFabObj.AGObjectID).setSpeedSkalar($(this).val());
+	});
 	
+	//volume sliders
 	$('#slider_general_volume').on('input', function (){	
 		getReferenceById(actFabObj.AGObjectID).aliveSound.volume = $(this).val();
 		$('#slider_value_general').text(Math.floor($(this).val() * 100));
@@ -972,17 +983,8 @@ jQuery(function($){
 		getReferenceById(actFabObj.AGObjectID).interactionSound.volume = $(this).val();
 		$('#slider_value_action').text(Math.floor($(this).val() * 100));
 	});
-	
-	
-	$('#object_speed_dropdown').change(function(){
-		getReferenceById(actFabObj.AGObjectID).setSpeedSkalar($(this).val());
-	});
-	
-	//add soundsource
-	// $('.btn_ss').click(function(){
-	// 	i_audicom.addSoundSource(actFabObj.AGObjectID, $(this).attr('ss'));
-	// });
-	//
+
+	//general sound select
 	$('#sound_dropdown').change(function(){
 		i_audicom.addSoundSource(actFabObj.AGObjectID, $(this).val(), 'on_alive');
 		if($(this).val()=='none'){
@@ -992,12 +994,10 @@ jQuery(function($){
 			$('#slider_general_volume .slider_value').text(100);
 			$('#slider_value_general').text(100);
 			$('#slider_box_general').fadeIn(100);
-			
-		
-			
 		}	
 	});
 	
+	//destruction sound Select
 	$('#sound_destruction_dropdown').change(function(){
 		i_audicom.addSoundSource(actFabObj.AGObjectID, $(this).val(), 'on_death');
 		if($(this).val()=='none'){
@@ -1009,6 +1009,7 @@ jQuery(function($){
 		}
 	});
 	
+	//action sound Select
 	$('#sound_action_dropdown').change(function(){
 		i_audicom.addSoundSource(actFabObj.AGObjectID, $(this).val(), 'on_action');
 		if($(this).val()=='none'){
@@ -1019,8 +1020,19 @@ jQuery(function($){
 			$('#slider_box_action').fadeIn(100);
 		}
 	});
-		
 	
+	//attack range Select
+	$( "#atk_range_dropdown").change(function(){	
+		let range_buffer = $("#atk_range_dropdown").val();	
+		if(range_buffer == 0){
+			getReferenceById(i_audicom._AGroomID).dangerous = false;
+		}else{
+			getReferenceById(i_audicom._AGroomID).dangerous = true;
+		}
+		getReferenceById(actFabObj.AGObjectID).range = range_buffer;
+	});
+	
+		
 	//add position of object to path
 	$('.btn_add_to_path').click(function(){
 		addPathPoint(actFabObj.left, actFabObj.top);
@@ -1066,14 +1078,6 @@ jQuery(function($){
 			$('.rb_ctrls').addClass('no_click lower_opacity');
 			$('.btn_path_delete').addClass('no_click lower_opacity');
 			$('.ui_box_special:visible').not('#ui_box_enemy_path').not('#ui_box_player_railed').addClass('no_click').addClass('lower_opacity');	
-			
-			
-			
-
-			
-			
-			
-			
 		}
 	});
 	
@@ -1101,7 +1105,7 @@ jQuery(function($){
 		}
 	});
 	
-	
+	//toggle running in circles
 	$('#cb_circle').click(function(){
 		if($('#cb_circle').is(":checked")){
 			getReferenceById(actFabObj.AGObjectID).circle = true;
@@ -1110,6 +1114,7 @@ jQuery(function($){
 		}
 	});
 	
+	//toggle runaway
 	$('#cb_runaway').click(function(){
 		if($('#cb_runaway').is(":checked")){
 			getReferenceById(actFabObj.AGObjectID).runaway = true;
@@ -1117,8 +1122,6 @@ jQuery(function($){
 			getReferenceById(actFabObj.AGObjectID).runaway = false;
 		}
 	});
-	
-	
 	
 	//toggle recording for portal linking
 	$('#btn_path_linkdoors').click(function(){
@@ -1161,6 +1164,8 @@ jQuery(function($){
 		}		
 	});
 	
+	
+	
 	//close win screen
 	$('#win_screen').click(function(){
 		$(this).fadeOut(200);
@@ -1177,11 +1182,31 @@ jQuery(function($){
 	});
 	
 	//paste level
-	$('#btn_load').click(function(){
-		i_audicom.loadLevelSALO();
+	$('#btn_load').click(function(){	
+		if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+			//if firefox -> manual input
+			$('#ff_popup').fadeIn(200);
+		}else{
+			i_audicom.loadLevelSALO();
+		}
 	});
 	
-	//select level
+	//load for Firefox
+	$('#ff_load').click(function(){
+		let ff_lvl_code = $('#ff_ta').val();
+		i_audicom.loadFFLevel(ff_lvl_code);
+		$('#ff_popup').fadeOut(200);
+		$('#ff_ta').val('');
+	});
+	//close Firefox-Popup
+	$('#ff_popup').click(function(e){
+		if(!$(e.target).is('textarea') && !$(e.target).is('#ff_load')){
+			$('#ff_popup').fadeOut(200);
+			$('#ff_ta').val('');
+		}		
+	});
+	
+	//level select
 	$("#level_dropdown").change(function() {		
 		switch(this.value){
 			case 'Railed Shooter':
@@ -1199,7 +1224,7 @@ jQuery(function($){
 		}
 	});
 		
-	//link portal
+	//portal select
 	$("#portal_dropdown").change(function(){	
 		let portal_buffer = '';
 		let value_buffer = $(this).val();
@@ -1216,6 +1241,7 @@ jQuery(function($){
 		}		
 	});
 	
+	//movement type
 	$( "input[name='controls']").change(function(){	
 		let controls_value = $("input[name='controls']:checked"). val();
 				
@@ -1241,23 +1267,9 @@ jQuery(function($){
 		}	
 	});
 	
-	$( "#sound_action_dropdown").change(function(){	
-		let range_buffer = $("#sound_action_dropdown").val();	
-		if(range_buffer == 0){
-			getReferenceById(i_audicom._AGroomID).dangerous = false;
-		}else{
-			getReferenceById(i_audicom._AGroomID).dangerous = true;
-		}
-		// if(range_buffer == 3){
-	// 		getReferenceById(i_audicom._AGroomID).dangerous = true;
-	// 		let room_x = getReferenceById(i_audicom._AGroomID).size.x;
-	// 		let room_y = getReferenceById(i_audicom._AGroomID).size.y;
-	// 		range_buffer = (room_x > room_y) ? room_x: room_y;
-	// 	}
-		getReferenceById(actFabObj.AGObjectID).range = range_buffer;
-	});
 	
 	
+	//add element to events, items etc
 	$('table').on('click', '.table_add', function () {
 		//console.log($(this).parents("table").attr('id'));
 		let table_id = $(this).parents("table").attr('id');
@@ -1313,6 +1325,7 @@ jQuery(function($){
 		}
 	}); 
 	
+	//delete for events, items etc
 	$('table').on('click', '.btn_delete_row', function () {
 		//console.log($(this).parents("table").attr('id'));
 		let table_id = $(this).parents("table").attr('id');	
@@ -1342,6 +1355,7 @@ jQuery(function($){
 	}); 
 	
 	//quelle: https://mdbootstrap.com/docs/jquery/tables/editable/#!
+	//items
 	const $tableID_items = $('#item_table');
 	$tableID_items.on('input', '.input_item_name', function () {	
 	    let buffer = $(this).val();
@@ -1372,7 +1386,7 @@ jQuery(function($){
 		getReferenceById(parseInt($(this).parents('tr').attr('item_id'))).charges = buffer;
 	});
 
-	/*EVENT-Table*/
+	//events
 	const $tableID_events = $('#event_table');
 	$tableID_events.on('change', '.select_event_primary', function () {	
 	    let buffer = $(this).val();
@@ -1405,7 +1419,7 @@ jQuery(function($){
 		
 	});
 	
-	/*Global Event Table*/
+	//global events
 	const $tableID_glevents = $('#glevent_table');	
 	$tableID_glevents.on('change', '.select_glevent_primary', function () {	
 	    let buffer = $(this).val();
@@ -1427,7 +1441,7 @@ jQuery(function($){
 		
 	});
 
-	/*Global Event Table*/
+	//conditions
 	const $tableID_conditions = $('#condition_table');
 	$tableID_conditions.on('change', '.select_condition_portal', function (){		
 		let condition_id_buffer = parseInt($(this).parents('tr').attr('condition_id'));		
@@ -1487,7 +1501,8 @@ jQuery(function($){
 	    let buffer = $(this).val();
 		getReferenceById(parseInt($(this).parents('tr').attr('condition_id'))).value = buffer;
 	});
-
+	
+	//hide & display events, items etc
 	$('.item_event_tab').click(function(){
 		let table_buffer = $(this).attr('table_');
 		$('.item_event_tab').removeClass('item_event_tab_active');

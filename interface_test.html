@@ -33,16 +33,18 @@
 			<div id = "mouse_coords_x">X: <span></span></div>
 			<div id = "mouse_coords_y">Y: <span></span></div>
 		</div><!--mouse_coords-->
-		
+		<div id = "hlp_box">
+			<button id = "btn_help" class = "misc_ctrls"><i class="fas fa-question"></i></button>
+		</div>
 		<div id = "misc_ctrls_box" class = "misc_ctrls">
 			<select id = "level_dropdown">
-				<option level="-"></option>
+				<option level="-">Level Select</option>
 			  	<option level="1">Railed Shooter</option>
-			  	<option level="2">Frogger Demo</option>
+			  	<option level="2">Frogger</option>
 			 	 <option level="3">Labyrinth</option>
-				<option level="4">Auditory Pointer Demo</option>
+				<option level="4">Pointer</option>
 			</select>
-			<button id = "btn_help" class = "misc_ctrls"><i class="fas fa-question"></i></button>
+			
 			<div id = "fabric_objects_container" class = "displace"></div><!--fabric_objects_container-->
 		</div><!--misc_box-->
 		
@@ -68,6 +70,7 @@
 				<div id = "canvas_controls_box" class = "control_box">
 					<button id = "btn_save" class = "btn"><i class="fas fa-copy"></i></button>
 					<button id = "btn_load" class = "btn"><i class="fas fa-paste"></i></button>
+					
 					<!-- <button id = "btn_zoom_in" class = "btn"><i class="fas fa-plus"></i></button>
 					<button id = "btn_zoom_out" class = "btn"><i class="fas fa-minus"></i></button>		 -->
 				</div><!--scene_controls_box-->
@@ -540,6 +543,17 @@
 			</div><!--col-->
 		</div><!--r_cont-->
 		
+		<div id = "ff_popup">
+			<div id = "ff_inputbox">
+				<div id = "ff_close_btn"><i class="fas fa-times"></i></div>
+				<p>Firefox doesn't allow direct pasting (which is a good thing, don't worry:)).</p><p>To solve this problem just manually paste your Level Code into the textarea below and hit Load. Otherwise just click outside this text box to close it.</p>
+				<textarea id = "ff_ta" placeholder = "Paste your Level Code here :)"></textarea>
+				
+				<div id = "ff_load" class = "btn">Load</div>
+				
+			</div>
+			
+		</div>
 		
 		<div id = "overlay">
 			<div id = "overlay_text_box">

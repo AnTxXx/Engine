@@ -692,20 +692,9 @@ export class IAudiCom {
 		}	
 	}
 	
-	
 	/**
-	* load Level from Clipboard
-	*/
-	loadLevelSALO(){
-		this.deleteItemsEventsEtc();
-		let that = this;
-		
-		this._room_canvas.clear();	
-		g_history.loadLevelFromClipboard().then(function(){
-			that.renderScene();
-		});
-	}
-	
+	 * Deletes Items, Conditions, Global Events & Events
+	 */
 	deleteItemsEventsEtc(){	
 		let items_buffer = getReferencesOfType('AGItem');
 		items_buffer.forEach(function(buffer){
@@ -733,7 +722,7 @@ export class IAudiCom {
 	
 	
     /**
-     * Lists all items
+     * Lists all Items
      */
 	listItems(){
 		let select_obj_buffer = '<option value = ""></option>' + this.prepareSelectObjects();
@@ -749,7 +738,10 @@ export class IAudiCom {
 			});
 		}
 	}
-
+	
+	/**
+	 * Updates the Item Lists
+	 */
 	refreshItemSelect(){
 		let select_item_buffer = this.prepareSelectItems();
 		$('.select_event_item').empty().append(select_item_buffer);	
@@ -762,7 +754,9 @@ export class IAudiCom {
 		});	
 	}
 	
-	
+    /**
+     * Lists all Conditions
+     */
 	listConditions(){
 		$('#condition_table tbody tr').not('#condition_input_row').remove();	
 		let select_obj_buffer = this.prepareSelectObjects();
@@ -806,6 +800,14 @@ export class IAudiCom {
 		}		
 	}
 	
+    /**
+     * Generates a new Item with the given properties
+     * @param The name of the item
+	 * @param The description of the item
+	 * @param The type of the item
+	 * @param The charges count of the item
+	 * @param The carrier object of the item
+     */
 	generateItem(_item_name, _item_desc, _item_type, _item_charges, _item_carriedby){
 		let item_buffer = new AGItem(_item_name, _item_desc, _item_type, _item_charges);
 		let id_buffer = getIdByReference(item_buffer);
@@ -820,12 +822,24 @@ export class IAudiCom {
 		this.listConditions();
 	}
 	
+    /**
+     * Generates a new Condition with the given properties
+	 * @param The portal the condition applies to
+	 * @param The object interacting with the portal
+	 * @param The trigger function
+	 * @param The type of the item
+	 * @param The count of the item
+     */
 	generateCondition(_cond_portal, _cond_primary, _cond_func, _cond_arg1, _cond_arg2){	
 		let cond_buffer = new AGCondition(_cond_primary, "INVENTORY", _cond_func, [_cond_arg1], _cond_arg2);
  		getReferenceById(_cond_portal).addConditionById(getIdByReference(cond_buffer));
 		this.listConditions();
 	}
 	
+	/**
+	 * Prepares the content of the Dropdown for the portals
+	 * @returns The String with the Dropdown-Options
+	 */
 	prepareSelectPortals(){
 		let that = this;
 		let select_obj_buffer = '';
@@ -842,6 +856,10 @@ export class IAudiCom {
 		return select_obj_buffer;
 	}
 	
+	/**
+	 * Returns all Portal Objects
+	 * @returns The array of portals
+	 */
 	getPortals(){
 		let portals_buffer = [];
 		let rooms_buffer = getReferenceById(g_gamearea.ID).AGRooms;
@@ -857,6 +875,11 @@ export class IAudiCom {
 		return portals_buffer;
 	}
 	
+	/**
+	 * Returns the ID of a Portal linked to a Condition ID
+	 * @param The Condition ID
+	 * @returns The Portal ID
+	 */
 	getIdOfPortal(_condition_id){
 		let portals_buffer = this.getPortals();
 		let portal_id_buffer = null;
@@ -871,7 +894,12 @@ export class IAudiCom {
 		});
 		return portal_id_buffer;
 	}
-
+	
+	
+	/**
+	 * Prepares the content of the Dropdown for the Item Types
+	 * @returns The String with the Dropdown-Options
+	 */
 	prepareSelectTypes(){
 		let items_buffer = getReferencesOfType('AGItem');	
 		let that = this;
@@ -889,11 +917,24 @@ export class IAudiCom {
 		return append_buffer;
 	}
 	
+	/**
+	* Deletes a Condition by ID
+	* @param The Condition ID
+	*/
 	deleteConditionFromList(_cond_id){
 		deleteCondition(_cond_id);
 		this.listConditions();
 	}
 
+    /**
+     * Generates a new Event with the given properties
+	 * @param The primary object of the Event
+	 * @param The trigger
+	 * @param The resulting action
+	 * @param The item name
+	 * @param The secondary object
+	 * @param The repeat count
+     */
 	generateEvent(_event_primary, _event_trigger, _event_action, _event_item, _event_secondary, _event_repeat){	
 		let event_buffer = new Event(_event_primary, _event_trigger, _event_action, _event_secondary, _event_item, _event_repeat);
 		let id_buffer = getIdByReference(event_buffer);	
@@ -909,6 +950,10 @@ export class IAudiCom {
 		this.refreshItemSelect();
 	}
 	
+	/**
+	* Deletes an Item by ID
+	* @param The Item ID
+	*/
 	deleteItemfromList(_item_id){	
 		deleteItem(parseInt(_item_id));
 		this.listEvents();
@@ -917,13 +962,25 @@ export class IAudiCom {
 		this.listConditions();
 	}
 	
+    /**
+     * Generates a new Global Event with the given properties
+	 * @param The primary object of the event
+	 * @param The condition object
+	 * @param The called function
+	 * @param The item type
+	 * @param The item count
+	 * @param The resulting action
+	 * @param The repeat count
+     */
 	generateGlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, _glevent_type, _glevent_count, _glevent_action, _glevent_repeat){
 		let glevent_buffer = new GlobalEvent(_glevent_primary, _glevent_conobject, _glevent_func, [_glevent_type], _glevent_count, _glevent_action, _glevent_repeat);
 		this.refreshObjectSelect();
 		this.listGlobalEvents();
 	}
 	
-	
+	/**
+	* Refreshes the Object Selects for Events and Global Events
+	*/
 	refreshObjectSelect(){
 		let select_obj_buffer = this.prepareSelectObjects();
 		$('.select_event_primary').empty().append(select_obj_buffer);	
@@ -953,6 +1010,9 @@ export class IAudiCom {
 		});	
 	}
 	
+	/**
+	* Lists the Global Events
+	*/
 	listGlobalEvents(){
 		//fill the global events
 		$('#glevent_table tbody tr').not('#glevent_input_row').remove();
@@ -1007,6 +1067,9 @@ export class IAudiCom {
 		});
 	}
 	
+	/**
+	* Lists the Events
+	*/
 	listEvents(){
 		$('#event_table tbody tr').not('#event_input_row').empty();
 		let events_buffer = getReferencesOfType('Event');		
@@ -1034,15 +1097,26 @@ export class IAudiCom {
 		}
 	}
 	
+	/**
+	* Deletes an Event by ID
+	* @param The Event ID
+	*/
 	deleteEvent(_event_id){
 		//console.log(getReferenceById(getReferencesOfType("AGEventHandler")[0]))
 		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeEventByID(parseInt(_event_id));	
 	}
+	/**
+	* Deletes a Global Event by ID
+	* @param The Global Event ID
+	*/
 	deleteGlobalEvent(_event_id){
 		getReferenceById(getReferencesOfType("AGEventHandler")[0]).removeGlobalEventByID(parseInt(_event_id));	
 	}
 	
-	
+	/**
+	 * Prepares the content of the Dropdown for the Items (by Name)
+	 * @returns The String with the Dropdown-Options
+	 */
 	prepareSelectItems(){
 		let that = this;
 		let items_buffer = getReferencesOfType('AGItem');	
@@ -1055,7 +1129,10 @@ export class IAudiCom {
 		return select_item_buffer;
 	}
 	
-	
+	/**
+	 * Prepares the content of the Dropdown for the Objects
+	 * @returns The String with the Dropdown-Options
+	 */
 	prepareSelectObjects(){
 		let that = this;
 		let select_obj_buffer = '';
@@ -1249,8 +1326,8 @@ export class IAudiCom {
 	}
 	
     /**
-     * Deletes all debugging dots
-     */
+    * Deletes all debugging dots
+    */
 	deleteDots(){
 		let room_buffer = this._room_canvas;
 		let canvas_objects = room_buffer.getObjects();
@@ -1263,10 +1340,10 @@ export class IAudiCom {
 	}
 	
     /**
-     * Returns the fabric-object linked to an AGObject-ID
-     * @param The ID of the AGOBject
-	 * @return The fabric-object
-     */
+    * Returns the fabric-object linked to an AGObject-ID
+    * @param The ID of the AGOBject
+	* @return The fabric-object
+    */
 	getFabricObject(ag_objectID){
 		let canvas_objects = this._room_canvas.getObjects();
 		let fab_buffer;
@@ -1279,8 +1356,8 @@ export class IAudiCom {
 	}
 	
     /**
-     * Toggles the visual representation of the editor for higher contrasts
-     */
+    * Toggles the visual representation of the editor for higher contrasts
+    */
 	toggleVisionMode(){
 		this._vision_mode = +!this._vision_mode;
 		this._room_canvas.backgroundColor = this._colors[0][this._vision_mode];
@@ -1323,9 +1400,9 @@ export class IAudiCom {
 	}
 	
     /**
-     * Zooms the scenes in or out
-     * @param the zoom factor
-     */
+    * Zooms the scenes in or out
+    * @param the zoom factor
+    */
 	zoomCanvas(zoom_factor){
 		//min : 0.5
 		//max : 1.5
@@ -1364,8 +1441,8 @@ export class IAudiCom {
 	}
 	
     /**
-     * Disables key scrolling
-     */
+    * Disables key scrolling
+    */
 	disableKeyScrolling(){
 		window.addEventListener("keydown", function(e) {
 		    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
@@ -1375,8 +1452,8 @@ export class IAudiCom {
 	}
 	
     /**
-     * Enables key scrolling
-     */
+    * Enables key scrolling
+    */
 	enableKeyScrolling(){
 		//window.removeEventListener("keydown");
 	}
@@ -1386,6 +1463,34 @@ export class IAudiCom {
 	*/
 	saveLevelSALO(){
 		g_history.saveLevelToClipboard();
+	}
+	
+	/**
+	* load Level from Clipboard
+	*/
+	loadLevelSALO(){
+		g_history.loadLevelFromClipboard().then(function(){
+			this.deleteItemsEventsEtc();
+			let that = this;
+			this._room_canvas.clear();	
+			that.renderScene();
+		}).catch(() => {
+    		alert("Something went wrong while loading your Level Code. Please check your Level Code and try again!");
+  		});
+	}
+	
+	/**
+	* gets called by the UI in case of loading a level in Firefox
+	* @param the level code to load
+	*/
+	loadFFLevel(_ff_lvl_code){
+		try{
+			g_history.rebuild(_ff_lvl_code);
+			this.renderScene();
+		}catch(err){
+			alert("Something went wrong while loading your Level Code. - Please check your Level Code and try again!");
+		}
+ 		
 	}
 	
     /**
