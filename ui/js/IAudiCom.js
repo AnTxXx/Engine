@@ -15,7 +15,9 @@ import { GlobalEvent } from "../../lib/GlobalEvent.js";
 import { Vector3 } from "../../lib/js/three/Vector3.js";
 import { g_eventHandler, deleteItem, getReferencesOfType, getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl, getOwnerIdOfItemById, deleteCondition } from "../../lib/AGEngine.js";
 
-
+/**
+ * Handles communication between UI and Engine 
+ */
 export class IAudiCom {
     set position(value) {
         this._scale = value;
