@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "flow-typed": "^2.5.1",
+    "jsdoc": "^3.6.3",
     "lodash": "^4.17.11",
     "resonance-audio": "^1.0.0",
     "webpack": "^4.29.6"

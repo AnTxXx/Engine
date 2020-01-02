@@ -18,11 +18,6 @@ const conditionObjectVals = Object.freeze({
     INVENTORY: 'INVENTORY',
 })
 
-
-
-//TODO Create Trigger for WINGAME
-//TODO Create "Trigger" for Amount of Items reached
-
 export type Trigger = $Values<typeof triggerVals>;
 export type Action = $Values<typeof actionVals>;
 export type ConditionObject = $Values<typeof conditionObjectVals>;

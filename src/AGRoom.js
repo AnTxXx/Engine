@@ -273,6 +273,10 @@ export class AGRoom {
         return collisionArray;
     }
 
+    /**
+     * Removes the AGObject from the room.
+     * @param obj The AGObject to be removed.
+     */
     removeAGObject(obj:AGObject){
         let index:number = -1;
         for(let i = 0; i < this._AGobjects.length; i++){

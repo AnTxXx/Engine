@@ -33,23 +33,39 @@ export class AGEventHandler{
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.addEvent.name, this.constructor.name, arguments);
     }
 
+    /**
+     * Removes an Event from the Eventlist by ID.
+     * @param eventID The ID of the Event to be removed.
+     */
     removeEventByID(eventID:number){
         this.removeEvent(getReferenceById(eventID));
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeEventByID.name, this.constructor.name, arguments);
         g_references.delete(eventID);
     }
 
+    /**
+     * Removes an Event from the Eventlist by Event Object.
+     * @param event The Object that should be removed.
+     */
     removeEvent(event:Event){
         console.log("[AGEventHandler] Removing Event [ID: " + event.ID + "].");
         this._events.splice(this.findEventIndex(event), 1);
     }
 
+    /**
+     * Removes a GlobalEvent from the GlobalEventlist by ID.
+     * @param eventID The ID of the GlobalEvent to be removed.
+     */
     removeGlobalEventByID(eventID:number){
         this.removeEvent(getReferenceById(eventID));
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeGlobalEventByID.name, this.constructor.name, arguments);
         g_references.delete(eventID);
     }
 
+    /**
+     * Removes a GlobalEvent from the Eventlist by GlobalEvent Object.
+     * @param event The Object that should be removed.
+     */
     removeGlobalEvent(event:GlobalEvent){
         console.log("[AGEventHandler] Removing Global Event [ID: " + event.ID + "].");
         this._globalEvents.splice(this.findGlobalEventIndex(event), 1);
@@ -68,6 +84,7 @@ export class AGEventHandler{
         this._globalEvents = [];
     }
 
+
     evaluateGlobalEvents(){
         for(let i = 0; i < this._globalEvents.length; i++){
             this.evaluateGlobalEvent(this._globalEvents[i]);
@@ -79,6 +96,11 @@ export class AGEventHandler{
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.addGlobalEvent.name, this.constructor.name, arguments);
     }
 
+    /**
+     * Evaluates a GlobalEvent if the conditions are met. Returns true, if the conditions are met.
+     * @param event The GlobalEvent object to be evaluated.
+     * @returns {boolean} Returns true, if the event's conditions are met, otherwise false.
+     */
     evaluateGlobalEvent(event:GlobalEvent):boolean {
         //console.log(event.funcOfConditionObject.apply(event.object.inventory, event.funcArgs));
         if((event.repeat >= 1 || event.repeat === -1)){
@@ -99,6 +121,10 @@ export class AGEventHandler{
         return false;
     }
 
+    /**
+     * Triggers an action. Currently only WINGAME is available.
+     * @param action The Action to be triggered.
+     */
     fireAction(action:Action){
         switch(action){
             case "WINGAME":
@@ -108,7 +134,7 @@ export class AGEventHandler{
     }
 
     /**
-     * Returns the Index of the event.
+     * Returns the index of the event.
      * @param event Event to be queried.
      * @returns {number} Returns the index of the event.
      */
@@ -124,6 +150,11 @@ export class AGEventHandler{
         return -1;
     }
 
+    /**
+     * Returns the index of the GlobalEvent object in the global events list. (function deprecated)
+     * @param event The GlobalEvent object to be searched for.
+     * @returns {number} Returns the ID of the GlobalEvent.
+     */
     findGlobalEventIndex(event:GlobalEvent):number {
         for(let i = 0; i < this._globalEvents.length; i++){
             if(this._globalEvents[i].ID === event.ID)
@@ -132,6 +163,10 @@ export class AGEventHandler{
         return -1;
     }
 
+    /**
+     * Deletes all events (also removing from reference table) that contain a specific item (ID).
+     * @param itemID The ID of the AGItem.
+     */
     deleteEventsContainingItemById(itemID:number){
         let agitem:AGItem = getReferenceById(itemID);
         let that = this;
@@ -143,6 +178,10 @@ export class AGEventHandler{
         })
     }
 
+    /**
+     * Deletes all events (also removing from reference table) that contain a specific object (ID).
+     * @param objectID The ID of the AGObject.
+     */
     deleteEventsContainingObjectById(objectID:number){
         let agobject:AGObject = getReferenceById(objectID);
         let that = this;
@@ -156,6 +195,10 @@ export class AGEventHandler{
         })
     }
 
+    /**
+     * Deletes all GlobalEvents (also removing from reference table) that contain a specific object (ID).
+     * @param objectID The ID of the AGObject.
+     */
     deleteGlobalEventsContainingObjectById(objectID:number){
         let agobject:AGObject = getReferenceById(objectID);
         let that = this;
@@ -200,9 +243,9 @@ export class AGEventHandler{
     }
 
     /**
-     * 
-     * @param object
-     * @param trigger
+     * Function is called if certain events happen (e.g., collision, death) and reacts by triggering the respective function.
+     * @param object The AGObject that called this function.
+     * @param trigger The Trigger (e.g., ONCONTACT, ONDEATH)
      */
     call(object:AGObject, trigger:Trigger){
         //console.log("[AGEventHandler] Received Event-Call from " + object.name);

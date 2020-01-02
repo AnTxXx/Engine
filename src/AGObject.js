@@ -569,6 +569,9 @@ export class AGObject {
         }
     }
 
+    /**
+     * Actions to do when an AGObject dies.
+     */
     onDeath(){
         g_eventHandler.call(this, "ONDEATH");
         if(this._deathSound) this._deathSound.play();
@@ -576,6 +579,9 @@ export class AGObject {
         this.kill();
     }
 
+    /**
+     * Kills the AGObject and removes it from the reference table.
+     */
     kill(){
         console.log("[AGObject] " + this.name + ": killed.");
         this.stop();
@@ -590,6 +596,10 @@ export class AGObject {
         if(this._interactionSound) this._interactionSound.play();
     }
 
+    /**
+     * AGObject receives damage from obj.
+     * @param obj The AGObject that does damage to this AGObject.
+     */
     doDamage(obj:AGObject){
         if(this.destructible) {
             this.health -= obj.damage;

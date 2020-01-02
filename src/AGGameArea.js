@@ -106,6 +106,9 @@ export class AGGameArea {
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.addRoom.name, this.constructor.name, arguments);
     }
 
+    /**
+     * Unsolves all rooms (sets the solved attribute of all rooms to false).
+     */
     unsolveRooms(){
         this._AGRooms.forEach(function(element) {
             console.log("[AGGameArea] Unsolving Room [ID: " + element.ID + "].");
