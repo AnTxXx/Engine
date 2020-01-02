@@ -74,18 +74,29 @@ export class AGPortal extends AGObject{
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.linkPortals.name, this.constructor.name, arguments);
     }
 
+    /**
+     * Unlinks this portal and the other.
+     */
     unlink(){
         if(this._exit != null && this._exit.exit != null) this._exit.exit = null;
         this._exit = null;
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.unlink.name, this.constructor.name, arguments);
     }
 
+    /**
+     * Adds an AGCondition to this AGPortal by ID.
+     * @param condition The ID of the AGCondition to be added.
+     */
     addConditionById(condition:number){
         let cond:AGCondition = getReferenceById(condition);
         this._conditions.push(cond);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.addConditionById.name, this.constructor.name, arguments);
     }
 
+    /**
+     * Deletes an AGCondition of this AGPortal by ID.
+     * @param condition The ID of the AGCondition to be deleted.
+     */
     deleteConditionById(condition:number){
         let cond:AGCondition = getReferenceById(condition);
         let index:number = -1;
@@ -105,6 +116,9 @@ export class AGPortal extends AGObject{
         return this._conditions[this._conditions.indexOf(cond)];
     }
 
+    /**
+     * Kills the AGPortal and triggers the kill function of the superclass.
+     */
     kill() {
         let that = this;
         this._conditions.forEach(element => that.deleteConditionById(element.ID));

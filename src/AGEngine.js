@@ -18,18 +18,34 @@ export let g_controls:AGNavigation;
 
 export let g_IAudiCom:IAudiCom;
 
+/**
+ * Sets the IAudiCom Interface that connects the GUI with the Engine. Global variable.
+ * @param IAC The IAudiCom interface.
+ */
 export function setIAudiCom(IAC:IAudiCom){
     g_IAudiCom = IAC;
 }
 
+/**
+ * Sets the GameArea. Global variable.
+ * @param gameArea The AGGameArea to be set.
+ */
 export function setGameArea(gameArea:AGGameArea){
     if(g_gamearea) g_gamearea = gameArea;
 }
 
+/**
+ * Sets the EventHandler. Global variable.
+ * @param eventHandler The AGEventHandler to be set.
+ */
 export function setEventHandler(eventHandler:AGEventHandler){
     if(g_eventHandler) g_eventHandler = eventHandler;
 }
 
+/**
+ * Deletes an Item from the inventories, events (including the events themselves), and from the reference list.
+ * @param itemID The id of the AGItem to be removed.
+ */
 export function deleteItem(itemID:number){
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGInventory") {
@@ -43,6 +59,10 @@ export function deleteItem(itemID:number){
     console.log("[AGEngine] Deleted Item ID " + itemID + " from Inventories and References Table.");
 }
 
+/**
+ * Deletes a Condition by ID.
+ * @param conditionID The ID of the AGCondition to be removed.
+ */
 export function deleteCondition(conditionID:number){
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGPortal") {
@@ -54,6 +74,11 @@ export function deleteCondition(conditionID:number){
     console.log("[AGEngine] Deleted Condition ID " + conditionID + " from Objects and References Table.");
 }
 
+/**
+ * Returns the ID of the AGObject, in which's inventory the item is.
+ * @param itemID The ID of the AGItem.
+ * @returns {number} Returns the ID of the AGObject.
+ */
 export function getOwnerIdOfItemById(itemID:number){
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGInventory") {
@@ -71,7 +96,7 @@ Game Area in which the audio game is played. It holds all audio game objects.
  */
 
 /**
- * Creates a new EventHandler and GameArea, mainly for rebuilding the whole scene or creating a new one
+ * Creates a new EventHandler and GameArea, mainly for rebuilding the whole scene or creating a new one.
  */
 export function rebuildHandlerGameArea(){
     g_eventHandler = new AGEventHandler();
@@ -108,6 +133,11 @@ export function getIdByReference(obj:Object):number{
     //return Object.keys(g_references).find(key => g_references[key] === obj);
 }
 
+/**
+ * Returns all IDs of a given Type (e.g., AGItem) from the references table.
+ * @param type The type as string.
+ * @returns {[]} Returns an array of found IDs.
+ */
 export function getReferencesOfType(type:string):Array<number> {
     let returnArr = [];
     for (let [k, v] of g_references) {
@@ -123,12 +153,12 @@ export function getReferencesOfType(type:string):Array<number> {
 export function setLoading(bool:boolean){
     g_loading = bool;
 }
-
+/*
 const ConditionEnum = {
     None: 0,
     Moving: 1,
     Permanent: 2,
-};
+};*/
 
 let request;
 
@@ -146,7 +176,11 @@ function draw(gameArea:AGGameArea) {
     gameArea.draw();
 }
 
-//Start or Stop the game
+/**
+ * Starts and stops the game.
+ * @param gameArea The AGGameArea the game is running in.
+ * @param state Set to true, if the game should run, otherwise set to false.
+ */
 export function play(gameArea:AGGameArea, state:boolean){
     g_playing = state;
     if(g_playing){
@@ -165,6 +199,10 @@ function stop(gameArea:AGGameArea){
     gameArea.stop();
 }
 
+/**
+ * Sets a room to be unsolved again, if it has been set to solved (e.g., player has reached the goal).
+ * @param gameArea The AGGameArea the game is running in.
+ */
 function unsolveRooms(gameArea:AGGameArea){
     gameArea.unsolveRooms();
 }

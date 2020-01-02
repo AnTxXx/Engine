@@ -52,6 +52,9 @@ export class AGPlayer extends AGObject {
         if(this._hitSound) this._hitSound.play();
     }
 
+    /**
+     * Called if the AGPlayer does the interact action.
+     */
     interact() {
 
         //damage others

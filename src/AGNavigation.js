@@ -28,7 +28,12 @@ function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
     return true;
 }
 
-//new moveTo function that forces collision and does not stop before it without triggering collision
+/**
+ * Moves the AGObject into direction, depending on speed. Needs a timeStamp for deltaTime (frame-independent movement)
+ * @param object The AGObject that should be move.
+ * @param direction The direction as Vector3 the object should be moved to.
+ * @param timeStamp A current frame-timestamp.
+ */
 export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
     let timeDiff;
     if(timeStamp!==undefined){

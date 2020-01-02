@@ -20,6 +20,10 @@ export class AGRoomExit extends AGObject {
         this._reached = false;
     }
 
+    /**
+     * The routine that is called when there is a collision happening with this and another AGObject.
+     * @param obj The other AGObject that triggered the collision.
+     */
     onCollisionEnter(obj: AGObject) {
         super.onCollisionEnter(obj);
         if(obj.type === "PLAYER"){

@@ -102,6 +102,10 @@ export class AGCondition {
         this._value = value;
     }
 
+    /**
+     * Evaluates the Condition.
+     * @returns {boolean} Returns true, if the condition is met, otherwise false.
+     */
     evaluate():boolean {
         switch(this._conditionObject) {
             case "INVENTORY":
@@ -117,6 +121,11 @@ export class AGCondition {
 
 }
 
+/**
+ * Evaluates all Conditions in an Array with AGConditions.
+ * @param conditions An Array with AGConditions to be checked.
+ * @returns {boolean} Returns true, if all conditions are met, otherwise false.
+ */
 export function evaluateAll(conditions:Array<AGCondition>):boolean{
     for(let i = 0; i < conditions.length; i++){
         if(!conditions[i].evaluate()) return false;

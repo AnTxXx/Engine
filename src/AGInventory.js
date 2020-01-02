@@ -56,6 +56,11 @@ export class AGInventory{
         console.log("[AGInventory] Adding Item " + item.name + " to Object " + this._attachedTo.name + "'s inventory.");
     }
 
+    /**
+     * Returns the amount of items in this AGInventory with the same name.
+     * @param name The name of the AGItem.
+     * @returns {number} The amount of AGItems found with the given name.
+     */
     countByName(name:string):number {
         let count:number = 0;
         for(let i = 0; i < this._inventory.length; i++){
@@ -66,6 +71,11 @@ export class AGInventory{
         return count;
     }
 
+    /**
+     * Returns the amount of items in this AGInventory with the same type.
+     * @param type The type of the AGItem.
+     * @returns {number} The amount of AGItems found with the given type.
+     */
     countByType(type:string):number {
         let count:number = 0;
         for(let i = 0; i < this._inventory.length; i++){
@@ -76,6 +86,10 @@ export class AGInventory{
         return count;
     }
 
+    /**
+     * Removes an item from this AGInventory by AGItem object.
+     * @param item The AGItem object that should be removed from the inventory.
+     */
     removeItem(item:AGItem){
         let indexToDelete:number = -1;
         for(let i = 0; i < this._inventory.length; i++){
@@ -91,6 +105,10 @@ export class AGInventory{
     }
 
 
+    /**
+     * Removes an item from this AGInventory by ID.
+     * @param itemID The item ID that should be removed from the inventory.
+     */
     removeItemById(itemID:number){
         this.removeItem(getReferenceById(itemID));
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeItemById.name, this.constructor.name, arguments);
@@ -105,6 +123,11 @@ export class AGInventory{
         return null;
     }
 
+    /**
+     * Searches for a AGItem in this AGInventory. Returns the item if found, otherwise null.
+     * @param item The AGItem object that is being looked for.
+     * @returns {null|*} Returns the AGItem if found, otherwise null.
+     */
     searchItem(item:AGItem):?AGItem{
         for(let i = 0; i < this._inventory.length; i++){
             if(this._inventory[i] === item){
@@ -114,15 +137,30 @@ export class AGInventory{
         return null;
     }
 
+    /**
+     * Checks if a AGItem is in this AGInventory, by ID. Returns true if found, otherwise false.
+     * @param itemID The ID of the AGItem to be found.
+     * @returns {boolean} Returns true, if the inventory has the item, otherwise false.
+     */
     hasItemById(itemID:number):boolean{
         if(this.searchItemById(itemID)) return true;
         return false;
     }
 
+    /**
+     Searches for a AGItem in this AGInventory, by ID. Returns the item if found, otherwise null.
+     * @param item The AGItem object that is being looked for.
+     * @returns {?AGItem} Returns the AGItem if found, otherwise null.
+     */
     searchItemById(itemID:number):?AGItem{
         return(this.searchItem(getReferenceById(itemID)));
     }
 
+    /**
+     * Changes the amount of charges of a AGItem.
+     * @param item The item for which the charges are changed.
+     * @param changeBy The amount by which the charges should be changed.
+     */
     changeItemCharge(item:AGItem, changeBy:number){
         if(this.searchItem(item)!==null){
             item.charges += changeBy;
