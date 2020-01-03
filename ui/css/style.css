@@ -458,6 +458,7 @@ input[type=file] + label:hover{
 	top:0;
 	left:0;
 	display:none;
+	height:100%;
 }
 #overlay_text_box{
 	background-color:white;
@@ -503,7 +504,7 @@ ol li{
 	top:0;
 	left:0;
 	width:100%;
-	min-height:100vh;
+	height:100%;
 	background-color:rgba(204, 204, 204, 0.5);
 }
 #ff_inputbox{
@@ -538,7 +539,7 @@ ol li{
 	position:absolute;
 	top:0;
 	left:0;
-	padding:15px 20px;
+	padding:15px 15px;
 }
 
 #btn_help{	
@@ -546,7 +547,6 @@ ol li{
 	font-size:20px;
 	cursor:pointer;
 	display:inline-block;
-	margin-left:5px;
 }
 #btn_help:hover{
 	color:#7F7F7F;
