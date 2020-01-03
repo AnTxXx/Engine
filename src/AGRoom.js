@@ -331,7 +331,6 @@ export class AGRoom {
         }
 
         this.checkForCollision();
-        //TODO wtf? see uncommented version ...
         /*this._resonanceAudioScene.setListenerPosition(this._listener.position.x -  this.size.x/2,
             this._listener.position.y - this.size.y/2,
             this._listener.position.z - this.size.z/2);*/

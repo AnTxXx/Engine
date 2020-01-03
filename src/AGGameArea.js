@@ -11,6 +11,9 @@ import {getReferenceById, setGameArea} from "./AGEngine.js";
 
 let debug:number = 0;
 
+/**
+ * GameArea that holds several AGRooms. It can be considered as the plane on which the game is played.
+ */
 export class AGGameArea {
 
     get audioContext() {

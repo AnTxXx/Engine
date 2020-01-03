@@ -6,6 +6,9 @@ import {AGObject} from "./AGObject.js";
 import {g_history, g_loading, g_references, g_playing, getReferenceById} from "./AGEngine.js";
 import {Counter} from "./IDGenerator.js";
 
+/**
+ * Class that represents one event, including object, trigger, action, etc.
+ */
 export class Event {
     get origin(): AGObject {
         return this._origin;

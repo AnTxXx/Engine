@@ -26,6 +26,9 @@ import {AGCondition} from "./AGCondition.js";
 
 //let _ = require('lodash/core');
 
+/**
+ * Class which is responsible for saving and loading of levels.
+ */
 export class AGSaLo {
     _classes:Array<Function>;
 
@@ -94,9 +97,6 @@ export class AGSaLo {
         g_references.clear();
         Counter.reset();
 
-
-        //TODO JSON HIN UND HER
-
         let serialized:string;
         //let parsedObject:Object;
 
@@ -136,7 +136,7 @@ export class AGSaLo {
                 let constructor:Function = getConstructor(obj._func, this._classes);
                 //console.log(constructor);
                 let newObject = Reflect.construct(constructor, args);
-                //TODO: TEMPORARY SOLUTION FOR EVENTHANDLER FIRST (NEEDED TO REFRESH global variables)
+                //TEMPORARY SOLUTION FOR EVENTHANDLER FIRST (NEEDED TO REFRESH global variables)
                 if(i === 0) setEventHandler(newObject);
                 if(i === 1) setGameArea(newObject);
             } else {

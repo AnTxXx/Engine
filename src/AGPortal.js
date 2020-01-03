@@ -9,6 +9,9 @@ import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
 import {getReferenceById} from "./AGEngine.js";
 import {setLoading} from "./AGEngine.js";
 
+/**
+ * Portal class that offers options to move a player from X to Y via in-game objects.
+ */
 export class AGPortal extends AGObject{
     get conditions() {
         return this._conditions;
@@ -49,7 +52,6 @@ export class AGPortal extends AGObject{
             //Blocks object that has just been teleported in other Portal to not get teleported again (until leave)
             if(this._exit) this._exit.blockedObjects.push(obj);
             if(this._exit) {
-                //TODO: temporary fix to disable save of player position if player moves through portal
                 setLoading(true);
                 if(this._exit) obj.position = this._exit.position.clone();
                 setLoading(false);

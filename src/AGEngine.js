@@ -136,7 +136,7 @@ export function getIdByReference(obj:Object):number{
 /**
  * Returns all IDs of a given Type (e.g., AGItem) from the references table.
  * @param type The type as string.
- * @returns {[]} Returns an array of found IDs.
+ * @returns {Array} Returns an array of found IDs.
  */
 export function getReferencesOfType(type:string):Array<number> {
     let returnArr = [];

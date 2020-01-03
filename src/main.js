@@ -62,5 +62,3 @@ console.log(g_history);
 
 export let i_audicom = new IAudiCom();
 setIAudiCom(i_audicom);
-
-// TODO: eine art pushforce pro objekt, damit das staerkere Objekt das schwaechere zurueckdraengen kann?

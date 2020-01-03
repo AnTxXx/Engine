@@ -4,6 +4,9 @@ import {Counter} from "./IDGenerator.js";
 import {g_history} from "./AGEngine.js";
 import {g_references, g_loading, g_playing} from "./AGEngine.js";
 
+/**
+ * In-game item class.
+ */
 export class AGItem {
     _name:string;
     _description:string;
