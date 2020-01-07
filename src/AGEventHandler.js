@@ -9,7 +9,7 @@ import {GlobalEvent} from "./GlobalEvent.js";
 import {AGItem} from "./AGItem.js";
 
 /**
- * Eventhandler Class (Very WIP)
+ * Eventhandler Class
  */
 export class AGEventHandler{
     get ID() {
@@ -252,7 +252,6 @@ export class AGEventHandler{
         let events:Array<Event> = this.findEventsAfterCall(object, trigger);
         for(let i = 0; i < events.length; i++){
             if(events[i].repeat >= 1 || events[i].repeat === -1){
-                //TODO: implement remaining action
                 console.log("[AGEventHandler] Event triggered:");
                 console.log(events[i]);
                 switch(events[i].trigger){

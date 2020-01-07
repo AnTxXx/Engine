@@ -1,10 +1,11 @@
 // @flow
 
-//TODO: implement
-
 import {AGObject} from "./AGObject.js";
 import {Vector3} from "./js/three/Vector3.js";
 
+/**
+ * Exit that triggers the WINGAME if player collides with it.
+ */
 export class AGRoomExit extends AGObject {
     get reached() {
         return this._reached;
@@ -30,7 +31,6 @@ export class AGRoomExit extends AGObject {
             console.log("[AGRoomExit] " + obj.name + " reached exit.");
             this._reached = true;
             obj.room.solved = true;
-            //TODO: Logic to shift player into new room, change audiocontext, etc.
         }
 
     }

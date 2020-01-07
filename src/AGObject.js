@@ -12,6 +12,9 @@ import {getReferenceById} from "./AGEngine.js";
 
 let debug = 0;
 
+/**
+ * The main class that serves as basis for other objects.
+ */
 export class AGObject {
     get deathSound(): ?AGSoundSource {
         return this._deathSound;
@@ -489,7 +492,6 @@ export class AGObject {
         }*/
 
         if(this._movable) {
-            //TODO: 0.2 suboptimal ... should be speed * deltaTime or something like that
             if ((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)) {
                 if (this._circle) {
                     this._currentRoute = ++this._currentRoute % this._route.length;

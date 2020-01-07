@@ -8,6 +8,9 @@ import {getReferenceById} from "./AGEngine.js";
 import {hitBoundingBox} from "./AGPhysics.js";
 import {AGObject} from "./AGObject.js";
 
+/**
+ * Class that is responsible for sound propagation related stuff.
+ */
 export class AGSoundSource
   /*extends AGObject*/ {
     get update(): boolean {
@@ -179,7 +182,7 @@ export class AGSoundSource
         this._gainNode.gain.value = 1;
 
         this.source = this.resonanceAudioScene.createSource();
-        //TODO: activate filter when obstruction between listener and soundsource
+
         this._obstructionFilter = this.audioContext.createBiquadFilter();
         this._obstructionFilter.type = "lowpass";
         this._obstructionFilter.frequency.value = 300;
@@ -206,7 +209,6 @@ export class AGSoundSource
      * @param position New position (Vector3) of the sound source.
      */
     setPosition(position: Vector3){
-        //TODO maybe buggy, should be tested, workaround for now see uncommented
         /*this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
             position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
             position.z - this.room.positionOnGameArea.z + this.room.size.z/2);*/
@@ -234,7 +236,7 @@ export class AGSoundSource
             this.audioElement.play();
         }
 
-        //TODO: Attenuation not working properly...
+        //Attenuation not working properly...
         //check objects between sound source and player
         //if(this._object.name.localeCompare("Waterfall3")==0) console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
         if(this._room.betweenPlayerObjectRayIntersect(this._object).length>0){

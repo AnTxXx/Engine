@@ -3,34 +3,34 @@
   <component name="ChangeListManager">
     <list default="true" id="e72e4bf6-2216-47cd-b7e0-bb846605a1d8" name="Default Changelist" comment="well... one step closer to world domination, except that the keydownevents are killing me softly :&quot;(">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGCondition.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEngine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGEventHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGEventHandler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGGameArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGGameArea.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGInventory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGNavigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGItem.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGObject.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGPortal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoom.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGRoomExit.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGRoomExit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/AGSaLo.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSaLo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/EventType.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/EventType.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGCondition.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGCondition.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/GlobalEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/GlobalEvent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGEngine.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGEngine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGEventHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGEventHandler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGGameArea.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGGameArea.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGInventory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGInventory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AGNavigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGNavigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGItem.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGObject.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGPlayer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPlayer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGPortal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGPortal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGRoom.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGRoomExit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGRoomExit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AGSaLo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSaLo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EventType.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventType.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AGSoundSource.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/AGSoundSource.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GlobalEvent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/GlobalEvent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,18 +132,10 @@
       <workItem from="1575715431971" duration="1153000" />
       <workItem from="1575984686682" duration="1835000" />
       <workItem from="1576230765487" duration="357000" />
-      <workItem from="1577956737746" duration="9572000" />
+      <workItem from="1577956737746" duration="11963000" />
+      <workItem from="1578049630263" duration="802000" />
     </task>
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -175,30 +167,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="640" y="247" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575715415745" />
-    <state x="730" y="351" width="459" height="485" key="#com.intellij.tools.ToolEditorDialog" timestamp="1577982014853">
+    <state x="730" y="351" width="459" height="485" key="#com.intellij.tools.ToolEditorDialog" timestamp="1577982285484">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="730" y="351" width="459" height="485" key="#com.intellij.tools.ToolEditorDialog/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982014853" />
-    <state x="741" y="276" key="FileChooserDialogImpl" timestamp="1577982057395">
+    <state x="730" y="351" width="459" height="485" key="#com.intellij.tools.ToolEditorDialog/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982285484" />
+    <state x="741" y="276" key="FileChooserDialogImpl" timestamp="1577982295053">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="741" y="276" key="FileChooserDialogImpl/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982057395" />
-    <state width="1877" height="281" key="GridCell.Tab.0.bottom" timestamp="1577982057425">
+    <state x="741" y="276" key="FileChooserDialogImpl/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982295053" />
+    <state width="1877" height="281" key="GridCell.Tab.0.bottom" timestamp="1577984410556">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982057425" />
-    <state width="1877" height="281" key="GridCell.Tab.0.center" timestamp="1577982057424">
+    <state width="1877" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577984410556" />
+    <state width="1877" height="281" key="GridCell.Tab.0.center" timestamp="1577984410556">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982057424" />
-    <state width="1877" height="281" key="GridCell.Tab.0.left" timestamp="1577982057424">
+    <state width="1877" height="281" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577984410556" />
+    <state width="1877" height="281" key="GridCell.Tab.0.left" timestamp="1577984410556">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982057424" />
-    <state width="1877" height="281" key="GridCell.Tab.0.right" timestamp="1577982057425">
+    <state width="1877" height="281" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577984410556" />
+    <state width="1877" height="281" key="GridCell.Tab.0.right" timestamp="1577984410556">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982057425" />
+    <state width="1877" height="281" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577984410556" />
     <state width="1878" height="395" key="GridCell.Tab.1.bottom" timestamp="1576251895642">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -231,13 +223,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1878" height="395" key="GridCell.Tab.2.right/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1576251895643" />
-    <state x="462" y="162" key="SettingsEditor" timestamp="1577982016317">
+    <state x="462" y="162" key="SettingsEditor" timestamp="1577982286713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="462" y="162" key="SettingsEditor/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982016317" />
-    <state x="624" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1577978393773">
+    <state x="462" y="162" key="SettingsEditor/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577982286713" />
+    <state x="625" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1577983635809">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="624" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577978393773" />
+    <state x="625" y="228" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.501.1920.1160@0.0.1920.1040" timestamp="1577983635809" />
   </component>
 </project>
