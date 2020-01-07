@@ -1212,13 +1212,13 @@ jQuery(function($){
 			case 'Railed Shooter':
 				i_audicom.loadLevel(1);
 				break;
-			case 'Frogger Demo':
+			case 'Frogger':
 				i_audicom.loadLevel(2);
 				break;
 			case 'Labyrinth':
 				i_audicom.loadLevel(3);
 				break;
-			case 'Auditory Pointer Demo':
+			case 'Pointer':
 				i_audicom.loadLevel(4);
 				break;
 		}
