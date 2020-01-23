@@ -1,10 +1,8 @@
 // @flow
 
-import {g_references, g_loading, setLoading, g_gamearea} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
-import {getReferenceById} from "./AGEngine.js";
-import {Vector3} from "./js/three/Vector3.js";
-import {g_history} from "./AGEngine.js";
+import {g_references, getReferenceById, setEventHandler, setGameArea, setLoading} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGEventHandler} from "./AGEventHandler.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {AGNavigation} from "./AGNavigation.js";
@@ -18,7 +16,6 @@ import {AGInventory} from "./AGInventory.js";
 import {GlobalEvent} from "./GlobalEvent.js";
 import {Event} from "./Event.js";
 import {AGItem} from "./AGItem.js";
-import {setEventHandler, setGameArea} from "./AGEngine.js";
 import {AGCondition} from "./AGCondition.js";
 
 
@@ -95,7 +92,7 @@ export class AGSaLo {
     rebuild(lvl?:string){
         //console.log(g_history);
         g_references.clear();
-        Counter.reset();
+        IncrementOneCounter.reset();
 
         let serialized:string;
         //let parsedObject:Object;

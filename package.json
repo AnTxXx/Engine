@@ -2,20 +2,23 @@
   "name": "Engine",
   "version": "1.0.0",
   "dependencies": {
-    "flow-typed": "^2.5.1",
-    "jsdoc": "^3.6.3",
-    "lodash": "^4.17.11",
-    "resonance-audio": "^1.0.0",
-    "webpack": "^4.29.6"
+    "resonance-audio": "^1.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-flow": "^6.23.0",
-    "flow-bin": "^0.93.0"
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-flow": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "circular-dependency-plugin": "^5.2.0",
+    "flow-typed": "^2.5.1",
+    "jsdoc": "^3.6.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.10",
+    "webpack-serve": "^3.2.0"
   },
   "scripts": {
-    "build": "babel src/ -d lib/",
-    "prepublish": "npm run build",
-    "flow": "flow"
+    "build": "webpack",
+    "start": "webpack-serve"
   }
 }

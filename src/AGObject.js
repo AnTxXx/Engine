@@ -1,13 +1,20 @@
 // @flow
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {move} from "./AGNavigation.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
-import {Counter} from "./IDGenerator.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
-import {g_history, g_eventHandler, g_references, g_loading, g_gamearea, g_playing} from "./AGEngine.js";
-import {getReferenceById} from "./AGEngine.js";
+import {
+    g_eventHandler,
+    g_gamearea,
+    g_history,
+    g_loading,
+    g_playing,
+    g_references,
+    getReferenceById
+} from "./AGEngine.js";
 
 
 let debug = 0;
@@ -384,7 +391,7 @@ export class AGObject {
      * @param size Size (Vector3) of the object.
      */
     constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
 

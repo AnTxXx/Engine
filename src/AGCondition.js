@@ -1,10 +1,8 @@
 // @flow
 
 import {AGObject} from "./AGObject.js";
-import type {ConditionType} from "./ConditionType.js";
-import {getReferenceById} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
+import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 import type {ConditionObject} from "./EventType.js";
 
 /**
@@ -82,7 +80,7 @@ export class AGCondition {
     }
 
     constructor(objectID: number, conditionObject:ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object) {
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
 

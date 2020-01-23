@@ -1,11 +1,9 @@
 // @flow
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading, g_gamearea, g_playing} from "./AGEngine.js";
-import {getReferenceById} from "./AGEngine.js";
-import {hitBoundingBox} from "./AGPhysics.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_gamearea, g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {AGObject} from "./AGObject.js";
 
 /**
@@ -157,7 +155,7 @@ export class AGSoundSource
      * @param room The room this sound source is going to be played.
      */
     constructor(name:string, file:Object, looping:boolean, interval:number, roomID:number){
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGSoundSource] Creating AGSoundSource object [ID: " + this._ID + "]: " + name + ".");
         this.file = file;

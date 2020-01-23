@@ -19,3 +19,9 @@ Running flow is part of a babel-build-process (see `.babelrc`). To run the build
 ## Run Local Development Environment
 
 To run a local server, serving all files including livereload do the following:
+
+## Ongoing
+
+- use webpack to create one file from the library
+- IDGenerator exported 2 times Counter
+- circular dependency on AGObject (leading to TDZ, see https://github.com/webpack/webpack/issues/9173)

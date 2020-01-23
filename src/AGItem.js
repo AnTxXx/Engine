@@ -1,8 +1,7 @@
 // @flow
 
-import {Counter} from "./IDGenerator.js";
-import {g_history} from "./AGEngine.js";
-import {g_references, g_loading, g_playing} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
 
 /**
  * In-game item class.
@@ -65,7 +64,7 @@ export class AGItem {
     }
 
     constructor(name: string, description: string, type: string, charges: number) {
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGItem] Creating AGItem object [ID: " + this._ID + "]: " + name + ".");
         this._name = name;

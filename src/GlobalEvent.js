@@ -1,9 +1,9 @@
 // @flow
 
-import type {ConditionObject, Action} from "./EventType.js";
+import type {Action, ConditionObject} from "./EventType.js";
 import {AGObject} from "./AGObject.js";
-import {g_loading, g_playing, g_history, g_references, getReferenceById} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
+import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 
 /**
  * Similar to Event class but with a focus on Global Events.
@@ -86,7 +86,7 @@ export class GlobalEvent {
     }
 
     constructor(objectID: number, conditionObject: ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object, action:Action, repeat:number) {
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[GlobalEvent] Creating Event [ID: " + this._ID + "] with objectID " + objectID + ", conditionObject " + conditionObject + " and Function " + funcOfConditionObject + ".");

@@ -1,13 +1,12 @@
 // @flow
 
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
 import {AGRoom} from "./AGRoom.js";
 
 import {AGSaLo} from "./AGSaLo.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading, g_playing} from "./AGEngine.js";
-import {getReferenceById, setGameArea} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 
 let debug:number = 0;
 
@@ -84,7 +83,7 @@ export class AGGameArea {
     _history:AGSaLo;
 
     constructor(name:string, size:Vector3){
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGGameArea] Creating AGGameArea object [ID: " + this._ID + "].");
 

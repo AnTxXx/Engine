@@ -1,12 +1,10 @@
 // @flow
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import {Counter} from "./IDGenerator.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
-import {g_references} from "./AGEngine.js";
-import {g_history, g_loading, g_playing, g_IAudiCom} from "./AGEngine.js";
-import {isPointInsideAABB, frbIntersectionPoint} from "./AGPhysics.js";
-import {Plane} from "./js/three/Plane.js";
+import {g_history, g_IAudiCom, g_loading, g_playing, g_references} from "./AGEngine.js";
+import {frbIntersectionPoint} from "./AGPhysics.js";
 
 let gForward, gBackward, gLeft, gRight, gInteract;
 
@@ -379,7 +377,7 @@ export class AGNavigation {
      * @param right Keycode for right-turn.
      */
     constructor(forward:number, backward:number, left:number, right:number, interact:number){
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGNavigation] Creating AGNavigation object [ID: " + this._ID + "].");
         gForward = forward;

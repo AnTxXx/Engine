@@ -1,11 +1,9 @@
 // @flow
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {AGObject} from "./AGObject.js";
 import {AGNavigation} from "./AGNavigation.js";
-import {g_history} from "./AGEngine.js";
-import {g_controls, g_loading} from "./AGEngine.js";
-import {getReferenceById} from "./AGEngine.js";
+import {g_controls} from "./AGEngine.js";
 
 /**
  * Player class that derives from AGObject. Allows interactions.

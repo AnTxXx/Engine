@@ -1,9 +1,9 @@
 // @flow
-import { AGGameArea} from "./AGGameArea.js";
+import {AGGameArea} from "./AGGameArea.js";
 import {AGSaLo} from "./AGSaLo.js";
 import {AGEventHandler} from "./AGEventHandler.js";
 import {AGNavigation} from "./AGNavigation.js";
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {IAudiCom} from "../ui/js/IAudiCom.js";
 import {AGItem} from "./AGItem.js";
 

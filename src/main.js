@@ -1,4 +1,6 @@
-// @flow
+;
+/*
+// @ flow
 import {g_controls, g_references, g_eventHandler, g_history, g_gamearea, setControl, deleteItem} from "./AGEngine.js";
 import { AGGameArea} from "./AGGameArea.js";
 import { AGObject} from "./AGObject.js";
@@ -62,3 +64,4 @@ console.log(g_history);
 
 export let i_audicom = new IAudiCom();
 setIAudiCom(i_audicom);
+*/

@@ -2,9 +2,9 @@
 
 import {Event} from "./Event.js";
 import {AGObject} from "./AGObject.js";
-import type {Trigger, ConditionObject, Action} from "./EventType.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_loading, g_references, g_gamearea, g_playing, getReferenceById, setEventHandler} from "./AGEngine.js";
+import type {Action, Trigger} from "./EventType.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_gamearea, g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {GlobalEvent} from "./GlobalEvent.js";
 import {AGItem} from "./AGItem.js";
 
@@ -76,7 +76,7 @@ export class AGEventHandler{
     _globalEvents:Array<GlobalEvent>;
 
     constructor(){
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[AGEventHandler] Creating AGEventHandler object [ID: " + this._ID + "].");

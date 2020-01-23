@@ -2,10 +2,8 @@
 
 import {AGItem} from "./AGItem.js";
 import {AGObject} from "./AGObject.js";
-import {g_history} from "./AGEngine.js";
-import {g_references, g_loading, g_playing} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
-import {getReferenceById} from "./AGEngine.js";
+import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 
 /**
  * The Inventory class which can hold several items. Offers functions for inventory modification.
@@ -30,7 +28,7 @@ export class AGInventory{
     }
 
     constructor(object:AGObject) {
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGInventory] Creating AGInventory object [ID: " + this._ID + "]. for Object: " + object.name);
         this._inventory = [];

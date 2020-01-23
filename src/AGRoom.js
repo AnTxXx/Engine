@@ -1,14 +1,12 @@
 // @flow
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGObject} from "./AGObject.js";
-import {isAABBInsideAABB, isPointInsideAABB, colliding, isAABBInsideRoom, hitBoundingBox} from "./AGPhysics.js";
+import {colliding, hitBoundingBox, isAABBInsideAABB, isAABBInsideRoom, isPointInsideAABB} from "./AGPhysics.js";
 import type {Type} from "./AGType.js";
 import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_references, g_loading, g_playing} from "./AGEngine.js";
-import {getReferenceById} from "./AGEngine.js";
-import {g_gamearea} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_gamearea, g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -134,7 +132,7 @@ export class AGRoom {
      * @param gameArea The AGGameArea this room is part of.
      */
     constructor(name:string, size:Vector3, positionOnGrid:Vector3){
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
         this._positionOnGameArea = positionOnGrid;

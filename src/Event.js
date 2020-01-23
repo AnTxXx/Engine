@@ -1,10 +1,10 @@
 // @flow
 
-import type {Trigger, Action} from "./EventType.js";
+import type {Action, Trigger} from "./EventType.js";
 
 import {AGObject} from "./AGObject.js";
-import {g_history, g_loading, g_references, g_playing, getReferenceById} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
+import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 
 /**
  * Class that represents one event, including object, trigger, action, etc.
@@ -84,7 +84,7 @@ export class Event {
     _ID:number;
 
     constructor(originID: number, trigger:Trigger, action:Action, objectID: number, addObjectID: number, repeat: number) {
-        this._ID = Counter.next();
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[Event] Creating Event [ID: " + this._ID + "] with originID " + originID + " and objectID " + objectID + ".");

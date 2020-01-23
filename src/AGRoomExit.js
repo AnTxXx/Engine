@@ -1,7 +1,7 @@
 // @flow
 
 import {AGObject} from "./AGObject.js";
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 
 /**
  * Exit that triggers the WINGAME if player collides with it.

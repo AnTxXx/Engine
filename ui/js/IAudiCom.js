@@ -1,19 +1,31 @@
-import { play } from '../../lib/AGEngine.js';
-import { AGEventHandler } from "../../lib/AGEventHandler.js";
-import { AGGameArea } from "../../lib/AGGameArea.js";
-import { AGItem } from "../../lib/AGItem.js";
-import { AGNavigation } from "../../lib/AGNavigation.js";
-import { AGObject } from "../../lib/AGObject.js";
-import { AGCondition } from "../../lib/AGCondition.js";
-import { AGPlayer } from "../../lib/AGPlayer.js";
-import { AGPortal } from "../../lib/AGPortal.js";
-import { AGRoom } from "../../lib/AGRoom.js";
-import { AGRoomExit } from "../../lib/AGRoomExit.js";
-import { AGSoundSource } from "../../lib/AGSoundSource.js";
-import { Event } from "../../lib/Event.js";
-import { GlobalEvent } from "../../lib/GlobalEvent.js";
-import { Vector3 } from "../../lib/js/three/Vector3.js";
-import { g_eventHandler, deleteItem, getReferencesOfType, getIdByReference, getReferenceById, g_history, g_gamearea, g_references, rebuildHandlerGameArea, setControl, getOwnerIdOfItemById, deleteCondition } from "../../lib/AGEngine.js";
+import {
+	deleteCondition,
+	deleteItem,
+	g_eventHandler,
+	g_gamearea,
+	g_history,
+	g_references,
+	getIdByReference,
+	getOwnerIdOfItemById,
+	getReferenceById,
+	getReferencesOfType,
+	play,
+	rebuildHandlerGameArea,
+	setControl
+} from '../../src/AGEngine.js';
+import {AGEventHandler} from "../../src/AGEventHandler.js";
+import {AGItem} from "../../src/AGItem.js";
+import {AGNavigation} from "../../src/AGNavigation.js";
+import {AGObject} from "../../src/AGObject.js";
+import {AGCondition} from "../../src/AGCondition.js";
+import {AGPlayer} from "../../src/AGPlayer.js";
+import {AGPortal} from "../../src/AGPortal.js";
+import {AGRoom} from "../../src/AGRoom.js";
+import {AGRoomExit} from "../../src/AGRoomExit.js";
+import {AGSoundSource} from "../../src/AGSoundSource.js";
+import {Event} from "../../src/Event.js";
+import {GlobalEvent} from "../../src/GlobalEvent.js";
+import {Vector3} from "../../lib/js/three/Vector3.js";
 
 /**
  * Handles communication between UI and Engine 
