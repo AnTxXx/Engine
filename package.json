@@ -13,12 +13,14 @@
     "circular-dependency-plugin": "^5.2.0",
     "flow-typed": "^2.5.1",
     "jsdoc": "^3.6.3",
+    "serve": "^11.3.0",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.10",
     "webpack-serve": "^3.2.0"
   },
   "scripts": {
     "build": "webpack",
-    "start": "webpack-serve"
+    "start": "webpack-serve",
+    "prod": "serve ."
   }
 }

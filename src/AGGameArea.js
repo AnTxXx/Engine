@@ -1,12 +1,12 @@
 // @flow
 
 import {Vector3} from "../lib/js/three/Vector3.js";
-import {AGObject} from "./AGObject.js";
+import {IAGObject} from "./IAGObject.js";
 import {AGRoom} from "./AGRoom.js";
 
-import {AGSaLo} from "./AGSaLo.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
-import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {AGSaLo, g_history} from "./AGEngine";
 
 let debug:number = 0;
 
@@ -34,7 +34,7 @@ export class AGGameArea {
     set resonanceAudioScene(value) {
         this._resonanceAudioScene = value;
     }
-    get listener(): AGObject {
+    get listener(): IAGObject {
         return this._listener;
     }
 
@@ -70,7 +70,7 @@ export class AGGameArea {
         this._size = value;
     }
 
-    _listener:AGObject;
+    _listener:IAGObject;
 
     // $FlowFixMe
     _resonanceAudioScene;

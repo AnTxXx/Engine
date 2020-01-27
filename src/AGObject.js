@@ -9,12 +9,13 @@ import {AGInventory} from "./AGInventory.js";
 import {
     g_eventHandler,
     g_gamearea,
-    g_history,
     g_loading,
     g_playing,
     g_references,
     getReferenceById
 } from "./AGEngine.js";
+import type {IAGObject} from "./IAGObject";
+import {g_history} from "./AGEngine";
 
 
 let debug = 0;
@@ -22,7 +23,7 @@ let debug = 0;
 /**
  * The main class that serves as basis for other objects.
  */
-export class AGObject {
+export class AGObject implements IAGObject {
     get deathSound(): ?AGSoundSource {
         return this._deathSound;
     }
@@ -428,7 +429,7 @@ export class AGObject {
 
     /**
      * Adds a soundsource to the object.
-     * @param source Soundsource (AGSoundSource) to be added.
+     * @param sourceID Soundsource (AGSoundSource) to be added.
      */
     addSoundSource(sourceID: number){
         let source = getReferenceById(sourceID);
@@ -443,7 +444,7 @@ export class AGObject {
         this._AGSoundSources = [];
     }
 
-    getSoundSources(){
+    getSoundSources():Array<AGSoundSource>{
         return this._AGSoundSources;
     }
 

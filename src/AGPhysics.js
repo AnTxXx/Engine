@@ -1,15 +1,15 @@
 // @flow
-import {AGObject} from "./AGObject.js";
+import {IAGObject} from "./IAGObject.js";
 import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGRoom} from "./AGRoom.js";
 
 /**
- * Checks if two objects (AGObject) are currently colliding. AABBxAABB testing
- * @param obj1 The first object (AGObject).
- * @param obj2 The second object (AGObject).
+ * Checks if two objects (IAGObject) are currently colliding. AABBxAABB testing
+ * @param obj1 The first object (IAGObject).
+ * @param obj2 The second object (IAGObject).
  * @returns {boolean} Returns true if the two objects are colliding, otherwise false.
  */
-export function colliding(obj1:AGObject, obj2:AGObject):boolean{
+export function colliding(obj1:IAGObject, obj2:IAGObject):boolean{
     /*console.log((obj1.position.x-obj1.size.x/2 <= obj2.position.x+obj2.size.x/2 &&
         obj1.position.x+obj1.size.x/2 >= obj2.position.x-obj2.size.x/2) + " // " + (obj1.position.y-obj1.size.y/2 <= obj2.position.y+obj2.size.y/2 &&
         obj1.position.y+obj1.size.y/2 >= obj2.position.y-obj2.size.y/2) + " // " + (obj1.position.z-obj1.size.z/2 <= obj2.position.z+obj2.size.z/2 &&
@@ -25,10 +25,10 @@ export function colliding(obj1:AGObject, obj2:AGObject):boolean{
 /**
  * Checks if a point (without size!) is inside an object.
  * @param point The point (Vector3) to be checked.
- * @param obj The object (AGObject) in which the point is to be suspected.
+ * @param obj The object (IAGObject) in which the point is to be suspected.
  * @returns {boolean} Returns true, if the point is inside the object. Otherwise false.
  */
-export function isPointInsideAABB(point:Vector3, obj:AGObject):boolean {
+export function isPointInsideAABB(point:Vector3, obj:IAGObject):boolean {
     return (point.x >= obj.position.x-obj.size.x/2 && point.x <= obj.position.x+obj.size.x/2) &&
         (point.y >= obj.position.y-obj.size.y/2 && point.y <= obj.position.y+obj.size.y/2) &&
         (point.z >= obj.position.z-obj.size.z/2 && point.z <= obj.position.z+obj.size.z/2);
@@ -38,10 +38,10 @@ export function isPointInsideAABB(point:Vector3, obj:AGObject):boolean {
  * Checks if a point with a size is inside a given object.
  * @param point The point (Vector3) to be checked.
  * @param size The size(Vector3) of the point.
- * @param obj The object (AGObject) in which the point with size is to be suspected.
+ * @param obj The object (IAGObject) in which the point with size is to be suspected.
  * @returns {boolean} Returns true, if the point with size is inside the object. Otherwise false.
  */
-export function isAABBInsideAABB(point:Vector3, size:Vector3, obj:AGObject):boolean {
+export function isAABBInsideAABB(point:Vector3, size:Vector3, obj:IAGObject):boolean {
     return (point.x-size.x/2 <= obj.position.x+obj.size.x/2 &&
         point.x+size.x/2 >= obj.position.x-obj.size.x/2) &&
         (point.y-size.y/2 <= obj.position.y+obj.size.y/2 &&
@@ -66,7 +66,7 @@ export function isAABBInsideRoom(point:Vector3, size:Vector3, room:AGRoom):boole
     point.z + size.z/2 <= room.size.z);
 }
 
-export function frbIntersectionPoint(target:AGObject, source:Vector3, direction:Vector3):Vector3 {
+export function frbIntersectionPoint(target:IAGObject, source:Vector3, direction:Vector3):Vector3 {
     let v_minB:Vector3 = new Vector3(target.position.x-target.size.x/2, target.position.y-target.size.y/2, target.position.z-target.size.z/2);
     let v_maxB:Vector3 = new Vector3(target.position.x+target.size.x/2, target.position.y+target.size.y/2, target.position.z+target.size.z/2);
 
@@ -154,7 +154,7 @@ Fast Ray-Box Intersection
 by Andrew Woo
 from "Graphics Gems", Academic Press, 1990
 */
-export function hitBoundingBox(target:AGObject, source:AGObject, direction?:Vector3):boolean{
+export function hitBoundingBox(target:IAGObject, source:IAGObject, direction?:Vector3):boolean{
 
     let v_minB:Vector3 = new Vector3(target.position.x-target.size.x/2, target.position.y-target.size.y/2, target.position.z-target.size.z/2);
     let v_maxB:Vector3 = new Vector3(target.position.x+target.size.x/2, target.position.y+target.size.y/2, target.position.z+target.size.z/2);
@@ -240,7 +240,7 @@ export function hitBoundingBox(target:AGObject, source:AGObject, direction?:Vect
 
 }
 
-/*export function getMinMaxB(obj:AGObject):Array<number>{
+/*export function getMinMaxB(obj:IAGObject):Array<number>{
     let minV3:Vector3 = new Vector3(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
     let maxV3:Vector3 = new Vector3(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE);
 

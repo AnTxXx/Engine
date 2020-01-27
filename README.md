@@ -25,3 +25,8 @@ To run a local server, serving all files including livereload do the following:
 - use webpack to create one file from the library
 - IDGenerator exported 2 times Counter
 - circular dependency on AGObject (leading to TDZ, see https://github.com/webpack/webpack/issues/9173)
+
+## Open Questions
+
+- Why does the Engine keep an instance of IAudiCom?
+- Why is AGAudioSource an AGObject while being able to manage (have references of) AGObject?

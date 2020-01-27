@@ -13,7 +13,6 @@ import { AGPlayer } from "./AGPlayer.js";
 import { AGPortal } from "./AGPortal.js";
 import { AGRoom } from "./AGRoom.js";
 import { AGRoomExit } from "./AGRoomExit.js";
-import { AGSaLo, SaLoCommand } from "./AGSaLo.js";
 import { AGSoundSource } from "./AGSoundSource.js";
 import { Collision } from "./Collision.js";
 import { Event } from "./Event.js";
@@ -23,6 +22,8 @@ import { GlobalEvent } from "./GlobalEvent.js";
 //---------------------------------
 import {evaluateAll} from "./AGCondition.js";
 import {setIAudiCom,
+    startAGEngine,
+    initializeEngine,
     setGameArea,
     setEventHandler,
     deleteItem,
@@ -51,6 +52,7 @@ import {collisionIsInArray, objectPartOfCollisions} from "./Collision.js";
 //import type {Type} from "./AGType.js";
 import type {Trigger, Action, ConditionObject} from "./EventType.js";
 import type {ConditionType} from "./ConditionType.js";
+import type {IAGObject} from "./IAGObject.js";
 
 // Constants
 //---------------------------------
@@ -62,13 +64,12 @@ import {
     g_loading,
     g_playing,
     g_references,
-    g_history,
     g_eventHandler,
     g_gamearea,
     g_controls,
 } from "./AGEngine.js"
 
-
+import {AGSaLo, g_history, SaLoCommand} from "./AGEngine";
 
 /* Now we define the public API by exporting what we want */
 
@@ -96,11 +97,15 @@ export {
     // Functions
     //---------------------------------
 
+    // MAIN FUNCTION
+    startAGEngine,
+
     // AGCondition
     evaluateAll,
 
     // AGEngine
     setIAudiCom,
+    initializeEngine,
     setGameArea,
     setEventHandler,
     deleteItem,
@@ -132,6 +137,9 @@ export {
     // Types
     //---------------------------------
 
+    // AGObject interface
+//    IAGObject,
+
     // AGType
 //    Type,
 
@@ -157,3 +165,5 @@ export {
     g_gamearea,
     g_controls
 }
+
+startAGEngine();

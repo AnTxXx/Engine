@@ -1,16 +1,17 @@
 // @flow
 
-import {AGObject} from "./AGObject.js";
-import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IAGObject} from "./IAGObject.js";
+import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
 import type {ConditionObject} from "./EventType.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Class for Conditions that must be fulfilled before an action can take place. (Very WIP)
  */
 export class AGCondition {
 
-    _object:AGObject;
+    _object:IAGObject;
     _conditionObject:ConditionObject;
     _funcOfConditionObject:Function;
     _funcArgs:Array<any>;
@@ -68,12 +69,12 @@ export class AGCondition {
         this._value = value;
     }
 
-    get object():AGObject {
+    get object():IAGObject {
         return this._object;
     }
 
     set object(objectID:number) {
-        let obj:AGObject = getReferenceById(objectID);
+        let obj:IAGObject = getReferenceById(objectID);
         // $FlowFixMe
         if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'object').set.name, this.constructor.name, arguments);
         this._object = obj;

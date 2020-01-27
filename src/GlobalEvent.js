@@ -1,15 +1,16 @@
 // @flow
 
 import type {Action, ConditionObject} from "./EventType.js";
-import {AGObject} from "./AGObject.js";
-import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IAGObject} from "./IAGObject.js";
+import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Similar to Event class but with a focus on Global Events.
  */
 export class GlobalEvent {
-    _object:AGObject;
+    _object:IAGObject;
     _conditionObject:ConditionObject;
     _funcOfConditionObject:Function;
     _funcArgs:Array<any>;
@@ -18,7 +19,7 @@ export class GlobalEvent {
     _repeat:number;
     _ID:number;
 
-    get object(): AGObject {
+    get object(): IAGObject {
         return this._object;
     }
 

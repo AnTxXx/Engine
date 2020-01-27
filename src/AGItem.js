@@ -1,7 +1,8 @@
 // @flow
 
 import {IncrementOneCounter} from "./IDGenerator.js";
-import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
+import {g_loading, g_playing, g_references} from "./AGEngine.js";
+import {g_history} from "./AGEngine";
 
 /**
  * In-game item class.

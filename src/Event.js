@@ -2,15 +2,16 @@
 
 import type {Action, Trigger} from "./EventType.js";
 
-import {AGObject} from "./AGObject.js";
-import {g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IAGObject} from "./IAGObject.js";
+import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Class that represents one event, including object, trigger, action, etc.
  */
 export class Event {
-    get origin(): AGObject {
+    get origin(): IAGObject {
         return this._origin;
     }
 
@@ -56,7 +57,7 @@ export class Event {
         this._addObject = go;
     }
 
-    get object(): AGObject {
+    get object(): IAGObject {
         return this._object;
     }
 
@@ -75,10 +76,10 @@ export class Event {
         this._ID = value;
     }
 
-    _origin:AGObject;
+    _origin:IAGObject;
     _trigger:Trigger;
     _action:Action;
-    _object:AGObject;
+    _object:IAGObject;
     _addObject:?Object;
     _repeat:number;
     _ID:number;

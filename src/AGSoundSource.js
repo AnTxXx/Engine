@@ -3,8 +3,9 @@ import {Vector3} from "../lib/js/three/Vector3.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
-import {g_gamearea, g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
-import {AGObject} from "./AGObject.js";
+import {g_gamearea, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IAGObject} from "./IAGObject.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Class that is responsible for sound propagation related stuff.
@@ -18,11 +19,11 @@ export class AGSoundSource
     set update(value: boolean) {
         this._update = value;
     }
-    get object(): AGObject {
+    get object(): IAGObject {
         return this._object;
     }
 
-    set object(value: AGObject) {
+    set object(value: IAGObject) {
         this._object = value;
     }
 

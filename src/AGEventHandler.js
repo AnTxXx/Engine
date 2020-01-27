@@ -1,12 +1,13 @@
 // @flow
 
 import {Event} from "./Event.js";
-import {AGObject} from "./AGObject.js";
+import {IAGObject} from "./IAGObject.js";
 import type {Action, Trigger} from "./EventType.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
-import {g_gamearea, g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {g_gamearea, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {GlobalEvent} from "./GlobalEvent.js";
 import {AGItem} from "./AGItem.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Eventhandler Class
@@ -26,7 +27,7 @@ export class AGEventHandler{
 
     /**
      * Adds a new event to the Eventlist.
-     * @param event The event ID of the event to be added to the Eventlist.
+     * @param eventID The event ID of the event to be added to the Eventlist.
      */
     addEvent(eventID:number){
         this._events.push(getReferenceById(eventID));
@@ -183,7 +184,7 @@ export class AGEventHandler{
      * @param objectID The ID of the AGObject.
      */
     deleteEventsContainingObjectById(objectID:number){
-        let agobject:AGObject = getReferenceById(objectID);
+        let agobject:IAGObject = getReferenceById(objectID);
         let that = this;
         this._events.forEach(function(item){
             if(item.addObject === agobject ||
@@ -200,7 +201,7 @@ export class AGEventHandler{
      * @param objectID The ID of the AGObject.
      */
     deleteGlobalEventsContainingObjectById(objectID:number){
-        let agobject:AGObject = getReferenceById(objectID);
+        let agobject:IAGObject = getReferenceById(objectID);
         let that = this;
         this._globalEvents.forEach(function(item){
             if(item.object === agobject){
@@ -230,7 +231,7 @@ export class AGEventHandler{
      * @param trigger The trigger that fires the event.
      * @returns {Array<Event>} Returns an Array of Events that fits the requested AGObject and Trigger.
      */
-    findEventsAfterCall(object:AGObject, trigger:Trigger):Array<Event>{
+    findEventsAfterCall(object:IAGObject, trigger:Trigger):Array<Event>{
         let events:Array<Event> = [];
         for(let i = 0; i < this._events.length; i++){
             if(this._events[i].origin === object &&
@@ -244,10 +245,10 @@ export class AGEventHandler{
 
     /**
      * Function is called if certain events happen (e.g., collision, death) and reacts by triggering the respective function.
-     * @param object The AGObject that called this function.
+     * @param object The IAGObject that called this function.
      * @param trigger The Trigger (e.g., ONCONTACT, ONDEATH)
      */
-    call(object:AGObject, trigger:Trigger){
+    call(object:IAGObject, trigger:Trigger){
         //console.log("[AGEventHandler] Received Event-Call from " + object.name);
         let events:Array<Event> = this.findEventsAfterCall(object, trigger);
         for(let i = 0; i < events.length; i++){

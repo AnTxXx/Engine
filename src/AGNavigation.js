@@ -1,10 +1,11 @@
 // @flow
 import {Vector3} from "../lib/js/three/Vector3.js";
-import {AGObject} from "./AGObject.js";
+import {IAGObject} from "./IAGObject.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
-import {g_history, g_IAudiCom, g_loading, g_playing, g_references} from "./AGEngine.js";
+import {g_IAudiCom, g_loading, g_playing, g_references} from "./AGEngine.js";
 import {frbIntersectionPoint} from "./AGPhysics.js";
+import {g_history} from "./AGEngine";
 
 let gForward, gBackward, gLeft, gRight, gInteract;
 
@@ -12,11 +13,11 @@ let gForward, gBackward, gLeft, gRight, gInteract;
 
 /**
  * Private function: if a collision is allowed (e.g., collision with portal) or not.
- * @param obj The object (AGObject) to be checked with.
- * @param collArray The array of AGObjects with the current collisions.
+ * @param obj The object (IAGObject) to be checked with.
+ * @param collArray The array of IAGObjects with the current collisions.
  * @returns {boolean} Returns true if collision is allowed, otherwise false.
  */
-function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
+function allowedCollision(obj:IAGObject, collArray:Array<IAGObject>):boolean{
     for(let i = 0; i < collArray.length; i++){
         if(obj !== collArray[i] && collArray[i].type !== "PORTAL") {
             //console.log("[AGNavigation] " + obj.name + ": Condition failed at object " + collArray[i].name + ".");
@@ -27,12 +28,12 @@ function allowedCollision(obj:AGObject, collArray:Array<AGObject>):boolean{
 }
 
 /**
- * Moves the AGObject into direction, depending on speed. Needs a timeStamp for deltaTime (frame-independent movement)
- * @param object The AGObject that should be move.
+ * Moves the IAGObject into direction, depending on speed. Needs a timeStamp for deltaTime (frame-independent movement)
+ * @param object The IAGObject that should be move.
  * @param direction The direction as Vector3 the object should be moved to.
  * @param timeStamp A current frame-timestamp.
  */
-export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
+export function move(object:IAGObject, direction:Vector3, timeStamp?:Date){
     let timeDiff;
     if(timeStamp!==undefined){
         timeDiff = new Date() - timeStamp;
@@ -44,7 +45,7 @@ export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
     object.position.add(object.speed.clone().multiply(direction).clone().multiplyScalar(timeDiff));
     object.room.checkForCollision();
 
-    let PoC:Array<AGObject> = objectPartOfCollisions(object.room.collisions, object);
+    let PoC:Array<IAGObject> = objectPartOfCollisions(object.room.collisions, object);
 
     if(!allowedCollision(object, PoC)) {
         console.log("[AGNavigation] " + object.name + ": Can't move forward. Colliding with other object.");
@@ -60,7 +61,7 @@ export function move(object:AGObject, direction:Vector3, timeStamp?:Date){
     }
 }
 
-function pointOfIntersectionForSound(collisionObject:AGObject, object:AGObject){
+function pointOfIntersectionForSound(collisionObject:IAGObject, object:IAGObject){
     let p1:Vector3, p2:Vector3, p3:Vector3, p4:Vector3;
 
     //get the 8 corners of the cube
@@ -183,7 +184,7 @@ function rotateAroundPoint(center:Vector3, point:Vector3, angle:number):Vector3{
     return new Vector3(nx, point.y, nz);
 }
 
-function extractPointToArray(collisionObject:AGObject, point:Vector3, dir:Vector3, arrToAdd:Array<Vector3>):number{
+function extractPointToArray(collisionObject:IAGObject, point:Vector3, dir:Vector3, arrToAdd:Array<Vector3>):number{
     let pt:Vector3 = frbIntersectionPoint(collisionObject, point, dir);
     if(pt!==null) {
         arrToAdd.push(pt);
@@ -192,7 +193,7 @@ function extractPointToArray(collisionObject:AGObject, point:Vector3, dir:Vector
     return 0;
 }
 /*
-function pointOfIntersection(PoC_arr:Array<AGObject>, obj:AGObject){
+function pointOfIntersection(PoC_arr:Array<IAGObject>, obj:IAGObject){
     let point:Vector3;
     for(let i = -1; i <= 1; i+=2){
         for(let j = -1; j <= 1; j+=2){
@@ -207,7 +208,7 @@ function pointOfIntersection(PoC_arr:Array<AGObject>, obj:AGObject){
 }*/
 /*
 //https://stackoverflow.com/questions/6408670/line-of-intersection-between-two-planes
-function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
+function planeIntersectPlane(PoC_arr:Array<IAGObject>, obj:IAGObject){
     let r_points:Array<Vector3> = [], r_normals:Array<Vector3> = [];
     let plane1_arr:Array<Plane> = calculatePlanesCCW(PoC_arr[0]);
     let plane2_arr:Array<Plane> = calculatePlanesCCW(obj);
@@ -246,14 +247,14 @@ function planeIntersectPlane(PoC_arr:Array<AGObject>, obj:AGObject){
 
  */
 /*
-function pointInsideSphere(point:Vector3, obj:AGObject):boolean{
+function pointInsideSphere(point:Vector3, obj:IAGObject):boolean{
     //console.log((point.clone().distanceTo(obj.position.clone())));
     if((point.clone().distanceTo(obj.position.clone())) <= (obj.position.clone().add(obj.size)).clone().distanceTo(obj.position)) return true;
     return false;
 }*/
 /*
-function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
-    let return_arr:Array<AGObject> = [];
+function calculatePlanesCCW(obj:IAGObject):Array<IAGObject> {
+    let return_arr:Array<IAGObject> = [];
 
     let plane_a:Plane = new Plane();
     let plane_b:Plane = new Plane();
@@ -304,7 +305,7 @@ function calculatePlanesCCW(obj:AGObject):Array<AGObject> {
 }
  */
 
-function extractPlanePoint(obj:AGObject, x:number, y:number, z:number):Vector3{
+function extractPlanePoint(obj:IAGObject, x:number, y:number, z:number):Vector3{
     let returnV:Vector3 = new Vector3(obj.position.x+(obj.size.x/2*x), obj.position.y+(obj.size.x/2*y), obj.position.z+(obj.size.z/2*z));
     return returnV;
 }
@@ -392,9 +393,9 @@ export class AGNavigation {
 
     /**
      * draw-loop
-     * @param player Object (AGObject) which can be moved by the player.
+     * @param player Object (IAGObject) which can be moved by the player.
      */
-    draw(player:AGObject){
+    draw(player:IAGObject){
         //if(moveTimestamp.getTime() === new Date(0).getTime()) moveTimestamp = new Date();
         window.onkeydown = function(e) {
             if(e.keyCode===-1) return;

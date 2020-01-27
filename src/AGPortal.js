@@ -2,7 +2,8 @@
 import {AGObject} from "./AGObject.js";
 import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGCondition, evaluateAll} from "./AGCondition.js";
-import {g_history, g_loading, g_playing, g_references, getReferenceById, setLoading} from "./AGEngine.js";
+import {g_loading, g_playing, g_references, getReferenceById, setLoading} from "./AGEngine.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Portal class that offers options to move a player from X to Y via in-game objects.
