@@ -1,6 +1,6 @@
 // @flow
 
-import {IAGObject} from "./IAGObject.js";
+import type {IAGObject} from "./IAGObject.js";
 
 /**
  * Checks if a specific Collision is inside arr-Array. Checks for order too!

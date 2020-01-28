@@ -2,7 +2,7 @@
 
 import type {Action, Trigger} from "./EventType.js";
 
-import {IAGObject} from "./IAGObject.js";
+import type {IAGObject} from "./IAGObject.js";
 import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
 import {g_history} from "./AGEngine";

@@ -20,9 +20,9 @@ import {IncrementOneCounter} from "./IDGenerator";
 export let g_loading:boolean = false;
 export let g_playing:boolean = false;
 export let g_references:Map<number, Object> = new Map();
-export let g_eventHandler:AGEventHandler = null; // set by initializeEngine-function
-export let g_history: AGSaLo = null; // set by initializeEngine-function
-export let g_gamearea:AGGameArea = null; // set by initializeEngine-function
+export let g_eventHandler:AGEventHandler; // set by initializeEngine-function
+export let g_history: AGSaLo; // set by initializeEngine-function
+export let g_gamearea:AGGameArea; // set by initializeEngine-function
 export let g_controls:AGNavigation;
 export let g_IAudiCom:IAudiCom; // set in initialization call in index.html
 
@@ -35,13 +35,29 @@ export function setIAudiCom(IAC:IAudiCom){
 }
 
 export function initializeEngine() {
-    g_history = new AGSaLo();
-    g_eventHandler = new AGEventHandler();
-    g_gamearea = new AGGameArea("Area", new Vector3(30,2.5,10));
+    let initialized = false;
+    if (g_history === undefined) {
+        g_history = new AGSaLo();
+        initialized = true;
+    }
+    if (g_eventHandler === undefined) {
+        g_eventHandler = new AGEventHandler();
+        initialized = true;
+    }
+    if (g_gamearea === undefined) {
+        g_gamearea = new AGGameArea("Area", new Vector3(30,2.5,10));
+        initialized = true;
+    }
+    if (initialized) {
+        console.debug("[AGEngine] Initialized g_history, g_eventHandler and g_gamearea", g_history, g_eventHandler, g_gamearea);
+    }
+    return initialized;
 }
 
 export function startAGEngine() {
-    initializeEngine();
+    if (!initializeEngine()) {
+        return;
+    }
 
     let controls: AGNavigation = new AGNavigation(38, 40, 37, 39, 67);
     let controlsID: number = getIdByReference(controls);

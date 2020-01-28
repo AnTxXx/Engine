@@ -1,6 +1,6 @@
 // @flow
 import {Vector3} from "../lib/js/three/Vector3.js";
-import {IAGObject} from "./IAGObject.js";
+import type {IAGObject} from "./IAGObject.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
 import {objectPartOfCollisions} from "./Collision.js";
 import {g_IAudiCom, g_loading, g_playing, g_references} from "./AGEngine.js";

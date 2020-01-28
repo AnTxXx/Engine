@@ -1,7 +1,7 @@
 // @flow
 
 import {Vector3} from "../lib/js/three/Vector3.js";
-import {IAGObject} from "./IAGObject.js";
+import type {IAGObject} from "./IAGObject.js";
 import {AGRoom} from "./AGRoom.js";
 
 import {IncrementOneCounter} from "./IDGenerator.js";
