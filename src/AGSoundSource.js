@@ -10,8 +10,7 @@ import {g_history} from "./AGEngine";
 /**
  * Class that is responsible for sound propagation related stuff.
  */
-export class AGSoundSource
-  /*extends AGObject*/ {
+export class AGSoundSource {
     get update(): boolean {
         return this._update;
     }
@@ -19,6 +18,7 @@ export class AGSoundSource
     set update(value: boolean) {
         this._update = value;
     }
+
     get object(): IAGObject {
         return this._object;
     }
@@ -38,6 +38,7 @@ export class AGSoundSource
     set room(value: AGRoom) {
         this._room = value;
     }
+
     get looping(): boolean {
         return this._looping;
     }
@@ -50,14 +51,15 @@ export class AGSoundSource
         return this._playing;
     }
 
-    set playing(value:boolean) {
+    set playing(value: boolean) {
         this._playing = value;
     }
-    get type():Type {
+
+    get type(): Type {
         return this._type;
     }
 
-    set type(value:Type) {
+    set type(value: Type) {
         this._type = value;
     }
 
@@ -65,7 +67,7 @@ export class AGSoundSource
         return this._audioElement;
     }
 
-    set audioElement(value:Object) {
+    set audioElement(value: Object) {
         this._audioElement = value;
     }
 
@@ -75,7 +77,7 @@ export class AGSoundSource
 
     set tag(value: string) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set.name, this.constructor.name, arguments);
         this._tag = value;
     }
 
@@ -85,7 +87,7 @@ export class AGSoundSource
 
     set name(value: string) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'name').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'name').set.name, this.constructor.name, arguments);
         this._name = value;
     }
 
@@ -95,9 +97,9 @@ export class AGSoundSource
 
     set maxDistance(value: number) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'maxDistance').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'maxDistance').set.name, this.constructor.name, arguments);
         this._maxDistance = value;
-        if(this.source) this.source.setMaxDistance(this._maxDistance);
+        if (this.source) this.source.setMaxDistance(this._maxDistance);
     }
 
     get volume(): number {
@@ -106,44 +108,43 @@ export class AGSoundSource
 
     set volume(value: number) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
         console.log("[AGSoundSource] Changing volume of AGSoundSource object [ID: " + this._ID + "] to " + value + ".");
         this._volume = value;
-        if(this.source) this._gainNode.gain.value = value;
+        if (this.source) this._gainNode.gain.value = value;
     }
 
-    _name:string;
-    file:Object;
+    _name: string;
+    file: Object;
 
-    _looping:boolean;
-    interval:number;
-    _playing:boolean;
-    _audioElement:Object;
-    audioElementSource:Object;
-    source:Object;
-    _type:Type;
-    _ID:number;
+    _looping: boolean;
+    interval: number;
+    _playing: boolean;
+    _audioElement: Object;
+    audioElementSource: Object;
+    source: Object;
+    _type: Type;
+    _ID: number;
 
-    _update:boolean;
+    _update: boolean;
 
-    _object:AGObject;
+    _object: AGObject;
 
-    _room:AGRoom;
+    _room: AGRoom;
 
-    _maxDistance:number;
-    _volume:number;
+    _maxDistance: number;
+    _volume: number;
 
     // $FlowFixMe
     audioContext;
     // $FlowFixMe
     resonanceAudioScene;
 
-    _gainNode:GainNode;
+    _gainNode: GainNode;
 
-    _obstructionFilter:BiquadFilterNode;
+    _obstructionFilter: BiquadFilterNode;
 
-    _tag:string;
-
+    _tag: string;
 
 
 // $FlowFixMe
@@ -155,7 +156,7 @@ export class AGSoundSource
      * @param interval ?
      * @param room The room this sound source is going to be played.
      */
-    constructor(name:string, file:Object, looping:boolean, interval:number, roomID:number){
+    constructor(name: string, file: Object, looping: boolean, interval: number, roomID: number) {
         this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGSoundSource] Creating AGSoundSource object [ID: " + this._ID + "]: " + name + ".");
@@ -200,14 +201,14 @@ export class AGSoundSource
 
         this._volume = 1;
 
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
     /**
      * Sets the position of the sound source.
      * @param position New position (Vector3) of the sound source.
      */
-    setPosition(position: Vector3){
+    setPosition(position: Vector3) {
         /*this.source.setPosition(position.x - this.room.positionOnGameArea.x + this.room.size.x/2,
             position.y - this.room.positionOnGameArea.y +this.room.size.y/2,
             position.z - this.room.positionOnGameArea.z + this.room.size.z/2);*/
@@ -223,14 +224,14 @@ export class AGSoundSource
     /**
      * Starts the sound source. Doesn't care if it's already playing.
      */
-    play(){
-        if(!this._playing && this._looping){
+    play() {
+        if (!this._playing && this._looping) {
             this._playing = true;
             this.audioElement.loop = this._looping;
             this.audioElement.play();
         }
 
-        if(!this._looping){
+        if (!this._looping) {
             this.audioElement.currentTime = 0;
             this.audioElement.play();
         }
@@ -238,7 +239,7 @@ export class AGSoundSource
         //Attenuation not working properly...
         //check objects between sound source and player
         //if(this._object.name.localeCompare("Waterfall3")==0) console.log(this._room.betweenPlayerObjectRayIntersect(this._object));
-        if(this._room.betweenPlayerObjectRayIntersect(this._object).length>0){
+        if (this._room.betweenPlayerObjectRayIntersect(this._object).length > 0) {
             this.audioElementSource.disconnect();
             this.audioElementSource.connect(this._gainNode).connect(this._obstructionFilter);
             this._obstructionFilter.connect(this.source.input);
@@ -251,13 +252,13 @@ export class AGSoundSource
     /**
      * Stops the sound source.
      */
-    stop(){
-       this.playing = false;
-       this.audioElement.pause();
-       this.audioElement.currentTime = 0;
+    stop() {
+        this.playing = false;
+        this.audioElement.pause();
+        this.audioElement.currentTime = 0;
     }
 
-    pause(){
+    pause() {
         this.audioElement.pause();
     }
 
@@ -265,7 +266,7 @@ export class AGSoundSource
      * Plays the sound source on the given position at least once (depending on loop property of the AGSoundSource)
      * @param pos The Vector3 position where the sound is played at
      */
-    playOnceAtPosition(pos:Vector3){
+    playOnceAtPosition(pos: Vector3) {
         console.log("[AGSoundSource] Playing AGSoundSource [ID: " + this._ID + "]: " + this._name + " at position " + pos.x.toFixed(2) + "/" + pos.y.toFixed(2) + "/" + pos.z.toFixed(2) + ".");
         this.stop();
         this.setPosition(pos);

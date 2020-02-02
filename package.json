@@ -2,6 +2,7 @@
   "name": "Engine",
   "version": "1.0.0",
   "dependencies": {
+    "js-beautify": "^1.10.3",
     "resonance-audio": "^1.0.0"
   },
   "devDependencies": {

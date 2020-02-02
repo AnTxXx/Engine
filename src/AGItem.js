@@ -8,16 +8,16 @@ import {g_history} from "./AGEngine";
  * In-game item class.
  */
 export class AGItem {
-    _name:string;
-    _description:string;
-    _charges:number;
-    _ID:number;
-    _type:string;
+    _name: string;
+    _description: string;
+    _charges: number;
+    _ID: number;
+    _type: string;
 
     set name(value: string) {
         this._name = value;
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'name').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'name').set.name, this.constructor.name, arguments);
     }
 
     set description(value: string) {
@@ -27,14 +27,14 @@ export class AGItem {
     set charges(value: number) {
         this._charges = value;
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'charges').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'charges').set.name, this.constructor.name, arguments);
     }
 
-    addCharge(){
+    addCharge() {
         this._charges++;
     }
 
-    removeCharge():number{
+    removeCharge(): number {
         return --this._charges;
     }
 
@@ -61,7 +61,7 @@ export class AGItem {
     set type(value: string) {
         this._type = value;
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'type').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'type').set.name, this.constructor.name, arguments);
     }
 
     constructor(name: string, description: string, type: string, charges: number) {
@@ -73,12 +73,12 @@ export class AGItem {
         this._charges = charges;
         this._type = type;
 
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
-    deleteItemInReferences(){
+    deleteItemInReferences() {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.deleteItemInReferences.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.deleteItemInReferences.name, this.constructor.name, arguments);
         g_references.delete(this._ID);
     }
 }

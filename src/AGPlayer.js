@@ -11,7 +11,7 @@ import {g_controls} from "./AGEngine.js";
 export class AGPlayer extends AGObject {
 
 
-    navigation:AGNavigation;
+    navigation: AGNavigation;
 
     /**
      * Creates a player of the game.
@@ -22,7 +22,7 @@ export class AGPlayer extends AGObject {
      * @param navigation Navigation (AGNavigation) that has the controls for the player.
      * @param room
      */
-    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3){
+    constructor(name: string, position: Vector3, direction: Vector3, size: Vector3) {
         console.log("[AGPlayer] Creating AGPlayer object: " + name + ".");
 
         super(name, position, direction, size);
@@ -30,17 +30,17 @@ export class AGPlayer extends AGObject {
 
     }
 
-    moveSound:AGSoundSource;
+    moveSound: AGSoundSource;
 
-    health:number;
+    health: number;
 
     /**
      * draw-loop
      */
 
-    draw(timeStamp:Date){
+    draw(timeStamp: Date) {
         super.draw(timeStamp);
-        if(g_controls !== undefined) g_controls.draw(this);
+        if (g_controls !== undefined) g_controls.draw(this);
     }
 
     /**
@@ -49,8 +49,8 @@ export class AGPlayer extends AGObject {
      */
     onCollisionEnter(obj: AGObject) {
         super.onCollisionEnter(obj);
-        if(this._hitSound) this._hitSound.audioElement.currentTime = 0;
-        if(this._hitSound) this._hitSound.play();
+        if (this._hitSound) this._hitSound.audioElement.currentTime = 0;
+        if (this._hitSound) this._hitSound.play();
     }
 
     /**
@@ -60,21 +60,21 @@ export class AGPlayer extends AGObject {
 
         //damage others
 
-        if(!this.dangerous) return;
+        if (!this.dangerous) return;
 
         let timeDiff = new Date() - this._interactionCDTimestamp;
         //console.log(timeDiff);
-        if(timeDiff < this._interactionCooldown) {
+        if (timeDiff < this._interactionCooldown) {
             console.log("[AGPlayer] " + this.name + "still on Cooldown for " + (this._interactionCooldown - timeDiff) + "ms.");
             return;
         }
 
         super.interact();
 
-        let hits:Array<AGObject> = this.room.objectsRayIntersect(this);
-        for(let i = 0; i < hits.length; i++){
+        let hits: Array<AGObject> = this.room.objectsRayIntersect(this);
+        for (let i = 0; i < hits.length; i++) {
             //if the object is in hit range
-            if(hits[i].position.distanceTo(this.position)<this.range){
+            if (hits[i].position.distanceTo(this.position) < this.range) {
                 console.log("[AGPlayer] Interaction Hits:");
                 console.log(hits);
                 hits[i].doDamage(this);

@@ -1,5 +1,6 @@
 export interface Counter {
     next(): number;
+
     reset(): void;
 }
 

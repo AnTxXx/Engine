@@ -17,20 +17,20 @@ import {AGInventory} from "./AGInventory";
 import {AGCondition} from "./AGCondition";
 import {IncrementOneCounter} from "./IDGenerator";
 
-export let g_loading:boolean = false;
-export let g_playing:boolean = false;
-export let g_references:Map<number, Object> = new Map();
-export let g_eventHandler:AGEventHandler; // set by initializeEngine-function
+export let g_loading: boolean = false;
+export let g_playing: boolean = false;
+export let g_references: Map<number, Object> = new Map();
+export let g_eventHandler: AGEventHandler; // set by initializeEngine-function
 export let g_history: AGSaLo; // set by initializeEngine-function
-export let g_gamearea:AGGameArea; // set by initializeEngine-function
-export let g_controls:AGNavigation;
-export let g_IAudiCom:IAudiCom; // set in initialization call in index.html
+export let g_gamearea: AGGameArea; // set by initializeEngine-function
+export let g_controls: AGNavigation;
+export let g_IAudiCom: IAudiCom; // set in initialization call in index.html
 
 /**
  * Sets the IAudiCom Interface that connects the GUI with the Engine. Global variable.
  * @param IAC The IAudiCom interface.
  */
-export function setIAudiCom(IAC:IAudiCom){
+export function setIAudiCom(IAC: IAudiCom) {
     g_IAudiCom = IAC;
 }
 
@@ -45,7 +45,7 @@ export function initializeEngine() {
         initialized = true;
     }
     if (g_gamearea === undefined) {
-        g_gamearea = new AGGameArea("Area", new Vector3(30,2.5,10));
+        g_gamearea = new AGGameArea("Area", new Vector3(30, 2.5, 10));
         initialized = true;
     }
     if (initialized) {
@@ -104,26 +104,26 @@ export function startAGEngine() {
  * Sets the GameArea. Global variable.
  * @param gameArea The AGGameArea to be set.
  */
-export function setGameArea(gameArea:AGGameArea){
-    if(g_gamearea) g_gamearea = gameArea;
+export function setGameArea(gameArea: AGGameArea) {
+    if (g_gamearea) g_gamearea = gameArea;
 }
 
 /**
  * Sets the EventHandler. Global variable.
  * @param eventHandler The AGEventHandler to be set.
  */
-export function setEventHandler(eventHandler:AGEventHandler){
-    if(g_eventHandler) g_eventHandler = eventHandler;
+export function setEventHandler(eventHandler: AGEventHandler) {
+    if (g_eventHandler) g_eventHandler = eventHandler;
 }
 
 /**
  * Deletes an Item from the inventories, events (including the events themselves), and from the reference list.
  * @param itemID The id of the AGItem to be removed.
  */
-export function deleteItem(itemID:number){
+export function deleteItem(itemID: number) {
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGInventory") {
-           v.removeItemById(itemID);
+            v.removeItemById(itemID);
         }
     }
     g_eventHandler.deleteEventsContainingItemById(itemID);
@@ -137,14 +137,14 @@ export function deleteItem(itemID:number){
  * Deletes a Condition by ID.
  * @param conditionID The ID of the AGCondition to be removed.
  */
-export function deleteCondition(conditionID:number){
+export function deleteCondition(conditionID: number) {
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGPortal") {
             v.deleteConditionById(conditionID);
         }
     }
 
-   // g_references.delete(conditionID);
+    // g_references.delete(conditionID);
     console.log("[AGEngine] Deleted Condition ID " + conditionID + " from Objects and References Table.");
 }
 
@@ -153,16 +153,17 @@ export function deleteCondition(conditionID:number){
  * @param itemID The ID of the AGItem.
  * @returns {number} Returns the ID of the AGObject.
  */
-export function getOwnerIdOfItemById(itemID:number){
+export function getOwnerIdOfItemById(itemID: number) {
     for (let [k, v] of g_references) {
         if (v.constructor.name === "AGInventory") {
-            let item:AGItem = v.searchItemById(itemID);
-            if(item){
+            let item: AGItem = v.searchItemById(itemID);
+            if (item) {
                 return v.attachedTo.ID;
             }
         }
     }
 }
+
 //let resonanceAudioScene; //for first testings, maybe we will need something like AGRoom, where we can also put the resonance rooms into
 //let AGGameArea = new AGGameArea("main", new Vector3(20,20,0)); //simulate something "static", probably (quite sure :p) not state of the art
 /*
@@ -172,16 +173,16 @@ Game Area in which the audio game is played. It holds all audio game objects.
 /**
  * Creates a new EventHandler and GameArea, mainly for rebuilding the whole scene or creating a new one.
  */
-export function rebuildHandlerGameArea(){
+export function rebuildHandlerGameArea() {
     g_eventHandler = new AGEventHandler();
-    g_gamearea = new AGGameArea("Area", new Vector3(30,2.5,10));
+    g_gamearea = new AGGameArea("Area", new Vector3(30, 2.5, 10));
 }
 
 /**
  * Sets the Navigation to be a global variable.
  * @param controls The AGNavigation controls to be set as global variable.
  */
-export function setControl(controls:AGNavigation){
+export function setControl(controls: AGNavigation) {
     g_controls = controls;
 }
 
@@ -190,7 +191,7 @@ export function setControl(controls:AGNavigation){
  * @param id ID where you want to retrieve the respective object from.
  * @returns {void|Object} Return the object or void.
  */
-export function getReferenceById(id:number):Object{
+export function getReferenceById(id: number): Object {
     return g_references.get(id);
 }
 
@@ -199,11 +200,11 @@ export function getReferenceById(id:number):Object{
  * @param obj Object where you want to retrieve the respective ID from.
  * @returns {*} Returns the ID (number).
  */
-export function getIdByReference(obj:Object):number{
+export function getIdByReference(obj: Object): number {
     return [...g_references.entries()]
     // $FlowFixMe
-        .filter(({ 1: v }) => v === obj)
-        .map(([k]) => k)[0];
+    .filter(({1: v}) => v === obj)
+    .map(([k]) => k)[0];
     //return Object.keys(g_references).find(key => g_references[key] === obj);
 }
 
@@ -212,7 +213,7 @@ export function getIdByReference(obj:Object):number{
  * @param type The type as string.
  * @returns {Array} Returns an array of found IDs.
  */
-export function getReferencesOfType(type:string):Array<number> {
+export function getReferencesOfType(type: string): Array<number> {
     let returnArr = [];
     for (let [k, v] of g_references) {
         if (v.constructor.name === type) returnArr.push(k);
@@ -224,9 +225,10 @@ export function getReferencesOfType(type:string):Array<number> {
  * Public flag that should be set to true if the system loads or rebuilds a level. Disables the automated saving during loading.
  * @param bool True if the system is in loading state, false if not.
  */
-export function setLoading(bool:boolean){
+export function setLoading(bool: boolean) {
     g_loading = bool;
 }
+
 /*
 const ConditionEnum = {
     None: 0,
@@ -237,7 +239,7 @@ const ConditionEnum = {
 let request;
 
 //Update Loop
-function animate(gameArea:AGGameArea) {
+function animate(gameArea: AGGameArea) {
     draw(gameArea);
     request = window.requestAnimationFrame(function () {
         animate(gameArea);
@@ -245,7 +247,7 @@ function animate(gameArea:AGGameArea) {
 }
 
 //Calling the gameArea for draw (update loop tick)
-function draw(gameArea:AGGameArea) {
+function draw(gameArea: AGGameArea) {
     g_eventHandler.evaluateGlobalEvents();
     gameArea.draw();
 }
@@ -255,9 +257,9 @@ function draw(gameArea:AGGameArea) {
  * @param gameArea The AGGameArea the game is running in.
  * @param state Set to true, if the game should run, otherwise set to false.
  */
-export function play(gameArea:AGGameArea, state:boolean){
+export function play(gameArea: AGGameArea, state: boolean) {
     g_playing = state;
-    if(g_playing){
+    if (g_playing) {
         console.log("[AGEngine] Playing...");
         animate(gameArea);
     } else {
@@ -269,7 +271,7 @@ export function play(gameArea:AGGameArea, state:boolean){
 }
 
 //Stop game
-function stop(gameArea:AGGameArea){
+function stop(gameArea: AGGameArea) {
     gameArea.stop();
 }
 
@@ -277,7 +279,7 @@ function stop(gameArea:AGGameArea){
  * Sets a room to be unsolved again, if it has been set to solved (e.g., player has reached the goal).
  * @param gameArea The AGGameArea the game is running in.
  */
-function unsolveRooms(gameArea:AGGameArea){
+function unsolveRooms(gameArea: AGGameArea) {
     gameArea.unsolveRooms();
 }
 

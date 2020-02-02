@@ -6,8 +6,7 @@ import type {Type} from "./AGType.js";
 import {Collision, collisionIsInArray} from "./Collision.js";
 import {AGGameArea} from "./AGGameArea.js";
 import {IncrementOneCounter} from "./IDGenerator.js";
-import {g_gamearea, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
-import {g_history} from "./AGEngine";
+import {g_gamearea, g_history, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 
 let debug = 0;
 
@@ -19,7 +18,7 @@ export class AGRoom {
         return this._collisions;
     }
 
-    set collisions(value:Array<Collision>) {
+    set collisions(value: Array<Collision>) {
         this._collisions = value;
     }
 
@@ -31,11 +30,12 @@ export class AGRoom {
         return this._live;
     }
 
-    set live(value:boolean) {
+    set live(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set.name, this.constructor.name, arguments);
         this._live = value;
     }
+
     get positionOnGameArea(): Vector3 {
         return this._positionOnGameArea;
     }
@@ -51,6 +51,7 @@ export class AGRoom {
     set gameArea(value: AGGameArea) {
         this._gameArea = value;
     }
+
     get size(): Vector3 {
         return this._size;
     }
@@ -58,13 +59,15 @@ export class AGRoom {
     set size(value: Vector3) {
         this._size = value;
     }
-    get type():Type {
+
+    get type(): Type {
         return this._type;
     }
 
-    set type(value:Type) {
+    set type(value: Type) {
         this._type = value;
     }
+
     get listener(): IAGObject {
         return this._listener;
     }
@@ -82,12 +85,13 @@ export class AGRoom {
     set listener(valueID: number) {
         this._listener = getReferenceById(valueID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set.name, this.constructor.name, arguments);
     }
 
     get resonanceAudioScene() {
         return this._resonanceAudioScene;
     }
+
     // $FlowFixMe
     set resonanceAudioScene(value) {
         this._resonanceAudioScene = value;
@@ -99,9 +103,10 @@ export class AGRoom {
     get AGobjects(): Array<IAGObject> {
         return this._AGobjects;
     }
-    _name:string;
-    _size:Vector3;
-    _ID:number;
+
+    _name: string;
+    _size: Vector3;
+    _ID: number;
 
     get name(): string {
         return this._name;
@@ -111,19 +116,19 @@ export class AGRoom {
         this._name = value;
     }
 
-    roomDimensions:Object;
-    roomMaterials:Object;
+    roomDimensions: Object;
+    roomMaterials: Object;
 
-    _listener:IAGObject;
-    _type:Type;
+    _listener: IAGObject;
+    _type: Type;
 
-    _positionOnGameArea:Vector3;
-    _gameArea:AGGameArea;
-    _live:boolean;
+    _positionOnGameArea: Vector3;
+    _gameArea: AGGameArea;
+    _live: boolean;
 
-    _lastTime:Date;
+    _lastTime: Date;
 
-    _solved:boolean;
+    _solved: boolean;
 
     /**
      *
@@ -132,7 +137,7 @@ export class AGRoom {
      * @param positionOnGrid The position of the room in the overall grid (the game 'map').
      * @param gameArea The AGGameArea this room is part of.
      */
-    constructor(name:string, size:Vector3, positionOnGrid:Vector3){
+    constructor(name: string, size: Vector3, positionOnGrid: Vector3) {
         this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
         console.log("[AGRoom] Creating AGRoom object [ID: " + this._ID + "]: " + name + ".");
@@ -169,7 +174,7 @@ export class AGRoom {
         this._name = name;
         this._type = "GAMEAREA";
 
-        if(!this._collisions){
+        if (!this._collisions) {
             this._collisions = [];
         }
         this._size = size;
@@ -180,23 +185,23 @@ export class AGRoom {
 
         this._solved = false;
 
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
     }
 
-    _AGobjects:Array<IAGObject>;
-    _collisions:Array<Collision>;
+    _AGobjects: Array<IAGObject>;
+    _collisions: Array<Collision>;
 
     /**
      * Adds a IAGObject to the room (and will therefore be considered with every draw loop)
      * @param gameObject The IAGObject to add.
      */
-    add(gameObjectID :number){
-        if(!this._AGobjects){
+    add(gameObjectID: number) {
+        if (!this._AGobjects) {
             this._AGobjects = [];
         }
         let gameObject = getReferenceById(gameObjectID);
         this._AGobjects.push(gameObject);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.add.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.add.name, this.constructor.name, arguments);
         gameObject.room = this;
     }
 
@@ -205,27 +210,27 @@ export class AGRoom {
      * @param obj1 The first object that is involved in a collision.
      * @param obj2 The second object that is involved in a collision.
      */
-    addCollision(obj1:IAGObject, obj2:IAGObject){
+    addCollision(obj1: IAGObject, obj2: IAGObject) {
         this._collisions.push(new Collision(obj1, obj2));
     }
 
-    objectsRayIntersect(obj:IAGObject):Array<IAGObject>{
-        let returnArr:Array<IAGObject> = [];
-        for(let i = 0; i < this._AGobjects.length; i++){
-           if(hitBoundingBox(this._AGobjects[i], obj) && this._AGobjects[i] !== obj) returnArr.push((this._AGobjects[i]));
+    objectsRayIntersect(obj: IAGObject): Array<IAGObject> {
+        let returnArr: Array<IAGObject> = [];
+        for (let i = 0; i < this._AGobjects.length; i++) {
+            if (hitBoundingBox(this._AGobjects[i], obj) && this._AGobjects[i] !== obj) returnArr.push((this._AGobjects[i]));
         }
         return returnArr;
     }
 
-    betweenPlayerObjectRayIntersect(obj:IAGObject):Array<IAGObject>{
-        let returnArr:Array<IAGObject> = [];
-        for(let i = 0; i < this._AGobjects.length; i++){
+    betweenPlayerObjectRayIntersect(obj: IAGObject): Array<IAGObject> {
+        let returnArr: Array<IAGObject> = [];
+        for (let i = 0; i < this._AGobjects.length; i++) {
             //console.log(obj);
             //console.log(hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()));
             //console.log(this._AGobjects[i] !== obj);
             //console.log(this._AGobjects[i] !== g_gamearea.listener);
             //console.log((g_gamearea.listener.position.distanceTo(obj.position) < obj.position.distanceTo(this._AGobjects[i])));
-            if(obj && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener && (g_gamearea.listener.position.distanceTo(obj.position) < obj.position.distanceTo(this._AGobjects[i]))) returnArr.push((this._AGobjects[i]));
+            if (obj && hitBoundingBox(this._AGobjects[i], obj, (g_gamearea.listener.position.clone().sub(obj.position.clone())).normalize()) && this._AGobjects[i] !== obj && this._AGobjects[i] !== g_gamearea.listener && (g_gamearea.listener.position.distanceTo(obj.position) < obj.position.distanceTo(this._AGobjects[i]))) returnArr.push((this._AGobjects[i]));
         }
         return returnArr;
     }
@@ -237,21 +242,21 @@ export class AGRoom {
     /**
      * Checks if a collision is happening in the respective room. If yes, it will be added to the local room collision array.
      */
-    checkForCollision(){
+    checkForCollision() {
         //Collision?
-        for(let i = 0, len = this._AGobjects.length; i < len; i++){
-            for(let j = 0; j < len; j++){
-                if(i === j) continue;
+        for (let i = 0, len = this._AGobjects.length; i < len; i++) {
+            for (let j = 0; j < len; j++) {
+                if (i === j) continue;
                 else {
-                    if(this._AGobjects[i].collidable && this._AGobjects[j].collidable) {
+                    if (this._AGobjects[i].collidable && this._AGobjects[j].collidable) {
                         if (colliding(this._AGobjects[i], this._AGobjects[j])) {
-                            if((collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]))) === -1){
+                            if ((collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]))) === -1) {
                                 //console.log("[AGRoom] " + this.name + ": Collision between " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
                                 this._AGobjects[i].onCollisionEnter(this._AGobjects[j]);
                                 this.addCollision(this._AGobjects[i], this._AGobjects[j]);
                             }
                         } else {
-                            let index:number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
+                            let index: number = collisionIsInArray(this._collisions, new Collision(this._AGobjects[i], this._AGobjects[j]));
                             if (index > -1) {
                                 //console.log("[AGRoom] " + this.name + ": Collision exit on " + this._AGobjects[i].name + " and " + this._AGobjects[j].name);
                                 this._AGobjects[i].onCollisionExit(this._AGobjects[j]);
@@ -264,10 +269,10 @@ export class AGRoom {
         }
     }
 
-    predictCollisionByPoint(position:Vector3):Array<IAGObject>{
-        let collisionArray:Array<IAGObject> = [];
-        for(let i = 0, len = this._AGobjects.length; i < len; i++){
-            if(isPointInsideAABB(position, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
+    predictCollisionByPoint(position: Vector3): Array<IAGObject> {
+        let collisionArray: Array<IAGObject> = [];
+        for (let i = 0, len = this._AGobjects.length; i < len; i++) {
+            if (isPointInsideAABB(position, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
         }
         return collisionArray;
     }
@@ -276,20 +281,20 @@ export class AGRoom {
      * Removes the IAGObject from the room.
      * @param obj The IAGObject to be removed.
      */
-    removeIAGObject(obj:IAGObject){
-        let index:number = -1;
-        for(let i = 0; i < this._AGobjects.length; i++){
-            if(obj === this._AGobjects[i]) index = i;
+    removeIAGObject(obj: IAGObject) {
+        let index: number = -1;
+        for (let i = 0; i < this._AGobjects.length; i++) {
+            if (obj === this._AGobjects[i]) index = i;
         }
-        if(index === -1) return;
+        if (index === -1) return;
         this._AGobjects.splice(index, 1);
         this.removeCollisionWithObject(obj);
         console.log("[AGRoom] Removed object " + obj.name + " from room " + this.name + ".");
     }
 
-    removeCollisionWithObject(obj:IAGObject){
-        for(let i = this._collisions.length-1; i>=0; i--){
-            if(this._collisions[i].obj1 === obj || this._collisions[i].obj2 === obj) this._collisions.splice(i,1);
+    removeCollisionWithObject(obj: IAGObject) {
+        for (let i = this._collisions.length - 1; i >= 0; i--) {
+            if (this._collisions[i].obj1 === obj || this._collisions[i].obj2 === obj) this._collisions.splice(i, 1);
         }
     }
 
@@ -299,10 +304,10 @@ export class AGRoom {
      * @param size Size (Vector3) of the object.
      * @returns {Array<IAGObject>} An Array of IAGObjects that intersect with the position and size of the object given.
      */
-    predictCollisionByPointAndSize(position:Vector3, size:Vector3):Array<IAGObject>{
-        let collisionArray:Array<IAGObject> = [];
-        for(let i = 0, len = this._AGobjects.length; i < len; i++){
-            if(isAABBInsideAABB(position, size, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
+    predictCollisionByPointAndSize(position: Vector3, size: Vector3): Array<IAGObject> {
+        let collisionArray: Array<IAGObject> = [];
+        for (let i = 0, len = this._AGobjects.length; i < len; i++) {
+            if (isAABBInsideAABB(position, size, this._AGobjects[i])) collisionArray.push(this._AGobjects[i]);
         }
         return collisionArray;
     }
@@ -313,20 +318,20 @@ export class AGRoom {
      * @param size The size (Vector3) of the surrounding boundary the point.
      * @returns {boolean} True, if point is inside room, otherwise false.
      */
-    pointInsideRoom(position:Vector3, size:Vector3):boolean{
+    pointInsideRoom(position: Vector3, size: Vector3): boolean {
         return isAABBInsideRoom(position, size, this);
     }
 
     /**
      * draw-loop
      */
-    draw(){
-        if(this._lastTime.getTime() === new Date(0).getTime()) this._lastTime = new Date();
+    draw() {
+        if (this._lastTime.getTime() === new Date(0).getTime()) this._lastTime = new Date();
         //console.log(this._lastTime);
         //All objects draw
-        for(let i = 0; i < this._AGobjects.length; i++){
+        for (let i = 0; i < this._AGobjects.length; i++) {
             this._AGobjects[i].draw(this._lastTime);
-            if(debug) console.log("draw on element: " + this._AGobjects[i].name);
+            if (debug) console.log("draw on element: " + this._AGobjects[i].name);
         }
 
         this.checkForCollision();
@@ -346,11 +351,11 @@ export class AGRoom {
     /**
      * Iteratively goes through all objects stored in IAGObjects and calls their respective stop. Clears collision array too.
      */
-    stop(){
+    stop() {
         this._collisions = [];
-        this._AGobjects.forEach(function(element) {
+        this._AGobjects.forEach(function (element) {
             element.stop();
-            if(debug) console.log("stop on element: " + element.name);
+            if (debug) console.log("stop on element: " + element.name);
         });
     }
 
