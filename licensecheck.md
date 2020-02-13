@@ -21,7 +21,13 @@ Source: https://github.com/resonance-audio/resonance-audio-web-sdk
 
 Type of Usage: Not Bundled Dependency
 
-Compatibility: Unknown
+Re-licensing as MIT: yes
+
+Sources:
+
+- https://resources.whitesourcesoftware.com/blog-whitesource/top-10-apache-license-questions-answered
+- https://tldrlegal.com/license/mit-license
+- https://opensource.org/licenses/MIT
 
 JQuery
 ------
@@ -32,7 +38,7 @@ Source: https://github.com/jquery/jquery
 
 Type of Usage: Not Bundled Dependency
 
-Compatibiltiy: Yes - Same License
+Re-licensing as MIT: Yes - Same License
 
 Fabric
 ------
@@ -43,7 +49,7 @@ Source: https://github.com/fabricjs/fabric.js
 
 Type of Usage: Not Bundled Dependency
 
-Compatibility: Yes - Same License
+Re-licensing as MIT: Yes - Same License
 
 Three
 -----
@@ -54,4 +60,4 @@ Source: https://github.com/mrdoob/three.js
 
 Type of Usage: Remix. Some files reused.
 
-Compatibility: Yes - Same License
+Re-licensing as MIT: Yes - Same License

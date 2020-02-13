@@ -1,32 +1,42 @@
-# AudiComp
+# [AudiCom](https://audicom.at/) - Create, Share, and Play Audio Games
 
-## Setup Local Development Environment
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FAnTxXx%2FEngine.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FAnTxXx%2FEngine?ref=badge_shield)
 
-Build scripts do not fail with node v5.8.0 and npm 5.3.0.
-Make sure everything is set up accordingly or use the *node version manager* (nvm, https://github.com/nvm-sh/nvm)
+## User Guides
 
-    nvm install
-    nvm use
-    nvm install-latest-npm
+Read more about what [AudiCom](https://audicom.at/) is on https://audicom.at/.
 
-## Run Local Build
+To *play* or *create* audio games, use the [Editor](https://www.audicom.at/Engine/interface_test.html) which is
+available on https://www.audicom.at/Engine/interface_test.html.
 
-This project has been developed using Flow (https://github.com/flow-typed/flow-typed see `.flowconfig`).
-Running flow is part of a babel-build-process (see `.babelrc`). To run the build run:
+To *get started* or *discuss* and *share* audio games, use the [Forum](https://www.audicom.at/forum/) which is
+available on https://www.audicom.at/forum/
 
-    npm run build
+## Contributing
 
-## Run Local Development Environment
+We're always looking for help identifying bugs and improving documentation. Our small team will
+not be able to implement your new feature requests, however, we appreciate them to learn, what
+people playing, creating and sharing audio games are caring about.
 
-To run a local server, serving all files including livereload do the following:
+Please create issues for our comments, bug reports, recommendations, or feature requests on
+https://github.com/AnTxXx/Engine/issues
 
-## Ongoing
+At the moment we do not provide templates for these issue-types.
 
-- use webpack to create one file from the library
-- IDGenerator exported 2 times Counter
-- circular dependency on AGObject (leading to TDZ, see https://github.com/webpack/webpack/issues/9173)
+Please take a look at [CONTRIBUTING.md](https://github.com/AnTxXx/Engine/tree/master/CONTRIBUTING.md) for further
+information.
 
-## Open Questions
+## Developer Guides
 
-- Why does the Engine keep an instance of IAudiCom?
-- Why is AGAudioSource an AGObject while being able to manage (have references of) AGObject?
+### Introduction
+
+There is one file to rule them all: [lib/audicom.js](https://github.com/AnTxXx/Engine/tree/master/lib/audicom.js).
+
+It contains the AudiCom-Engine written in ES6. So if you want to use it you should be familiar with the
+[EcmaScript 6.0 Standard](https://ecma-international.org/ecma-262/6.0). A low level entry can be achieved reading
+[An introduction to ES6](https://medium.com/sons-of-javascript/javascript-an-introduction-to-es6-1819d0d89a0f) by
+Gerard Sans. If you are a tinkerer, you can also approach ES6 playing on [ES6Fiddle](http://www.es6fiddle.net/)
+
+### Creating a simple game
+
+TODO: Step-By-Step
