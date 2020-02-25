@@ -24,15 +24,7 @@ export let g_eventHandler: AGEventHandler; // set by initializeEngine-function
 export let g_history: AGSaLo; // set by initializeEngine-function
 export let g_gamearea: AGGameArea; // set by initializeEngine-function
 export let g_controls: AGNavigation;
-export let g_IAudiCom: IAudiCom; // set in initialization call in index.html
-
-/**
- * Sets the IAudiCom Interface that connects the GUI with the Engine. Global variable.
- * @param IAC The IAudiCom interface.
- */
-export function setIAudiCom(IAC: IAudiCom) {
-    g_IAudiCom = IAC;
-}
+export let g_IAudiCom: IAudiCom; // set by initializeEngine-function
 
 export function initializeEngine() {
     let initialized = false;
@@ -42,14 +34,18 @@ export function initializeEngine() {
     }
     if (g_eventHandler === undefined) {
         g_eventHandler = new AGEventHandler();
-        initialized = true;
+        initialized = initialized && true;
     }
     if (g_gamearea === undefined) {
         g_gamearea = new AGGameArea("Area", new Vector3(30, 2.5, 10));
-        initialized = true;
+        initialized = initialized && true;
+    }
+    if (g_IAudiCom === undefined) {
+        g_IAudiCom = new IAudiCom();
+        initialized = initialized && true;
     }
     if (initialized) {
-        console.debug("[AGEngine] Initialized g_history, g_eventHandler and g_gamearea", g_history, g_eventHandler, g_gamearea);
+        console.debug("[AGEngine] Initialized g_history, g_eventHandler, g_gamearea, g_IAudiCom ", g_history, g_eventHandler, g_gamearea, g_IAudiCom);
     }
     return initialized;
 }
@@ -58,46 +54,6 @@ export function startAGEngine() {
     if (!initializeEngine()) {
         return;
     }
-
-    let controls: AGNavigation = new AGNavigation(38, 40, 37, 39, 67);
-    let controlsID: number = getIdByReference(controls);
-    setControl(getReferenceById(controlsID));
-
-    let room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
-    let room_1ID = getIdByReference(room_1);
-    g_gamearea.addRoom(room_1ID);
-    let player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-    let playerID = getIdByReference(player);
-
-    let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
-
-    getReferenceById(room_1ID).add(playerID);
-
-    g_gamearea.listener = playerID;
-    getReferenceById(room_1ID).listener = playerID;
-
-
-    //Player Settings
-    getReferenceById(playerID).setSpeedSkalar(0.1);
-
-    //getReferenceById(playerID).movable = true;
-    getReferenceById(playerID).dangerous = true;
-    getReferenceById(playerID).damage = 1;
-    getReferenceById(playerID).range = 1;
-    getReferenceById(playerID).interactionCooldown = 500;
-    getReferenceById(playerID).hitSound = ouch.ID;
-
-    getReferenceById(room_1ID).live = true;
-    //play(area, true);
-
-    console.log(g_history);
-
-    //g_history.rebuild();
-
-    //console.log(g_gamearea.AGRooms[0].AGobjects);
-    //console.log(g_references);
-
-    setIAudiCom(new IAudiCom());
 }
 
 /**
@@ -438,7 +394,7 @@ export class AGSaLo {
 
                 //console.log(returnFunc);
             }
-        })
+        });
         return returnFunc;
         //Object.getOwnPropertyDescriptor(((class) classname).prototype, funct)
     }

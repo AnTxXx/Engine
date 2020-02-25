@@ -32,7 +32,7 @@ export class AGRoom {
 
     set live(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'live').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set live', this.constructor.name, arguments);
         this._live = value;
     }
 
@@ -85,7 +85,7 @@ export class AGRoom {
     set listener(valueID: number) {
         this._listener = getReferenceById(valueID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGRoom.prototype, 'listener').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set listener', this.constructor.name, arguments);
     }
 
     get resonanceAudioScene() {

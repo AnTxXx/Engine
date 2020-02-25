@@ -17,7 +17,7 @@ export class Event {
     set origin(originID: number) {
         let go = getReferenceById(originID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(Event.prototype, 'origin').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set origin', this.constructor.name, arguments);
         this._origin = go;
     }
 
@@ -52,7 +52,7 @@ export class Event {
     set addObject(addObjectID: number) {
         let go = getReferenceById(addObjectID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(Event.prototype, 'addObject').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set addObject', this.constructor.name, arguments);
         this._addObject = go;
     }
 
@@ -63,7 +63,7 @@ export class Event {
     set object(objectID: number) {
         let go = getReferenceById(objectID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(Event.prototype, 'object').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set object', this.constructor.name, arguments);
         this._object = go;
     }
 

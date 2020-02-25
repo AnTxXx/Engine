@@ -43,7 +43,7 @@ export class AGGameArea {
 
     set listener(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGGameArea.prototype, 'listener').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set listener', this.constructor.name, arguments);
         this._listener = getReferenceById(value);
     }
 

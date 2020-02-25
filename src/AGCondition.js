@@ -29,7 +29,7 @@ export class AGCondition {
 
     set conditionObject(value: any) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'conditionObject').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set conditionObject', this.constructor.name, arguments);
         this._conditionObject = value;
     }
 
@@ -39,7 +39,7 @@ export class AGCondition {
 
     set funcOfConditionObject(value: string) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'funcOfConditionObject').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set funcOfConditionObject', this.constructor.name, arguments);
         let f: Function;
         switch (this._conditionObject) {
             case "INVENTORY":
@@ -55,7 +55,7 @@ export class AGCondition {
 
     set funcArgs(value: Array<*>) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'funcArgs').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set funcArgs', this.constructor.name, arguments);
         this._funcArgs = value;
     }
 
@@ -65,7 +65,7 @@ export class AGCondition {
 
     set value(value: Object) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'value').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set value', this.constructor.name, arguments);
         this._value = value;
     }
 
@@ -76,7 +76,7 @@ export class AGCondition {
     set object(objectID: number) {
         let obj: IAGObject = getReferenceById(objectID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'object').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set object', this.constructor.name, arguments);
         this._object = obj;
     }
 

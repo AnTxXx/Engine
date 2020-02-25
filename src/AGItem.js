@@ -17,7 +17,7 @@ export class AGItem {
     set name(value: string) {
         this._name = value;
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'name').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set name', this.constructor.name, arguments);
     }
 
     set description(value: string) {
@@ -27,7 +27,7 @@ export class AGItem {
     set charges(value: number) {
         this._charges = value;
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'charges').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set charges', this.constructor.name, arguments);
     }
 
     addCharge() {
@@ -61,7 +61,7 @@ export class AGItem {
     set type(value: string) {
         this._type = value;
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGItem.prototype, 'type').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set type', this.constructor.name, arguments);
     }
 
     constructor(name: string, description: string, type: string, charges: number) {

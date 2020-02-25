@@ -28,7 +28,7 @@ export { AGSaLo, SaLoCommand } from "./AGEngine.js";
 // Functions
 //---------------------------------
 export {evaluateAll} from "./AGCondition.js";
-export {setIAudiCom,
+export {
     startAGEngine,
     setGameArea,
     setEventHandler,

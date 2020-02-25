@@ -68,10 +68,8 @@ export class IAudiCom {
             ['#000000', '#f02727'],	//7 colors for path-lines
             ['#7079d4', '#39adff'],	//8 colors for generic objects
         ];
-        this.renderScene();
+        //this.renderScene(); // not on initialization
         //this.renderPathDot();
-
-
     }
 
     /**
@@ -1514,10 +1512,12 @@ export class IAudiCom {
     loadLevel(lvl_) {
         let that = this;
         //restore default view
+        if (that._AGroomID) {
+            $('#input_room_name').val(getReferenceById(that._AGroomID).name);
+            $('#tb_canvas_dim_width').val(getReferenceById(that._AGroomID).size.x);
+            $('#tb_canvas_dim_height').val(getReferenceById(that._AGroomID).size.z);
+        }
         $('#ui_part_right_inner').hide();
-        $('#input_room_name').val(getReferenceById(that._AGroomID).name);
-        $('#tb_canvas_dim_width').val(getReferenceById(that._AGroomID).size.x);
-        $('#tb_canvas_dim_height').val(getReferenceById(that._AGroomID).size.z);
         $('.ui_box_special').hide();
         $('.ui_box_general').hide();
         $('.ui_box_room').show();

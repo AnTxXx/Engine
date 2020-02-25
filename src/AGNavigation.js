@@ -329,7 +329,7 @@ export class AGNavigation {
 
     set forward(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'forward').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set forward', this.constructor.name, arguments);
         gForward = value;
     }
 
@@ -339,7 +339,7 @@ export class AGNavigation {
 
     set backward(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'backward').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set backward', this.constructor.name, arguments);
         gBackward = value;
     }
 
@@ -349,7 +349,7 @@ export class AGNavigation {
 
     set left(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'left').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set left', this.constructor.name, arguments);
         gLeft = value;
     }
 
@@ -359,7 +359,7 @@ export class AGNavigation {
 
     set right(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGNavigation.prototype, 'right').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set right', this.constructor.name, arguments);
         gRight = value;
     }
 

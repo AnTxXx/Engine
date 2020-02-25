@@ -77,7 +77,7 @@ export class AGSoundSource {
 
     set tag(value: string) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'tag').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set tag', this.constructor.name, arguments);
         this._tag = value;
     }
 
@@ -87,7 +87,7 @@ export class AGSoundSource {
 
     set name(value: string) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'name').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set name', this.constructor.name, arguments);
         this._name = value;
     }
 
@@ -97,7 +97,7 @@ export class AGSoundSource {
 
     set maxDistance(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'maxDistance').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set maxDistance', this.constructor.name, arguments);
         this._maxDistance = value;
         if (this.source) this.source.setMaxDistance(this._maxDistance);
     }
@@ -108,7 +108,7 @@ export class AGSoundSource {
 
     set volume(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGSoundSource.prototype, 'volume').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set volume', this.constructor.name, arguments);
         console.log("[AGSoundSource] Changing volume of AGSoundSource object [ID: " + this._ID + "] to " + value + ".");
         this._volume = value;
         if (this.source) this._gainNode.gain.value = value;

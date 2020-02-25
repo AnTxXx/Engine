@@ -24,7 +24,7 @@ export class AGObject implements IAGObject {
     set deathSound(soundID: number) {
         let deathSound = getReferenceById(soundID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'deathSound').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set deathSound', this.constructor.name, arguments);
         if (this._AGSoundSources.indexOf(deathSound) === -1) this._AGSoundSources.push(deathSound);
         this._deathSound = deathSound;
     }
@@ -46,7 +46,7 @@ export class AGObject implements IAGObject {
     set aliveSound(soundID: number) {
         let aliveSound = getReferenceById(soundID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'aliveSound').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set aliveSound', this.constructor.name, arguments);
         if (this._AGSoundSources.indexOf(aliveSound) === -1) this._AGSoundSources.push(aliveSound);
         this._aliveSound = aliveSound;
     }
@@ -68,7 +68,7 @@ export class AGObject implements IAGObject {
     set interactionSound(soundID: number) {
         let interactionSound = getReferenceById(soundID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'interactionSound').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set interactionSound', this.constructor.name, arguments);
         if (this._AGSoundSources.indexOf(interactionSound) === -1) this._AGSoundSources.push(interactionSound);
         this._interactionSound = interactionSound;
     }
@@ -90,7 +90,7 @@ export class AGObject implements IAGObject {
     set movementSound(soundID: number) {
         let movementSound = getReferenceById(soundID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movementSound').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set movementSound', this.constructor.name, arguments);
         if (this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
         this._movementSound = movementSound;
     }
@@ -105,7 +105,7 @@ export class AGObject implements IAGObject {
 
     set damage(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set damage', this.constructor.name, arguments);
         this._damage = value;
     }
 
@@ -115,7 +115,7 @@ export class AGObject implements IAGObject {
 
     set dangerous(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set dangerous', this.constructor.name, arguments);
         this._dangerous = value;
     }
 
@@ -125,7 +125,7 @@ export class AGObject implements IAGObject {
 
     set range(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set range', this.constructor.name, arguments);
         this._range = value;
     }
 
@@ -135,7 +135,7 @@ export class AGObject implements IAGObject {
 
     set destructible(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set destructible', this.constructor.name, arguments);
         this._destructible = value;
     }
 
@@ -145,7 +145,7 @@ export class AGObject implements IAGObject {
 
     set health(value: number) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set health', this.constructor.name, arguments);
         this._health = value;
     }
 
@@ -171,7 +171,7 @@ export class AGObject implements IAGObject {
 
     set collidable(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'collidable').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set collidable', this.constructor.name, arguments);
         this._collidable = value;
     }
 
@@ -197,7 +197,7 @@ export class AGObject implements IAGObject {
 
     set name(value: string) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'name').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set name', this.constructor.name, arguments);
         this._name = value;
     }
 
@@ -207,7 +207,7 @@ export class AGObject implements IAGObject {
 
     set movable(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set movable', this.constructor.name, arguments);
         this._movable = value;
     }
 
@@ -217,7 +217,7 @@ export class AGObject implements IAGObject {
 
     set size(value: Vector3) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'size').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set size', this.constructor.name, arguments);
         this._size = value;
     }
 
@@ -235,7 +235,7 @@ export class AGObject implements IAGObject {
 
     set position(value: Vector3) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'position').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set position', this.constructor.name, arguments);
         this._position = value;
         //console.log(this._position);
         //console.log(this._direction);
@@ -252,7 +252,7 @@ export class AGObject implements IAGObject {
 
     set speed(value: Vector3) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set speed', this.constructor.name, arguments);
         this._speed = value;
     }
 
@@ -272,7 +272,7 @@ export class AGObject implements IAGObject {
 
     set runaway(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'runaway').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set runaway', this.constructor.name, arguments);
         this._runaway = value;
     }
 
@@ -282,7 +282,7 @@ export class AGObject implements IAGObject {
 
     set circle(value: boolean) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'circle').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set circle', this.constructor.name, arguments);
         this._circle = value;
     }
 
@@ -292,7 +292,7 @@ export class AGObject implements IAGObject {
 
     set tag(value: string) {
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set tag', this.constructor.name, arguments);
         this._tag = value;
     }
 
@@ -303,7 +303,7 @@ export class AGObject implements IAGObject {
     set hitSound(valueID: number) {
         let value = getReferenceById(valueID);
         // $FlowFixMe
-        if (!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'hitSound').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set hitSound', this.constructor.name, arguments);
         this._hitSound = value;
     }
 

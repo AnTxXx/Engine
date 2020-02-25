@@ -23,6 +23,6 @@
   },
   "scripts": {
     "build": "rollup --config",
-    "start": "rollup --config rollup.dev.config.js"
+    "start": "rollup --config rollup.dev.config.js --watch"
   }
 }
