@@ -281,7 +281,7 @@ export class AGRoom {
      * Removes the IAGObject from the room.
      * @param obj The IAGObject to be removed.
      */
-    removeIAGObject(obj: IAGObject) {
+    removeAGObject(obj: IAGObject) {
         let index: number = -1;
         for (let i = 0; i < this._AGobjects.length; i++) {
             if (obj === this._AGobjects[i]) index = i;

@@ -606,6 +606,7 @@
 
 			let controls = new AGNavigation(38, 40, 37, 39, 67);
 			let controlsID = getIdByReference(controls);
+			g_IAudiCom._controlsID = controlsID;
 			setControl(getReferenceById(controlsID));
 
 			let room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));

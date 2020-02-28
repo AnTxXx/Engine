@@ -52,7 +52,7 @@ See [GitFlow](https://www.gitflow.com/)
 
 ### Set Up Development Environment
 
-Build scripts do not fail with node v5.8.0 and npm 5.3.0.
+Build scripts do not fail with node v8.17.0 and npm v6.13.6
 Make sure your system is set up accordingly or use the *node version manager* (nvm, https://github.com/nvm-sh/nvm),
 which only requires three commands to make sure node and npm are version locked.
 
@@ -62,6 +62,7 @@ which only requires three commands to make sure node and npm are version locked.
 
 To execute this build chain run:
 
+    npm install
     npm run build
 
 ### Run Local Development Environment

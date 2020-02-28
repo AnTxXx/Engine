@@ -92,11 +92,11 @@ assigning the tag `"WALL"`, `"ENEMY"` and `"WATERFAL""` automatically uses the a
 
         var enemy1 = new AGObject("Gegner 1", new Vector3(6.3, 1.0, 2.4), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
         var enemy1_ID = enemy1.ID;
-        getReferenceById(environmental1_ID).tag = "WATERFALL";
-
+        getReferenceById(enemy1_ID).tag = "ENEMY";
+ 
         var environmental1 = new AGObject("Wasserfall", new Vector3(19.3, 1.0, 2.1), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
         var environmental1_ID = environmental1.ID;
-        getReferenceById(enemy1_ID).tag = "ENEMY";
+        getReferenceById(environmental1_ID).tag = "WATERFALL";
 
         getReferenceById(room_1ID).add(wall1_ID);
         getReferenceById(room_1ID).add(enemy1_ID);
@@ -122,22 +122,21 @@ source to the exit object.
         getReferenceById(exitID).addSoundSource(magic_exit_ID);
 
 6. Now set the player settings. By setting the `hitSound` the sound source is linked to the player.
-It is `dangerous` to enemies and `movable`. To learn about other settings like `damage` and `range`
+It is `dangerous` to enemies and has a battle `range` of 7. To learn about other settings like `damage` and `range`
 read about in [src/AGPlayer.js](https://github.com/AnTxXx/Engine/blob/cleanup/src/AGPlayer.js).
 `dangerous` objects can not pass `collidable` objects.
 
         //Player Settings
-        getReferenceById(playerID).setSpeedSkalar(2);
+        getReferenceById(playerID).setSpeedSkalar(0.1);
         getReferenceById(playerID).hitSound = ouchID;
-        getReferenceById(playerID).movable = true;
 
         getReferenceById(playerID).dangerous = true;
         getReferenceById(playerID).damage = 1;
         getReferenceById(playerID).range = 7;
 
 7. Now set the enemy settings. By setting the `setAliveSound` the sound source is linked to the enemy.
-It is `destructible` by a player, `movable` and `collidable` with the walls. To learn about other
-settings like `health` or `deathSound` read about it in
+It is `destructible` by a player and `collidable` with the walls. To learn about other
+settings like `moveable`, `health` or `deathSound` read about it in
 [src/AGObject.js](https://github.com/AnTxXx/Engine/blob/cleanup/src/AGObject.js).
 
         getReferenceById(enemy1_ID).destructible = true;
@@ -157,10 +156,32 @@ player cannot pass through it:
         getReferenceById(environmental2_ID).addSoundSource(environmental2SS_ID);
         getReferenceById(environmental2_ID).collidable = false;
 
-9. Finally, start the room :)
+9. Finally, add the line for starting the room :)
 
         getReferenceById(room_1ID).live = true;
+
+10. To really start a game run the following commands and once finished, visit http://localhost:10001/newgame.html
+
+        nvm install
+        nvm use
+        npm install
+        npm start
+
+See [CONTRIBUTING.md](https://github.com/AnTxXx/Engine/blob/cleanup/CONTRIBUTING.md) for more details on how to
+set up a working development environment.
+
+Try to assign a sound to the enemy!
 
 We did not explain events and tags in detail, you can learn about them in the examples in
 [ui/js/IAudiCom.js](https://github.com/AnTxXx/Engine/blob/cleanup/ui/js/IAudiCom.js#L1533)
 in the lines below 1533.
+
+### Sharing a game
+
+If you followed the above getting started guide, copy the following three files/directories to your
+webhost of choice to share the new game:
+
+    sounds/*
+    ui/*
+    lib/*
+    newgame.html
