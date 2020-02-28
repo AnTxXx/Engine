@@ -21,12 +21,12 @@ seem to be an expert already!
 ### Buildchain
 
 This project is written in [flow](https://github.com/facebook/flow). The source is located in
-[src](https://github.com/AnTxXx/Engine/tree/master/src) and
-[ui](https://github.com/AnTxXx/Engine/tree/master/src). The source is transpiled to ES6 using
-[babel](https://github.com/babel/babel) (See [.babelrc](https://github.com/AnTxXx/Engine/tree/master/.babelrc)). Finally
+[src](https://github.com/AnTxXx/Engine/tree/cleanup/src) and
+[ui](https://github.com/AnTxXx/Engine/tree/cleanup/src). The source is transpiled to ES6 using
+[babel](https://github.com/babel/babel) (See [.babelrc](https://github.com/AnTxXx/Engine/tree/cleanup/.babelrc)). Finally
 the code is bundled using [rollupjs](https://github.com/rollup/rollup) (See
-[rollup.config.js](https://github.com/AnTxXx/Engine/tree/master/rollup.config.js)) creating 
-[lib/audicom.js](https://github.com/AnTxXx/Engine/tree/master/lib/audicom.js).
+[rollup.config.js](https://github.com/AnTxXx/Engine/tree/cleanup/rollup.config.js)) creating 
+[lib/audicom.js](https://github.com/AnTxXx/Engine/tree/cleanup/lib/audicom.js).
 
 ### Live Reload and ENOSPC
 
@@ -42,7 +42,7 @@ See [Semantic Versioning 2.0](https://semver.org/)
 
 ### Codestyle
 
-See [.editorconfig](https://github.com/AnTxXx/Engine/tree/master/.editorconfig).
+See [.editorconfig](https://github.com/AnTxXx/Engine/tree/cleanup/.editorconfig).
 
 ### Workflow
 
@@ -71,7 +71,7 @@ To run a local server, serving all files including livereload do the following:
     npm start
 
 If everything works as expected, you should be able to head over to http://localhost:10001/interface_test.html and see
-a running instance of the editor. Once you change some JS file, [lib/audicom.js](https://github.com/AnTxXx/Engine/tree/master/lib/audicom.js)
+a running instance of the editor. Once you change some JS file, [lib/audicom.js](https://github.com/AnTxXx/Engine/tree/cleanup/lib/audicom.js)
 should be changed. If this does not work, your setup/environment differs from ours. Let's find out how and drop us an
 issue!
 
