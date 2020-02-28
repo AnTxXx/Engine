@@ -80,4 +80,27 @@ Happy Hacking!
 
 ## IntelliJ based development setup
 
-TODO: add some screenshots and links to the jetbrains documentation.
+First clone this repository. Next open it in WebStorm - you do not have to create a new project.
+If your IDE is not configured to accept configuration from the `.idea` folder you wont get our
+settings, and will use your own.
+
+![Open a new project](doc/img/webstorm_open.png)
+
+Open Webstorms terminal and use `nvm` and `npm` as described above to install everything.
+
+![Install requirements](doc/img/webstorm_terminal.png)
+
+Make sure, everything is set up correctly, by opening File -> Settings -> Languages & Frameworks ->
+
+![Check the node settings](doc/img/webstorm_settings.png)
+
+Open the NPM tab - it should list all commands the project brings along:
+
+![Find npm targets](doc/img/webstorm_npm.png)
+
+And run your local instance, by right-clicking on the target and select "Run" or just double clicking it.
+
+![Start the project](doc/img/webstorm_run.png)
+
+Using the debug profile to run the local webserver, will debug the webserver, not the Engine. You will
+have to use the browsers built in features for debugging.
