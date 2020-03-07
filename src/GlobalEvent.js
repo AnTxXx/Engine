@@ -1,31 +1,32 @@
 // @flow
 
-import type {ConditionObject, Action} from "./EventType.js";
-import {AGObject} from "./AGObject.js";
-import {g_loading, g_playing, g_history, g_references, getReferenceById} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
+import type {Action, ConditionObject} from "./EventType.js";
+import type {IAGObject} from "./IAGObject.js";
+import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Similar to Event class but with a focus on Global Events.
  */
 export class GlobalEvent {
-    _object:AGObject;
-    _conditionObject:ConditionObject;
-    _funcOfConditionObject:Function;
-    _funcArgs:Array<any>;
-    _value:Object;
-    _action:Action;
-    _repeat:number;
-    _ID:number;
+    _object: IAGObject;
+    _conditionObject: ConditionObject;
+    _funcOfConditionObject: Function;
+    _funcArgs: Array<any>;
+    _value: Object;
+    _action: Action;
+    _repeat: number;
+    _ID: number;
 
-    get object(): AGObject {
+    get object(): IAGObject {
         return this._object;
     }
 
     set object(objectID: number) {
         let go = getReferenceById(objectID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(GlobalEvent.prototype, 'object').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set object', this.constructor.name, arguments);
         this._object = go;
     }
 
@@ -81,21 +82,21 @@ export class GlobalEvent {
         return this._ID;
     }
 
-    set ID(value:number) {
+    set ID(value: number) {
         this._ID = value;
     }
 
-    constructor(objectID: number, conditionObject: ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object, action:Action, repeat:number) {
-        this._ID = Counter.next();
+    constructor(objectID: number, conditionObject: ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object, action: Action, repeat: number) {
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[GlobalEvent] Creating Event [ID: " + this._ID + "] with objectID " + objectID + ", conditionObject " + conditionObject + " and Function " + funcOfConditionObject + ".");
 
         this._object = getReferenceById(objectID);
         this._conditionObject = conditionObject;
 
-        let f:Function;
-        switch(conditionObject){
+        let f: Function;
+        switch (conditionObject) {
             case "INVENTORY":
                 f = g_history.getFunction("AGInventory", funcOfConditionObject);
                 break;

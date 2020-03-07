@@ -1,13 +1,14 @@
 // @flow
-import {Vector3} from "./js/three/Vector3.js";
+import {Vector3} from "../lib/js/three/Vector3.js";
 import {AGSoundSource} from "./AGSoundSource.js";
 import {move} from "./AGNavigation.js";
 import type {Type} from "./AGType.js";
 import {AGRoom} from "./AGRoom.js";
-import {Counter} from "./IDGenerator.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 import {AGInventory} from "./AGInventory.js";
-import {g_history, g_eventHandler, g_references, g_loading, g_gamearea, g_playing} from "./AGEngine.js";
-import {getReferenceById} from "./AGEngine.js";
+import {g_eventHandler, g_gamearea, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import type {IAGObject} from "./IAGObject";
+import {g_history} from "./AGEngine";
 
 
 let debug = 0;
@@ -15,24 +16,24 @@ let debug = 0;
 /**
  * The main class that serves as basis for other objects.
  */
-export class AGObject {
+export class AGObject implements IAGObject {
     get deathSound(): ?AGSoundSource {
         return this._deathSound;
     }
 
-    set deathSound(soundID:number) {
+    set deathSound(soundID: number) {
         let deathSound = getReferenceById(soundID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'deathSound').set.name, this.constructor.name, arguments);
-        if(this._AGSoundSources.indexOf(deathSound) === -1) this._AGSoundSources.push(deathSound);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set deathSound', this.constructor.name, arguments);
+        if (this._AGSoundSources.indexOf(deathSound) === -1) this._AGSoundSources.push(deathSound);
         this._deathSound = deathSound;
     }
 
-    clearDeathSound(){
+    clearDeathSound() {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearDeathSound.name, this.constructor.name, arguments);
-        let index:number = (this._AGSoundSources.indexOf(this._deathSound));
-        if(this._deathSound && (index !== -1)) {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.clearDeathSound.name, this.constructor.name, arguments);
+        let index: number = (this._AGSoundSources.indexOf(this._deathSound));
+        if (this._deathSound && (index !== -1)) {
             this._AGSoundSources.splice(index, 1);
             this._deathSound = null;
         }
@@ -42,41 +43,41 @@ export class AGObject {
         return this._aliveSound;
     }
 
-    set aliveSound(soundID:number) {
+    set aliveSound(soundID: number) {
         let aliveSound = getReferenceById(soundID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'aliveSound').set.name, this.constructor.name, arguments);
-        if(this._AGSoundSources.indexOf(aliveSound) === -1) this._AGSoundSources.push(aliveSound);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set aliveSound', this.constructor.name, arguments);
+        if (this._AGSoundSources.indexOf(aliveSound) === -1) this._AGSoundSources.push(aliveSound);
         this._aliveSound = aliveSound;
     }
 
-    clearAliveSound(){
+    clearAliveSound() {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearAliveSound.name, this.constructor.name, arguments);
-        let index:number = (this._AGSoundSources.indexOf(this._aliveSound));
-        if(this._aliveSound && (index !== -1)) {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.clearAliveSound.name, this.constructor.name, arguments);
+        let index: number = (this._AGSoundSources.indexOf(this._aliveSound));
+        if (this._aliveSound && (index !== -1)) {
             this._AGSoundSources.splice(index, 1);
             this._aliveSound = null;
         }
     }
 
-    get interactionSound():?AGSoundSource {
+    get interactionSound(): ?AGSoundSource {
         return this._interactionSound;
     }
 
-    set interactionSound(soundID:number) {
+    set interactionSound(soundID: number) {
         let interactionSound = getReferenceById(soundID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'interactionSound').set.name, this.constructor.name, arguments);
-        if(this._AGSoundSources.indexOf(interactionSound) === -1) this._AGSoundSources.push(interactionSound);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set interactionSound', this.constructor.name, arguments);
+        if (this._AGSoundSources.indexOf(interactionSound) === -1) this._AGSoundSources.push(interactionSound);
         this._interactionSound = interactionSound;
     }
 
-    clearInteractionSound(){
+    clearInteractionSound() {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearInteractionSound.name, this.constructor.name, arguments);
-        let index:number = (this._AGSoundSources.indexOf(this._interactionSound));
-        if(this._interactionSound && (index !== -1)) {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.clearInteractionSound.name, this.constructor.name, arguments);
+        let index: number = (this._AGSoundSources.indexOf(this._interactionSound));
+        if (this._interactionSound && (index !== -1)) {
             this._AGSoundSources.splice(index, 1);
             this._interactionSound = null;
         }
@@ -86,24 +87,25 @@ export class AGObject {
         return this._movementSound;
     }
 
-    set movementSound(soundID:number) {
+    set movementSound(soundID: number) {
         let movementSound = getReferenceById(soundID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movementSound').set.name, this.constructor.name, arguments);
-        if(this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set movementSound', this.constructor.name, arguments);
+        if (this._AGSoundSources.indexOf(movementSound) === -1) this._AGSoundSources.push(movementSound);
         this._movementSound = movementSound;
     }
 
-    get route():Array<Vector3> {
+    get route(): Array<Vector3> {
         return this._route;
     }
+
     get damage(): number {
         return this._damage;
     }
 
     set damage(value: number) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'damage').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set damage', this.constructor.name, arguments);
         this._damage = value;
     }
 
@@ -113,37 +115,40 @@ export class AGObject {
 
     set dangerous(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'dangerous').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set dangerous', this.constructor.name, arguments);
         this._dangerous = value;
     }
+
     get range(): number {
         return this._range;
     }
 
     set range(value: number) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'range').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set range', this.constructor.name, arguments);
         this._range = value;
     }
-    get destructible():boolean {
+
+    get destructible(): boolean {
         return this._destructible;
     }
 
-    set destructible(value:boolean) {
+    set destructible(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'destructible').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set destructible', this.constructor.name, arguments);
         this._destructible = value;
     }
 
-    get health():number {
+    get health(): number {
         return this._health;
     }
 
-    set health(value:number) {
+    set health(value: number) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'health').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set health', this.constructor.name, arguments);
         this._health = value;
     }
+
     get ID() {
         return this._ID;
     }
@@ -159,15 +164,17 @@ export class AGObject {
     set room(value: AGRoom) {
         this._room = value;
     }
+
     get collidable() {
         return this._collidable;
     }
 
-    set collidable(value:boolean) {
+    set collidable(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'collidable').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set collidable', this.constructor.name, arguments);
         this._collidable = value;
     }
+
     get blockedObjects(): Array<AGObject> {
         return this._blockedObjects;
     }
@@ -175,20 +182,22 @@ export class AGObject {
     set blockedObjects(value: Array<AGObject>) {
         this._blockedObjects = value;
     }
-    get type():Type {
+
+    get type(): Type {
         return this._type;
     }
 
-    set type(value:Type) {
+    set type(value: Type) {
         this._type = value;
     }
+
     get name(): string {
         return this._name;
     }
 
     set name(value: string) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'name').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set name', this.constructor.name, arguments);
         this._name = value;
     }
 
@@ -196,20 +205,22 @@ export class AGObject {
         return this._movable;
     }
 
-    set movable(value:boolean) {
+    set movable(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'movable').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set movable', this.constructor.name, arguments);
         this._movable = value;
     }
+
     get size(): Vector3 {
         return this._size;
     }
 
     set size(value: Vector3) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'size').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set size', this.constructor.name, arguments);
         this._size = value;
     }
+
     get direction(): Vector3 {
         return this._direction;
     }
@@ -217,18 +228,20 @@ export class AGObject {
     set direction(value: Vector3) {
         this._direction = value;
     }
+
     get AGSoundSources(): AGSoundSource[] {
         return this._AGSoundSources;
     }
 
     set position(value: Vector3) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'position').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set position', this.constructor.name, arguments);
         this._position = value;
         //console.log(this._position);
         //console.log(this._direction);
         //console.log(this._size);
     }
+
     get position(): Vector3 {
         return this._position;
     }
@@ -239,16 +252,16 @@ export class AGObject {
 
     set speed(value: Vector3) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'speed').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set speed', this.constructor.name, arguments);
         this._speed = value;
     }
 
-    setSpeedSkalar(value:number){
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.setSpeedSkalar.name, this.constructor.name, arguments);
+    setSpeedSkalar(value: number) {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.setSpeedSkalar.name, this.constructor.name, arguments);
         this.speed = new Vector3(value, value, value);
     }
 
-    getSpeedSkalar(){
+    getSpeedSkalar() {
         return this.speed.x;
     }
 
@@ -257,9 +270,9 @@ export class AGObject {
         return this._runaway;
     }
 
-    set runaway(value:boolean) {
+    set runaway(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'runaway').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set runaway', this.constructor.name, arguments);
         this._runaway = value;
     }
 
@@ -267,9 +280,9 @@ export class AGObject {
         return this._circle;
     }
 
-    set circle(value:boolean) {
+    set circle(value: boolean) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'circle').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set circle', this.constructor.name, arguments);
         this._circle = value;
     }
 
@@ -279,7 +292,7 @@ export class AGObject {
 
     set tag(value: string) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'tag').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set tag', this.constructor.name, arguments);
         this._tag = value;
     }
 
@@ -290,7 +303,7 @@ export class AGObject {
     set hitSound(valueID: number) {
         let value = getReferenceById(valueID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGObject.prototype, 'hitSound').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set hitSound', this.constructor.name, arguments);
         this._hitSound = value;
     }
 
@@ -303,67 +316,67 @@ export class AGObject {
         this._interactionCooldown = value;
     }
 
-    _type:Type;
+    _type: Type;
 
-    _room:AGRoom;
+    _room: AGRoom;
 
-    _ID:number;
+    _ID: number;
 
-    _name:string;
-    _position:Vector3;
-    _direction:Vector3;
-    _size:Vector3;
+    _name: string;
+    _position: Vector3;
+    _direction: Vector3;
+    _size: Vector3;
 
-    _speed:Vector3;
-    _movable:boolean;
-    _route:Array<Vector3>;
-    _currentRoute:number;
+    _speed: Vector3;
+    _movable: boolean;
+    _route: Array<Vector3>;
+    _currentRoute: number;
 
-    _hitSound:?AGSoundSource;
+    _hitSound: ?AGSoundSource;
 
-    _collidable:boolean;
-    _blockedObjects:Array<AGObject>;
-    _tag:string;
+    _collidable: boolean;
+    _blockedObjects: Array<AGObject>;
+    _tag: string;
 
-    _inventory:AGInventory;
+    _inventory: AGInventory;
 
-    _destructible:boolean;
-    _health:number;
+    _destructible: boolean;
+    _health: number;
 
-    _range:number;
+    _range: number;
 
-    _damage:number;
-    _dangerous:boolean;
+    _damage: number;
+    _dangerous: boolean;
 
-    _interactionSound:?AGSoundSource;
-    _movementSound:AGSoundSource;
+    _interactionSound: ?AGSoundSource;
+    _movementSound: AGSoundSource;
     _deathSound: ?AGSoundSource;
     _aliveSound: ?AGSoundSource;
 
-    _interactionCooldown:number;
-    _interactionCDTimestamp:Date;
+    _interactionCooldown: number;
+    _interactionCDTimestamp: Date;
 
-    _runaway:boolean;
-    _circle:boolean;
+    _runaway: boolean;
+    _circle: boolean;
 
     /**
      * Sets the waypoints of the respective object to which the object moves (if moveable == true).
      * @param routes The routes as rest parameter.
      */
-    addRoute(...routes:Vector3){
+    addRoute(...routes: Vector3) {
         let i;
-        for(i = 0; i < routes.length; i++) {
+        for (i = 0; i < routes.length; i++) {
             this._route.push(routes[i]);
         }
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addRoute.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.addRoute.name, this.constructor.name, arguments);
     }
 
     /**
      * Adds a waypoint to the route.
      * @param node The waypoint to be added.
      */
-    addRouteNode(node:Vector3){
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addRouteNode.name, this.constructor.name, arguments);
+    addRouteNode(node: Vector3) {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.addRouteNode.name, this.constructor.name, arguments);
         this._route.push(node);
     }
 
@@ -371,8 +384,8 @@ export class AGObject {
     /**
      * Clears the route.
      */
-    clearRoute(){
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearRoute.name, this.constructor.name, arguments);
+    clearRoute() {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.clearRoute.name, this.constructor.name, arguments);
         this._route = [];
     }
 
@@ -383,10 +396,10 @@ export class AGObject {
      * @param direction Direction (Vector3) of the object.
      * @param size Size (Vector3) of the object.
      */
-    constructor(name:string, position:Vector3, direction:Vector3, size:Vector3) {
-        this._ID = Counter.next();
+    constructor(name: string, position: Vector3, direction: Vector3, size: Vector3) {
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
 
         console.log("[AGObject] Creating AGObject object [ID: " + this._ID + "]: " + name + " at position " + position.x + "/" + position.y + "/" + position.z);
         this._position = position;
@@ -394,7 +407,7 @@ export class AGObject {
         this._size = size;
         this._currentRoute = 0;
         this._movable = false;
-        this._speed = new Vector3(0,0,0);
+        this._speed = new Vector3(0, 0, 0);
         this._name = name;
         this._collidable = true;
         this._type = "OBJECT";
@@ -417,44 +430,43 @@ export class AGObject {
         this._circle = true;
     }
 
-    _AGSoundSources:Array<AGSoundSource>;
+    _AGSoundSources: Array<AGSoundSource>;
 
     /**
      * Adds a soundsource to the object.
-     * @param source Soundsource (AGSoundSource) to be added.
+     * @param sourceID Soundsource (AGSoundSource) to be added.
      */
-    addSoundSource(sourceID: number){
+    addSoundSource(sourceID: number) {
         let source = getReferenceById(sourceID);
         source.setPosition(this._position);
         source.object = this;
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addSoundSource.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.addSoundSource.name, this.constructor.name, arguments);
         this._AGSoundSources.push(source);
     }
 
-    clearSoundSources(){
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.clearSoundSources.name, this.constructor.name, arguments);
+    clearSoundSources() {
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.clearSoundSources.name, this.constructor.name, arguments);
         this._AGSoundSources = [];
     }
 
-    getSoundSources(){
+    getSoundSources(): Array<AGSoundSource> {
         return this._AGSoundSources;
     }
 
-    _moveableSign:number;
-    _movementSoundLastPosition:Vector3;
-
+    _moveableSign: number;
+    _movementSoundLastPosition: Vector3;
 
 
     /**
      * the draw-loop
      */
 
-    draw(timeStamp:Date){
+    draw(timeStamp: Date) {
         //as long as the draw loop is called, the sound should be played.
-        for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
+        for (let i = 0, len = this._AGSoundSources.length; i < len; i++) {
             //console.log(this.position);
-            if(this._AGSoundSources[i].update) this._AGSoundSources[i].setPosition(this.position);
-            if(this._AGSoundSources[i].looping) this._AGSoundSources[i].play();
+            if (this._AGSoundSources[i].update) this._AGSoundSources[i].setPosition(this.position);
+            if (this._AGSoundSources[i].looping) this._AGSoundSources[i].play();
         }
 
         /*
@@ -491,12 +503,11 @@ export class AGObject {
             }
         }*/
 
-        if(this._movable) {
+        if (this._movable) {
             if ((this.position.distanceTo(this._route[this._currentRoute]) < 0.2)) {
                 if (this._circle) {
                     this._currentRoute = ++this._currentRoute % this._route.length;
-                }
-                else {
+                } else {
                     this._currentRoute = this._currentRoute + this._moveableSign;
                     if (this._currentRoute == this._route.length || this._currentRoute < 0) {
                         this._moveableSign *= (-1);
@@ -504,8 +515,8 @@ export class AGObject {
                     }
                 }
             } else {
-                if(this._runaway){
-                    if(g_gamearea.listener.position.distanceTo(this._position) < 2.0) {
+                if (this._runaway) {
+                    if (g_gamearea.listener.position.distanceTo(this._position) < 2.0) {
                         move(this, this._route[this._currentRoute].clone().sub(this.position.clone()).normalize(), timeStamp);
                     }
                 } else {
@@ -513,7 +524,6 @@ export class AGObject {
                 }
             }
         }
-
 
 
         /*
@@ -527,17 +537,17 @@ export class AGObject {
         }*/
 
         //What happens if the object dies
-        if(this._destructible && this._health <= 0) this.onDeath();
+        if (this._destructible && this._health <= 0) this.onDeath();
 
-       //this._movementSoundLastPosition = this.position.clone();
+        //this._movementSoundLastPosition = this.position.clone();
     }
 
     /**
      * Stops all running sounds at the object.
      */
-    stop(){
-        for(let i = 0, len = this._AGSoundSources.length; i < len; i++){
-            if(this._AGSoundSources[i].looping) {
+    stop() {
+        for (let i = 0, len = this._AGSoundSources.length; i < len; i++) {
+            if (this._AGSoundSources[i].looping) {
                 this._AGSoundSources[i].stop();
             }
         }
@@ -551,7 +561,7 @@ export class AGObject {
         //console.log("Collision happened between: " + this.name + " and " + obj.name);
         g_eventHandler.call(this, "ONCONTACT");
         //adds this object to the other object on its blocked list, so the onCollisionEnter isn't called again.
-        if(!this._blockedObjects.includes(obj)){
+        if (!this._blockedObjects.includes(obj)) {
             this._blockedObjects.push(obj);
         }
     }
@@ -565,7 +575,7 @@ export class AGObject {
 
         //deletes the object from the blockedObjects list.
         let index = this._blockedObjects.lastIndexOf(obj);
-        if(index > -1){
+        if (index > -1) {
             //console.log("[AGObject] Collision Exit: removing object " + obj.name);
             this._blockedObjects.splice(index, 1);
         }
@@ -574,9 +584,9 @@ export class AGObject {
     /**
      * Actions to do when an AGObject dies.
      */
-    onDeath(){
+    onDeath() {
         g_eventHandler.call(this, "ONDEATH");
-        if(this._deathSound) this._deathSound.play();
+        if (this._deathSound) this._deathSound.play();
         console.log("[AGObject] " + this.name + " got destroyed. Triggering death routines.");
         this.kill();
     }
@@ -584,26 +594,26 @@ export class AGObject {
     /**
      * Kills the AGObject and removes it from the reference table.
      */
-    kill(){
+    kill() {
         console.log("[AGObject] " + this.name + ": killed.");
         this.stop();
         this.room.removeAGObject(this);
         g_eventHandler.deleteEventsContainingObjectById(this._ID);
         g_eventHandler.deleteGlobalEventsContainingObjectById(this._ID);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.kill.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.kill.name, this.constructor.name, arguments);
         g_references.delete(this._ID);
     }
 
-    interact(){
-        if(this._interactionSound) this._interactionSound.play();
+    interact() {
+        if (this._interactionSound) this._interactionSound.play();
     }
 
     /**
      * AGObject receives damage from obj.
      * @param obj The AGObject that does damage to this AGObject.
      */
-    doDamage(obj:AGObject){
-        if(this.destructible) {
+    doDamage(obj: AGObject) {
+        if (this.destructible) {
             this.health -= obj.damage;
             console.log("[AGObject] " + this.name + " got " + obj.damage + " damage from object " + obj.name + " leaving me at " + this.health + " health.");
         } else {
@@ -611,7 +621,7 @@ export class AGObject {
         }
     }
 
-    reset(){
+    reset() {
 
     }
 }

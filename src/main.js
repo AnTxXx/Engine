@@ -1,64 +1,78 @@
-// @flow
-import {g_controls, g_references, g_eventHandler, g_history, g_gamearea, setControl, deleteItem} from "./AGEngine.js";
-import { AGGameArea} from "./AGGameArea.js";
-import { AGObject} from "./AGObject.js";
-import { AGSoundSource} from "./AGSoundSource.js";
-import { AGNavigation} from "./AGNavigation.js";
-import { AGPlayer} from "./AGPlayer.js";
-import { Vector3 } from "./js/three/Vector3.js";
-import { AGPortal } from "./AGPortal.js";
-import {AGRoom} from "./AGRoom.js";
-import {AGItem} from "./AGItem.js";
-import type {Trigger, Action} from "./EventType.js";
-import {Event} from "./Event.js";
-import {AGCondition} from "./AGCondition.js";
-import { IAudiCom } from "../ui/js/IAudiCom.js";
+/* This file defines the public api for the AG Library and the Entrypoint */
 
-import {AGRoomExit} from "./AGRoomExit.js";
-import {getIdByReference, getReferenceById, getReferencesOfType} from "./AGEngine.js";
-import {g_IAudiCom} from "./AGEngine.js";
-import {setIAudiCom} from "./AGEngine.js";
-import {AGInventory} from "./AGInventory.js";
-import {GlobalEvent} from "./GlobalEvent.js";
+// fix polyfill problems
+// import "core-js/stable";
+import "regenerator-runtime/runtime";
 
+/* Now we define the public API by exporting what we want */
 
-let controls:AGNavigation = new AGNavigation(38, 40, 37, 39, 67);
-let controlsID:number = getIdByReference(controls);
-setControl(getReferenceById(controlsID));
+// Classes
+//---------------------------------
+export { AGCondition } from "./AGCondition.js";
+export { AGEventHandler } from "./AGEventHandler.js";
+export { AGGameArea } from "./AGGameArea.js";
+export { AGInventory } from "./AGInventory.js";
+export { AGItem } from "./AGItem.js";
+export { AGNavigation } from "./AGNavigation.js";
+export { AGObject } from "./AGObject.js";
+export { AGPlayer } from "./AGPlayer.js";
+export { AGPortal } from "./AGPortal.js";
+export { AGRoom } from "./AGRoom.js";
+export { AGRoomExit } from "./AGRoomExit.js";
+export { AGSoundSource } from "./AGSoundSource.js";
+export { Collision } from "./Collision.js";
+export { Event } from "./Event.js";
+export { GlobalEvent } from "./GlobalEvent.js";
+export { AGSaLo, SaLoCommand } from "./AGEngine.js";
 
-let room_1 = new AGRoom("First Room", new Vector3(20.0, 2.5, 12.0), new Vector3(10.0, 0.0, 10.0));
-let room_1ID = getIdByReference(room_1);
-g_gamearea.addRoom(room_1ID);
-let player = new AGPlayer("Player", new Vector3(1, 1.0, 2), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
-let playerID = getIdByReference(player);
+// Functions
+//---------------------------------
+export {evaluateAll} from "./AGCondition.js";
+export {
+    startAGEngine,
+    setGameArea,
+    setEventHandler,
+    deleteItem,
+    deleteCondition,
+    getOwnerIdOfItemById,
+    rebuildHandlerGameArea,
+    setControl,
+    getReferenceById,
+    getIdByReference,
+    getReferencesOfType,
+    setLoading,
+    play} from "./AGEngine.js";
+export {move} from "./AGNavigation.js";
+export {
+    colliding,
+    isPointInsideAABB,
+    isAABBInsideAABB,
+    isAABBInsideRoom,
+    frbIntersectionPoint,
+    hitBoundingBox
+} from "./AGPhysics";
+export {collisionIsInArray, objectPartOfCollisions} from "./Collision.js";
 
-let ouch = new AGSoundSource("Ouch", "sounds/ouch.wav", false, 1, room_1ID);
+// Types
+//---------------------------------
+//import type {Type} from "./AGType.js";
+export type {Trigger, Action, ConditionObject} from "./EventType.js";
+export type {ConditionType} from "./ConditionType.js";
+export type {IAGObject} from "./IAGObject.js";
 
-getReferenceById(room_1ID).add(playerID);
+// Constants
+//---------------------------------
+export { IncrementOneCounter } from "./IDGenerator.js"
 
-g_gamearea.listener = playerID;
-getReferenceById(room_1ID).listener = playerID;
-
-
-//Player Settings
-getReferenceById(playerID).setSpeedSkalar(0.1);
-
-//getReferenceById(playerID).movable = true;
-getReferenceById(playerID).dangerous = true;
-getReferenceById(playerID).damage = 1;
-getReferenceById(playerID).range = 1;
-getReferenceById(playerID).interactionCooldown = 500;
-getReferenceById(playerID).hitSound = ouch.ID;
-
-getReferenceById(room_1ID).live = true;
-//play(area, true);
-
-console.log(g_history);
-
-//g_history.rebuild();
-
-//console.log(g_gamearea.AGRooms[0].AGobjects);
-//console.log(g_references);
-
-export let i_audicom = new IAudiCom();
-setIAudiCom(i_audicom);
+// Variables
+//---------------------------------
+export {
+    g_loading,
+    g_playing,
+    g_references,
+    g_eventHandler,
+    g_gamearea,
+    g_controls,
+    g_history,
+    g_IAudiCom
+} from "./AGEngine.js"

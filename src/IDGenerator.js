@@ -1,5 +1,6 @@
 export interface Counter {
     next(): number;
+
     reset(): void;
 }
 
@@ -10,4 +11,4 @@ export function new_counter(init = 0): Counter {
     };
 }
 
-export const Counter = new_counter(0);
+export const IncrementOneCounter = new_counter(0);

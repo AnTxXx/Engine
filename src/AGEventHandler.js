@@ -1,17 +1,18 @@
 // @flow
 
 import {Event} from "./Event.js";
-import {AGObject} from "./AGObject.js";
-import type {Trigger, ConditionObject, Action} from "./EventType.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_loading, g_references, g_gamearea, g_playing, getReferenceById, setEventHandler} from "./AGEngine.js";
+import type {IAGObject} from "./IAGObject.js";
+import type {Action, Trigger} from "./EventType.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
+import {g_gamearea, g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
 import {GlobalEvent} from "./GlobalEvent.js";
 import {AGItem} from "./AGItem.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Eventhandler Class
  */
-export class AGEventHandler{
+export class AGEventHandler {
     get ID() {
         return this._ID;
     }
@@ -26,20 +27,20 @@ export class AGEventHandler{
 
     /**
      * Adds a new event to the Eventlist.
-     * @param event The event ID of the event to be added to the Eventlist.
+     * @param eventID The event ID of the event to be added to the Eventlist.
      */
-    addEvent(eventID:number){
+    addEvent(eventID: number) {
         this._events.push(getReferenceById(eventID));
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addEvent.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.addEvent.name, this.constructor.name, arguments);
     }
 
     /**
      * Removes an Event from the Eventlist by ID.
      * @param eventID The ID of the Event to be removed.
      */
-    removeEventByID(eventID:number){
+    removeEventByID(eventID: number) {
         this.removeEvent(getReferenceById(eventID));
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeEventByID.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.removeEventByID.name, this.constructor.name, arguments);
         g_references.delete(eventID);
     }
 
@@ -47,7 +48,7 @@ export class AGEventHandler{
      * Removes an Event from the Eventlist by Event Object.
      * @param event The Object that should be removed.
      */
-    removeEvent(event:Event){
+    removeEvent(event: Event) {
         console.log("[AGEventHandler] Removing Event [ID: " + event.ID + "].");
         this._events.splice(this.findEventIndex(event), 1);
     }
@@ -56,9 +57,9 @@ export class AGEventHandler{
      * Removes a GlobalEvent from the GlobalEventlist by ID.
      * @param eventID The ID of the GlobalEvent to be removed.
      */
-    removeGlobalEventByID(eventID:number){
+    removeGlobalEventByID(eventID: number) {
         this.removeEvent(getReferenceById(eventID));
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.removeGlobalEventByID.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.removeGlobalEventByID.name, this.constructor.name, arguments);
         g_references.delete(eventID);
     }
 
@@ -66,34 +67,34 @@ export class AGEventHandler{
      * Removes a GlobalEvent from the Eventlist by GlobalEvent Object.
      * @param event The Object that should be removed.
      */
-    removeGlobalEvent(event:GlobalEvent){
+    removeGlobalEvent(event: GlobalEvent) {
         console.log("[AGEventHandler] Removing Global Event [ID: " + event.ID + "].");
         this._globalEvents.splice(this.findGlobalEventIndex(event), 1);
     }
 
-    _ID:number;
-    _events:Array<Event>;
-    _globalEvents:Array<GlobalEvent>;
+    _ID: number;
+    _events: Array<Event>;
+    _globalEvents: Array<GlobalEvent>;
 
-    constructor(){
-        this._ID = Counter.next();
+    constructor() {
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
         console.log("[AGEventHandler] Creating AGEventHandler object [ID: " + this._ID + "].");
         this._events = [];
         this._globalEvents = [];
     }
 
 
-    evaluateGlobalEvents(){
-        for(let i = 0; i < this._globalEvents.length; i++){
+    evaluateGlobalEvents() {
+        for (let i = 0; i < this._globalEvents.length; i++) {
             this.evaluateGlobalEvent(this._globalEvents[i]);
         }
     }
 
-    addGlobalEvent(eventID:number){
+    addGlobalEvent(eventID: number) {
         this._globalEvents.push(getReferenceById(eventID));
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.addGlobalEvent.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.addGlobalEvent.name, this.constructor.name, arguments);
     }
 
     /**
@@ -101,17 +102,17 @@ export class AGEventHandler{
      * @param event The GlobalEvent object to be evaluated.
      * @returns {boolean} Returns true, if the event's conditions are met, otherwise false.
      */
-    evaluateGlobalEvent(event:GlobalEvent):boolean {
+    evaluateGlobalEvent(event: GlobalEvent): boolean {
         //console.log(event.funcOfConditionObject.apply(event.object.inventory, event.funcArgs));
-        if((event.repeat >= 1 || event.repeat === -1)){
-            switch(event.conditionObject){
+        if ((event.repeat >= 1 || event.repeat === -1)) {
+            switch (event.conditionObject) {
                 case "INVENTORY":
-                    if(event.object.inventory){
-                        if(event.funcOfConditionObject.apply(event.object.inventory, event.funcArgs) === event.value){
+                    if (event.object.inventory) {
+                        if (event.funcOfConditionObject.apply(event.object.inventory, event.funcArgs) === event.value) {
                             console.log("[AGEventHandler] Requirements for Global Event fulfilled. Executing action.");
                             console.log(event);
                             this.fireAction(event.action);
-                            if(event.repeat >= 1) event.repeat--;
+                            if (event.repeat >= 1) event.repeat--;
                             return true;
                         }
                     }
@@ -125,8 +126,8 @@ export class AGEventHandler{
      * Triggers an action. Currently only WINGAME is available.
      * @param action The Action to be triggered.
      */
-    fireAction(action:Action){
-        switch(action){
+    fireAction(action: Action) {
+        switch (action) {
             case "WINGAME":
                 g_gamearea.listener.room.solved = true;
                 break;
@@ -138,9 +139,9 @@ export class AGEventHandler{
      * @param event Event to be queried.
      * @returns {number} Returns the index of the event.
      */
-    findEventIndex(event:Event):number {
-        for(let i = 0; i < this._events.length; i++){
-            if(this._events[i].origin === event.origin &&
+    findEventIndex(event: Event): number {
+        for (let i = 0; i < this._events.length; i++) {
+            if (this._events[i].origin === event.origin &&
                 this._events[i].trigger === event.trigger &&
                 this._events[i].action === event.action &&
                 this._events[i].object === event.object &&
@@ -155,10 +156,10 @@ export class AGEventHandler{
      * @param event The GlobalEvent object to be searched for.
      * @returns {number} Returns the ID of the GlobalEvent.
      */
-    findGlobalEventIndex(event:GlobalEvent):number {
-        for(let i = 0; i < this._globalEvents.length; i++){
-            if(this._globalEvents[i].ID === event.ID)
-            return i;
+    findGlobalEventIndex(event: GlobalEvent): number {
+        for (let i = 0; i < this._globalEvents.length; i++) {
+            if (this._globalEvents[i].ID === event.ID)
+                return i;
         }
         return -1;
     }
@@ -167,11 +168,11 @@ export class AGEventHandler{
      * Deletes all events (also removing from reference table) that contain a specific item (ID).
      * @param itemID The ID of the AGItem.
      */
-    deleteEventsContainingItemById(itemID:number){
-        let agitem:AGItem = getReferenceById(itemID);
+    deleteEventsContainingItemById(itemID: number) {
+        let agitem: AGItem = getReferenceById(itemID);
         let that = this;
-        this._events.forEach(function(item){
-            if(item.addObject === agitem){
+        this._events.forEach(function (item) {
+            if (item.addObject === agitem) {
                 that.removeEventByID(item.ID);
                 console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
             }
@@ -182,13 +183,13 @@ export class AGEventHandler{
      * Deletes all events (also removing from reference table) that contain a specific object (ID).
      * @param objectID The ID of the AGObject.
      */
-    deleteEventsContainingObjectById(objectID:number){
-        let agobject:AGObject = getReferenceById(objectID);
+    deleteEventsContainingObjectById(objectID: number) {
+        let agobject: IAGObject = getReferenceById(objectID);
         let that = this;
-        this._events.forEach(function(item){
-            if(item.addObject === agobject ||
+        this._events.forEach(function (item) {
+            if (item.addObject === agobject ||
                 item.origin === agobject ||
-                item.object === agobject){
+                item.object === agobject) {
                 that.removeEventByID(item.ID);
                 console.log("[AGEventHandler] Deleted Event [ID: " + item.ID + "] from References Table.");
             }
@@ -199,11 +200,11 @@ export class AGEventHandler{
      * Deletes all GlobalEvents (also removing from reference table) that contain a specific object (ID).
      * @param objectID The ID of the AGObject.
      */
-    deleteGlobalEventsContainingObjectById(objectID:number){
-        let agobject:AGObject = getReferenceById(objectID);
+    deleteGlobalEventsContainingObjectById(objectID: number) {
+        let agobject: IAGObject = getReferenceById(objectID);
         let that = this;
-        this._globalEvents.forEach(function(item){
-            if(item.object === agobject){
+        this._globalEvents.forEach(function (item) {
+            if (item.object === agobject) {
                 that.removeGlobalEventByID(item.ID);
                 console.log("[AGEventHandler] Deleted Global Event [ID: " + item.ID + "] from References Table.");
             }
@@ -230,10 +231,10 @@ export class AGEventHandler{
      * @param trigger The trigger that fires the event.
      * @returns {Array<Event>} Returns an Array of Events that fits the requested AGObject and Trigger.
      */
-    findEventsAfterCall(object:AGObject, trigger:Trigger):Array<Event>{
-        let events:Array<Event> = [];
-        for(let i = 0; i < this._events.length; i++){
-            if(this._events[i].origin === object &&
+    findEventsAfterCall(object: IAGObject, trigger: Trigger): Array<Event> {
+        let events: Array<Event> = [];
+        for (let i = 0; i < this._events.length; i++) {
+            if (this._events[i].origin === object &&
                 this._events[i].trigger === trigger
             ) {
                 events.push(this._events[i]);
@@ -244,20 +245,20 @@ export class AGEventHandler{
 
     /**
      * Function is called if certain events happen (e.g., collision, death) and reacts by triggering the respective function.
-     * @param object The AGObject that called this function.
+     * @param object The IAGObject that called this function.
      * @param trigger The Trigger (e.g., ONCONTACT, ONDEATH)
      */
-    call(object:AGObject, trigger:Trigger){
+    call(object: IAGObject, trigger: Trigger) {
         //console.log("[AGEventHandler] Received Event-Call from " + object.name);
-        let events:Array<Event> = this.findEventsAfterCall(object, trigger);
-        for(let i = 0; i < events.length; i++){
-            if(events[i].repeat >= 1 || events[i].repeat === -1){
+        let events: Array<Event> = this.findEventsAfterCall(object, trigger);
+        for (let i = 0; i < events.length; i++) {
+            if (events[i].repeat >= 1 || events[i].repeat === -1) {
                 console.log("[AGEventHandler] Event triggered:");
                 console.log(events[i]);
-                switch(events[i].trigger){
+                switch (events[i].trigger) {
                     //TRIGGER: ON CONTACT WITH OTHER OBJECT
                     case "ONCONTACT":
-                        switch(events[i].action){
+                        switch (events[i].action) {
                             // TRIGGER: ONCONTACT, ACTION: ADD TO INVENTORY
                             case "ADD":
                                 events[i].object.inventory.addItem(events[i].addObject);
@@ -274,7 +275,7 @@ export class AGEventHandler{
                         }
                         break;
                     case "ONDEATH":
-                        switch(events[i].action){
+                        switch (events[i].action) {
                             // TRIGGER: ONDEATH, ACTION: ADD TO INVENTORY
                             case "ADD":
                                 events[i].object.inventory.addItem(events[i].addObject);

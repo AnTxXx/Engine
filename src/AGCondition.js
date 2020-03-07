@@ -1,24 +1,23 @@
 // @flow
 
-import {AGObject} from "./AGObject.js";
-import type {ConditionType} from "./ConditionType.js";
-import {getReferenceById} from "./AGEngine.js";
-import {Counter} from "./IDGenerator.js";
-import {g_history, g_loading, g_playing, g_references} from "./AGEngine.js";
+import type {IAGObject} from "./IAGObject.js";
+import {g_loading, g_playing, g_references, getReferenceById} from "./AGEngine.js";
+import {IncrementOneCounter} from "./IDGenerator.js";
 import type {ConditionObject} from "./EventType.js";
+import {g_history} from "./AGEngine";
 
 /**
  * Class for Conditions that must be fulfilled before an action can take place. (Very WIP)
  */
 export class AGCondition {
 
-    _object:AGObject;
-    _conditionObject:ConditionObject;
-    _funcOfConditionObject:Function;
-    _funcArgs:Array<any>;
-    _value:Object;
+    _object: IAGObject;
+    _conditionObject: ConditionObject;
+    _funcOfConditionObject: Function;
+    _funcArgs: Array<any>;
+    _value: Object;
     //_amount:number;
-    _ID:number;
+    _ID: number;
 
     get ID() {
         return this._ID;
@@ -30,7 +29,7 @@ export class AGCondition {
 
     set conditionObject(value: any) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'conditionObject').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set conditionObject', this.constructor.name, arguments);
         this._conditionObject = value;
     }
 
@@ -40,9 +39,9 @@ export class AGCondition {
 
     set funcOfConditionObject(value: string) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'funcOfConditionObject').set.name, this.constructor.name, arguments);
-        let f:Function;
-        switch(this._conditionObject){
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set funcOfConditionObject', this.constructor.name, arguments);
+        let f: Function;
+        switch (this._conditionObject) {
             case "INVENTORY":
                 f = g_history.getFunction("AGInventory", value);
                 break;
@@ -56,7 +55,7 @@ export class AGCondition {
 
     set funcArgs(value: Array<*>) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'funcArgs').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set funcArgs', this.constructor.name, arguments);
         this._funcArgs = value;
     }
 
@@ -66,32 +65,32 @@ export class AGCondition {
 
     set value(value: Object) {
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'value').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set value', this.constructor.name, arguments);
         this._value = value;
     }
 
-    get object():AGObject {
+    get object(): IAGObject {
         return this._object;
     }
 
-    set object(objectID:number) {
-        let obj:AGObject = getReferenceById(objectID);
+    set object(objectID: number) {
+        let obj: IAGObject = getReferenceById(objectID);
         // $FlowFixMe
-        if(!g_loading && !g_playing) g_history.ike(this._ID, Object.getOwnPropertyDescriptor(AGCondition.prototype, 'object').set.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, 'set object', this.constructor.name, arguments);
         this._object = obj;
     }
 
-    constructor(objectID: number, conditionObject:ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object) {
-        this._ID = Counter.next();
+    constructor(objectID: number, conditionObject: ConditionObject, funcOfConditionObject: string, funcArgs: Array<*>, value: Object) {
+        this._ID = IncrementOneCounter.next();
         g_references.set(this._ID, this);
-        if(!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
+        if (!g_loading && !g_playing) g_history.ike(this._ID, this.constructor.name, this.constructor.name, arguments);
 
         this._object = getReferenceById(objectID);
         this._conditionObject = conditionObject;
         //this._amount = amount;
 
-        let f:Function;
-        switch(conditionObject){
+        let f: Function;
+        switch (conditionObject) {
             case "INVENTORY":
                 f = g_history.getFunction("AGInventory", funcOfConditionObject);
                 break;
@@ -106,8 +105,8 @@ export class AGCondition {
      * Evaluates the Condition.
      * @returns {boolean} Returns true, if the condition is met, otherwise false.
      */
-    evaluate():boolean {
-        switch(this._conditionObject) {
+    evaluate(): boolean {
+        switch (this._conditionObject) {
             case "INVENTORY":
                 if (this._object.inventory) {
                     if (this._funcOfConditionObject.apply(this._object.inventory, this._funcArgs) === this._value) {
@@ -126,9 +125,9 @@ export class AGCondition {
  * @param conditions An Array with AGConditions to be checked.
  * @returns {boolean} Returns true, if all conditions are met, otherwise false.
  */
-export function evaluateAll(conditions:Array<AGCondition>):boolean{
-    for(let i = 0; i < conditions.length; i++){
-        if(!conditions[i].evaluate()) return false;
+export function evaluateAll(conditions: Array<AGCondition>): boolean {
+    for (let i = 0; i < conditions.length; i++) {
+        if (!conditions[i].evaluate()) return false;
     }
     return true;
 }
