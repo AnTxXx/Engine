@@ -15,10 +15,10 @@ available on https://www.audicom.at/forum/
 ## Contributing
 
 We're always looking for help identifying bugs and improving documentation. Our small team will
-not be able to implement your new feature requests, however, we appreciate them to learn, what
+not be able to implement feature requests, however, we appreciate collecting them to learn, what
 people playing, creating and sharing audio games are caring about.
 
-Please create issues for our comments, bug reports, recommendations, or feature requests on
+Please create issues for your comments, bug reports, recommendations, or feature requests on
 https://github.com/AnTxXx/Engine/issues
 
 At the moment we do not provide templates for these issue-types.
